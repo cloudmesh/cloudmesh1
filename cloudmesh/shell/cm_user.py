@@ -12,21 +12,23 @@ log = LOGGER(__file__)
 
 def shell_command_user(arguments):
     """
-    Usage:
-           user list
-           user info [ID]
-           user id
+    ::
 
-    Administrative command to lists the users from LDAP
+      Usage:
+             user list
+             user info [ID]
+             user id
 
-    Arguments:
+      Administrative command to lists the users from LDAP
 
-      list       list the users
-      ID         list the user with the given ID
+      Arguments:
 
-    Options:
+        list       list the users
+        ID         list the user with the given ID
 
-       -v       verbose mode
+      Options:
+
+         -v       verbose mode
 
     """
 

@@ -18,30 +18,34 @@ class cm_shell_register:
 
     @command
     def do_register(self, args, arguments):
-        '''
-        Usage:
-          register [options] NAME
+        """
+            Usage:
+              register [options] NAME
 
-        Arguments:
-          NAME      Name of the cloud to be registered
+            Arguments:
+              NAME      Name of the cloud to be registered
 
-        Options:
-          -a --act      Activate the cloud to be registered
-          -d --deact    Deactivate the cloud
-        '''
+            Options:
+              -a --act      Activate the cloud to be registered
+              -d --deact    Deactivate the cloud
+            """
 
-        config = cm_config()
-        cm_user_id = config.username()
-        user_obj = cm_user()
-        user = user_obj.info(cm_user_id)
+            config = cm_config()
+            cm_user_id = config.username()
+            user_obj = cm_user()
+            user = user_obj.info(cm_user_id)
 
-        cloudtypes = {}
-        error = {}
-        registered = {}
+            cloudtypes = {}
+            error = {}
+            registered = {}
 
         cloudname = arguments['NAME']
+        ::
+        
 
-        # check all the registered clouds.
+        # check all the regi
+            ::
+            stered clouds.
         for cloud in user['defaults']['registered_clouds']:
             registered[cloud] = True
             if (cloud == cloudname and not (arguments['--act'] or

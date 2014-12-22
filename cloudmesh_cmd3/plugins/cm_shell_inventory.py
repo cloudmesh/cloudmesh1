@@ -35,35 +35,37 @@ class cm_shell_inventory:
     @command
     def do_inventory(self, args, arguments):
         """
-        Usage:
-               inventory clean
-               inventory create image DESCRIPTION
-               inventory create server [dynamic] DESCRIPTION
-               inventory create service [dynamic] DESCRIPTION
-               inventory exists server NAME
-               inventory exists service NAME
-               inventory
-               inventory print
-               inventory info [--cluster=CLUSTER] [--server=SERVER]
-               inventory list [--cluster=CLUSTER] [--server=SERVER]
-               inventory server NAME
-               inventory service NAME
+        ::
+        
+          Usage:
+                 inventory clean
+                 inventory create image DESCRIPTION
+                 inventory create server [dynamic] DESCRIPTION
+                 inventory create service [dynamic] DESCRIPTION
+                 inventory exists server NAME
+                 inventory exists service NAME
+                 inventory
+                 inventory print
+                 inventory info [--cluster=CLUSTER] [--server=SERVER]
+                 inventory list [--cluster=CLUSTER] [--server=SERVER]
+                 inventory server NAME
+                 inventory service NAME
 
-        Manages the inventory
+          Manages the inventory
 
-            clean       cleans the inventory
-            server      define servers
+              clean       cleans the inventory
+              server      define servers
 
-        Arguments:
+          Arguments:
 
-          DESCRIPTION    The hostlist"i[009-011],i[001-002]"
+            DESCRIPTION    The hostlist"i[009-011],i[001-002]"
 
-          NAME           The name of a service or server
+            NAME           The name of a service or server
 
 
-        Options:
+          Options:
 
-           v       verbose mode
+             v       verbose mode
 
         """
         try:

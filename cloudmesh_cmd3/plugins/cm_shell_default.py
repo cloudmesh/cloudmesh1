@@ -1,6 +1,6 @@
 from cmd3.shell import function_command
 from cloudmesh.user.cm_default import shell_command_default
-
+# BUG: shell_command_default is a shell commnd and should be in the shell directory
 
 class cm_shell_default:
 

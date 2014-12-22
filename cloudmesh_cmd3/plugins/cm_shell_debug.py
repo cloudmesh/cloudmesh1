@@ -13,11 +13,13 @@ class cm_shell_debug:
     @command
     def do_debug(self, args, arguments):
         """
+        ::
+        
         Usage:
-            debug on
-            debug off
+              debug on
+              debug off
 
-            Turns the debug log level on and off.
+              Turns the debug log level on and off.
         """
 
         self.cm_config_server = cm_config_server()

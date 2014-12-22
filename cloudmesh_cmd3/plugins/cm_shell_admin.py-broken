@@ -104,28 +104,30 @@ class cm_shell_admin:
     @command
     def do_admin(self, args, arguments):
         """
-        Usage:
-               admin [force] newuser USERNAME CLOUDNAME [CONFIGDIR]
+	::
 
-        Initializes new user in the CLOUDNAME cloud. A me.yaml
-        file will be generated and placed in CONFIGDIR, or printed
-        to stdout if CONDIGDIR is None.
+	  Usage:
+		 admin [force] newuser USERNAME CLOUDNAME [CONFIGDIR]
 
-        Arguments:
+	  Initializes new user in the CLOUDNAME cloud. A me.yaml
+	  file will be generated and placed in CONFIGDIR, or printed
+	  to stdout if CONDIGDIR is None.
 
-          newuser    create a new user
+	  Arguments:
 
-          USERNAME   the username of the new user
+	    newuser    create a new user
 
-          CLOUDNAME  the name of the cloud
+	    USERNAME   the username of the new user
 
-          CONFIGDIR  where to place the me.yaml file
+	    CLOUDNAME  the name of the cloud
 
-          force      force mode does not ask. This may be dangerous.
+	    CONFIGDIR  where to place the me.yaml file
 
-        Options:
+	    force      force mode does not ask. This may be dangerous.
 
-           -v       verbose mode
+	  Options:
+
+	     -v       verbose mode
 
         """
         log.info(arguments)

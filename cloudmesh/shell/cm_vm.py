@@ -25,104 +25,105 @@ log = LOGGER(__file__)
 
 def shell_command_vm(arguments):
     """
-        ::
+    ::
 
-            Usage:
-                vm start [--name=<vmname>]
-                         [--count=<count>]
-                         [--cloud=<CloudName>]
-                         [--image=<imgName>|--imageid=<imgId>]
-                         [--flavor=<flavorName>|--flavorid=<flavorId>]
-                         [--group=<group>]
-                vm delete [NAME|--id=<id>]
-                          [--group=<group>]
-                          [--cloud=<CloudName>]
-                          [--prefix=<prefix>|--names=<hostlist>]
-                          [--force]
-                vm ip assign (NAME|--id=<id>)
-                             [--cloud=<CloudName>]
-                vm ip show [NAME|--id=<id>]
-                           [--group=<group>]
-                           [--cloud=<CloudName>]
-                           [--prefix=<prefix>|--names=<hostlist>]
-                           [--format=FORMAT]
-                           [--refresh]
-                vm login (--name=<vmname>|--id=<id>|--addr=<address>) --ln=<LoginName>
-                         [--cloud=<CloudName>]
-                         [--key=<key>]
-                         [--] [<command>...]
-                vm login NAME --ln=<LoginName>
-                         [--cloud=<CloudName>]
-                         [--key=<key>]
-                         [--] [<command>...]
-                vm list [CLOUD|--all]
-                        [--refresh]
-                        [--format=FORMAT]
-                        [--column=COLUMN]
-                        [--group=<group>]
+      Usage:
 
-            Arguments:
-                <command>              positional arguments, the commands you want to
-                                       execute on the server(e.g. ls -a), you will get
-                                       a return of executing result instead of login to
-                                       the server, note that type in -- is suggested before
-                                       you input the commands
-                NAME                   server name
+        vm start [--name=<vmname>]
+                 [--count=<count>]
+                 [--cloud=<CloudName>]
+                 [--image=<imgName>|--imageid=<imgId>]
+                 [--flavor=<flavorName>|--flavorid=<flavorId>]
+                 [--group=<group>]
+        vm delete [NAME|--id=<id>]
+                  [--group=<group>]
+                  [--cloud=<CloudName>]
+                  [--prefix=<prefix>|--names=<hostlist>]
+                  [--force]
+        vm ip assign (NAME|--id=<id>)
+                  [--cloud=<CloudName>]
+        vm ip show [NAME|--id=<id>]
+                   [--group=<group>]
+                   [--cloud=<CloudName>]
+                   [--prefix=<prefix>|--names=<hostlist>]
+                   [--format=FORMAT]
+                   [--refresh]
+        vm login (--name=<vmname>|--id=<id>|--addr=<address>) --ln=<LoginName>
+                   [--cloud=<CloudName>]
+                   [--key=<key>]
+                   [--] [<command>...]
+         vm login NAME --ln=<LoginName>
+                   [--cloud=<CloudName>]
+                   [--key=<key>]
+                   [--] [<command>...]
+         vm list [CLOUD|--all]
+                   [--refresh]
+                   [--format=FORMAT]
+                   [--column=COLUMN]
+                   [--group=<group>]
 
-            Options:
-                --addr=<address>       give the public ip of the server
-                --cloud=<CloudName>    give a cloud to work on, if not given, selected
-                                       or default cloud will be used
-                --count=<count>        give the number of servers to start
-                --flavor=<flavorName>  give the name of the flavor
-                --flavorid=<flavorId>  give the id of the flavor
-                --group=<group>        give the group name of server
-                --id=<id>              give the server id
-                --image=<imgName>      give the name of the image
-                --imageid=<imgId>      give the id of the image
-                --key=<key>            spicfy a private key to use, input a string which
-                                       is the full path to the key file
-                --ln=<LoginName>       give the login name of the server that you want
-                                       to login
-                --name=<vmname>        give the name of the virtual machine
-                --names=<hostlist>     give the VM name, but in a hostlist style, which is very
-                                       convenient when you need a range of VMs e.g. sample[1-3]
-                                       => ['sample1', 'sample2', 'sample3']
-                                       sample[1-3,18] => ['sample1', 'sample2', 'sample3', 'sample18']
-                --prefix=<prefix>      give the prefix of the server, standand server
-                                       name is in the form of prefix_index, e.g. abc_9
-                --force                delete vms without user's confirmation
+         Arguments:
+              <command>  positional arguments, the commands you want to
+                         execute on the server(e.g. ls -a), you will get
+                         a return of executing result instead of login to
+                         the server, note that type in -- is suggested before
+                         you input the commands
+              NAME       server name
 
-            Description:
-                commands used to start or delete servers of a cloud
+         Options:
+            --addr=<address>       give the public ip of the server
+            --cloud=<CloudName>    give a cloud to work on, if not given, selected
+                                   or default cloud will be used
+            --count=<count>        give the number of servers to start
+            --flavor=<flavorName>  give the name of the flavor
+            --flavorid=<flavorId>  give the id of the flavor
+            --group=<group>        give the group name of server
+            --id=<id>              give the server id
+            --image=<imgName>      give the name of the image
+            --imageid=<imgId>      give the id of the image
+            --key=<key>            spicfy a private key to use, input a string which
+                                   is the full path to the key file
+            --ln=<LoginName>       give the login name of the server that you want
+                                   to login
+            --name=<vmname>        give the name of the virtual machine
+            --names=<hostlist>     give the VM name, but in a hostlist style, which is very
+                                   convenient when you need a range of VMs e.g. sample[1-3]
+                                   => ['sample1', 'sample2', 'sample3']
+                                   sample[1-3,18] => ['sample1', 'sample2', 'sample3', 'sample18']
+            --prefix=<prefix>      give the prefix of the server, standand server
+                                   name is in the form of prefix_index, e.g. abc_9
+            --force                delete vms without user's confirmation
 
-                vm start [options...]       start servers of a cloud, user may specify
-                                            flavor, image .etc, otherwise default values
-                                            will be used, see how to set default values
-                                            of a cloud: cloud help
-                vm delete [options...]      delete servers of a cloud, user may delete
-                                            a server by its name or id, delete servers
-                                            of a group or servers of a cloud, give prefix
-                                            and/or range to find servers by their names.
-                                            Or user may specify more options to narrow
-                                            the search
-                vm ip assign [options...]   assign a public ip to a VM of a cloud
-                vm ip show [options...]     show the ips of VMs
-                vm login [options...]       login to a server or execute commands on it
-                vm list [options...]        same as command "list vm", please refer to it
+         Description:
+            commands used to start or delete servers of a cloud
 
-            Examples:
-                vm start --count=5 --group=test --cloud=india
-                        start 5 servers on india and give them group
-                        name: test
+            vm start [options...]       start servers of a cloud, user may specify
+                                        flavor, image .etc, otherwise default values
+                                        will be used, see how to set default values
+                                        of a cloud: cloud help
+            vm delete [options...]      delete servers of a cloud, user may delete
+                                        a server by its name or id, delete servers
+                                        of a group or servers of a cloud, give prefix
+                                        and/or range to find servers by their names.
+                                        Or user may specify more options to narrow
+                                        the search
+            vm ip assign [options...]   assign a public ip to a VM of a cloud
+            vm ip show [options...]     show the ips of VMs
+            vm login [options...]       login to a server or execute commands on it
+            vm list [options...]        same as command "list vm", please refer to it
 
-                vm delete --group=test --names=sample_[1-9]
-                        delete servers on selected or default cloud with search conditions:
-                        group name is test and the VM names are among sample_1 ... sample_9
+         Examples:
+            vm start --count=5 --group=test --cloud=india
+                 start 5 servers on india and give them group
+                 name: test
 
-                vm ip show --names=sample_[1-5,9] --format=json
-                        show the ips of VM names among sample_1 ... sample_5 and sample_9 in
-                        json format
+            vm delete --group=test --names=sample_[1-9]
+                delete servers on selected or default cloud with search conditions:
+                group name is test and the VM names are among sample_1 ... sample_9
+
+            vm ip show --names=sample_[1-5,9] --format=json
+                 show the ips of VM names among sample_1 ... sample_5 and sample_9 in
+                 json format
 
     """
 

@@ -15,23 +15,25 @@ class cm_shell_loglevel:
     @command
     def do_loglevel(self, args, arguments):
         """
-        Usage:
-            loglevel
-            loglevel critical
-            loglevel error
-            loglevel warning
-            loglevel info
-            loglevel debug
+        ::
+        
+          Usage:
+              loglevel
+              loglevel critical
+              loglevel error
+              loglevel warning
+              loglevel info
+              loglevel debug
 
-            Shows current log level or changes it.
-            
-            loglevel - shows current log level
-            critical - shows log message in critical level
-            error    - shows log message in error level including critical
-            warning  - shows log message in warning level including error
-            info     - shows log message in info level including warning
-            debug    - shows log message in debug level including info
-            
+              Shows current log level or changes it.
+
+              loglevel - shows current log level
+              critical - shows log message in critical level
+              error    - shows log message in error level including critical
+              warning  - shows log message in warning level including error
+              info     - shows log message in info level including warning
+              debug    - shows log message in debug level including info
+
         """
         key = "cloudmesh.server.loglevel"
         if arguments['debug']:

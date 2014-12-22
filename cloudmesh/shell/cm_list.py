@@ -15,58 +15,61 @@ log = LOGGER(__file__)
 
 
 def shell_command_list(arguments):
-    """List available flavors, images, vms, projects and clouds
+    """
+    ::
 
-    Usage:
-        list flavor [CLOUD|--all] [--refresh] [--format=FORMAT]
-        [--column=COLUMN]
-        list image [CLOUD|--all] [--refresh] [--format=FORMAT] [--column=COLUMN]
-        list vm [CLOUD|--all] [--refresh] [--format=FORMAT] [--column=COLUMN] [--group=<group>]
-        list project
-        list cloud [--column=COLUMN]
+      List available flavors, images, vms, projects and clouds
 
-    Arguments:
+      Usage:
+          list flavor [CLOUD|--all] [--refresh] [--format=FORMAT]
+          [--column=COLUMN]
+          list image [CLOUD|--all] [--refresh] [--format=FORMAT] [--column=COLUMN]
+          list vm [CLOUD|--all] [--refresh] [--format=FORMAT] [--column=COLUMN] [--group=<group>]
+          list project
+          list cloud [--column=COLUMN]
 
-        CLOUD    the name of the cloud e.g. india
+      Arguments:
 
-    Options:
+          CLOUD    the name of the cloud e.g. india
 
-        -v         verbose mode
-        --all      list information of all active clouds
-        --refresh  refresh data before list
+      Options:
 
-        --column=COLUMN        specify what information to display in
-                               the columns of the list command. For
-                               example, --column=active,label prints
-                               the columns active and label. Available
-                               columns are active, label, host,
-                               type/version, type, heading, user,
-                               credentials, defaults (all to display
-                               all, email to display all except
-                               credentials and defaults)
+          -v         verbose mode
+          --all      list information of all active clouds
+          --refresh  refresh data before list
 
-        --format=FORMAT         output format: table, json, csv
+          --column=COLUMN        specify what information to display in
+                                 the columns of the list command. For
+                                 example, --column=active,label prints
+                                 the columns active and label. Available
+                                 columns are active, label, host,
+                                 type/version, type, heading, user,
+                                 credentials, defaults (all to display
+                                 all, email to display all except
+                                 credentials and defaults)
 
-    Description:
+          --format=FORMAT         output format: table, json, csv
 
-        List clouds and projects information, if the CLOUD argument is not specified, the
-        selected default cloud will be used. You can interactively set the default cloud with the command
-        'cloud select'.
+      Description:
 
-        list flavor
-        : list the flavors
-        list image
-        : list the images
-        list vm
-        : list the vms
-        list project
-        : list the projects
-        list cloud
-        : same as cloud list
+          List clouds and projects information, if the CLOUD argument is not specified, the
+          selected default cloud will be used. You can interactively set the default cloud with the command
+          'cloud select'.
 
-    See Also:
+          list flavor
+          : list the flavors
+          list image
+          : list the images
+          list vm
+          : list the vms
+          list project
+          : list the projects
+          list cloud
+          : same as cloud list
 
-        man cloud
+      See Also:
+
+          man cloud
 
     """
     call = ListInfo(arguments)

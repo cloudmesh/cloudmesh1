@@ -12,27 +12,29 @@ log = LOGGER(__file__)
 
 def shell_command_flavor(arguments):
     """
-    Usage:
-        flavor
-        flavor CLOUD... [--refresh]
-        flavor -h | --help
-        flavor --version
+    ::
 
-   Options:
-       -h                   help message
-       --refresh            refresh flavors of IaaS
+      Usage:
+          flavor
+          flavor CLOUD... [--refresh]
+          flavor -h | --help
+          flavor --version
 
-    Arguments:
-        CLOUD    Name of the IaaS cloud e.g. india_openstack_grizzly.
+     Options:
+         -h                   help message
+         --refresh            refresh flavors of IaaS
 
-    Description:
-       flavor command provides list of available flavors. Flavor describes
-       virtual hardware configurations such as size of memory, disk, cpu cores.
+      Arguments:
+          CLOUD    Name of the IaaS cloud e.g. india_openstack_grizzly.
 
-    Result:
+      Description:
+         flavor command provides list of available flavors. Flavor describes
+         virtual hardware configurations such as size of memory, disk, cpu cores.
 
-    Examples:
-        $ flavor india_openstack_grizzly
+      Result:
+
+      Examples:
+          $ flavor india_openstack_grizzly
 
     """
 

@@ -19,24 +19,26 @@ class cm_shell_color:
     @command
     def do_color(self, args, arguments):
         """
-        Usage:
-            color on
-            color off
-            color
-            
-            Turns the shell color printing on or off
+        ::
+        
+          Usage:
+              color on
+              color off
+              color
 
-        Description:
+              Turns the shell color printing on or off
 
-            color on   switched the color on
+          Description:
 
-            color off  switches the color off
-            
-            color      without parameters prints a test to display
-                       the various colored mesages. It is intended
-                       as a test to see if your terminal supports
-                       colors.
-                      
+              color on   switched the color on
+
+              color off  switches the color off
+
+              color      without parameters prints a test to display
+                         the various colored mesages. It is intended
+                         as a test to see if your terminal supports
+                         colors.
+
         """
         if arguments['on']:
             key = "cloudmesh.shell.color"

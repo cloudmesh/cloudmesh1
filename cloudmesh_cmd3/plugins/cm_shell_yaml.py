@@ -19,24 +19,26 @@ class cm_shell_yaml:
     @command
     def do_yaml(self, args, arguments):
         """
-        Usage:
-            yaml KIND [KEY] [--filename=FILENAME] [--format=FORMAT]
-            yaml KIND KEY VALUE [--filename=FILENAME] 
+        ::
 
-        Provides yaml information or updates yaml on a given replacement
+          Usage:
+              yaml KIND [KEY] [--filename=FILENAME] [--format=FORMAT]
+              yaml KIND KEY VALUE [--filename=FILENAME] 
 
-        Arguments:
-            KIND        The type of the yaml file (server, user) 
-            KEY         Key name of the nested dict e.g. cloudmesh.server.loglevel
-            VALUE       Value to set on a given KEY
-            FILENAME    cloudmesh.yaml or cloudmesh_server.yaml
-            FORMAT      The format of the output (table, json, yaml)
+          Provides yaml information or updates yaml on a given replacement
 
-        Options:
-            
-            --format=FORMAT      the format of the output [default: print]
+          Arguments:
+              KIND        The type of the yaml file (server, user) 
+              KEY         Key name of the nested dict e.g. cloudmesh.server.loglevel
+              VALUE       Value to set on a given KEY
+              FILENAME    cloudmesh.yaml or cloudmesh_server.yaml
+              FORMAT      The format of the output (table, json, yaml)
 
-        Description:
+          Options:
+
+              --format=FORMAT      the format of the output [default: print]
+
+          Description:
 
              Sets and gets values from a yaml configuration file
         """

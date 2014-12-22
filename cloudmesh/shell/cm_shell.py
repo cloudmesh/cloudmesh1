@@ -1,47 +1,50 @@
 #! /usr/bin/env python
-"""cm config
-------------
-Command to generate rc files from our cloudmesh configuration files.
+"""
+::
 
-Usage:
-  cm defaults [FILENAME] - stores also alias
-  cm defaults clear - clears the defaults
+  cm config
+  ------------
+  Command to generate rc files from our cloudmesh configuration files.
 
-  cm set PREFIX INDEX - automatic index index must be of the form 00001  from which to start naming vms. 0 indicate how many leading 0s in the index.
-  cm set project [PROJECT] - set functions will be interactive if no param is given
-  cm set cloud [CLOUD]
-  cm set image [IMAGE] [CLOUD]
-  cm set flavor [FLAVOR] [CLOUD]
+  Usage:
+    cm defaults [FILENAME] - stores also alias
+    cm defaults clear - clears the defaults
 
-  cm list [CLOUD | all]
-  cm list servers [CLOUD]
-  cm list images [CLOUD]
-  cm list flavors [CLOUD]
-  cm list config [CLOUD]
+    cm set PREFIX INDEX - automatic index index must be of the form 00001  from which to start naming vms. 0 indicate how many leading 0s in the index.
+    cm set project [PROJECT] - set functions will be interactive if no param is given
+    cm set cloud [CLOUD]
+    cm set image [IMAGE] [CLOUD]
+    cm set flavor [FLAVOR] [CLOUD]
 
-  cm find REGEX - finds the fm that match the condition  (cloud="name", ...)
+    cm list [CLOUD | all]
+    cm list servers [CLOUD]
+    cm list images [CLOUD]
+    cm list flavors [CLOUD]
+    cm list config [CLOUD]
 
-  cm start COUNT [IMAGE] [FLAVOR] [CLOUD]
-  cm stop [INDEX]
-  cm delete [INDEX]
+    cm find REGEX - finds the fm that match the condition  (cloud="name", ...)
 
-  cm info [CLOUD]
-  cm info [NAME] - info of the vom with name
-  cm info [INDEX] - info about the vm with the given index
+    cm start COUNT [IMAGE] [FLAVOR] [CLOUD]
+    cm stop [INDEX]
+    cm delete [INDEX]
 
-  cm referesh [all | CLOUD] [images | servers | flavors]
+    cm info [CLOUD]
+    cm info [NAME] - info of the vom with name
+    cm info [INDEX] - info about the vm with the given index
 
-  cm alias ALIAS=STRING
+    cm referesh [all | CLOUD] [images | servers | flavors]
 
-  cm rain IMAGE CLOUD
+    cm alias ALIAS=STRING
 
-  cm usage START END [CLOUD] [PROJECT]
+    cm rain IMAGE CLOUD
 
-  cm --version
-  cm --help
+    cm usage START END [CLOUD] [PROJECT]
+
+    cm --version
+    cm --help
 
 
-  cm config ... take from cm_cli
+    cm config ... take from cm_cli
 
 """
 from __future__ import print_function

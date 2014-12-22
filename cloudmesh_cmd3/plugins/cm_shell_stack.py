@@ -36,23 +36,25 @@ class cm_shell_stack:
     @command
     def do_stack(self, args, arguments):
         """
-        Usage:
-            stack start NAME [--template=TEMPLATE] [--param=PARAM]
-            stack stop NAME
-            stack show NAME
-            stack list [--refresh] [--column=COLUMN] [--format=FORMAT]
-            stack help | -h
+        ::
 
-        An orchestration tool (OpenStack Heat)
+          Usage:
+              stack start NAME [--template=TEMPLATE] [--param=PARAM]
+              stack stop NAME
+              stack show NAME
+              stack list [--refresh] [--column=COLUMN] [--format=FORMAT]
+              stack help | -h
 
-        Arguments:
+          An orchestration tool (OpenStack Heat)
 
-          NAME           stack name
-          help           Prints this message
-          
-        Options:
+          Arguments:
 
-           -v       verbose mode
+            NAME           stack name
+            help           Prints this message
+
+          Options:
+
+             -v       verbose mode
 
         """
         self.cm_mongo = cm_mongo()

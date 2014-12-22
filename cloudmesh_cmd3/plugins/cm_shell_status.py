@@ -16,12 +16,14 @@ class cm_shell_status:
     @command
     def do_status(self, args, arguments):
         """
-        Usage:
-            status mongo
-            status celery
-            status celery ping
-            status celery stats
-            status rabbitmq
+        ::
+
+          Usage:
+              status mongo
+              status celery
+              status celery ping
+              status celery stats
+              status rabbitmq
 
             Shows system status
         """

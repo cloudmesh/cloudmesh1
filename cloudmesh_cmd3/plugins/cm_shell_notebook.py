@@ -95,16 +95,18 @@ class cm_shell_notebook:
     @command
     def do_notebook(self, args, arguments):
         """
-        Usage:
-            notebook create
-            notebook start
-            notebook kill
+        ::
+        
+          Usage:
+              notebook create
+              notebook start
+              notebook kill
 
-        Manages the ipython notebook server
+          Manages the ipython notebook server
 
-        Options:
+          Options:
 
-           -v       verbose mode
+             -v       verbose mode
 
         """
         log.info(arguments)

@@ -11,28 +11,30 @@ log = LOGGER(__file__)
 
 def shell_command_image(arguments):
     """
-    Usage:
-        image
-        image <cm_cloud>... [--refresh]
-    image -h | --help
-        image --version
+    ::
 
-   Options:
-       -h                   help message
-       --refresh            refresh images of IaaS
+      Usage:
+          image
+          image <cm_cloud>... [--refresh]
+      image -h | --help
+          image --version
 
-    Arguments:
-        cm_cloud    Name of the IaaS cloud e.g. india_openstack_grizzly.
+     Options:
+         -h                   help message
+         --refresh            refresh images of IaaS
 
-    Description:
-       image command provides list of available images. Image describes
-       pre-configured virtual machine image.
+      Arguments:
+          cm_cloud    Name of the IaaS cloud e.g. india_openstack_grizzly.
+
+      Description:
+         image command provides list of available images. Image describes
+         pre-configured virtual machine image.
 
 
-    Result:
+      Result:
 
-    Examples:
-        $ image india_openstack_grizzly
+      Examples:
+          $ image india_openstack_grizzly
 
     """
 

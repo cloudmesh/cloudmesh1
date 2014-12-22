@@ -11,22 +11,24 @@ log = LOGGER(__file__)
 
 def shell_command_open_web(arguments):
     """
-    Usage:
-        web [--fg|--cm] [LINK]
+    ::
 
-    Arguments:
+      Usage:
+          web [--fg|--cm] [LINK]
 
-        LINK    the link on the localhost cm server is opened.
+      Arguments:
 
-    Options:
+          LINK    the link on the localhost cm server is opened.
 
-        -v         verbose mode
-        --fg       opens a link on the FG portal
-        --cm       opens a link on the CM portal
+      Options:
 
-    Description:
+          -v         verbose mode
+          --fg       opens a link on the FG portal
+          --cm       opens a link on the CM portal
 
-        Opens a web page with the specified link
+      Description:
+
+          Opens a web page with the specified link
 
     """
 

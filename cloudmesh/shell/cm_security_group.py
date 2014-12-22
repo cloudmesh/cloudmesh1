@@ -11,26 +11,28 @@ log = LOGGER(__file__)
 
 def shell_command_security_group(arguments):
     """
-    Usage:
-        security_group list <cm_cloud>...
-        security_group add <cm_cloud> <label> <parameters>  [NOT IMPLEMENTED]
-        security_group delete <cm_cloud> <label>            [NOT IMPLEMENTED]
-    security_group -h | --help
-        security_group --version
+    ::
 
-   Options:
-       -h                   help message
+      Usage:
+          security_group list <cm_cloud>...
+          security_group add <cm_cloud> <label> <parameters>  [NOT IMPLEMENTED]
+          security_group delete <cm_cloud> <label>            [NOT IMPLEMENTED]
+      security_group -h | --help
+          security_group --version
 
-    Arguments:
-        cm_cloud    Name of the IaaS cloud e.g. india_openstack_grizzly.
+     Options:
+         -h                   help message
 
-    Description:
-       security_group command provides list of available security_groups.
+      Arguments:
+          cm_cloud    Name of the IaaS cloud e.g. india_openstack_grizzly.
 
-    Result:
+      Description:
+         security_group command provides list of available security_groups.
 
-    Examples:
-        $ security_group list india_openstack_grizzly
+      Result:
+
+      Examples:
+          $ security_group list india_openstack_grizzly
 
     """
 

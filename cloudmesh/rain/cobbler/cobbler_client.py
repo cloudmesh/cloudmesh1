@@ -1,97 +1,98 @@
 #!/usr/bin/env python
 
 """Example of program with many options using docopt.
+::
 
-Usage:
-  cobbler_client.py list --object=OBJECT_TYPE [--format=FORMAT]
-  cobbler_client.py list --object=OBJECT_TYPE
-  cobbler_client.py get --object=OBJECT_TYPE --name=ITEM_NAME
-  cobbler_client.py add --object=OBJECT_TYPE --data=DATA_FILE
-  cobbler_client.py child --object=OBJECT_TYPE --name=ITEM_NAME
-  cobbler_client.py profile --ks=ITEM_NAME
-  cobbler_client.py update --object=OBJECT_TYPE --data=DATA_FILE
-  cobbler_client.py remove --object=OBJECT_TYPE --name=ITEM_NAME
-  cobbler_client.py remove interface --system=SYSTEM_NAME --name=ITEM_NAME
-  cobbler_client.py deploy --name=SYSTEM_NAME [options]
-  cobbler_client.py power --name=SYSTEM_NAME [options]
-  cobbler_client.py test [options]
+  Usage:
+    cobbler_client.py list --object=OBJECT_TYPE [--format=FORMAT]
+    cobbler_client.py list --object=OBJECT_TYPE
+    cobbler_client.py get --object=OBJECT_TYPE --name=ITEM_NAME
+    cobbler_client.py add --object=OBJECT_TYPE --data=DATA_FILE
+    cobbler_client.py child --object=OBJECT_TYPE --name=ITEM_NAME
+    cobbler_client.py profile --ks=ITEM_NAME
+    cobbler_client.py update --object=OBJECT_TYPE --data=DATA_FILE
+    cobbler_client.py remove --object=OBJECT_TYPE --name=ITEM_NAME
+    cobbler_client.py remove interface --system=SYSTEM_NAME --name=ITEM_NAME
+    cobbler_client.py deploy --name=SYSTEM_NAME [options]
+    cobbler_client.py power --name=SYSTEM_NAME [options]
+    cobbler_client.py test [options]
 
-Arguments:
-  PATH  destination path
+  Arguments:
+    PATH  destination path
 
-Options:
-  -h --help            show this help message and exit
-  --version            show version and exit
-  -v --verbose         print status messages
-  -q --quiet           report only file names
-  -f --force           force remove the object and its sub-objects
-  -o --off             power off the system
-  --object=OBJECT_TYPE    specifies the object type: distro, profile, system, kickstart
-  --name=ITEM_NAME        specifies the item's name
-  --data=DATA_FILE      specifies the filename containing the data
-  --system=SYSTEM_NAME   specifies the name of system from which some interfaces will be deleted
-  --onoff=ONOFF    specifies the power status, on or off
-  --format=FORMAT   the format of the table is either json, html, list,
-                    or ascii [default: ascii]
-Description:
+  Options:
+    -h --help            show this help message and exit
+    --version            show version and exit
+    -v --verbose         print status messages
+    -q --quiet           report only file names
+    -f --force           force remove the object and its sub-objects
+    -o --off             power off the system
+    --object=OBJECT_TYPE    specifies the object type: distro, profile, system, kickstart
+    --name=ITEM_NAME        specifies the item's name
+    --data=DATA_FILE      specifies the filename containing the data
+    --system=SYSTEM_NAME   specifies the name of system from which some interfaces will be deleted
+    --onoff=ONOFF    specifies the power status, on or off
+    --format=FORMAT   the format of the table is either json, html, list,
+                      or ascii [default: ascii]
+  Description:
 
-  describe here what the commands do
+    describe here what the commands do
 
-  cobbler_client.py list object_type
+    cobbler_client.py list object_type
 
-    list names in object type ...
+      list names in object type ...
 
-  cobbler_client.py get object_type item_name
+    cobbler_client.py get object_type item_name
 
-    get the detail report of item_name in object_type
+      get the detail report of item_name in object_type
 
-  cobbler_client.py add object_type data_file
-  cobbler_client.py update object_type data_file
+    cobbler_client.py add object_type data_file
+    cobbler_client.py update object_type data_file
 
-    add the data object in data_file belongs to object_type to cobbler.
-      examples:
-        profile: data_file
-        { "name": "test-profile-140318",
-          "distro": "test-x86_64",
-          "kickstart": "ktanaka.ks"
-        }
+      add the data object in data_file belongs to object_type to cobbler.
+        examples:
+          profile: data_file
+          { "name": "test-profile-140318",
+            "distro": "test-x86_64",
+            "kickstart": "ktanaka.ks"
+          }
 
-        system: data_file
-        { "name": "test-sys-140318",
-          "profile": "test-profile-140318",
-          "power": {
-                     "power-address": "1.2.3.4",
-                     "power-user": "test",
-                     "power-pass": "nopassword",
-                     "power-type": "ipmilan",
-                     "power-id": 1
-                    },
-          "interfaces": [
-                          {
-                            "name": "ee1",
-                            "ip-address": "192.168.1.23",
-                            "mac-address": "aa:bb:cc:dd:ee:ff",
-                            "static": true,
-                            "management": true,
-                            "netmask": "255.255.255.0"
-                           },
-                           {
-                             "name": "ee2",
-                             "ip-address": "192.168.1.123",
-                             "mac-address": "aa:bb:cc:ee:dd:ff",
-                             "static": true,
-                             "management": false,
-                             "netmask": "255.255.255.0"
-                            }
-                          ]
-           }
-  cobbler_client.py remove object_type item_name
+          system: data_file
+          { "name": "test-sys-140318",
+            "profile": "test-profile-140318",
+            "power": {
+                       "power-address": "1.2.3.4",
+                       "power-user": "test",
+                       "power-pass": "nopassword",
+                       "power-type": "ipmilan",
+                       "power-id": 1
+                      },
+            "interfaces": [
+                            {
+                              "name": "ee1",
+                              "ip-address": "192.168.1.23",
+                              "mac-address": "aa:bb:cc:dd:ee:ff",
+                              "static": true,
+                              "management": true,
+                              "netmask": "255.255.255.0"
+                             },
+                             {
+                               "name": "ee2",
+                               "ip-address": "192.168.1.123",
+                               "mac-address": "aa:bb:cc:ee:dd:ff",
+                               "static": true,
+                               "management": false,
+                               "netmask": "255.255.255.0"
+                              }
+                            ]
+             }
+    cobbler_client.py remove object_type item_name
 
-      remove an item_name in object_type
+        remove an item_name in object_type
 
-  cobbler_client.py remove interface system_name item_name
+    cobbler_client.py remove interface system_name item_name
 
-      remove the interface item_name form system system_name
+        remove the interface item_name form system system_name
 """
 from __future__ import print_function
 

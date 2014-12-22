@@ -7,24 +7,25 @@ from cloudmesh.cm_mongo import cm_mongo
 
 log = LOGGER(__file__)
 
-
+# TODO: [--width=WIDTH]
+# WIDTH   The width of the ID in teh label, padded with 0
 def shell_command_label(arguments):
-    # TODO: [--width=WIDTH]
-    # WIDTH   The width of the ID in teh label, padded with 0
     """
-    Usage:
-           label [--prefix=PREFIX] [--id=ID] [--raw]
+    ::
 
-    Options:
+      Usage:
+             label [--prefix=PREFIX] [--id=ID] [--raw]
 
-      --prefix=PREFIX    provide the prefix for the label
-      --id=ID            provide the start ID which is an integer
-      --raw              prints label only
+      Options:
 
-    Description:
+        --prefix=PREFIX    provide the prefix for the label
+        --id=ID            provide the start ID which is an integer
+        --raw              prints label only
 
-        A command to set a prefix and an id for a name of VM. 
-        Without a paremeter, it prints a current label.
+      Description:
+
+          A command to set a prefix and an id for a name of VM. 
+          Without a paremeter, it prints a current label.
 
     """
     try:

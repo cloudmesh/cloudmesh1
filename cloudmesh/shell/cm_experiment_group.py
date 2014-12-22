@@ -12,98 +12,100 @@ log = LOGGER(__file__)
 
 def shell_command_experiment_group(arguments):
     """
-    Usage:
-        group list [--format=FORMAT]
-        group create NAME
-        group remove NAME
-        group add item NAME TYPE VALUE
-        group remove item NAME TYPE VALUE
-        group show NAME [TYPE] [--format=FORMAT]
+    ::
 
-    Arguments:
+      Usage:
+          group list [--format=FORMAT]
+          group create NAME
+          group remove NAME
+          group add item NAME TYPE VALUE
+          group remove item NAME TYPE VALUE
+          group show NAME [TYPE] [--format=FORMAT]
 
-        NAME    name of the group
-        TYPE    type of the item in the group, e.g. vm 
-        VALUE   value of item to add, e.g. vm name
+      Arguments:
 
-    Options:
+          NAME    name of the group
+          TYPE    type of the item in the group, e.g. vm 
+          VALUE   value of item to add, e.g. vm name
 
-        -v               verbose mode
-        --format=FORMAT  output format: table, json, csv
+      Options:
 
-    Description:
+          -v               verbose mode
+          --format=FORMAT  output format: table, json, csv
 
-       group list           lists the groups
-       group create         creates a new group
-       group remove         removes a group
-       group add item       addes an item of a type to a group
-       group remove item    removes an item of a type from a group
-       group show           lists items of a group
-       
-    Examples:
-        group add item sample vm samplevm
-            add vm named samplevm to group sample
-            
-        group show sample vm --format=json
-            list all VMs of group sample in json format
+      Description:
 
-    Example:
+         group list           lists the groups
+         group create         creates a new group
+         group remove         removes a group
+         group add item       addes an item of a type to a group
+         group remove item    removes an item of a type from a group
+         group show           lists items of a group
 
-       group create experiment_1
-       vm start
-       last = vm label
-       group add experiment_1 vm last
+      Examples:
+          group add item sample vm samplevm
+              add vm named samplevm to group sample
 
-       group create experiment_2
-       vm start
-       last = vm info label  # prints the vm label /prefix + number
-       ipno = vm info ip # prints the ip of the last vm
-       ipno = vm info ip gvonlasz_1  # get ip of vm with label gvonlasz_1
+          group show sample vm --format=json
+              list all VMs of group sample in json format
 
-       group add expermiment_2 ip ipno
+      Example:
 
-       groups are just tuples
+         group create experiment_1
+         vm start
+         last = vm label
+         group add experiment_1 vm last
 
-       i can have multiple Kinds in the tuple
+         group create experiment_2
+         vm start
+         last = vm info label  # prints the vm label /prefix + number
+         ipno = vm info ip # prints the ip of the last vm
+         ipno = vm info ip gvonlasz_1  # get ip of vm with label gvonlasz_1
 
-    mongoengine
+         group add expermiment_2 ip ipno
 
-    class groupObject
+         groups are just tuples
 
-        def add (... name, kind, attribute ...)
-        def printer ( ... kind, printfunction, name...)
-        def getter ( .... kind, name)
-        
-    def getter ( .... kind, name ...)
+         i can have multiple Kinds in the tuple
 
-       if kind == "vm":
-          vm = get vm from mongo
-          return vm
-       elif kind = "image"
-          iamge = get image from mongo
-          return iamge
-       ....
+      mongoengine
 
-    def vmPrinter ( .... vm ...)
+      class groupObject
 
-       print vm.ip
-       print vm.name
-       ....
+          def add (... name, kind, attribute ...)
+          def printer ( ... kind, printfunction, name...)
+          def getter ( .... kind, name)
 
-    def imagePrinter ( .... image ...)
+      def getter ( .... kind, name ...)
 
-       print image.size
-       print image.name
-       ....
+         if kind == "vm":
+            vm = get vm from mongo
+            return vm
+         elif kind = "image"
+            iamge = get image from mongo
+            return iamge
+         ....
 
-       
+      def vmPrinter ( .... vm ...)
 
-    g = groupObject()
-    g.printer("vm", cmPrinter)
-    g.printer("image", imagePrinter)
+         print vm.ip
+         print vm.name
+         ....
 
-    
-       
+      def imagePrinter ( .... image ...)
+
+         print image.size
+         print image.name
+         ....
+
+
+
+      g = groupObject()
+      g.printer("vm", cmPrinter)
+      g.printer("image", imagePrinter)
+
+
+
        
     """
     # Changed the scope of this import.

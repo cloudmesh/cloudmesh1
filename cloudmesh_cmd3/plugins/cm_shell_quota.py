@@ -34,20 +34,22 @@ class cm_shell_quota:
     @command
     def do_quota(self, args, arguments):
         """
-        Usage:
-            quota [CLOUD] [--format=json]
-            quota help | -h
+        ::
+        
+          Usage:
+              quota [CLOUD] [--format=json]
+              quota help | -h
 
-        quota limit on a current project (tenant)
+          quota limit on a current project (tenant)
 
-        Arguments:
+          Arguments:
 
-          CLOUD          Cloud name to see the usage
-          help           Prints this message
+            CLOUD          Cloud name to see the usage
+            help           Prints this message
 
-        Options:
+          Options:
 
-           -v       verbose mode
+             -v       verbose mode
 
         """
 

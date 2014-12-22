@@ -185,7 +185,7 @@ Command - cluster::
         cluster start CLUSTER_NAME
         cluster list
         cluster login CLUSTER_NAME
-        cluster stop CLUSTER_NAME
+        cluster stop STACK_NAME
         cluster create --count=<count>
                        --group=<group>
                        [--ln=<LoginName>]
@@ -896,7 +896,7 @@ limits
 Command - limits::
 
     Usage:
-        limits [CLOUD]
+        limits [CLOUD] [--format=json]
         limits help | -h
     
     Current usage data with limits on a selected project (tenant)
@@ -1256,7 +1256,7 @@ quota
 Command - quota::
 
     Usage:
-        quota [CLOUD]
+        quota [CLOUD] [--format=json]
         quota help | -h
     
     quota limit on a current project (tenant)
@@ -1414,37 +1414,6 @@ Command - security_group::
     
     
 
-slurm
-----------------------------------------------------------------------
-
-Command - slurm::
-
-    Usage:
-        slurm create NAME WORKERS CLOUD [--image=IMAGE] [--flavor=FLAVOR]
-        slurm info [NAME]
-        slurm status [NAME]            
-        slurm delete [-f] [NAME]
-        slurm clean
-        slurm checkpoint NAME
-        slurm restore NAME
-        slurm list
-        slurm default NAME WORKERS CLOUD [--image=IMAGE] [--flavor=FLAVOR]
-    
-    Manages a virtual slurm cluster on a cloud
-    
-    Arguments:
-    
-      NAME     The name of the slurm cluster
-      WORKERS  The number of workers in the virtual slurm cluster
-      CLOUD    The name of the cloud on which the virtual slurm cluster
-               is to be deployed
-    
-    Options:
-    
-       -v       verbose mode
-    
-    
-
 stack
 ----------------------------------------------------------------------
 
@@ -1565,10 +1534,10 @@ usage
 Command - usage::
 
     Usage:
-        usage [CLOUD] [--start=START] [--end=END]
+        usage [CLOUD] [--start=START] [--end=END] [--format=json]
         usage help | -h
     
-    Usage data on a current project (tenant)
+    Usage data on a current project/tenant
     
     Arguments:
     

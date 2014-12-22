@@ -15,70 +15,70 @@ def shell_command_default(arguments):
     """
     ::
 
-    Usage:
-        default [--column=COLUMN] [--format=FORMAT]
-        default cloud [VALUE]
-        default format [VALUE]
-        default key [VALUE]
-        default flavor [CLOUD] [--name=NAME|--id=ID]
-        default image [CLOUD] [--name=NAME|--id=ID]
-        default list refresh [--on|--off]
+      Usage:
+          default [--column=COLUMN] [--format=FORMAT]
+          default cloud [VALUE]
+          default format [VALUE]
+          default key [VALUE]
+          default flavor [CLOUD] [--name=NAME|--id=ID]
+          default image [CLOUD] [--name=NAME|--id=ID]
+          default list refresh [--on|--off]
 
-    Arguments:
+      Arguments:
 
-        VALUE    provide a value to update default setting
-        CLOUD    provide a cloud name to work with, if not
-                 specified, the default cloud or a selected
-                 cloud will be used
+          VALUE    provide a value to update default setting
+          CLOUD    provide a cloud name to work with, if not
+                   specified, the default cloud or a selected
+                   cloud will be used
 
-    Options:
+      Options:
 
-        --column=COLUMN  specify what information to display.
-                         The columns are specified as a comma
-                         separated list. For example: cloud,format
-        --format=FORMAT  output format: table, json, csv
-        --name=NAME      provide flavor or image name
-        --id=ID          provide flavor or image id
-        --on             turn on
-        --off            turn off
+          --column=COLUMN  specify what information to display.
+                           The columns are specified as a comma
+                           separated list. For example: cloud,format
+          --format=FORMAT  output format: table, json, csv
+          --name=NAME      provide flavor or image name
+          --id=ID          provide flavor or image id
+          --on             turn on
+          --off            turn off
 
-    Description:
+      Description:
 
-        default [--column=COLUMN] [--format=FORMAT]
-            print user defaults settings
+          default [--column=COLUMN] [--format=FORMAT]
+              print user defaults settings
 
-        default cloud [VALUE]
-            print or change (if VALUE provided) default cloud. To set
-            a cloud as default, it must be registered and active (to
-            list clouds: cloud [list]; to activate a cloud: cloud on
-            [CLOUD])
+          default cloud [VALUE]
+              print or change (if VALUE provided) default cloud. To set
+              a cloud as default, it must be registered and active (to
+              list clouds: cloud [list]; to activate a cloud: cloud on
+              [CLOUD])
 
-        default format [VALUE]
-            print or change(if VALUE provided) default print format,
-            available formats are table, json, csv
-            
-        default key [VALUE]
-            print or change (if VALUE provided) default key.
+          default format [VALUE]
+              print or change(if VALUE provided) default print format,
+              available formats are table, json, csv
 
-        default flavor [CLOUD] [--name=NAME|--id=ID]
-            set default flavor for a cloud, same as command:
+          default key [VALUE]
+              print or change (if VALUE provided) default key.
 
-                cloud set flavor [CLOUD] [--name=NAME|--id=ID]
+          default flavor [CLOUD] [--name=NAME|--id=ID]
+              set default flavor for a cloud, same as command:
 
-            (to check a cloud's default settings:
-             cloud default [CLOUD|--all])
+                  cloud set flavor [CLOUD] [--name=NAME|--id=ID]
 
-        default image [CLOUD] [--name=NAME|--id=ID]
-            set default image for a cloud, same as command:
+              (to check a cloud's default settings:
+               cloud default [CLOUD|--all])
 
-             cloud set image [CLOUD] [--name=NAME|--id=ID]
+          default image [CLOUD] [--name=NAME|--id=ID]
+              set default image for a cloud, same as command:
 
-            (to check a cloud's default settings:
-             cloud default [CLOUD|--all])
-             
-        default list refresh [--on|--off]
-            set the default behaviour of the list commands, if the default
-            value is on, then the program will always refresh before listing
+               cloud set image [CLOUD] [--name=NAME|--id=ID]
+
+              (to check a cloud's default settings:
+               cloud default [CLOUD|--all])
+
+          default list refresh [--on|--off]
+              set the default behaviour of the list commands, if the default
+              value is on, then the program will always refresh before listing
 
     """
     call = DefaultCommand(arguments)

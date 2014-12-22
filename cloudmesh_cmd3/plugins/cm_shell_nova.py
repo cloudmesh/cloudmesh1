@@ -41,26 +41,28 @@ class cm_shell_nova:
     @command
     def do_nova(self, args, arguments):
         """
-        Usage:
-               nova set CLOUD
-               nova info [CLOUD]          
-               nova help
-               nova ARGUMENTS               
+        ::
+        
+          Usage:
+                 nova set CLOUD
+                 nova info [CLOUD]          
+                 nova help
+                 nova ARGUMENTS               
 
-        A simple wrapper for the openstack nova command
+          A simple wrapper for the openstack nova command
 
-        Arguments:
+          Arguments:
 
-          ARGUMENTS      The arguments passed to nova
-          help           Prints the nova manual
-          set            reads the information from the current cloud
-                         and updates the environment variables if
-                         the cloud is an openstack cloud
-          info           the environment values for OS
-          
-        Options:
+            ARGUMENTS      The arguments passed to nova
+            help           Prints the nova manual
+            set            reads the information from the current cloud
+                           and updates the environment variables if
+                           the cloud is an openstack cloud
+            info           the environment values for OS
 
-           -v       verbose mode
+          Options:
+
+             -v       verbose mode
 
         """
         # log.info(arguments)

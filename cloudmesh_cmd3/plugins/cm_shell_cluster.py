@@ -43,46 +43,48 @@ class cm_shell_cluster:
     @command
     def do_cluster(self, args, arguments):
         """
-        Usage:
-            cluster start CLUSTER_NAME
-            cluster list
-            cluster login CLUSTER_NAME
-            cluster stop STACK_NAME
-            cluster create --count=<count>
-                           --group=<group>
-                           [--ln=<LoginName>]
-                           [--cloud=<CloudName>]
-                           [--image=<imgName>|--imageid=<imgId>]
-                           [--flavor=<flavorName>|--flavorid=<flavorId>]
-                           [--force]
-                                    
-        Description:
-            Cluster Management
-            
-            cluster create --count=<count> --group=<group> --ln=<LoginName> [options...]
-            <count>            specify amount of VMs in the cluster
-            <group>            specify a group name of the cluster, make sure it's unique
-                Start a cluster of VMs, and each of them can log into all others.
-                CAUTION: you sould do some default setting before using this command:
-                1. select cloud to work on, e.g. cloud select india
-                2. activate the cloud, e.g. cloud on india
-                3. set the default key to start VMs, e.g. key default [NAME]
-                4. set the start name of VMs, which is prefix and index, e.g. label --prefix=test --id=1
-                5. set image of VMs, e.g. default image
-                6. set flavor of VMs, e.g. default flavor
-                Also, please make sure the group name of the cluster is unique
-                
-        Options:
-            --ln=<LoginName>           give a login name for the VMs, e.g. ubuntu
-            --cloud=<CloudName>        give a cloud to work on
-            --flavor=<flavorName>      give the name of the flavor
-            --flavorid=<flavorId>      give the id of the flavor
-            --image=<imgName>          give the name of the image
-            --imageid=<imgId>          give the id of the image
-            --force                    if a group exists and there are VMs in it, the program will
-                                       ask user to proceed or not, use this flag to respond yes as 
-                                       default(if there are VMs in the group before creating this 
-                                       cluster, the program will include the exist VMs into the cluster)
+        ::
+        
+          Usage:
+              cluster start CLUSTER_NAME
+              cluster list
+              cluster login CLUSTER_NAME
+              cluster stop STACK_NAME
+              cluster create --count=<count>
+                             --group=<group>
+                             [--ln=<LoginName>]
+                             [--cloud=<CloudName>]
+                             [--image=<imgName>|--imageid=<imgId>]
+                             [--flavor=<flavorName>|--flavorid=<flavorId>]
+                             [--force]
+
+          Description:
+              Cluster Management
+
+              cluster create --count=<count> --group=<group> --ln=<LoginName> [options...]
+              <count>            specify amount of VMs in the cluster
+              <group>            specify a group name of the cluster, make sure it's unique
+                  Start a cluster of VMs, and each of them can log into all others.
+                  CAUTION: you sould do some default setting before using this command:
+                  1. select cloud to work on, e.g. cloud select india
+                  2. activate the cloud, e.g. cloud on india
+                  3. set the default key to start VMs, e.g. key default [NAME]
+                  4. set the start name of VMs, which is prefix and index, e.g. label --prefix=test --id=1
+                  5. set image of VMs, e.g. default image
+                  6. set flavor of VMs, e.g. default flavor
+                  Also, please make sure the group name of the cluster is unique
+
+          Options:
+              --ln=<LoginName>           give a login name for the VMs, e.g. ubuntu
+              --cloud=<CloudName>        give a cloud to work on
+              --flavor=<flavorName>      give the name of the flavor
+              --flavorid=<flavorId>      give the id of the flavor
+              --image=<imgName>          give the name of the image
+              --imageid=<imgId>          give the id of the image
+              --force                    if a group exists and there are VMs in it, the program will
+                                         ask user to proceed or not, use this flag to respond yes as 
+                                         default(if there are VMs in the group before creating this 
+                                         cluster, the program will include the exist VMs into the cluster)
 
 
         """

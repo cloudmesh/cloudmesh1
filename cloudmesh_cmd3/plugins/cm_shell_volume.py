@@ -19,81 +19,83 @@ class cm_shell_volume:
     @command
     def do_volume(self, args, arguments):
         """
-        Usage:
-            volume list
-            volume create <size>
-                          [--snapshot-id=<snapshot-id>]
-                          [--image-id=<image-id>]
-                          [--display-name=<display-name>]
-                          [--display-description=<display-description>]
-                          [--volume-type=<volume-type>]
-                          [--availability-zone=<availability-zone>]
-            volume delete <volume>
-            volume attach <server> <volume> <device>
-            volume detach <server> <volume>
-            volume show <volume>
-            volume snapshot-list
-            volume snapshot-create <volume-id>
-                                   [--force]
-                                   [--display-name=<display-name>]
-                                   [--display-description=<display-description>]
-            volume snapshot-delete <snapshot>
-            volume snapshot-show <snapshot>
-            volume help
+        ::
+
+          Usage:
+              volume list
+              volume create <size>
+                            [--snapshot-id=<snapshot-id>]
+                            [--image-id=<image-id>]
+                            [--display-name=<display-name>]
+                            [--display-description=<display-description>]
+                            [--volume-type=<volume-type>]
+                            [--availability-zone=<availability-zone>]
+              volume delete <volume>
+              volume attach <server> <volume> <device>
+              volume detach <server> <volume>
+              volume show <volume>
+              volume snapshot-list
+              volume snapshot-create <volume-id>
+                                     [--force]
+                                     [--display-name=<display-name>]
+                                     [--display-description=<display-description>]
+              volume snapshot-delete <snapshot>
+              volume snapshot-show <snapshot>
+              volume help
 
 
-        volume management
+          volume management
 
-        Arguments:
-            <size>            Size of volume in GB
-            <volume>          Name or ID of the volume to delete
-            <volume-id>       ID of the volume to snapshot
-            <server>          Name or ID of server(VM).
-            <device>          Name of the device e.g. /dev/vdb. Use "auto" for 
-                              autoassign (if supported)
-            <snapshot>        Name or ID of the snapshot
+          Arguments:
+              <size>            Size of volume in GB
+              <volume>          Name or ID of the volume to delete
+              <volume-id>       ID of the volume to snapshot
+              <server>          Name or ID of server(VM).
+              <device>          Name of the device e.g. /dev/vdb. Use "auto" for 
+                                autoassign (if supported)
+              <snapshot>        Name or ID of the snapshot
 
-        Options:
-            --snapshot-id <snapshot-id>
-                                    Optional snapshot id to create the volume from.
-                                    (Default=None)
-            --image-id <image-id>
-                                    Optional image id to create the volume from.
-                                    (Default=None)
-            --display-name <display-name>
-                                    Optional volume name. (Default=None)
-            --display-description <display-description>
-                                    Optional volume description. (Default=None)
-            --volume-type <volume-type>
-                                    Optional volume type. (Default=None)
-            --availability-zone <availability-zone>
-                                    Optional Availability Zone for volume. (Default=None)
-            --force                 Optional flag to indicate whether to snapshot a volume
-                                    even if its attached to an instance. (Default=False)
-                                    
-        Description:
-            volume list
-                List all the volumes
-            volume create <size> [options...]
-                Add a new volume
-            volume delete <volume>
-                Remove a volume   
-            volume attach <server> <volume> <device>
-                Attach a volume to a server    
-            volume-detach <server> <volume>
-                Detach a volume from a server
-            volume show <volume>        
-                Show details about a volume
-            volume snapshot-list
-                List all the snapshots
-            volume snapshot-create <volume-id> [options...]
-                Add a new snapshot
-            volume snapshot-delete <snapshot>
-                Remove a snapshot
-            volume-snapshot-show <snapshot>
-                Show details about a snapshot
-            volume help 
-                Prints the nova manual
+          Options:
+              --snapshot-id <snapshot-id>
+                                      Optional snapshot id to create the volume from.
+                                      (Default=None)
+              --image-id <image-id>
+                                      Optional image id to create the volume from.
+                                      (Default=None)
+              --display-name <display-name>
+                                      Optional volume name. (Default=None)
+              --display-description <display-description>
+                                      Optional volume description. (Default=None)
+              --volume-type <volume-type>
+                                      Optional volume type. (Default=None)
+              --availability-zone <availability-zone>
+                                      Optional Availability Zone for volume. (Default=None)
+              --force                 Optional flag to indicate whether to snapshot a volume
+                                      even if its attached to an instance. (Default=False)
+
+          Description:
+              volume list
+                  List all the volumes
+              volume create <size> [options...]
+                  Add a new volume
+              volume delete <volume>
+                  Remove a volume   
+              volume attach <server> <volume> <device>
+                  Attach a volume to a server    
+              volume-detach <server> <volume>
+                  Detach a volume from a server
+              volume show <volume>        
+                  Show details about a volume
+              volume snapshot-list
+                  List all the snapshots
+              volume snapshot-create <volume-id> [options...]
+                  Add a new snapshot
+              volume snapshot-delete <snapshot>
+                  Remove a snapshot
+              volume-snapshot-show <snapshot>
+                  Show details about a snapshot
+              volume help 
+                  Prints the nova manual
 
         """
         # log.info(arguments)

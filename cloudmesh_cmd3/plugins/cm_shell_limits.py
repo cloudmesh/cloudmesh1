@@ -35,20 +35,22 @@ class cm_shell_limits:
     @command
     def do_limits(self, args, arguments):
         """
-        Usage:
-            limits [CLOUD] [--format=json]
-            limits help | -h
+        ::
+        
+          Usage:
+              limits [CLOUD] [--format=json]
+              limits help | -h
 
-        Current usage data with limits on a selected project (tenant)
+          Current usage data with limits on a selected project (tenant)
 
-        Arguments:
+          Arguments:
 
-          CLOUD          Cloud name to see the usage
-          help           Prints this message
+            CLOUD          Cloud name to see the usage
+            help           Prints this message
 
-        Options:
+          Options:
 
-           -v       verbose mode
+             -v       verbose mode
 
         """
         self.cm_mongo = cm_mongo()

@@ -36,22 +36,24 @@ class cm_shell_usage:
     @command
     def do_usage(self, args, arguments):
         """
-        Usage:
-            usage [CLOUD] [--start=START] [--end=END] [--format=json]
-            usage help | -h
+        ::
 
-        Usage data on a current project/tenant
+          Usage:
+              usage [CLOUD] [--start=START] [--end=END] [--format=json]
+              usage help | -h
 
-        Arguments:
+          Usage data on a current project/tenant
 
-          CLOUD          Cloud name to see the usage
-          START          start date of usage (YYYY-MM-DD)
-          END            end date of usage (YYYY-MM-DD)
-          help           Prints this message
+          Arguments:
 
-        Options:
+            CLOUD          Cloud name to see the usage
+            START          start date of usage (YYYY-MM-DD)
+            END            end date of usage (YYYY-MM-DD)
+            help           Prints this message
 
-           -v       verbose mode
+          Options:
+
+             -v       verbose mode
 
         """
         self.cm_mongo = cm_mongo()

@@ -71,64 +71,67 @@ class cm_shell_key:
     @command
     def do_key(self, args, arguments):
         """
-        Usage:
-               key -h|--help
-               key list [--source=SOURCE] [--dir=DIR] [--format=FORMAT]
-               key add [--keyname=KEYNAME] FILENAME
-               key default [KEYNAME]
-               key delete KEYNAME
+        ::
 
-        Manages the keys
+          Usage:
+                   key -h|--help
+                   key list [--source=SOURCE] [--dir=DIR] [--format=FORMAT]
+                   key add [--keyname=KEYNAME] FILENAME
+                   key default [KEYNAME]
+                   key delete KEYNAME
 
-        Arguments:
+            Manages the keys
 
-          SOURCE         mongo, yaml, ssh
-          KEYNAME        The name of a key
-          FORMAT         The format of the output (table, json, yaml)
-          FILENAME       The filename with full path in which the key is located
+            Arguments:
 
-        Options:
+              SOURCE         mongo, yaml, ssh
+              KEYNAME        The name of a key
+              FORMAT         The format of the output (table, json, yaml)
+              FILENAME       The filename with full path in which the key
+                             is located
 
-           --dir=DIR            the directory with keys [default: ~/.ssh]
-           --format=FORMAT      the format of the output [default: table]
-           --source=SOURCE      the source for the keys [default: mongo]
-           --keyname=KEYNAME    the name of the keys
+            Options:
 
-        Description:
+               --dir=DIR            the directory with keys [default: ~/.ssh]
+               --format=FORMAT      the format of the output [default: table]
+               --source=SOURCE      the source for the keys [default: mongo]
+               --keyname=KEYNAME    the name of the keys
 
-
-        key list --source=ssh  [--dir=DIR] [--format=FORMAT]
-
-           lists all keys in the directory. If the directory is not
-           specified the default will be ~/.ssh
-
-        key list --source=yaml  [--dir=DIR] [--format=FORMAT]
-
-           lists all keys in cloudmesh.yaml file in the specified directory.
-            dir is by default ~/.cloudmesh
-
-        key list [--format=FORMAT]
-
-            list the keys in mongo
-
-        key add [--keyname=keyname] FILENAME
-
-            adds the key specifid by the filename to mongodb
+            Description:
 
 
-        key list
+            key list --source=ssh  [--dir=DIR] [--format=FORMAT]
 
-             Prints list of keys. NAME of the key can be specified
+               lists all keys in the directory. If the directory is not
+               specified the default will be ~/.ssh
 
-        key default [NAME]
+            key list --source=yaml  [--dir=DIR] [--format=FORMAT]
 
-             Used to set a key from the key-list as the default key if NAME
-             is given. Otherwise print the current default key
+               lists all keys in cloudmesh.yaml file in the specified directory.
+                dir is by default ~/.cloudmesh
 
-        key delete NAME
+            key list [--format=FORMAT]
 
-             deletes a key. In yaml mode it can delete only key that
-             are not saved in mongo
+                list the keys in mongo
+
+            key add [--keyname=keyname] FILENAME
+
+                adds the key specifid by the filename to mongodb
+
+
+            key list
+
+                 Prints list of keys. NAME of the key can be specified
+
+            key default [NAME]
+
+                 Used to set a key from the key-list as the default key if NAME
+                 is given. Otherwise print the current default key
+
+            key delete NAME
+
+                 deletes a key. In yaml mode it can delete only key that
+                 are not saved in mongo
 
         """
         # print arguments

@@ -45,30 +45,32 @@ class cm_shell_launcher:
     @command
     def do_launcher(self, args, arguments):
         """
-        Usage:
-            launcher start MENU
-            launcher stop STACK_NAME
-            launcher list
-            launcher show STACK_NAME
-            launcher menu [--column=COLUMN] [--format=FORMAT]
-            launcher import [FILEPATH] [--force]
-            launcher export FILEPATH
-            launcher help | -h
+        ::
 
-        An orchestration tool with Chef Cookbooks
+          Usage:
+                launcher start MENU
+                launcher stop STACK_NAME
+                launcher list
+                launcher show STACK_NAME
+                launcher menu [--column=COLUMN] [--format=FORMAT]
+                launcher import [FILEPATH] [--force]
+                launcher export FILEPATH
+                launcher help | -h
 
-        Arguments:
+            An orchestration tool with Chef Cookbooks
 
-          MENU           Name of a cookbook
-          STACK_NAME     Name of a launcher
-          FILEPATH       Filepath
-          COLUMN         column name to display
-          FORMAT         display format (json, table)
-          help           Prints this message
+            Arguments:
 
-        Options:
+              MENU           Name of a cookbook
+              STACK_NAME     Name of a launcher
+              FILEPATH       Filepath
+              COLUMN         column name to display
+              FORMAT         display format (json, table)
+              help           Prints this message
 
-           -v       verbose mode
+            Options:
+
+               -v       verbose mode
 
         """
         log.info(arguments)

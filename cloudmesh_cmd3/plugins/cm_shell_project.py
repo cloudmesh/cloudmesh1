@@ -32,24 +32,26 @@ class cm_shell_project:
     @command
     def do_project(self, args, arguments):
         """
-        Usage:
-               project
-               project info [--format=FORMAT]
-               project default NAME
-               project active NAME
-               project delete NAME
-               project completed NAME
+        ::
+        
+          Usage:
+                 project
+                 project info [--format=FORMAT]
+                 project default NAME
+                 project active NAME
+                 project delete NAME
+                 project completed NAME
 
-        Manages the project
+          Manages the project
 
-        Arguments:
+          Arguments:
 
-          NAME           The project id
-          FORMAT         The display format. (json, table)
+            NAME           The project id
+            FORMAT         The display format. (json, table)
 
-        Options:
+          Options:
 
-           -v       verbose mode
+             -v       verbose mode
 
         """
         self._load_projects()
