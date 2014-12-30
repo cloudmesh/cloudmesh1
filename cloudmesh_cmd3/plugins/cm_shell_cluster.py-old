@@ -9,25 +9,36 @@ from cmd3.console import Console
 from cmd3.shell import command
 from cloudmesh.shell.cm_vm import VMcommand
 from cloudmesh.cm_mongo import cm_mongo
-from cloudmesh.user.cm_user import cm_user
 from cloudmesh.config.cm_config import cm_config
 from cloudmesh.config.cm_keys import cm_keys_mongo
+from cloudmesh.user.cm_user import cm_user
 from cloudmesh.shell.cm_cloud import CloudManage
 from cloudmesh.util.ssh import generate_keypair
 from cloudmesh.keys.util import _keyname_sanitation
-from cloudmesh_common.logger import LOGGER
 from cloudmesh_common.util import get_rand_string
+from cloudmesh_common.logger import LOGGER
 from cloudmesh_install.util import yn_choice
-from cloudmesh.shell.shellutil import (shell_commands_dict_output,
-        ALLOWED_PRINT_FORMAT)
-from cloudmesh.shell.clusters import Clusters
+from cloudmesh.shell.shellutil import shell_commands_dict_output
 
 log = LOGGER(__file__)
 
 class cm_shell_cluster:
 
+    _refreshid = "t_stacks"
+    cluster_tag = "cluster" # tag name
+
     def activate_cm_shell_cluster(self):
         self.register_command_topic('cloud', 'cluster')
+
+    def get_cloud_name(self, cm_user_id):
+        """Returns a default cloud name if exists
+        """
+        try:
+            return self.cm_user.get_defaults(cm_user_id)['nova-cloud']
+        except KeyError:
+            log.error('Set OpenStack as a default cloud. '
+                      '"stack" ONLY works with openstack platform.')
+            return None
 
     @command
     def do_cluster(self, args, arguments):
@@ -35,24 +46,24 @@ class cm_shell_cluster:
         ::
         
           Usage:
-              cluster list [--format=FORMAT]
-              cluster create <name>
-                             [--count=<count>]
+              cluster start CLUSTER_NAME
+              cluster list
+              cluster login CLUSTER_NAME
+              cluster stop STACK_NAME
+              cluster create --count=<count>
+                             --group=<group>
                              [--ln=<LoginName>]
                              [--cloud=<CloudName>]
                              [--image=<imgName>|--imageid=<imgId>]
                              [--flavor=<flavorName>|--flavorid=<flavorId>]
                              [--force]
-              cluster show <name> [--format=FORMAT]
-              cluster remove <name> [--grouponly]
 
           Description:
               Cluster Management
-              
-              cluster list
-                  list the clusters
 
-              cluster create <name> --count=<count> --ln=<LoginName> [options...]
+              cluster create --count=<count> --group=<group> --ln=<LoginName> [options...]
+              <count>            specify amount of VMs in the cluster
+              <group>            specify a group name of the cluster, make sure it's unique
                   Start a cluster of VMs, and each of them can log into all others.
                   CAUTION: you sould do some default setting before using this command:
                   1. select cloud to work on, e.g. cloud select india
@@ -61,20 +72,9 @@ class cm_shell_cluster:
                   4. set the start name of VMs, which is prefix and index, e.g. label --prefix=test --id=1
                   5. set image of VMs, e.g. default image
                   6. set flavor of VMs, e.g. default flavor
-                  Also, it is better to choose a unused group name
-              
-              cluster show <name> [--format=FORMAT]
-                  show the detailed information about the cluster VMs
-
-              cluster remove <name> [--grouponly]
-                  remove the cluster and its VMs, if you want to remove the cluster(group name)
-                  without removing the VMs, use --grouponly flag
-          
-          Arguments:
-              <name>        cluster name or group name
+                  Also, please make sure the group name of the cluster is unique
 
           Options:
-              --count=<count>            give the number of VMs to add into the cluster
               --ln=<LoginName>           give a login name for the VMs, e.g. ubuntu
               --cloud=<CloudName>        give a cloud to work on
               --flavor=<flavorName>      give the name of the flavor
@@ -85,74 +85,128 @@ class cm_shell_cluster:
                                          ask user to proceed or not, use this flag to respond yes as 
                                          default(if there are VMs in the group before creating this 
                                          cluster, the program will include the exist VMs into the cluster)
-              --grouponly                remove the group only without removing the VMs, otherwise 
-                                         cluster remove command will remove all the VMs of this cluster
-              --format=FORMAT            output format: table, json, csv
+
 
         """
         #pprint(arguments)
-        clusterobj = Clusters()
-        userobj = cm_user()
-        config = cm_config()
-        username = config.username()
+        self.cm_config = cm_config()
+        self.cm_mongo = cm_mongo()
+        self.cm_user = cm_user()
        
-        if arguments['list']:
-            try:
-                clusters_list = clusterobj.list_clusters()
-            except Exception, err:
-                Console.error(str(err))
+        # -----------------------------
+        # TODO::
+        # add VMs to cluster
+        # -----------------------------
+       
+        if arguments['start'] and arguments['CLUSTER_NAME']:
+            '''Starts a cluster'''
+
+            # Initialize default variables. e.g. userid, default cloud and
+            # default keypair
+            userid = self.cm_config.username()
+            def_cloud = self.get_cloud_name(userid)
+            self.cm_mongo.activate(userid)
+            
+            userinfo = self.cm_user.info(userid)
+            if "key" in userinfo["defaults"]:
+                key = userinfo["defaults"]["key"]
+            elif len(userinfo["keys"]["keylist"].keys()) > 0:
+                key = userinfo["keys"]["keylist"].keys()[0]
+        
+            if key:
+                keycontent = userinfo["keys"]["keylist"][key]
+                if keycontent.startswith('key '):
+                    keycontent = keycontent[4:]
+                cm_keys_mongo(userid).check_register_key(userid, def_cloud, key, keycontent)
+                keynamenew = _keyname_sanitation(userid, key)
+            else:
+                Console.warning("No sshkey found. Please Upload one")
                 return
-            if arguments['--format']:
-                if arguments['--format'] not in ALLOWED_PRINT_FORMAT:
-                    Console.error("wrong print format: {0}. (allowed print format: {1})".format(format_type, 
-                        ", ".join(ALLOWED_PRINT_FORMAT)))
+            
+            clustername = arguments['CLUSTER_NAME']
+            s_name = "{0}-{1}-{2}-{3}".format(self.cluster_tag, userid, clustername, get_rand_string())
+            # TEMP FOR HADOOP CLUSTER
+            if clustername != "hadoop":
+                Console.warning('hadoop is only available cluster')
+                return
+            
+            # 1. keypair for the communication between master and worker nodes
+            privatekey, publickey = generate_keypair()
+            t_url = \
+            "https://raw.githubusercontent.com/cloudmesh/cloudmesh/dev1.3/heat-templates/ubuntu-14.04/hadoop-cluster/hadoop-cluster.yaml"
+            param = {'KeyName': keynamenew,
+                     'PublicKeyString': publickey,
+                     'PrivateKeyString': privatekey}
+            log.debug(def_cloud, userid, s_name, t_url, param, publickey,
+                      privatekey)
+            res = self.cm_mongo.stack_create(cloud=def_cloud, cm_user_id=userid,
+                                             servername=s_name,
+                                             template_url=t_url,
+                                             parameters=param)
+            log.debug(res)
+            if 'error' in res:
+                print (res['error']['message'])
+            return res
+
+        elif arguments['list']:
+            userid = self.cm_config.username()
+            self.cm_mongo.activate(userid)
+            self.cm_mongo.refresh(cm_user_id=userid, types=[self._refreshid])
+            stacks = self.cm_mongo.stacks(cm_user_id=userid)
+            launchers = self.filter_launcher(
+                stacks,
+                {"search": "contain",
+                 "key": "stack_name",
+                 "value": self.cluster_tag }
+                )
+            log.debug(launchers)
+
+            d = {}
+            for k0, v0 in launchers.iteritems():
+                for k1, v1 in launchers[k0].iteritems():
+                    d[v1['id']] = v1
+            columns = ['stack_name', 'description', 'stack_status',
+                       'creation_time', 'cm_cloud']
+            if '--column' in arguments and arguments['--column'] != "all":
+                columns = [x.strip() for x in arguments['--column'].split(',')]
+
+            if '--format' in arguments:
+                if arguments['--format'] not in ['table', 'json', 'csv']:
+                    Console.error("please select printing format among table, json and csv")
                     return
                 else:
                     p_format = arguments['--format']
             else:
                 p_format = None
-            shell_commands_dict_output(username,
-                                       clusters_list,
+
+            shell_commands_dict_output(userid, d,
                                        print_format=p_format,
-                                       firstheader="cluster",
-                                       header=[["num of nodes", "num_of_nodes"],
-                                               ["num of active nodes", "num_of_active_nodes"]])
+                                       firstheader="id",
+                                       header=columns
+                                       )
 
-        elif arguments['show']:
-            try:
-                vms_dict = clusterobj.vms(arguments['<name>'])[arguments['<name>']]
-            except Exception, err:
-                Console.error(str(err))
-                return
-            if arguments['--format']:
-                if arguments['--format'] not in ALLOWED_PRINT_FORMAT:
-                    Console.error("wrong print format: {0}. (allowed print format: {1})".format(format_type,
-                        ", ".join(ALLOWED_PRINT_FORMAT)))
-                    return
-                else:
-                    p_format = arguments['--format']
-            else:
-                p_format = None
-                
-                
-            print ("NOT IMPLEMENTED")
-            """
-            shell_commands_dict_output(username,
-                                       vms_dict,
-                                       print_format=p_format,
-                                       firstheader="vm name",
-                                       header=[["cloud", "cm_cloud"]])
-            """
+        elif arguments['login']:
+            Console.error("Not implemented")
+            return
 
-
-        elif arguments['remove']: 
-            try:
-                clusterobj.delete(arguments['<name>'], grouponly=arguments['--grouponly'])
-            except Exception, err:
-                Console.error(str(err))
-                return
+        elif arguments['stop'] and arguments['CLUSTER_NAME']:
+            userid = self.cm_config.username()
+            def_cloud = self.get_cloud_name(userid)
+            c_id = arguments['CLUSTER_NAME']
+            self.cm_mongo.activate(userid)
+            res = self.cm_mongo.stack_delete(cloud=def_cloud,
+                                             cm_user_id=userid,
+                                             server=c_id)
+            log.debug(res)
+            return res
 
         elif arguments['create']:
+            try:
+                config = cm_config()
+            except:
+                Console.error("Failed to load the cloudmesh yaml file")
+                return
+            username = config['cloudmesh']['profile']['username']
             cloudname = arguments['--cloud'] or CloudManage().get_selected_cloud(username)
             temp_dir_name = ".temp_cluster_create_" + username + "_0"
             while os.path.isdir("./{0}".format(temp_dir_name)):
@@ -179,7 +233,11 @@ class cm_shell_cluster:
                 Console.error("<count> must be an integer")
                 return
             '''
-            GroupName = arguments['<name>']
+            if arguments['--group'] == '':
+                Console.error("<group> cannot be empty")
+                return
+            else:
+                GroupName = arguments['--group']
             
             if arguments['--ln']:
                 if arguments['--ln'] == '':
@@ -218,8 +276,6 @@ class cm_shell_cluster:
             arguments_temp = arguments
             arguments_temp['start'] = True
             arguments_temp['--name'] = None
-            arguments_temp['--group'] = GroupName
-
             
             vmclass = VMcommand(arguments_temp)
             res = vmclass.call_procedure()
@@ -300,7 +356,7 @@ class cm_shell_cluster:
             
             # -------------------------
             # key handler
-            userinfo = userobj.info(username)
+            userinfo = cm_user().info(username)
             key = None
             if "key" in userinfo["defaults"]:
                 key = userinfo["defaults"]["key"]
@@ -388,3 +444,6 @@ class cm_shell_cluster:
                 print (item)
             print ("(host name for private ips will have -i at the end of VM name, e.g. testVM -> testVM-i)")
 
+
+        #if arguments['delete']:
+            #print(cm("help"))

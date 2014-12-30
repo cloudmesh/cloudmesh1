@@ -20,6 +20,8 @@ from cloudmesh.shell.shellutil import get_vms_look_for
 from cloudmesh.shell.shellutil import shell_commands_dict_output
 from cloudmesh.shell.shellutil import get_command_list_refresh_default_setting
 
+import json
+
 
 log = LOGGER(__file__)
 
@@ -884,3 +886,33 @@ def assign_public_ip(username=None, cloudname=None, serverid=None):
     # else:
     # return "Manual public ip assignment is not allowed for {0}
     # cloud".format(cloud)
+
+
+
+# import json
+# from cloudmesh.config.cm_config import cm_config
+
+class VMs(object):
+	"""
+	vm api 
+	"""
+	def __init__(self):
+        self.config = cm_config()
+        self.username = self.config.username()
+        pass
+        
+	def _helper_cli_printer(vms_dict, print_format=None):
+		"""
+		accept a dict of VMs, change some informtion and get it ready for
+		printing such as tables in CLI
+		"""
+		for key, value in vms_dict.iteritems():
+            if '_id' in value:
+                del value['_id']  
+		if print_format == "json":
+			print(json.dumps(d, indent=4))
+		else:
+			pass
+		
+	
+	

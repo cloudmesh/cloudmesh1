@@ -48,7 +48,10 @@ def shell_command_experiment_group(arguments):
 
           group show sample vm --format=json
               list all VMs of group sample in json format
+    """
 
+
+    """
       Example:
 
          group create experiment_1
