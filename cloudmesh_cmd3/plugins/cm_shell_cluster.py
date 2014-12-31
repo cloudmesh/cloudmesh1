@@ -44,8 +44,11 @@ class cm_shell_cluster:
                              [--image=<imgName>|--imageid=<imgId>]
                              [--flavor=<flavorName>|--flavorid=<flavorId>]
                              [--force]
-              cluster show <name> [--format=FORMAT]
-              cluster remove <name> [--grouponly]
+              cluster show <name> 
+                           [--format=FORMAT] 
+                           [--column=COLUMN]
+              cluster remove <name> 
+                             [--grouponly]
 
           Description:
               Cluster Management
@@ -64,7 +67,7 @@ class cm_shell_cluster:
                   6. set flavor of VMs, e.g. default flavor
                   Also, it is better to choose a unused group name
               
-              cluster show <name> [--format=FORMAT]
+              cluster show <name>
                   show the detailed information about the cluster VMs
 
               cluster remove <name> [--grouponly]
@@ -88,8 +91,11 @@ class cm_shell_cluster:
                                          cluster, the program will include the exist VMs into the cluster)
               --grouponly                remove the group only without removing the VMs, otherwise 
                                          cluster remove command will remove all the VMs of this cluster
-              --format=FORMAT            output format: table, json, csv
-
+              FORMAT                     output format: table, json, csv
+              COLUMN                     customize what information to display, for example:
+                                         --column=status,addresses prints the columns status
+                                         and addresses
+                                         
         """
         #pprint(arguments)
         clusterobj = Clusters()
@@ -128,7 +134,7 @@ class cm_shell_cluster:
                 return
             if arguments['--format']:
                 if arguments['--format'] not in ALLOWED_PRINT_FORMAT:
-                    Console.error("wrong print format: {0}. (allowed print format: {1})".format(format_type,
+                    Console.error("wrong print format: {0}. (allowed print format: {1})".format(arguments['--format'],
                         ", ".join(ALLOWED_PRINT_FORMAT)))
                     return
                 else:
@@ -136,8 +142,17 @@ class cm_shell_cluster:
             else:
                 p_format = None
             
+            columns = None
+            if arguments['--column'] and arguments['--column'] != "all":
+                columns = [x.strip() for x in arguments['--column'].split(',')]
+            if columns == []:
+                Console.warning("please provide column names for --column")
+                return
+            
             vmobj = VMs()
-            vmobj._helper_vm_cli_printer(vms_dict, print_format=p_format)
+            vmobj._helper_vm_cli_printer(vms_dict, 
+                                         print_format=p_format,
+                                         columns=columns)
                 
             
 

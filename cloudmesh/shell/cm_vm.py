@@ -904,22 +904,27 @@ class VMs(object):
         self.mongodb = cm_mongo()
         pass
         
-    def _helper_vm_cli_printer(self, vms_dict, print_format=None, refresh=True):
+    def _helper_vm_cli_printer(self, vms_dict, 
+                               print_format=None, 
+                               columns=None,
+                               refresh=True):
         """
         accept a dict of VMs, change some informtion and get it ready for
         printing such as tables in CLI
         """
         clouds_list = []
+        if columns:
+            temp_columns = []
         for key, value in vms_dict.iteritems():
             if 'cm_cloud' in value and value['cm_cloud'] not in clouds_list:
                 clouds_list.append(value['cm_cloud'])
             if '_id' in value:
                 del value['_id']  
-        if print_format == "json":
-            print(json.dumps(d, indent=4))
+        if print_format == "json" and columns == None:
+            print(json.dumps(vms_dict, indent=4))
         else:
             res = {}
-            
+            headers = []
             # refresh the image and flavor information to get their names
             if refresh:
                 self.mongodb.activate(cm_user_id=self.username,
@@ -934,11 +939,11 @@ class VMs(object):
             
             for key, value in vms_dict.iteritems():
                 res[key] = {}
-                headers = []
                 cm_type = value['cm_type']
                 itemkeys = self._helper_itemkeys(cm_type)
                 for item in itemkeys:
-                    headers.append(item[0])
+                    if item[0] not in headers:
+                        headers.append(item[0])
                     try:
                         temp = _getFromDict(value, item[1:])
                         # ----------------------------------------
@@ -962,10 +967,25 @@ class VMs(object):
                                 temp0 = temp0 + i['addr'] + ', '
                             temp = temp0[:-2]
                         # ----------------------------------------
-                        res[key][item[0]] = temp
+                        temp_res = temp
                     except:
-                        res[key][item[0]] = None
-                    
+                        temp_res = None
+                    if columns:
+                        if item[0] in columns:
+                            res[key][item[0]] = temp_res
+                            if item[0] not in temp_columns:
+                                temp_columns.append(item[0])
+                        else:
+                            pass
+                    else:
+                        res[key][item[0]] = temp_res
+            if columns:
+                columns_to_print = []
+                for item in columns:
+                    if item in temp_columns:
+                        columns_to_print.append(item)
+                headers = columns_to_print
+            
             shell_commands_dict_output(self.username,
                                        res,
                                        print_format=print_format,
@@ -994,8 +1014,8 @@ class VMs(object):
                             #["name", "id"],
                             ["status", "extra", "status"],
                             ["addresses", "public_ips"],
-                            ["flavor", "extra", "instance_type"],
                             ['id', 'id'],
+                            ["flavor", "extra", "instance_type"],
                             ['image', 'extra', 'imageId'],
                             ["user_id", 'user_id'],
                             ["metadata", "metadata"],
