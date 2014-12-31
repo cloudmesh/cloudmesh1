@@ -21,6 +21,7 @@ from cloudmesh_install.util import yn_choice
 from cloudmesh.shell.shellutil import (shell_commands_dict_output,
         ALLOWED_PRINT_FORMAT)
 from cloudmesh.shell.clusters import Clusters
+from cloudmesh.shell.cm_vm import VMs
 
 log = LOGGER(__file__)
 
@@ -95,6 +96,7 @@ class cm_shell_cluster:
         userobj = cm_user()
         config = cm_config()
         username = config.username()
+        
        
         if arguments['list']:
             try:
@@ -133,16 +135,11 @@ class cm_shell_cluster:
                     p_format = arguments['--format']
             else:
                 p_format = None
+            
+            vmobj = VMs()
+            vmobj._helper_vm_cli_printer(vms_dict, print_format=p_format)
                 
-                
-            print ("NOT IMPLEMENTED")
-            """
-            shell_commands_dict_output(username,
-                                       vms_dict,
-                                       print_format=p_format,
-                                       firstheader="vm name",
-                                       header=[["cloud", "cm_cloud"]])
-            """
+            
 
 
         elif arguments['remove']: 

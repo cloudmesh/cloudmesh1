@@ -2,7 +2,7 @@
 
 .. role:: strikethrough
 
-This file contains tome very basic utility functions that must not
+This file contains some very basic utility functions that must not
 need any import from cloudmesh. That is no statement such as
 
 * :strikethrough:`import cloudmesh`
@@ -341,6 +341,10 @@ def dict_uni_to_ascii(d):
             return d
 
 
+def _getFromDict(dataDict, mapList):
+    # ref:
+    # http://stackoverflow.com/questions/14692690/access-python-nested-dictionary-items-via-a-list-of-keys
+    return reduce(lambda d, k: d[k], mapList, dataDict)
     
     
     

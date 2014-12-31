@@ -1,6 +1,7 @@
 from __future__ import print_function
 from cloudmesh.cm_mongo import cm_mongo
 from cloudmesh.user.cm_user import cm_user
+from cloudmesh_common.util import _getFromDict
 from cloudmesh_common.logger import LOGGER
 from cloudmesh.shell.cm_cloud import CloudManage
 from cloudmesh.config.cm_config import cm_config
@@ -19,7 +20,6 @@ from cloudmesh.config.cm_keys import cm_keys_mongo
 from cloudmesh.shell.shellutil import get_vms_look_for
 from cloudmesh.shell.shellutil import shell_commands_dict_output
 from cloudmesh.shell.shellutil import get_command_list_refresh_default_setting
-
 import json
 
 
@@ -891,28 +891,148 @@ def assign_public_ip(username=None, cloudname=None, serverid=None):
 
 # import json
 # from cloudmesh.config.cm_config import cm_config
+# from cloudmesh_common.util import _getFromDict
+# from cloudmesh.shell.shellutil import shell_commands_dict_output
 
 class VMs(object):
-	"""
-	vm api 
-	"""
-	def __init__(self):
+    """
+    vm api 
+    """
+    def __init__(self):
         self.config = cm_config()
         self.username = self.config.username()
+        self.mongodb = cm_mongo()
         pass
         
-	def _helper_cli_printer(vms_dict, print_format=None):
-		"""
-		accept a dict of VMs, change some informtion and get it ready for
-		printing such as tables in CLI
-		"""
-		for key, value in vms_dict.iteritems():
+    def _helper_vm_cli_printer(self, vms_dict, print_format=None, refresh=True):
+        """
+        accept a dict of VMs, change some informtion and get it ready for
+        printing such as tables in CLI
+        """
+        clouds_list = []
+        for key, value in vms_dict.iteritems():
+            if 'cm_cloud' in value and value['cm_cloud'] not in clouds_list:
+                clouds_list.append(value['cm_cloud'])
             if '_id' in value:
                 del value['_id']  
-		if print_format == "json":
-			print(json.dumps(d, indent=4))
-		else:
-			pass
-		
-	
-	
+        if print_format == "json":
+            print(json.dumps(d, indent=4))
+        else:
+            res = {}
+            
+            # refresh the image and flavor information to get their names
+            if refresh:
+                self.mongodb.activate(cm_user_id=self.username,
+                                      names=clouds_list)
+                self.mongodb.refresh(cm_user_id=self.username,
+                                     names=clouds_list,
+                                     types=['images', 'flavors'])
+            images_dict = self.mongodb.images(clouds=clouds_list, 
+                                              cm_user_id=self.username)
+            flavors_dict = self.mongodb.flavors(clouds=clouds_list, 
+                                                cm_user_id=self.username)
+            
+            for key, value in vms_dict.iteritems():
+                res[key] = {}
+                headers = []
+                cm_type = value['cm_type']
+                itemkeys = self._helper_itemkeys(cm_type)
+                for item in itemkeys:
+                    headers.append(item[0])
+                    try:
+                        temp = _getFromDict(value, item[1:])
+                        # ----------------------------------------
+                        # special handlers
+                        # ----------------------------------------
+                        if item[0] == 'flavor':
+                            if temp in flavors_dict[value["cm_cloud"]]:
+                                temp = flavors_dict[value["cm_cloud"]][temp]['name']
+                            else:
+                                temp = "unavailable"
+
+                        elif item[0] == 'image':
+                            if temp in images_dict[value["cm_cloud"]]:
+                                temp = images_dict[value["cm_cloud"]][temp]['name']
+                            else:
+                                temp = "unavailable"
+
+                        elif cm_type == "openstack" and item[0] == 'addresses':
+                            temp0 = ''
+                            for i in temp['private']:
+                                temp0 = temp0 + i['addr'] + ', '
+                            temp = temp0[:-2]
+                        # ----------------------------------------
+                        res[key][item[0]] = temp
+                    except:
+                        res[key][item[0]] = None
+                    
+            shell_commands_dict_output(self.username,
+                                       res,
+                                       print_format=print_format,
+                                       firstheader="name",
+                                       header=headers)
+                        
+                
+                
+    def _helper_itemkeys(self, cm_type):
+        itemkeys = {"openstack":
+                        [
+                            #['name', 'name'],
+                            ['status', 'status'],
+                            ['addresses', 'addresses'],
+                            ['id', 'id'],
+                            ['flavor', 'flavor', 'id'],
+                            ['image', 'image', 'id'],
+                            ['user_id', 'cm_user_id'],
+                            ['metadata', 'metadata'],
+                            ['key_name', 'key_name'],
+                            ['created', 'created'],
+                            ['cloud', 'cm_cloud']
+                        ],
+                        "ec2":
+                        [
+                            #["name", "id"],
+                            ["status", "extra", "status"],
+                            ["addresses", "public_ips"],
+                            ["flavor", "extra", "instance_type"],
+                            ['id', 'id'],
+                            ['image', 'extra', 'imageId'],
+                            ["user_id", 'user_id'],
+                            ["metadata", "metadata"],
+                            ["key_name", "extra", "key_name"],
+                            ["created", "extra", "launch_time"]
+                        ],
+                        "aws":
+                        [
+                            #["name", "name"],
+                            ["status", "extra", "status"],
+                            ["addresses", "public_ips"],
+                            ["flavor", "extra", "instance_type"],
+                            ['id', 'id'],
+                            ['image', 'extra', 'image_id'],
+                            ["user_id", "user_id"],
+                            ["metadata", "metadata"],
+                            ["key_name", "extra", "key_name"],
+                            ["created", "extra", "launch_time"]
+                        ],
+                        "azure":
+                        [
+                            #['name', 'name'],
+                            ['status', 'status'],
+                            ['addresses', 'vip'],
+                            ['flavor', 'flavor', 'id'],
+                            ['id', 'id'],
+                            ['image', 'image', 'id'],
+                            ['user_id', 'user_id'],
+                            ['metadata', 'metadata'],
+                            ['key_name', 'key_name'],
+                            ['created', 'created'],
+                        ]
+                        }
+        if cm_type in itemkeys:
+            return itemkeys[cm_type]
+        else:
+            raise Exception("no itemkeys for cm_type '{0}'".format(cm_type))
+            
+    
+    
