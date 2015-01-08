@@ -58,7 +58,7 @@ class cm_shell_usage:
         """
         self.cm_mongo = cm_mongo()
         self.cm_config = cm_config()
-        self.cm_user = cm_user()
+        self.cm_user = cm_user().username
 
         if arguments["help"] or arguments["-h"]:
             print (self.do_usage.__doc__)
