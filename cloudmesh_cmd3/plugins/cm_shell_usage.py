@@ -27,7 +27,7 @@ class cm_shell_usage:
         """Returns a default cloud name if exists
         """
         try:
-            return self.cm_user.get_defaults(cm_user_id)['nova-cloud']
+            return self.user.get_defaults(cm_user_id)['nova-cloud']
         except KeyError:
             log.error('Set OpenStack as a default cloud.'
                       '"stack" ONLY works with openstack platform.')
@@ -58,7 +58,7 @@ class cm_shell_usage:
         """
         self.cm_mongo = cm_mongo()
         self.cm_config = cm_config()
-        self.cm_user = cm_user()
+        self.user = cm_user()
 
         if arguments["help"] or arguments["-h"]:
             print (self.do_usage.__doc__)
