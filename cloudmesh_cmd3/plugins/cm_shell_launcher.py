@@ -37,7 +37,7 @@ class cm_shell_launcher:
         """Returns a default cloud name if exists
         """
         try:
-            return self.user.get_defaults(cm_user_id)['cloud']
+            return self.cm_user.get_defaults(cm_user_id)['cloud']
         except KeyError:
             log.error('set a default cloud with openstack. "stack" works on'
                       ' openstack platform only')
@@ -77,7 +77,7 @@ class cm_shell_launcher:
         log.info(arguments)
         self.cm_mongo = cm_mongo()
         self.cm_config = cm_config()
-        self.user = cm_user()
+        self.cm_user = cm_user()
         self._id = "t_stacks"
 
         if arguments["help"] or arguments["-h"]:
@@ -169,7 +169,7 @@ class cm_shell_launcher:
             def_cloud = self.get_cloud_name(userid)
             self.cm_mongo.activate(userid)
             
-            userinfo = self.user.info(userid)
+            userinfo = self.cm_user.info(userid)
             if "key" in userinfo["defaults"]:
                 key = userinfo["defaults"]["key"]
             elif len(userinfo["keys"]["keylist"].keys()) > 0:
