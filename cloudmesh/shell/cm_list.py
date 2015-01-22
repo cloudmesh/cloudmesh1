@@ -7,6 +7,7 @@ from cmd3.console import Console
 from cloudmesh.shell.cm_cloud import shell_command_cloud
 from docopt import docopt
 from cloudmesh.shell.shellutil import shell_commands_dict_output, get_command_list_refresh_default_setting
+from pprint import pprint
 
 # list_command_table_format = "simple"
 list_command_table_format = "grid"
@@ -21,10 +22,20 @@ def shell_command_list(arguments):
       List available flavors, images, vms, projects and clouds
 
       Usage:
-          list flavor [CLOUD|--all] [--refresh] [--format=FORMAT]
-          [--column=COLUMN]
-          list image [CLOUD|--all] [--refresh] [--format=FORMAT] [--column=COLUMN]
-          list vm [CLOUD|--all] [--refresh] [--format=FORMAT] [--column=COLUMN] [--group=<group>]
+          list flavor [CLOUD|--all] 
+                      [--refresh] 
+                      [--format=FORMAT]
+                      [--column=COLUMN]
+          list image [CLOUD|--all] 
+                     [--refresh] 
+                     [--format=FORMAT] 
+                     [--column=COLUMN]
+          list vm [CLOUD|--all] 
+                  [--group=<group>]
+                  [--refresh] 
+                  [--format=FORMAT] 
+                  [--column=COLUMN] 
+                  [--detail]
           list project
           list cloud [--column=COLUMN]
 
@@ -34,10 +45,12 @@ def shell_command_list(arguments):
 
       Options:
 
-          -v         verbose mode
-          --all      list information of all active clouds
-          --refresh  refresh data before list
-
+          --all                  list information of all active clouds
+          --refresh              refresh data before list
+          --group=<group>        give the group name in list vm
+          --detail               for table print format, a brief version 
+                                 is used as default, use this flag to print
+                                 detailed table
           --column=COLUMN        specify what information to display in
                                  the columns of the list command. For
                                  example, --column=active,label prints
@@ -47,8 +60,7 @@ def shell_command_list(arguments):
                                  credentials, defaults (all to display
                                  all, email to display all except
                                  credentials and defaults)
-
-          --format=FORMAT         output format: table, json, csv
+          --format=FORMAT        output format: table, json, csv
 
       Description:
 
@@ -88,6 +100,8 @@ class ListInfo(object):
         self.username = self.config['cloudmesh']['profile']['username']
 
         self.arguments = arguments
+        
+        #pprint(self.arguments)
         
         self.cloudmanage = CloudManage()
         try:
@@ -288,6 +302,40 @@ class ListInfo(object):
                             ['created', 'created'],
                         ]
                         }
+                        
+            itemkeys_short = {"openstack":
+                        [
+                            ['name', 'name'],
+                            ['status', 'status'],
+                            ['addresses', 'addresses'],
+                            ['flavor', 'flavor', 'id'],
+                            ['image', 'image', 'id']
+                        ],
+                        "ec2":
+                        [
+                            ["name", "id"],
+                            ["status", "extra", "status"],
+                            ["addresses", "public_ips"],
+                            ["flavor", "extra", "instance_type"],
+                            ['image', 'extra', 'imageId']
+                        ],
+                        "aws":
+                        [
+                            ["name", "name"],
+                            ["status", "extra", "status"],
+                            ["addresses", "public_ips"],
+                            ["flavor", "extra", "instance_type"],
+                            ['image', 'extra', 'image_id']
+                        ],
+                        "azure":
+                        [
+                            ['name', 'name'],
+                            ['status', 'status'],
+                            ['addresses', 'vip'],
+                            ['flavor', 'flavor', 'id'],
+                            ['image', 'image', 'id']
+                        ]
+                        }
             if self.refresh_default_setting or self.arguments['--refresh']:
                 self.cloudmanage.mongo.activate(
                     cm_user_id=self.username, names=clouds)
@@ -309,6 +357,9 @@ class ListInfo(object):
                             if item[0] in s_column:
                                 new_itemkeys[cloud].append(item)
                     itemkeys = new_itemkeys
+            else:
+                if not self.arguments['--detail']:
+                    itemkeys = itemkeys_short
 
             for cloud in clouds:
                 self.cloudmanage.print_cloud_servers(username=self.username,

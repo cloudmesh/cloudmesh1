@@ -57,11 +57,12 @@ def shell_command_vm(arguments):
                          [--cloud=<CloudName>]
                          [--key=<key>]
                          [--] [<command>...]
-                vm list [CLOUD|--all]
-                        [--refresh]
-                        [--format=FORMAT]
-                        [--column=COLUMN]
+                vm list [CLOUD|--all] 
                         [--group=<group>]
+                        [--refresh] 
+                        [--format=FORMAT] 
+                        [--column=COLUMN] 
+                        [--detail]
 
             Arguments:
                 <command>              positional arguments, the commands you want to
@@ -76,6 +77,9 @@ def shell_command_vm(arguments):
                 --cloud=<CloudName>    give a cloud to work on, if not given, selected
                                        or default cloud will be used
                 --count=<count>        give the number of servers to start
+                --detail               for table print format, a brief version 
+                                       is used as default, use this flag to print
+                                       detailed table
                 --flavor=<flavorName>  give the name of the flavor
                 --flavorid=<flavorId>  give the id of the flavor
                 --group=<group>        give the group name of server
