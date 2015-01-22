@@ -78,6 +78,7 @@ class cm_shell_launcher:
         self.cm_mongo = cm_mongo()
         self.cm_config = cm_config()
         self.user = cm_user()
+        self._id = "t_stacks"
 
         if arguments["help"] or arguments["-h"]:
             print (self.do_launcher.__doc__)
