@@ -1,0 +1,9 @@
+institutionrole_choices=[
+    ('Undergraduate','Undergraduate'),
+    ('Graduate Masters','Graduate Masters'),
+    ("Graduate PhD",'Graduate PhD'),
+    ('Student Other', 'Student Other'),
+    ('Faculty','Faculty'),
+    ('Staff','Staff'),
+    ('Other','Other')
+]
