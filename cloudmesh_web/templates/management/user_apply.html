@@ -1,55 +1,96 @@
 {% extends "layout/layout.html" %}
 
-
-{% macro render_field(field) %}
-    <tr>
-        <td style="width:30%"><i>{{ field.label }}</i></td>
-        <td style="width:70%">{{ field(**kwargs)|safe }}
-            <br>
-            {% if field.errors %}
-                <font color="red">
-                    <dl class=errors>
-                        {% for error in field.errors %}
-                            <dd>  <i class="fa fa-exclamation-triangle"></i> {{ error }}</dd>
-                        {% endfor %}
-                    </dl>
-                </font>
-            {% endif %}
-        </td>
-    </tr>
-{% endmacro %}
-
 {% block content %}
-
-    <legend> {{ title }} </legend>
+    <div class="page-header">
+        <h1> User Application</h1>
+    </div>
 
     <form method="post">
+        <table class="table table-condensed">
+            {% for entry in fields %}
+                {% set section = fields[entry] %}
+                <thead>
+                    <tr>
+                        <th colspan="2" bgcolor="#CCCCCC"> {{ section['label'] }} </th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% set parameters = section['fields'] %}
+                {% for parameter in parameters %}
+                    {% set key = parameter.keys()[0] %}
+                    {% set value = parameter[key] %}
+                    <tr>
+                        <td style="width:25%;font-weight:bold;vertical-align: middle">{{ value['label'] }}</td>
+                        <td style="width:70%" >
+                            <div class="form-group form-group-sm">
+                                <div class="form-group-sm col-sm-6">
+                                    {% if value['type'] == 'integer' %}
+                                        <input class="form-control"
+                                               type="number" step="any"
+                                               name="{{key}}"
+                                               placeholder="{{value['value']}}"
+                                               value="{{value['value']}}"
+                                                {%if value['required'] %} required {% endif %}>
+                                    {% elif value['type'] == 'float' %}
+                                        <input class="form-control"
+                                               type="number"
+                                               step="0.1"
+                                               name="{{key}}"
+                                               placeholder="{{value['value']}}"
+                                               value="{{value['value']}}"
+                                                {%if value['required'] %} required {% endif %}>
+                                    {% elif value['type'] == 'text' %}
+                                        <input class="form-control"
+                                               type="text"
+                                               height="18px"
+                                               name="{{key}}"
+                                               placeholder="{{value['value']}}"
+                                               value="{{value['value']}}"
+                                                {%if value['required'] %} required {% endif %}>
+                                    {% elif value['type'] == 'password' %}
+                                        <input class="form-control"
+                                               type="password"
+                                               height="18px"
+                                               name="{{key}}"
+                                               placeholder="{{value['value']}}"
+                                               value="{{value['value']}}"
+                                                {%if value['required'] %} required {% endif %}>
+                                    {% elif value['type'] == 'textarea' %}
+                                        <textarea class="form-control" name="{{ key  }}"wrap="soft" {%if value['required'] %} required {% endif %}>
+                                        </textarea>
+                                    {% elif value['type'] == 'selector' %}
+                                        <div class="form-inline">
+                                            {% for button in value['value'] %}
+                                                <label class="radio-inline">
+                                                    <input type="radio" name="{{key}}"
+                                                           value="{{button}}"
+                                                            {%if value['required'] %} required {% endif %}>
+                                                    {{button | capitalize}}
+                                                    </input>
+                                                </label>
+                                            {% endfor %}
+                                        </div>
+                                    {% elif value['type'] == 'dropdown' %}
+                                        <div class="form-inline">
+                                            {% set option_value = value['value'] %}
+                                            <select name="{{ key }}"{%if value['required'] %} required {% endif %}>>
+                                                <option>{{ option_value }}</option>
+                                            </select>
+                                            </label>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
 
-        {#  <legend> Profile </legend>#}
-{#        <table class="table table-condensed">#}
-         <table class="table table-condensed">
-            <tbody>
-            <tr>
-                <th colspan="2" bgcolor="#CCCCCC"> Profile </th>
-            </tr>
-            {% for field in profile_fields %}
-                {{ render_field(form[field]) }}
             {% endfor %}
-
-            <tr>
-                <th colspan="2" bgcolor="#CCCCCC">Organisation </th>
-            </tr>
-
-            {% for field in organization_fields %}
-                {{ render_field(form[field]) }}
-            {% endfor %}
-            </tbody>
         </table>
-
         <div class="control-group">
             <label class="control-label" for="button_submit"></label>
             <div class="controls">
-
                 {% for state in states %}
                     <button id="button_{{ state }}" value="{{ state }}"
                             name="button"
@@ -65,7 +106,6 @@
                 {% endfor %}
 
             </div>
-        </div>
         </div>
     </form>
 {% endblock %}

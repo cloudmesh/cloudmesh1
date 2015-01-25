@@ -1,205 +1,219 @@
-project:
-    info:
-        label: Project Information
-        fields:
-            - title:
-                label: Title
-                type: text
-                required: True
-    vocabulary:
-        label: Project Vocabulary
-        fields:
-            - category:
-                label: Project Category
-                type: dropdown
-                required: True
-            - keywords:
-                label: Project Keywords
-                type: text
-                required: True
-    contact:
-        label: Project Contacts
-        fields:
-            - lead:
-                label: Project Lead
-                type: text
-                required: True
-            - managers:
-                label: Project Managers
-                type: textarea
-                required: True
-            - members:
-                label: Project Members
-                type: textarea
-                required: True
-            - alumni:
-                label: Project Alumni
-                type: textarea
-                required: True
-            - contact:
-                label: Contact
-                type: text
-                required: True
-    details:
-        label: Project Details
-        fields:
-            - orientation:
-                label: Orientation
-                type: dropdown
-                required: true
-            - discipline:
-                label: Primary discipline
-                type: dropdown
-                required: true
-            - abstract:
-                label: Abstract
-                type: textarea
-                required: true
-            - merit:
-                label: Merit
-                type: textarea
-                required: true
-            - impact:
-                label: Broader Impact
-                type: textarea
-                required: true
-            - url:
-                label: URL
-                type: text
-                required: true
-            - results:
-                label: Results
-                type: textarea
-                required: true
-    agreements:
-        label: Agreements
-        fields:
-            - nsf_agreement:
-                label: NSF agreement to use Future Systems
-                type: checkbox
-                required: True
-            - collect_slide:
-                label: Slide collection
-                type: checkbox
-                required: True
-            - support:
-                label: Support
-                type: checkbox
-                required: True
-            - software_contrib:
-                label: Software Contributions
-                type: checkbox
-                required: True
-            - doc_contrib:
-                label: Documentation Contributions
-                type: checkbox
-                required: True
-    related_grant:
-        label: Related Grant
-        fields:
-            - organization:
-                label: Grant Organization
-                type: text
-                required: False
-            - id:
-                label: ID
-                type: text
-                required: False
-            - url:
-                label: URL
-                type: text
-                required: False
-    resource_requirements:
-        label: Resource Requirements
-        fields:
-            - services:
-                label: Resource Services
-                type: checkbox
-                options:
-                - Eucalyptus
-                - Openstack
-                - MPI
-                - Hadoop
-                - Mapreduce
-                - Docker
-                - Other
-                - None
-                required: True
-            - clusters:
-                label: Resource Clusters
-                type: checkbox
-                options:
-                - India
-                - Bravo
-                - Echo
-                - Delta
-                - Other
-                - None
-            - provisioning:
-                label: Resource Provisioning
-                type: checkbox
-                options:
-                - VM
-                - Baremetal
-                - Container
-                - IaaS
-                - PaaS
-                - Other
-                - None
-                required: True
-            - comment:
-                label: Comment
-                type: textarea
-                required: True
-            - use_of_fs:
-                label: Use of Future Systems
-                type: textarea
-                required: True
-            - scale_of_use:
-                label: Scale of use
-                type: textarea
-                required: True
-    other:
-        label: Other
-        fields:
-            - comments:
-                label: Comments
-                type: textarea
-                required: True
-    membership:
-        label: Membership Management
-        fields:
-            - join:
-                label: Allow users to request to join
-                type: checkbox
-                option:
-                - ""
-                required: True
-            - notification:
-                label: Send an email notification when a user joins
-                type: checkbox
-                option:
-                - ""
-    location:
-        label: Location
-        fields:
-            - name:
-                label: Name
-                type: text
-                required: True
-            - street:
-                label: Street
-                type: text
-                required: True
-            - additional:
-                label: Additional
-                type: textarea
-                required: True
-            - state:
-                label: State
-                type: dropdown
-                required: True
-            - country:
-                label: Country
-                type: dropdown
-                required: True
+meta:
+    yaml_version: 2.1
+    kind: management
+cloudmesh:
+    project:
+        info:
+            label: Project Information
+            fields:
+                - title:
+                    label: Title
+                    type: text
+                    required: True
+        vocabulary:
+            label: Project Vocabulary
+            fields:
+                - category:
+                    label: Project Category
+                    type: dropdown
+                    value: none
+                    required: True
+                - keywords:
+                    label: Project Keywords
+                    type: text
+                    required: True
+        contact:
+            label: Project Contacts
+            fields:
+                - lead:
+                    label: Project Lead
+                    type: text
+                    required: True
+                - managers:
+                    label: Project Managers
+                    type: textarea
+                    required: True
+                - members:
+                    label: Project Members
+                    type: textarea
+                    required: True
+                - alumni:
+                    label: Project Alumni
+                    type: textarea
+                    required: True
+                - contact:
+                    label: Contact
+                    type: text
+                    required: True
+        details:
+            label: Project Details
+            fields:
+                - orientation:
+                    label: Orientation
+                    type: dropdown
+                    value: none
+                    required: true
+                - discipline:
+                    label: Primary discipline
+                    type: dropdown
+                    value: none
+                    required: true
+                - abstract:
+                    label: Abstract
+                    type: textarea
+                    required: true
+                - merit:
+                    label: Merit
+                    type: textarea
+                    required: true
+                - impact:
+                    label: Broader Impact
+                    type: textarea
+                    required: true
+                - url:
+                    label: URL
+                    type: text
+                    required: true
+                - results:
+                    label: Results
+                    type: textarea
+                    required: true
+        agreements:
+            label: Agreements
+            fields:
+                - nsf_agreement:
+                    label: NSF agreement to use Future Systems
+                    type: checkbox
+                    - options: ""
+                    required: True
+                - collect_slide:
+                    label: Slide collection
+                    type: checkbox
+                    - options: ""
+                    required: True
+                - support:
+                    label: Support
+                    type: checkbox
+                    - options: ""
+                    required: True
+                - software_contrib:
+                    label: Software Contributions
+                    type: checkbox
+                    - options: ""
+                    required: True
+                - doc_contrib:
+                    label: Documentation Contributions
+                    type: checkbox
+                    - options: ""
+                    required: True
+        related_grant:
+            label: Related Grant
+            fields:
+                - organization:
+                    label: Grant Organization
+                    type: text
+                    required: False
+                - id:
+                    label: ID
+                    type: text
+                    required: False
+                - url:
+                    label: URL
+                    type: text
+                    required: False
+        resource_requirements:
+            label: Resource Requirements
+            fields:
+                - services:
+                    label: Resource Services
+                    type: checkbox
+                    options:
+                    - Eucalyptus
+                    - Openstack
+                    - MPI
+                    - Hadoop
+                    - Mapreduce
+                    - Docker
+                    - Other
+                    - None
+                    required: True
+                - clusters:
+                    label: Resource Clusters
+                    type: checkbox
+                    options:
+                    - India
+                    - Bravo
+                    - Echo
+                    - Delta
+                    - Other
+                    - None
+                - provisioning:
+                    label: Resource Provisioning
+                    type: checkbox
+                    options:
+                    - VM
+                    - Baremetal
+                    - Container
+                    - IaaS
+                    - PaaS
+                    - Other
+                    - None
+                    required: True
+                - comment:
+                    label: Comment
+                    type: textarea
+                    required: True
+                - use_of_fs:
+                    label: Use of Future Systems
+                    type: textarea
+                    required: True
+                - scale_of_use:
+                    label: Scale of use
+                    type: textarea
+                    required: True
+        other:
+            label: Other
+            fields:
+                - comments:
+                    label: Comments
+                    type: textarea
+                    required: True
+        membership:
+            label: Membership Management
+            fields:
+                - join:
+                    label: Allow users to request to join
+                    type: checkbox
+                    option:
+                    - ""
+                    required: True
+                - notification:
+                    label: Send an email notification when a user joins
+                    type: checkbox
+                    option:
+                    - ""
+        location:
+            label: Location
+            fields:
+                - name:
+                    label: Name
+                    type: text
+                    required: True
+                - street:
+                    label: Street
+                    type: text
+                    required: True
+                - additional:
+                    label: Additional
+                    type: textarea
+                    required: True
+                - state:
+                    label: State
+                    type: dropdown
+                    value: none
+                    required: True
+                - country:
+                    label: Country
+                    type: dropdown
+                    value: countries.txt
+                    required: True

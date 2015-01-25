@@ -772,7 +772,7 @@ def user_apply():
         flash('Thanks for registering')
         return redirect('/')
 
-    return render_template('management/user_apply.html',
+    return render_template('management/user_apply_old.html',
                            title="User Application",
                            states=['save', 'cancel'],
                            form=form,

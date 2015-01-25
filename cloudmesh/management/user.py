@@ -2,10 +2,6 @@ from cloudmesh.config.ConfigDict import ConfigDict
 from cloudmesh_install import config_file
 from mongoengine import *
 import datetime
-import time
-import hashlib
-import uuid
-from pprint import pprint
 #    mongod --noauth --dbpath . --port 27777
 from cloudmesh.management.cloudmeshobject import CloudmeshObject
 import yaml
@@ -123,7 +119,7 @@ class User(CloudmeshObject):
     # Affiliation
     #
     institution = StringField(required=True)
-    institution_role = StringField(required=True)
+    institutionrole = StringField(required=True)
     department = StringField(required=True)
     address = StringField(required=True)
     advisor = StringField()

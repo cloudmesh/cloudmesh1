@@ -10,6 +10,8 @@ from mongoengine import connect
 from wtforms import Form, validators, widgets
 from wtforms.fields import BooleanField, TextField, TextAreaField, PasswordField, \
     SelectMultipleField, StringField, RadioField
+from cloudmesh.config.ConfigDict import ConfigDict
+from cloudmesh_install import config_file
 
 from wtforms.validators import ValidationError
 
@@ -873,7 +875,7 @@ def user_apply():
 
     form = UserRegistrationForm(request.form)
 
-    if request.method == 'POST' and form.validate():
+    if request.method == 'POST':# and form.validate():
         data = dict(request.form)
         action = str(data['button'][0])
 
@@ -887,19 +889,18 @@ def user_apply():
             del data['confirm']
             for d in data:
                 user[d] = data[d]
-
+            print data
             users.add(user)
 
         flash('Thanks for registering')
         return redirect('/')
 
+    user_config = ConfigDict(filename=config_file("/cloudmesh_user_intf.yaml"))
+    user_fields = user_config.get("cloudmesh.user")
     return render_template('management/user_apply.html',
                            title="User Application",
                            states=['save', 'cancel'],
-                           form=form,
-                           fields=UserRegistrationForm.keys,
-                           profile_fields=UserRegistrationForm.profile_keys,
-                           organization_fields=UserRegistrationForm.organization_keys)
+                           fields=user_fields)
 
 
 @management_module.route('/project/edit/<projectid>/', methods=['GET', 'POST'])
