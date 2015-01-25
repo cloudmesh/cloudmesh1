@@ -77,22 +77,27 @@ project:
             - nsf_agreement:
                 label: NSF agreement to use Future Systems
                 type: checkbox
+                - options: ""
                 required: True
             - collect_slide:
                 label: Slide collection
                 type: checkbox
+                - options: ""
                 required: True
             - support:
                 label: Support
                 type: checkbox
+                - options: ""
                 required: True
             - software_contrib:
                 label: Software Contributions
                 type: checkbox
+                - options: ""
                 required: True
             - doc_contrib:
                 label: Documentation Contributions
                 type: checkbox
+                - options: ""
                 required: True
     related_grant:
         label: Related Grant
@@ -202,4 +207,5 @@ project:
             - country:
                 label: Country
                 type: dropdown
+                value: countries.txt
                 required: True

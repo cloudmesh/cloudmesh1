@@ -1,78 +1,82 @@
-user:
-    profile:
-        label: Profile
-        fields:
-            - username:
-                label: Username
-                type: text
-                required: True
-            - email:
-                label: Email
-                type: text
-                required: True
-            - newpassword:
-                label: New Password
-                type: text
-                required: True
-            - confirmpassword:
-                label: Confirm Password
-                type: text
-                required: True
-            - title:
-                label: Title
-                type: text
-                required: True
-            - firstname:
-                label: Firstname
-                type: text
-                required: True
-            - lastname:
-                label: Lastname
-                type: text
-                required: True
-            - phone:
-                label: Phone
-                type: text
-                required: True
-            - url:
-                label: URL
-                type: text
-                required: True
-            - citizenship:
-                label: Citizenship
-                type: dropdown
-                value: countries.txt
-                required: True
-            - bio:
-                label: Bio
-                type: textarea
-                required: True
-    organisation:
-        label: Organisation
-        fields:
-            - institution:
-                label: Institution
-                type: textarea
-                required: true
-            - institutionrole:
-                label: Institution Role
-                type: dropdown
-                value: role.txt
-                required: true
-            - department:
-                label: Department
-                type: textarea
-                required: true
-            - address:
-                label: Address
-                type: textarea
-                required: true
-            - advisor:
-                label: Advisor
-                type: textarea
-                required: true
-            - country:
-                label: Country
-                type: dropdown
-                type: countries.txt
-                required: true
+meta:
+    yaml_version: 2.1
+    kind: management
+cloudmesh:
+    user:
+        profile:
+            label: Profile
+            fields:
+                - username:
+                    label: Username
+                    type: text
+                    required: True
+                - email:
+                    label: Email
+                    type: text
+                    required: True
+                - newpassword:
+                    label: New Password
+                    type: text
+                    required: True
+                - confirmpassword:
+                    label: Confirm Password
+                    type: text
+                    required: True
+                - title:
+                    label: Title
+                    type: text
+                    required: True
+                - firstname:
+                    label: Firstname
+                    type: text
+                    required: True
+                - lastname:
+                    label: Lastname
+                    type: text
+                    required: True
+                - phone:
+                    label: Phone
+                    type: text
+                    required: True
+                - url:
+                    label: URL
+                    type: text
+                    required: True
+                - citizenship:
+                    label: Citizenship
+                    type: dropdown
+                    value: countries.txt
+                    required: True
+                - bio:
+                    label: Bio
+                    type: textarea
+                    required: True
+        organisation:
+            label: Organisation
+            fields:
+                - institution:
+                    label: Institution
+                    type: textarea
+                    required: true
+                - institutionrole:
+                    label: Institution Role
+                    type: dropdown
+                    value: role.txt
+                    required: true
+                - department:
+                    label: Department
+                    type: textarea
+                    required: true
+                - address:
+                    label: Address
+                    type: textarea
+                    required: true
+                - advisor:
+                    label: Advisor
+                    type: textarea
+                    required: true
+                - country:
+                    label: Country
+                    type: dropdown
+                    value: countries.txt
+                    required: true
