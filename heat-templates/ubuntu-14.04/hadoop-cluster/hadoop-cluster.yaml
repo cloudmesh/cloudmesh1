@@ -48,7 +48,7 @@ resources:
             curl -L https://www.opscode.com/chef/install.sh | bash
             wget http://github.com/opscode/chef-repo/tarball/master
             tar -zxf master
-            mv opscode-chef-repo* /home/ubuntu/chef-repo
+            mv chef-chef-repo-* /home/ubuntu/chef-repo
             rm master
             mkdir /home/ubuntu/chef-repo/.chef
             echo "cookbook_path [ '/home/ubuntu/chef-repo/cookbooks' ]" > /home/ubuntu/chef-repo/.chef/knife.rb
