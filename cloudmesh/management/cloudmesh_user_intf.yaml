@@ -14,6 +14,7 @@ cloudmesh:
                     label: Email
                     type: text
                     required: True
+<<<<<<< HEAD
                 - password:
                     label: New Password
                     type: password
@@ -21,6 +22,15 @@ cloudmesh:
                 - confirm:
                     label: Confirm Password
                     type: password
+=======
+                - newpassword:
+                    label: New Password
+                    type: text
+                    required: True
+                - confirmpassword:
+                    label: Confirm Password
+                    type: text
+>>>>>>> b56dc6df4a03779b4c48f0c429bccfc426eb8032
                     required: True
                 - title:
                     label: Title
@@ -45,7 +55,11 @@ cloudmesh:
                 - citizenship:
                     label: Citizenship
                     type: dropdown
+<<<<<<< HEAD
                     value: India(IN)
+=======
+                    value: countries.txt
+>>>>>>> b56dc6df4a03779b4c48f0c429bccfc426eb8032
                     required: True
                 - bio:
                     label: Bio
@@ -61,7 +75,11 @@ cloudmesh:
                 - institutionrole:
                     label: Institution Role
                     type: dropdown
+<<<<<<< HEAD
                     value: "Graduate Masters"
+=======
+                    value: role.txt
+>>>>>>> b56dc6df4a03779b4c48f0c429bccfc426eb8032
                     required: true
                 - department:
                     label: Department
@@ -78,5 +96,9 @@ cloudmesh:
                 - country:
                     label: Country
                     type: dropdown
+<<<<<<< HEAD
                     value: India(IN)
+=======
+                    value: countries.txt
+>>>>>>> b56dc6df4a03779b4c48f0c429bccfc426eb8032
                     required: true

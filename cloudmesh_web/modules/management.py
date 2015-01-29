@@ -889,7 +889,7 @@ def user_apply():
             del data['confirm']
             for d in data:
                 user[d] = data[d]
-            print data
+
             users.add(user)
 
         flash('Thanks for registering')
@@ -901,6 +901,7 @@ def user_apply():
                            title="User Application",
                            states=['save', 'cancel'],
                            fields=user_fields)
+
 
 
 @management_module.route('/project/edit/<projectid>/', methods=['GET', 'POST'])
