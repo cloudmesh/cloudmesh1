@@ -35,23 +35,33 @@ class cm_shell_project:
         ::
         
           Usage:
-                 project
-                 project info [--format=FORMAT]
-                 project default NAME
-                 project active NAME
-                 project delete NAME
-                 project completed NAME
-
-          Manages the project
+              project
+              project info [--format=FORMAT]
+              project default NAME
+              project active NAME
+              project delete NAME
+              project completed NAME
 
           Arguments:
 
-            NAME           The project id
-            FORMAT         The display format. (json, table)
-
-          Options:
-
-             -v       verbose mode
+              NAME           The project id
+              FORMAT         The display format. (json, table)
+            
+          Description:
+              Manages the user's projects
+              
+              project info
+                  show project information
+              project default
+                  set the default project
+              project active
+                  set/add an active project, 
+              project delete
+                  delete the project
+              project completed
+                  set a completed project, this will remove the project
+                  from active projects list and defalut project if it is
+              
 
         """
         self._load_projects()
