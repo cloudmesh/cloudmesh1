@@ -73,9 +73,26 @@
                                     {% elif value['type'] == 'dropdown' %}
                                         <div class="form-inline">
                                             {% set option_value = value['value'] %}
-                                            <select name="{{ key }}"{%if value['required'] %} required {% endif %}>>
-                                                <option>{{ option_value }}</option>
-                                            </select>
+                                            {% set field_name = key %}
+                                            {% if field_name == 'country' %}
+                                                <select name="{{ key }}"{%if value['required'] %} required {% endif %}>>
+                                                    {% for item in countries_list %}
+                                                        <option>{{ item }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            {% elif field_name == 'citizenship' %}
+                                                <select name="{{ key }}"{%if value['required'] %} required {% endif %}>>
+                                                    {% for item in countries_list %}
+                                                        <option>{{ item }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                                {% elif field_name == 'institutionrole' %}
+                                                <select name="{{ key }}"{%if value['required'] %} required {% endif %}>>
+                                                    {% for item in roles_list %}
+                                                        <option>{{ item }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            {% endif %}
                                             </label>
                                         </div>
                                     {% endif %}

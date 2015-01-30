@@ -1,138 +1,98 @@
 {% extends "layout/layout.html" %}
 
 
-{% macro render_field(field) %}
-    <tr>
-        <td bgcolor="#CCCCCC" style="width:35%"> <i>{{ field.label }}</i></td>
-        {% if field.type == "TextAreaField" %}
-            <td>{{ field(cols="200", rows="3")|safe }}
-                {% elif field.type == "TextField" %}
-            <td>{{ field(cols="100")|safe }}
-                {% else %}
-            <td>{{ field(**kwargs)|safe }}
-        {% endif %}
-        <br>
-        {% if field.errors %}
-            <font color="red">
-                <dl class=errors>
-                    {% for error in field.errors %}
-                        <dd>  <i class="fa fa-exclamation-triangle"></i> {{ error }}</dd>
-                    {% endfor %}
-                </dl>
-            </font>
-        {% endif %}
-        </td>
-    </tr>
-{% endmacro %}
-
 {% block content %}
-
-    <legend> {{ title }} </legend>
+    <div class="page-header">
+        <h1> Project Application</h1>
+    </div>
 
     <form method="post">
-         <table class="table table-condensed">
-            <tbody>
-            <tr>
-                <th colspan="2" bgcolor="#CCCCCC"> Project Information </th>
-            </tr>
-            {% for field in profile_fields %}
-                {{ render_field(form[field]) }}
+        <table class="table table-condensed">
+            {% for entry in fields %}
+                {% set section = fields[entry] %}
+                <thead>
+                <tr>
+                    <th colspan="2" bgcolor="#CCCCCC"> {{ section['label'] }} </th>
+                </tr>
+                </thead>
+                <tbody>
+                {% set parameters = section['fields'] %}
+                {% for parameter in parameters %}
+                    {% set key = parameter.keys()[0] %}
+                    {% set value = parameter[key] %}
+                    <tr>
+                        <td style="width:30%;font-weight:bold;vertical-align: middle">{{ value['label'] }}</td>
+                        <td style="width:60%">
+                            <div class="form-group form-group-sm">
+                                <div class="form-group-sm col-sm-6">
+                                    {% if value['type'] == 'integer' %}
+                                        <input class="form-control"
+                                               type="number" step="any"
+                                               name="{{ key }}"
+                                               placeholder="{{ value['value'] }}"
+                                               value="{{ value['value'] }}"
+                                                {% if value['required'] %} required {% endif %}>
+                                    {% elif value['type'] == 'float' %}
+                                        <input class="form-control"
+                                               type="number"
+                                               step="0.1"
+                                               name="{{ key }}"
+                                               placeholder="{{ value['value'] }}"
+                                               value="{{ value['value'] }}"
+                                                {% if value['required'] %} required {% endif %}>
+                                    {% elif value['type'] == 'text' %}
+                                        <input class="form-control"
+                                               type="text"
+                                               height="18px"
+                                               name="{{ key }}"
+                                               placeholder="{{ value['value'] }}"
+                                               value="{{ value['value'] }}"
+                                                {% if value['required'] %} required {% endif %}>
+                                    {% elif value['type'] == 'password' %}
+                                        <input class="form-control"
+                                               type="password"
+                                               height="18px"
+                                               name="{{ key }}"
+                                               placeholder="{{ value['value'] }}"
+                                               value="{{ value['value'] }}"
+                                                {% if value['required'] %} required {% endif %}>
+                                    {% elif value['type'] == 'textarea' %}
+                                        <textarea class="form-control" name="{{ key }}" wrap="soft"
+                                                {% if value['required'] %} required {% endif %}>
+                                        </textarea>
+                                    {% elif value['type'] == 'checkbox' %}
+                                        <div class="control-group">
+                                            {% set count=value['options']|length %}
+                                            {% for button in value['options'] %}
+                                                <label class="checkbox">
+                                                    <input type="checkbox" name="{{ key }}"
+                                                           value="{{ button }}"
+                                                            {% if value['required'] %} required {% endif %}>
+                                                    {{ button | capitalize }}
+                                                    </input>
+                                                </label>
+                                            {% endfor %}
+                                        </div>
+                                    {% elif value['type'] == 'dropdown' %}
+                                        <div class="form-inline">
+                                            {% set option_value = value['value'] %}
+                                            <select name="{{ key }}"{% if value['required'] %} required {% endif %}>>
+                                                <option>{{ option_value }}</option>
+                                            </select>
+                                            </label>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
             {% endfor %}
-
-            <tr>
-                <th colspan="2" bgcolor="#CCCCCC"> Project Vocabulary </th>
-            </tr>
-            {% for field in vocab_fields %}
-                {{ render_field(form[field]) }}
-            {% endfor %}
-
-            <tr>
-                <th colspan="2" bgcolor="#CCCCCC"> Project Contact </th>
-            </tr>
-            {% for field in contact_fields %}
-                {{ render_field(form[field]) }}
-            {% endfor %}
-
-                        <tr>
-                <th colspan="2" bgcolor="#CCCCCC"> Project Details </th>
-            </tr>
-            {% for field in project_details_fields %}
-                {{ render_field(form[field]) }}
-            {% endfor %}
-
-            <tr>
-                <th colspan="2" bgcolor="#CCCCCC">Agreements </th>
-            </tr>
-
-            {% for field in agreements_fields %}
-                {{ render_field(form[field]) }}
-            {% endfor %}
-
-            <tr>
-                <th colspan="2" bgcolor="#CCCCCC">Related Grant </th>
-            </tr>
-
-            {% for field in grant_fields %}
-                {{ render_field(form[field]) }}
-            {% endfor %}
-
-            <tr>
-                <th colspan="2" bgcolor="#CCCCCC">Resource Requirements </th>
-            </tr>
-
-            {% for field in resource_fields %}
-                {{ render_field(form[field]) }}
-            {% endfor %}
-
-            <tr>
-                <th colspan="2" bgcolor="#CCCCCC">Other </th>
-            </tr>
-
-            {% for field in other_fields %}
-                {{ render_field(form[field]) }}
-            {% endfor %}
-
-            <tr>
-                <th colspan="2" bgcolor="#CCCCCC">Project Membership Management </th>
-            </tr>
-
-            {% for field in membership_fields %}
-                {{ render_field(form[field]) }}
-            {% endfor %}
-            <tr>
-                <th colspan="2" bgcolor="#CCCCCC">Location </th>
-            </tr>
-
-            {% for field in loc_fields %}
-                {{ render_field(form[field]) }}
-            {% endfor %}
-            </tbody>
         </table>
-
-{#        {% for (panel, attributes) in fields %}#}
-{##}
-{#            <div class="panel panel-default">#}
-{#            <div class="panel-heading">#}
-{#                <h3 class="panel-title"> {{ panel | capitalize }} </h3>#}
-{#            </div>#}
-{#            <div class="panel-body">#}
-{##}
-{##}
-{#            <table class="table table-condensed">#}
-{#                <tbody>#}
-{#                <tr>#}
-                    {#	<th colspan="2" bgcolor="#CCCCCC"> {{ panel | capitalize }} </th>#}
-{#                </tr>#}
-{##}
-{#                {% for field in attributes %}#}
-{#                    {{ render_field(form[field]) }}#}
-{#                {% endfor %}#}
-{#                </tbody>#}
-{#            </table>#}
-{#        {% endfor %}#}
-
         <div class="control-group">
             <label class="control-label" for="button_submit"></label>
+
             <div class="controls">
 
                 {% for state in states %}
@@ -154,3 +114,162 @@
         </div>
     </form>
 {% endblock %}
+
+
+
+
+
+
+{#{% macro render_field(field) %}#}
+{#    <tr>#}
+{#        <td bgcolor="#CCCCCC" style="width:35%"> <i>{{ field.label }}</i></td>#}
+{#        {% if field.type == "TextAreaField" %}#}
+{#            <td>{{ field(cols="200", rows="3")|safe }}#}
+{#                {% elif field.type == "TextField" %}#}
+{#            <td>{{ field(cols="100")|safe }}#}
+{#                {% else %}#}
+{#            <td>{{ field(**kwargs)|safe }}#}
+{#        {% endif %}#}
+{#        <br>#}
+{#        {% if field.errors %}#}
+{#            <font color="red">#}
+{#                <dl class=errors>#}
+{#                    {% for error in field.errors %}#}
+{#                        <dd>  <i class="fa fa-exclamation-triangle"></i> {{ error }}</dd>#}
+{#                    {% endfor %}#}
+{#                </dl>#}
+{#            </font>#}
+{#        {% endif %}#}
+{#        </td>#}
+{#    </tr>#}
+{#{% endmacro %}#}
+{##}
+{#{% block content %}#}
+{##}
+{#    <legend> {{ title }} </legend>#}
+{##}
+{#    <form method="post">#}
+{#         <table class="table table-condensed">#}
+{#            <tbody>#}
+{#            <tr>#}
+{#                <th colspan="2" bgcolor="#CCCCCC"> Project Information </th>#}
+{#            </tr>#}
+{#            {% for field in profile_fields %}#}
+{#                {{ render_field(form[field]) }}#}
+{#            {% endfor %}#}
+{##}
+{#            <tr>#}
+{#                <th colspan="2" bgcolor="#CCCCCC"> Project Vocabulary </th>#}
+{#            </tr>#}
+{#            {% for field in vocab_fields %}#}
+{#                {{ render_field(form[field]) }}#}
+{#            {% endfor %}#}
+{##}
+{#            <tr>#}
+{#                <th colspan="2" bgcolor="#CCCCCC"> Project Contact </th>#}
+{#            </tr>#}
+{#            {% for field in contact_fields %}#}
+{#                {{ render_field(form[field]) }}#}
+{#            {% endfor %}#}
+{##}
+{#                        <tr>#}
+{#                <th colspan="2" bgcolor="#CCCCCC"> Project Details </th>#}
+{#            </tr>#}
+{#            {% for field in project_details_fields %}#}
+{#                {{ render_field(form[field]) }}#}
+{#            {% endfor %}#}
+{##}
+{#            <tr>#}
+{#                <th colspan="2" bgcolor="#CCCCCC">Agreements </th>#}
+{#            </tr>#}
+{##}
+{#            {% for field in agreements_fields %}#}
+{#                {{ render_field(form[field]) }}#}
+{#            {% endfor %}#}
+{##}
+{#            <tr>#}
+{#                <th colspan="2" bgcolor="#CCCCCC">Related Grant </th>#}
+{#            </tr>#}
+{##}
+{#            {% for field in grant_fields %}#}
+{#                {{ render_field(form[field]) }}#}
+{#            {% endfor %}#}
+{##}
+{#            <tr>#}
+{#                <th colspan="2" bgcolor="#CCCCCC">Resource Requirements </th>#}
+{#            </tr>#}
+{##}
+{#            {% for field in resource_fields %}#}
+{#                {{ render_field(form[field]) }}#}
+{#            {% endfor %}#}
+{##}
+{#            <tr>#}
+{#                <th colspan="2" bgcolor="#CCCCCC">Other </th>#}
+{#            </tr>#}
+{##}
+{#            {% for field in other_fields %}#}
+{#                {{ render_field(form[field]) }}#}
+{#            {% endfor %}#}
+{##}
+{#            <tr>#}
+{#                <th colspan="2" bgcolor="#CCCCCC">Project Membership Management </th>#}
+{#            </tr>#}
+{##}
+{#            {% for field in membership_fields %}#}
+{#                {{ render_field(form[field]) }}#}
+{#            {% endfor %}#}
+{#            <tr>#}
+{#                <th colspan="2" bgcolor="#CCCCCC">Location </th>#}
+{#            </tr>#}
+{##}
+{#            {% for field in loc_fields %}#}
+{#                {{ render_field(form[field]) }}#}
+{#            {% endfor %}#}
+{#            </tbody>#}
+{#        </table>#}
+{##}
+{#        {% for (panel, attributes) in fields %}#}
+{##}
+{#            <div class="panel panel-default">#}
+{#            <div class="panel-heading">#}
+{#                <h3 class="panel-title"> {{ panel | capitalize }} </h3>#}
+{#            </div>#}
+{#            <div class="panel-body">#}
+{##}
+{##}
+{#            <table class="table table-condensed">#}
+{#                <tbody>#}
+{#                <tr>#}
+{#                    	<th colspan="2" bgcolor="#CCCCCC"> {{ panel | capitalize }} </th>#}
+{#                </tr>#}
+{##}
+{#                {% for field in attributes %}#}
+{#                    {{ render_field(form[field]) }}#}
+{#                {% endfor %}#}
+{#                </tbody>#}
+{#            </table>#}
+{#        {% endfor %}#}
+{##}
+{#        <div class="control-group">#}
+{#            <label class="control-label" for="button_submit"></label>#}
+{#            <div class="controls">#}
+{##}
+{#                {% for state in states %}#}
+{#                    <button id="button_{{ state }}" value="{{ state }}"#}
+{#                            name="button"#}
+{#                            {% if state == 'save' %}#}
+{#                            class="btn btn-success"#}
+{#                            {% elif state == 'cancel' %}#}
+{#                            class="btn btn-danger"#}
+{#                            {% else %}#}
+{#                            class="btn"#}
+{#                            {% endif %}#}
+{#                            >{{ state|capitalize }}#}
+{#                    </button>#}
+{#                {% endfor %}#}
+{#            </div>#}
+{#        </div>#}
+{#        </div>#}
+{#        </div>#}
+{#    </form>#}
+{#{% endblock %}#}

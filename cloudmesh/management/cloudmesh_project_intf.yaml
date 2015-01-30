@@ -84,27 +84,32 @@ cloudmesh:
                 - nsf_agreement:
                     label: NSF agreement to use Future Systems
                     type: checkbox
-                    - options: ""
+                    options:
+                    - ""
                     required: True
                 - collect_slide:
                     label: Slide collection
                     type: checkbox
-                    - options: ""
+                    options:
+                    - ""
                     required: True
                 - support:
                     label: Support
                     type: checkbox
-                    - options: ""
+                    options:
+                    - ""
                     required: True
                 - software_contrib:
                     label: Software Contributions
                     type: checkbox
-                    - options: ""
+                    options:
+                    - ""
                     required: True
                 - doc_contrib:
                     label: Documentation Contributions
                     type: checkbox
-                    - options: ""
+                    options:
+                    - ""
                     required: True
         related_grant:
             label: Related Grant
@@ -184,14 +189,14 @@ cloudmesh:
                 - join:
                     label: Allow users to request to join
                     type: checkbox
-                    option:
-                    - ""
+                    options:
+                    - " "
                     required: True
                 - notification:
                     label: Send an email notification when a user joins
                     type: checkbox
-                    option:
-                    - ""
+                    options:
+                    - " "
         location:
             label: Location
             fields:
