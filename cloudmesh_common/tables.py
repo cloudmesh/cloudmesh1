@@ -24,8 +24,13 @@ def array_dict_table_printer(array, order=None, header=None, vertical=False):
     :param order: The order in which the columns are printed.
                   The order is specified by the key names of the dict.
     :param header: The Header of each of the columns
+    
+    :param vertical: vertical printing table
 
     """
+    if array is None or array == []:
+        return None
+        
     # header
     if header is None:
         header = array[0].keys()

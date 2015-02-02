@@ -911,7 +911,8 @@ class VMs(object):
     def _helper_vm_cli_printer(self, vms_dict, 
                                print_format=None, 
                                columns=None,
-                               refresh=True):
+                               refresh=True,
+                               detailed=True):
         """
         accept a dict of VMs, change some informtion and get it ready for
         printing such as tables in CLI
@@ -944,7 +945,7 @@ class VMs(object):
             for key, value in vms_dict.iteritems():
                 res[key] = {}
                 cm_type = value['cm_type']
-                itemkeys = self._helper_itemkeys(cm_type)
+                itemkeys = self._helper_itemkeys(cm_type, detailed=detailed)
                 for item in itemkeys:
                     if item[0] not in headers:
                         headers.append(item[0])
@@ -998,8 +999,9 @@ class VMs(object):
                         
                 
                 
-    def _helper_itemkeys(self, cm_type):
-        itemkeys = {"openstack":
+    def _helper_itemkeys(self, cm_type, detailed=True):
+        if detailed:
+            itemkeys = {"openstack":
                         [
                             #['name', 'name'],
                             ['status', 'status'],
@@ -1051,6 +1053,40 @@ class VMs(object):
                             ['metadata', 'metadata'],
                             ['key_name', 'key_name'],
                             ['created', 'created'],
+                        ]
+                        }
+        else:
+            itemkeys = {"openstack":
+                        [
+                            #['name', 'name'],
+                            ['status', 'status'],
+                            ['addresses', 'addresses'],
+                            ['flavor', 'flavor', 'id'],
+                            ['image', 'image', 'id']
+                        ],
+                        "ec2":
+                        [
+                            #["name", "id"],
+                            ["status", "extra", "status"],
+                            ["addresses", "public_ips"],
+                            ["flavor", "extra", "instance_type"],
+                            ['image', 'extra', 'imageId']
+                        ],
+                        "aws":
+                        [
+                            #["name", "name"],
+                            ["status", "extra", "status"],
+                            ["addresses", "public_ips"],
+                            ["flavor", "extra", "instance_type"],
+                            ['image', 'extra', 'image_id']
+                        ],
+                        "azure":
+                        [
+                            #['name', 'name'],
+                            ['status', 'status'],
+                            ['addresses', 'vip'],
+                            ['flavor', 'flavor', 'id'],
+                            ['image', 'image', 'id']
                         ]
                         }
         if cm_type in itemkeys:
