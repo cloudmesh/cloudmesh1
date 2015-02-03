@@ -116,7 +116,7 @@ def shell_command_experiment_group(arguments):
     from cloudmesh.experiment.group_usage import add_item_to_group
 
     name = arguments["NAME"]
-    type = arguments["TYPE"]
+    type_ = arguments["TYPE"]
     value = arguments["VALUE"]
 
     config = cm_config()
@@ -172,16 +172,16 @@ def shell_command_experiment_group(arguments):
 
     elif arguments["add"] and arguments['item']:
         try:
-            add_item_to_group(username, name, type, value, refresh=True)
+            add_item_to_group(username, name, type_, value, refresh=True)
         except Exception, err:
             Console.error(str(err))
             return
         Console.ok("item '{0}' of type '{1}' added to group '{2}'".format(
-                                                value, type, name))
+                                                value, type_, name))
             
     elif arguments['show']:
         try:
-            res = GroupManage.list_items_of_group(name, _type=type)
+            res = GroupManage.list_items_of_group(name, _type=type_)
         except Exception, err:
             Console.error(str(err))
             return
@@ -199,12 +199,12 @@ def shell_command_experiment_group(arguments):
             
     elif arguments["remove"] and arguments['item']:
         try:
-            GroupManage.delete_item_of_group(name, type, value)
+            GroupManage.delete_item_of_group(name, type_, value)
         except Exception, err:
             Console.error(str(err))
             return
         Console.ok("item '{0}' of type '{1}' removed from group '{2}'".format(
-                                                value, type, name))
+                                                value, type_, name))
 
 
     
