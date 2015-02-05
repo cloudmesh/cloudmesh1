@@ -47,6 +47,14 @@
                                                placeholder="{{value['value']}}"
                                                value="{{value['value']}}"
                                                 {%if value['required'] %} required {% endif %}>
+                                    {% elif value['type'] == 'email' %}
+                                        <input class="form-control"
+                                               type="text"
+                                               height="18px"
+                                               name="{{key}}"
+                                               placeholder="{{value['value']}}"
+                                               value="{{value['value']}}"
+                                                {%if value['required'] %} required {% endif %}>
                                     {% elif value['type'] == 'password' %}
                                         <input class="form-control"
                                                type="password"

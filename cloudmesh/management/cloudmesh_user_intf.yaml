@@ -12,7 +12,7 @@ cloudmesh:
                     required: True
                 - email:
                     label: Email
-                    type: text
+                    type: email
                     required: True
                 - password:
                     label: New Password

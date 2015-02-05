@@ -1154,7 +1154,7 @@ def user_apply():
 
     form = UserRegistrationForm(request.form)
 
-    if request.method == 'POST':# and form.validate():
+    if request.method == 'POST': #and form.validate():
         data = dict(request.form)
         action = str(data['button'][0])
 
@@ -1379,7 +1379,6 @@ def management_user_list():
 
     connect('user', port=27777)
     users = MongoUser.objects()
-
     return render_template('management/user_manage.html', users=users, with_edit="False", title="User List")
 
 

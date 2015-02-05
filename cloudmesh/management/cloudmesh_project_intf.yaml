@@ -191,7 +191,6 @@ cloudmesh:
                     type: checkbox
                     options:
                     - " "
-                    required: True
                 - notification:
                     label: Send an email notification when a user joins
                     type: checkbox
