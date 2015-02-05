@@ -80,7 +80,7 @@ def install_command(args):
 
     arguments = docopt(install_command.__doc__, args)
 
-    print arguments
+    # print arguments
 
     if arguments["cloudmesh"]:
         deploy()
