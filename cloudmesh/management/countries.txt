@@ -1,0 +1,4 @@
+preferred_country_choices=[
+    ('United Kingdom(GB)','United Kingdom(GB)'),
+    ('United States(US)','United States(US)'),
+    ('Germany(DE)','Germany(DE)')]

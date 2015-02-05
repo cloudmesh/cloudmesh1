@@ -47,6 +47,7 @@ class cm_shell_cluster:
               cluster show <name> 
                            [--format=FORMAT] 
                            [--column=COLUMN]
+                           [--detail]
               cluster remove <name> 
                              [--grouponly]
 
@@ -95,6 +96,9 @@ class cm_shell_cluster:
               COLUMN                     customize what information to display, for example:
                                          --column=status,addresses prints the columns status
                                          and addresses
+              --detail                   for table print format, a brief version 
+                                         is used as default, use this flag to print
+                                         detailed table
                                          
         """
         #pprint(arguments)
@@ -152,7 +156,8 @@ class cm_shell_cluster:
             vmobj = VMs()
             vmobj._helper_vm_cli_printer(vms_dict, 
                                          print_format=p_format,
-                                         columns=columns)
+                                         columns=columns,
+                                         detailed=arguments['--detail'])
                 
             
 
@@ -235,7 +240,8 @@ class cm_shell_cluster:
             
             vmclass = VMcommand(arguments_temp)
             res = vmclass.call_procedure()
-            if res == False: return
+            if res == False: 
+                return
         
             def string_to_dict(s):
                 h = s.find("{")

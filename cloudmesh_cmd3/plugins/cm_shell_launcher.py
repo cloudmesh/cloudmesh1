@@ -18,6 +18,7 @@ from cloudmesh.util.config import ordered_dump
 from cloudmesh_common.util import dict_uni_to_ascii
 from cloudmesh_install import config_file
 from cloudmesh.keys.util import _keyname_sanitation
+from cloudmesh.util.ssh import generate_keypair
 from cloudmesh.config.cm_keys import cm_keys_mongo
 
 log = LOGGER(__file__)
@@ -76,7 +77,8 @@ class cm_shell_launcher:
         log.info(arguments)
         self.cm_mongo = cm_mongo()
         self.cm_config = cm_config()
-        self.user = cm_user()
+        self.cm_user = cm_user()
+        self._id = "t_stacks"
 
         if arguments["help"] or arguments["-h"]:
             print (self.do_launcher.__doc__)
@@ -167,7 +169,7 @@ class cm_shell_launcher:
             def_cloud = self.get_cloud_name(userid)
             self.cm_mongo.activate(userid)
             
-            userinfo = self.user.info(userid)
+            userinfo = self.cm_user.info(userid)
             if "key" in userinfo["defaults"]:
                 key = userinfo["defaults"]["key"]
             elif len(userinfo["keys"]["keylist"].keys()) > 0:
@@ -190,6 +192,15 @@ class cm_shell_launcher:
             param = {'KeyName': keynamenew,
                      'Cookbook': cookbook,
                      'dummy': dummy}
+            # HADOOP CLUSTER TEST CODE
+            if cookbook == "hadoop":
+                privatekey, publickey = generate_keypair()
+                t_url = \
+                        "https://raw.githubusercontent.com/cloudmesh/cloudmesh/dev1.3/heat-templates/ubuntu-14.04/hadoop-cluster/hadoop-cluster.yaml"
+                param = {'KeyName': keynamenew,
+                         'PublicKeyString': publickey,
+                         'PrivateKeyString': privatekey}
+
             log.debug(def_cloud, userid, s_name, t_url, param)
             res = self.cm_mongo.stack_create(cloud=def_cloud, cm_user_id=userid,
                                              servername=s_name,
