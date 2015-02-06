@@ -40,61 +40,61 @@ class DBConnFactory(object):
         #                                      str(_args)))
         # except:
         #     pass
+        conn = None
+        if dbname:
+            dbkey = "%s_%s" % (dbname, clientType)
+            if dbkey in cls.connectors:
+                # print "RETURNING AN EXISTING DB CONNECTOR FROM FACTORY"
+                conn = cls.connectors[dbkey]
+            else:
+                if cls.DBCONFIG is None:
+                    cls.DBCONFIG = {}
+                    config = cm_config_server().get("cloudmesh.server.mongo")
+                    cls.DBCONFIG["host"] = config["host"]
+                    cls.DBCONFIG["port"] = int(config["port"])
+                    cls.DBCONFIG["username"] = config["username"]
+                    cls.DBCONFIG["password"] = config["password"]
 
-        dbkey = "%s_%s" % (dbname, clientType)
-        if dbkey in cls.connectors:
-            # print "RETURNING AN EXISTING DB CONNECTOR FROM FACTORY"
-            return cls.connectors[dbkey]
-        else:
-            conn = None
-            if cls.DBCONFIG is None:
-                cls.DBCONFIG = {}
-                config = cm_config_server().get("cloudmesh.server.mongo")
-                cls.DBCONFIG["host"] = config["host"]
-                cls.DBCONFIG["port"] = int(config["port"])
-                cls.DBCONFIG["username"] = config["username"]
-                cls.DBCONFIG["password"] = config["password"]
+                if clientType == MONGOCLIENT:
+                    if cls.DBCONFIG["username"] and cls.DBCONFIG["password"]:
+                        uri = "mongodb://{0}:{1}@{2}:{3}/{4}".format(cls.DBCONFIG["username"],
+                                                                     cls.DBCONFIG[
+                                                                         "password"],
+                                                                     cls.DBCONFIG[
+                                                                         "host"],
+                                                                     cls.DBCONFIG[
+                                                                         "port"],
+                                                                     dbname)
+                    else:
+                        uri = "mongodb://{2}:{3}/{4}".format(cls.DBCONFIG["username"],
+                                                             cls.DBCONFIG[
+                                                                 "password"],
+                                                             cls.DBCONFIG["host"],
+                                                             cls.DBCONFIG["port"],
+                                                             dbname)
+                    try:
+                        conn = MongoClient(uri)[dbname]
+                    except:
+                        msg = "Failed to connect to Mongoclient DB:\n\t%s" % uri
+                        print(msg)
+                        log.error(msg)
 
-            if clientType == MONGOCLIENT:
-                if cls.DBCONFIG["username"] and cls.DBCONFIG["password"]:
-                    uri = "mongodb://{0}:{1}@{2}:{3}/{4}".format(cls.DBCONFIG["username"],
-                                                                 cls.DBCONFIG[
-                                                                     "password"],
-                                                                 cls.DBCONFIG[
-                                                                     "host"],
-                                                                 cls.DBCONFIG[
-                                                                     "port"],
-                                                                 dbname)
-                else:
-                    uri = "mongodb://{2}:{3}/{4}".format(cls.DBCONFIG["username"],
-                                                         cls.DBCONFIG[
-                                                             "password"],
-                                                         cls.DBCONFIG["host"],
-                                                         cls.DBCONFIG["port"],
-                                                         dbname)
-                try:
-                    conn = MongoClient(uri)[dbname]
-                except:
-                    msg = "Failed to connect to Mongoclient DB:\n\t%s" % uri
-                    print(msg)
-                    log.error(msg)
-
-            elif clientType == MONGOENGINE:
-                try:
-                    conn = connect(dbname,
-                                   host=cls.DBCONFIG["host"],
-                                   port=cls.DBCONFIG["port"],
-                                   username=cls.DBCONFIG["username"],
-                                   password=cls.DBCONFIG["password"])
-                except:
-                    msg = "Failed to connect to MongoEngine DB:\n\t%s" % dbname
-                    print(msg)
-                    log.error(msg)
-                    log.error(traceback.format_exc())
-                    
-            cls.connectors[dbkey] = conn
-            return conn
-
+                elif clientType == MONGOENGINE:
+                    try:
+                        conn = connect(db=dbname,
+                                       alias=dbname,
+                                       host=cls.DBCONFIG["host"],
+                                       port=cls.DBCONFIG["port"],
+                                       username=cls.DBCONFIG["username"],
+                                       password=cls.DBCONFIG["password"])
+                    except:
+                        msg = "Failed to connect to MongoEngine DB:\n\t%s" % dbname
+                        print(msg)
+                        log.error(msg)
+                        log.error(traceback.format_exc())
+                # put the newly created connection object into factory
+                cls.connectors[dbkey] = conn
+        return conn
 
 def get_mongo_db(mongo_collection, clientType=MONGOCLIENT):
     """
@@ -110,12 +110,12 @@ def get_mongo_db(mongo_collection, clientType=MONGOCLIENT):
     #except:
     #    pass
 
-    config = cm_config_server().get("cloudmesh.server.mongo")
-
-    db_name = config["collections"][mongo_collection]['db']
+    db_name = get_mongo_dbname_from_collection(mongo_collection)
 
     conn = None
+
     db = DBConnFactory.getconn(db_name, clientType)
+
     if db:
         conn = db[mongo_collection]
     else:
@@ -126,7 +126,15 @@ def get_mongo_db(mongo_collection, clientType=MONGOCLIENT):
 
     return conn
 
-
+def get_mongo_dbname_from_collection(mongo_collection):
+    config = cm_config_server().get("cloudmesh.server.mongo")
+    db_name = None
+    try:
+        db_name = config["collections"][mongo_collection]['db']
+    except:
+        pass
+    return db_name
+    
 class cm_config_server(ConfigDict):
 
     """

@@ -1,13 +1,13 @@
 from __future__ import print_function
 from mongoengine import *
-from cloudmesh.config.cm_config import get_mongo_db, DBConnFactory
+from cloudmesh.config.cm_config import get_mongo_db, get_mongo_dbname_from_collection, DBConnFactory
 from cloudmesh_common.logger import LOGGER
 from pprint import pprint
 
 log = LOGGER(__file__)
 
 # Anyone who imports this file will have db connection automatically
-get_mongo_db("experiment", DBConnFactory.TYPE_MONGOENGINE)
+#get_mongo_db("experiment", DBConnFactory.TYPE_MONGOENGINE)
 
 TYPES_OF_ITEMS_IN_GROUP = ['VM', 'VOLUME']
 TYPES_IDENTITY_VALUE = {"VM": "vm_name",
@@ -18,17 +18,27 @@ class ExperimentGroup(Document):
     userid = StringField(required=True)
     description = StringField(max_length=50)
     tags = ListField(StringField(max_length=30))
+    dbname = get_mongo_dbname_from_collection("experiment")
+    if dbname:
+        meta = {'db_alias': dbname}
 
 class Comment(EmbeddedDocument):
     content = StringField()
     name = StringField(max_length=120)
-
+    dbname = get_mongo_dbname_from_collection("experiment")
+    if dbname:
+        meta = {'db_alias': dbname}
+    
 class GroupItem(Document):
     group = ReferenceField(ExperimentGroup, reverse_delete_rule=CASCADE)
     tags = ListField(StringField(max_length=30))
     comments = ListField(EmbeddedDocumentField(Comment))
-    meta = {'allow_inheritance': True}
-
+    dbname = get_mongo_dbname_from_collection("experiment")
+    if dbname:
+        meta = {'allow_inheritance': True, 'db_alias': dbname}
+    else:
+        meta = {'allow_inheritance': True}
+        
 class VM(GroupItem):
     vm_name = StringField()
     vm_id = StringField()
@@ -44,11 +54,11 @@ class VOLUME(GroupItem):
     volume_name = StringField()
 
 
-
 class GroupManagement(object):
     
     def __init__(self, username):
         self.username = username
+        get_mongo_db("experiment", DBConnFactory.TYPE_MONGOENGINE)
         
     def check_type(self, _type):
         if _type.upper() not in TYPES_OF_ITEMS_IN_GROUP:

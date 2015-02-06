@@ -20,7 +20,7 @@ from cloudmesh_common.util import get_rand_string
 from cloudmesh_install.util import yn_choice
 from cloudmesh.shell.shellutil import (shell_commands_dict_output,
         ALLOWED_PRINT_FORMAT)
-
+from cloudmesh.experiment.group import GroupManagement
 from cloudmesh.shell.cm_vm import VMs
 
 log = LOGGER(__file__)
@@ -213,7 +213,13 @@ class cm_shell_cluster:
             # If this import goes up to the top, monodb connection will be
             # estabilished. Due to that reason, this import stays here
             # Hyungro Lee 12/01/2014
-            from cloudmesh.experiment.group import GroupManagement
+            # 
+            # we have modified how the mongonenigne connects and 
+            # it's safe to import any class definition now at the beginning of file
+            # Fugang 02/06/2015
+            #
+            # from cloudmesh.experiment.group import GroupManagement
+            # 
             GroupManage = GroupManagement(username)
             groups_list = GroupManage.get_groups_names_list()
             vms_in_group_list = {}

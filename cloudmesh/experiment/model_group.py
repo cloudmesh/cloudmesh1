@@ -6,25 +6,27 @@ from __future__ import print_function
 from mongoengine import StringField, Document
 from cloudmesh_common.tables import array_dict_table_printer
 import json
-from cloudmesh.config.cm_config import get_mongo_db, DBConnFactory
+from cloudmesh.config.cm_config import get_mongo_db, get_mongo_dbname_from_collection, DBConnFactory
 
 
 class ExperimentBase(Document):
     cm_kind = StringField(default="experiment")
     cm_label = StringField()
     cm_userid = StringField()
-    meta = {'allow_inheritance': True}
-    get_mongo_db("experiment", DBConnFactory.TYPE_MONGOENGINE)
+    dbname = get_mongo_dbname_from_collection("experiment")
+    if dbname:
+        meta = {'allow_inheritance': True, 'db_alias': dbname}
+    else:
+        meta = {'allow_inheritance': True}
 
 
 class ExperimentVM(ExperimentBase):
     cloud = StringField()
     vmid = StringField()
-    get_mongo_db("experiment", DBConnFactory.TYPE_MONGOENGINE)
 
 
 class ExperimentGroup(object):
-
+    
     def __init__(self, userid, label):
 
         self.userid = userid
