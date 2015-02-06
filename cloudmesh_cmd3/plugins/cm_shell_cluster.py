@@ -20,7 +20,7 @@ from cloudmesh_common.util import get_rand_string
 from cloudmesh_install.util import yn_choice
 from cloudmesh.shell.shellutil import (shell_commands_dict_output,
         ALLOWED_PRINT_FORMAT)
-from cloudmesh.shell.clusters import Clusters
+
 from cloudmesh.shell.cm_vm import VMs
 
 log = LOGGER(__file__)
@@ -102,6 +102,11 @@ class cm_shell_cluster:
                                          
         """
         #pprint(arguments)
+        # defer the import of Clusters, as this further imports classes from cloudmesh.experiment.group,
+        # which connects to mongo automatically due to the using of mongoengine.
+        from cloudmesh.shell.clusters import Clusters
+        # cannot move up at the beginning.
+        
         clusterobj = Clusters()
         userobj = cm_user()
         config = cm_config()
