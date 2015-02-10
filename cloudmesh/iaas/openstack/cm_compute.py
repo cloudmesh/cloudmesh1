@@ -551,6 +551,18 @@ class openstack(ComputeBaseType):
                 pass
         return ret
 
+    # possibly for future use in network management via Neuron
+    # currently is not being used
+    def get_network_id(self):
+        """
+        Obtaining router/expertnal gateway info via the rest api call
+        """
+        ret = {"msg": "failed"}
+        r = self._get('v2.0/routers', service='network', urltype=self.service_url_type)
+        if "floating_ip" in r:
+            ret = r["floating_ip"]["ip"]
+        return r
+
     def get_public_ip(self):
         """
         Obtaining a floating ip from the pool via the rest api call
@@ -559,9 +571,34 @@ class openstack(ComputeBaseType):
 
         posturl = "%s/os-floating-ips" % url
         ret = {"msg": "failed"}
+        # Default to the default pool, possibly 'nova'
+        # Before the juno deployment, this always worked
         r = self._post(posturl)
+        # Since Juno deployment, the pool name was changed
+        if 'itemNotFound' in r:
+            if 'message' in r['itemNotFound'] and r['itemNotFound']['message'] == 'Floating ip pool not found.':
+                # get floating ip pool name first
+                r = self._get('os-floating-ip-pools')
+                if 'floating_ip_pools' in r:
+                    # use the first pool
+                    pool = r['floating_ip_pools'][0]['name']
+                    params = {'pool':pool}
+                    # reissue the request with returned pool name
+                    r = self._post(posturl, params)
         if "floating_ip" in r:
             ret = r["floating_ip"]["ip"]
+        #
+        # currently not being used
+        # Nureon related operations
+        #else:
+        #    gatewayinfo = self.get_network_id()
+        #    url = self._get_service_endpoint("network")[self.service_url_type]
+        #    posturl = '%s/v2.0/floatingips' % url
+        #    tenant_id = self.user_token['access']['token']['tenant']['id']
+        #    params = {"floatingip":{"floating_network_id":<UUID from gatewayinfo>}}
+        #    r = self._post(posturl)
+        #    #r = self._get('/v2.0/floatingips',service='network')
+        #    print (r)
         return ret
 
     def assign_public_ip(self, serverid, ip):

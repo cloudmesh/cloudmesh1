@@ -45,7 +45,7 @@ class Test:
         self.configuration = cm_config()
         print("OK")
 
-        self.name = self.configuration.active()[3]
+        self.name = 'india_juno'#self.configuration.active()[3]
         print("ACTIVE CLOUD", self.name)
 
         self.cloud = openstack(self.name)
