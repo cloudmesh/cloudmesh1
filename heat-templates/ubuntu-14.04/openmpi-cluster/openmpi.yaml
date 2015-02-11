@@ -1,0 +1,90 @@
+heat_template_version: 2013-05-23
+
+description: OpenMPI cluster with OpenStack Heat
+
+parameters:
+  KeyName:
+    type: string
+    description: Key name for logging in to instance
+
+resources:
+  security_group:
+    type: AWS::EC2::SecurityGroup
+    properties:
+      GroupDescription: "SSH(22)"
+      SecurityGroupIngress:
+      - IpProtocol: "tcp"
+        FromPort: "22"
+        ToPort : "22"
+        CidrIp : "0.0.0.0/0"
+  floating_ip:
+    type: AWS::EC2::EIP
+    properties:
+       InstanceId: { get_resource: 'mpi1' }
+
+  mpi1:
+    type: OS::Nova::Server
+    properties:
+      key_name: { get_param: KeyName }
+      image: "futuregrid/ubuntu-14.04"
+      flavor: "m1.small"
+      name: mpi1 
+      security_groups:
+        - "default"
+        - { get_resource: security_group }
+      user_data:
+        str_replace:
+          template: |
+            #!/bin/bash
+            useradd -m mpiuser 
+            sudo apt-get install -y openmpi-common openmpi-bin libopenmpi1.6 libopenmpi-dev
+
+            cat << EOL > /home/mpiuser/.mpi_hostfile
+            # The Hostfile for Open MPI
+            localhost slots=2
+            # The following slave nodes are single processor machines:
+            slave1
+            EOL
+
+  mpi2:
+    type: OS::Nova::Server
+    properties:
+      key_name: { get_param: KeyName }
+      image: "futuregrid/ubuntu-14.04"
+      flavor: "m1.small"
+      name: mpi2
+      security_groups:
+        - "default"
+        - { get_resource: security_group }
+      user_data:
+        str_replace:
+          template: |
+            #!/bin/bash
+            useradd -m mpiuser 
+
+            mpi2=$(ifconfig eth0 | awk -F':' '/inet addr/{split($2,_," ");print _[1]}')
+
+            cat << EOF > /etc/hosts.openmpi
+            
+            # internal network addresses for openmpi cluster
+            $mpi1 mpi1
+            $mpi2 mpi2 slave1
+            EOF
+
+            su -c "ssh-keygen -t dsa -f /home/mpiuser/.ssh/id_rsa -N ''" mpiuser
+            cat /home/mpiuser/.ssh/id_rsa.pub >> /home/mpiuser/.ssh/authorized_keys
+            chown mpiuser: /home/mpiuser/.ssh/authorized_keys
+            pubkey=$(cat /home/mpiuser/.ssh/id_rsa.pub)
+
+            ssh -q -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no $mpi1 "su -c 'mkdir /home/mpiuser/.ssh' mpiuser"
+            scp -q -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no /home/mpiuser/.ssh/id_rsa /home/mpiuser/.ssh/id_rsa.pub $mpi1:/home/mpiuser/.ssh/
+            ssh -q -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no $mpi1 "cat /home/mpiuser/.ssh/id_rsa.pub >> /home/mpiuser/.ssh/authorized_keys"
+            ssh -q -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no $mpi1 "chown mpiuser: /home/mpiuser/.ssh/id_rsa.pub /home/mpiuser/.ssh/id_rsa /home/mpiuser/.ssh/authorized_keys"
+
+            cat /etc/hosts.openmpi >> /etc/hosts
+
+            scp -q -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no /etc/hosts.openmpi $mpi1:/etc/hosts.openmpi
+            ssh -q -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no $mpi1 "cat /etc/hosts.openmpi >> /etc/hosts"
+
+          params:
+            $mpi1: { get_attr: [ mpi1, first_address ] }
