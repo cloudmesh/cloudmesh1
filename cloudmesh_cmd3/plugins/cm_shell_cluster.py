@@ -250,7 +250,7 @@ class cm_shell_cluster:
 
             
             vmclass = VMcommand(arguments_temp)
-            res = vmclass.call_procedure()
+            res = vmclass.execute()
             if res == False: 
                 return
         

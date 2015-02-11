@@ -134,10 +134,8 @@ def shell_command_vm(arguments):
     """
 
 
-    call_proc = VMcommand(arguments)
-    return call_proc.call_procedure()
-
-    """ vm_command.execute() ... """
+    command_execute = VMcommand(arguments)
+    return command_execute.execute()
 
 
 class VMcommand(object):
@@ -449,7 +447,7 @@ class VMcommand(object):
         return serverid
 
     # IMPROVE NAMW def execute():
-    def call_procedure(self):
+    def execute(self):
         if 'start' in self.arguments and self.arguments['start']:
             return self._vm_create()
         elif 'delete' in self.arguments and self.arguments['delete']:

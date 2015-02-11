@@ -138,8 +138,8 @@ def shell_command_cloud(arguments):
 
     """
 
-    call = CloudCommand(arguments)
-    call.call_procedure()
+    command_execute = CloudCommand(arguments)
+    command_execute.execute()
 
 
 class CloudManage(object):
@@ -1365,7 +1365,7 @@ class CloudCommand(CloudManage):
             return False
         return name
 
-    def call_procedure(self):
+    def execute(self):
         # print self.arguments ###########
         if 'list' in self.arguments and self.arguments['list']:
             self._cloud_list()
