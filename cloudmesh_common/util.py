@@ -279,7 +279,9 @@ def address_string(content, labels=False):
         vlan = content.keys()[0]
         for address in content[vlan]:
             if labels:
-                result = result + address['OS-EXT-IPS:kind'] + "="
+                # 2/11/15 By Mark X. change "kind" which seems wrong to "type"
+                # address['OS-EXT-IPS:kind'] => address['OS-EXT-IPS:type']
+                result = result + address['OS-EXT-IPS:type'] + "="
             result = result + address['addr']
             result = result + ", "
         result = result[:-2]

@@ -382,13 +382,20 @@ class cm_shell_cluster:
             for k, v in res.iteritems():
                 address_floating = get_ip(v)
                 os.popen("scp {2} {3} {0}@{1}:~/.ssh/authorized_keys ./{4}/"\
-                         .format(vm_login_name,address_floating, _key, StrictHostKeyChecking, dir_name))
+                         .format(vm_login_name,address_floating, 
+                                 _key, 
+                                 StrictHostKeyChecking, dir_name))
                 os.popen("cat ./{0}/authorized_keys_temp >> ./{0}/authorized_keys"\
                          .format(dir_name))
                 os.popen("scp {2} {3} ./{4}/authorized_keys {0}@{1}:~"\
-                         .format(vm_login_name,address_floating, _key, StrictHostKeyChecking, dir_name))
+                         .format(vm_login_name,address_floating, 
+                                 _key, 
+                                 StrictHostKeyChecking, dir_name))
                 os.popen("ssh {2} {3} {0}@{1} \"sudo mv authorized_keys ~/.ssh/\""\
-                         .format(vm_login_name,address_floating, _key, StrictHostKeyChecking))
+                         .format(vm_login_name,
+                                 address_floating, 
+                                 _key, 
+                                 StrictHostKeyChecking))
                 os.popen("rm ./{0}/authorized_keys".format(dir_name))
                 
                 os.popen("cp ./{0}/hosts_temp ./{0}/oops/".format(dir_name))

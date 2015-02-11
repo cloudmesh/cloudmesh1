@@ -21,6 +21,7 @@ from cloudmesh.shell.shellutil import get_vms_look_for
 from cloudmesh.shell.shellutil import shell_commands_dict_output
 from cloudmesh.shell.shellutil import get_command_list_refresh_default_setting
 import json
+from cloudmesh_common.util import address_string
 
 
 log = LOGGER(__file__)
@@ -132,8 +133,11 @@ def shell_command_vm(arguments):
 
     """
 
+
     call_proc = VMcommand(arguments)
     return call_proc.call_procedure()
+
+    """ vm_command.execute() ... """
 
 
 class VMcommand(object):
@@ -150,7 +154,12 @@ class VMcommand(object):
 
         self.username = self.config['cloudmesh']['profile']['username']
 
+    # IMPROVE NAME def _create(self):
     def _vm_create(self):
+
+        """creates a virtual machine through the command shell via the
+        arguments passed at initialization time of VMcommand"""
+
         # -------------------------
         # check input
         count = 1
@@ -260,7 +269,9 @@ class VMcommand(object):
             mongo = cm_mongo()
             serverdata = mongo.servers(clouds=[cloudname],
                                        cm_user_id=self.username)[cloudname]
-            serverdata = serverdata[serverid]['addresses']['private']
+            serverdata = serverdata[serverid]['addresses']
+            temp_val = serverdata.keys()[0]
+            serverdata = serverdata[temp_val]
             for i in serverdata:
                 if i['OS-EXT-IPS:type'] == "floating":
                     address = i['addr']
@@ -336,7 +347,9 @@ class VMcommand(object):
 
         res = {}
         for item in server_id_list:
-            temp = servers_dict[item]['addresses']['private']
+            temp = servers_dict[item]['addresses']
+            temp_val = temp.keys()[0]
+            temp = temp[temp_val]
             fixed = ""
             floating = ""
             for item0 in temp:
@@ -435,6 +448,7 @@ class VMcommand(object):
             return False
         return serverid
 
+    # IMPROVE NAMW def execute():
     def call_procedure(self):
         if 'start' in self.arguments and self.arguments['start']:
             return self._vm_create()
@@ -966,11 +980,8 @@ class VMs(object):
                             else:
                                 temp = "unavailable"
 
-                        elif cm_type == "openstack" and item[0] == 'addresses':
-                            temp0 = ''
-                            for i in temp['private']:
-                                temp0 = temp0 + i['addr'] + ', '
-                            temp = temp0[:-2]
+                        elif item[0] == 'addresses':
+                            temp = address_string(temp)
                         # ----------------------------------------
                         temp_res = temp
                     except:

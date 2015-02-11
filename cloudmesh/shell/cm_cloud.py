@@ -13,6 +13,7 @@ from cloudmesh.shell.shellutil import shell_commands_dict_output
 import csv
 from cloudmesh.server.database import Database
 import json
+from cloudmesh_common.util import address_string
 
 log = LOGGER(__file__)
 
@@ -748,17 +749,14 @@ class CloudManage(object):
                         else:
                             val = "unavailable"
 
-                    if k[0] == 'image':
+                    elif k[0] == 'image':
                         if val in images_dict[cloudname]:
                             val = images_dict[cloudname][val]['name']
                         else:
                             val = "unavailable"
 
-                    if cm_type == "openstack" and k[0] == 'addresses':
-                        tmp = ''
-                        for i in val['private']:
-                            tmp = tmp + i['addr'] + ', '
-                        val = tmp[:-2]
+                    elif k[0] == 'addresses':
+                        val = address_string(val)
                     # ----------------------------------------
                     values.append(str(val))
                 except:
