@@ -192,11 +192,12 @@ class cm_shell_launcher:
             param = {'KeyName': keynamenew,
                      'Cookbook': cookbook,
                      'dummy': dummy}
-            # HADOOP CLUSTER TEST CODE
-            if cookbook == "hadoop":
+            # test for openmpi, hadoop
+            if cookbook in [ "hadoop", "openmpi" ]:
                 privatekey, publickey = generate_keypair()
                 t_url = \
-                        "https://raw.githubusercontent.com/cloudmesh/cloudmesh/dev1.3/heat-templates/ubuntu-14.04/hadoop-cluster/hadoop-cluster.yaml"
+                ("https://raw.githubusercontent.com/cloudmesh/cloudmesh/dev1.3/heat-templates/ubuntu-14.04/"
+                + str(cookbook) + "-cluster/" + str(cookbook) + "-cluster.yaml")
                 param = {'KeyName': keynamenew,
                          'PublicKeyString': publickey,
                          'PrivateKeyString': privatekey}
