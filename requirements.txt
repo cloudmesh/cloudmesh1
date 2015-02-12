@@ -51,6 +51,7 @@ cmd3>=1.1.0
 #
 python-ldap
 pyaml
+pyyaml
 pymongo
 mongoengine
 #
