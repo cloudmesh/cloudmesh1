@@ -31,7 +31,91 @@ def isyes(value):
         print ("found", value, check)
         sys.exit()
 
+"""
+class server(object):
 
+    def __init__(self):
+        self.env = {
+            "type": "server",
+        }
+        
+    def info(self): 
+        pass
+
+    def status(self):
+        pass
+
+    def start(self):
+        """starts a server"""
+        pass
+
+    def stop(self):
+        pass
+
+    def __str__(self):
+        self.info()
+    
+class mongo_server(server):
+
+    def __init__(self):
+        self.env = {
+            "type": "server",
+        }
+        
+    def info(self): 
+        pass
+
+    def status(self):
+        pass
+
+    def start(self):
+        """starts a server"""
+        pass
+
+    def stop(self):
+        pass
+
+class rabbitmq_server(server):
+
+    def __init__(self):
+        self.env = {
+            "type": "server",
+        }
+        
+    def info(self): 
+        pass
+
+    def status(self):
+        pass
+
+    def start(self):
+        """starts a server"""
+        pass
+
+    def stop(self):
+        pass
+        
+class cellery_server(server):
+
+    def __init__(self):
+        self.env = {
+            "type": "server",
+        }
+        
+    def info(self): 
+        pass
+
+    def status(self):
+        pass
+
+    def start(self):
+        """starts a server"""
+        pass
+
+    def stop(self):
+        pass
+"""
+    
 class cloudmesh_server(object):
 
     def _ps(self):
