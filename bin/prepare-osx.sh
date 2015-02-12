@@ -17,4 +17,7 @@ ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/
 
 sudo easy_install pip && sudo pip install virtualenv
 
+pip install python-ldap \
+   --global-option=build_ext \
+   --global-option="-I$(xcrun --show-sdk-path)/usr/include/sasl"
 
