@@ -27,20 +27,22 @@ Contributors
 
 * Gregor von Laszewski 
 * Fugang Wang
-* Heng Chen 
 * Hyungro Lee
-* Sridhar Rajagopalan
 * Allen Streib
 * Koji Tanaka
-* Jonathan Klinginsmith
 
 Alumni
 --------
 
+* Heng Chen
 * Pushkar Joshi
-* Sneha Shekatar
+* Jonathan Klinginsmith
 * Pushkar Newaskar 
 * Shweta Balkrishna Patil 
+* Sridhar Rajagopalan
+* Sneha Shekatar
+
+If we forgot to list you here, please send mail to laszewski@gmail.com.
 
 
 Blog
@@ -50,6 +52,8 @@ A Blog is located at
 
 * http://cloudmesh.blogspot.com
 
+However we have not used it much.
+  
 Repository
 ----------
 
