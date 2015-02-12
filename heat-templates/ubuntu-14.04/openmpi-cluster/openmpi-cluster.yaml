@@ -79,6 +79,7 @@ resources:
             chmod 600 /root/.ssh/id_rsa
 
             useradd -m mpiuser 
+            sudo apt-get install -y openmpi-common openmpi-bin libopenmpi1.6 libopenmpi-dev
 
             mpi2=$(ifconfig eth0 | awk -F':' '/inet addr/{split($2,_," ");print _[1]}')
 
