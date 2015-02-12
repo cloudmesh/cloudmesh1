@@ -6,6 +6,12 @@ parameters:
   KeyName:
     type: string
     description: Key name for logging in to instance
+  PublicKeyString:
+    type: string
+    description: a public key string
+  PrivateKeyString:
+    type: string
+    description: a private key string
 
 resources:
   security_group:
@@ -36,6 +42,10 @@ resources:
         str_replace:
           template: |
             #!/bin/bash
+            echo $publickey >> /root/.ssh/authorized_keys
+            echo "$privatekey" > /root/.ssh/id_rsa
+            chmod 600 /root/.ssh/id_rsa
+
             useradd -m mpiuser 
             sudo apt-get install -y openmpi-common openmpi-bin libopenmpi1.6 libopenmpi-dev
 
@@ -45,6 +55,10 @@ resources:
             # The following slave nodes are single processor machines:
             slave1
             EOL
+
+          params:
+            $publickey: { get_param: PublicKeyString }
+            $privatekey: { get_param: PrivateKeyString }
 
   mpi2:
     type: OS::Nova::Server
@@ -60,6 +74,10 @@ resources:
         str_replace:
           template: |
             #!/bin/bash
+            echo $publickey >> /root/.ssh/authorized_keys
+            echo "$privatekey" > /root/.ssh/id_rsa
+            chmod 600 /root/.ssh/id_rsa
+
             useradd -m mpiuser 
 
             mpi2=$(ifconfig eth0 | awk -F':' '/inet addr/{split($2,_," ");print _[1]}')
@@ -88,3 +106,5 @@ resources:
 
           params:
             $mpi1: { get_attr: [ mpi1, first_address ] }
+            $publickey: { get_param: PublicKeyString }
+            $privatekey: { get_param: PrivateKeyString }
