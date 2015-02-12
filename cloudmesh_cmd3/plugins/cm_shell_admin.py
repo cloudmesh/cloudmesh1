@@ -1,5 +1,10 @@
 from cmd3.shell import command
 from cloudmesh.server.database import Database
+from cmd3.console import Console
+from cloudmesh_admin.server_admin import (cloudmesh_server, 
+                                          mongo_server,
+                                          rabbitmq_server,
+                                          celery_server)
 
 
 class cm_shell_admin:
@@ -20,22 +25,15 @@ class cm_shell_admin:
       admin mongo stop
       admin mongo status
       admin mongo password
-      admin celery status
       admin celery start
       admin celery stop
-      admin rabbitmq stop
+      admin celery status
       admin rabbitmq status
       admin rabbitmq start
-
-
-
+      admin rabbitmq stop
       admin version
 
     Options:
-      -h --help     Show this screen.
-      --version     Show version.
-        Usage:
-        
 
 
     Description:
@@ -43,49 +41,52 @@ class cm_shell_admin:
            reset portal password
         """
 
-    def _comamnd_type(arguments):
-        for kind in ['password'. 'rabbitmq', 'mongo', 'cellery']
-            if kind in arguments:
-                return kind
-        retunr None
-        
-
-    kind = _command_type(arguments):
+        def _comamnd_type(arguments):
+            for kind in ['server', 'rabbitmq', 'mongo', 'celery']:
+                if arguments[kind] == True:
+                    if kind == "server":
+                        kind = "cloudmesh"
+                    return kind
+            return None
+                 
+        if arguments['password'] and arguments['reset']:
+            #db = Database()
+            #db.set_password_local()
+            return
             
-    if arguments['password'] and arguments['reset']:
-        #db = Database()
-        #db.set_password_local()
-        pass
-        return
-
-    if kind is 'mongo':
-        # server = mongo server
-        pass
-    elsif kind is 'rabbitmq':
-        pass
-    elsif kind is 'cellery':
-        pass
-    elsif kind is None:
-       # error
-    
-    if arguments['start']:
-        #server.start()
-        pass
-    elif arguments['stop']:
-        #server.stop()
-        #server.kill()
-        pass
+        elif arguments['mongo'] and arguments['password']:
+            #set_mongo_password()
+            return
+            
+        kind = _command_type(arguments)
+            
+        if kind is 'cloudmesh':
+            server = cloudmesh_server()
+        elif kind is 'mongo':
+            server = mongo_server()
+        elif kind is 'rabbitmq':
+            server = rabbitmq_server()
+        elif kind is 'celery':
+            server = celery_server()
+        elif kind is None:
+           raise Exception("wrong command type")
         
-    elif arguments['status']:
-        Console.print ('Stausus of {0} Server'.format(kind))
-        # server.status()
-        pass
-        #print "status"
-        #queue_ls()
-        #mongo_info()
+        if arguments['start']:
+            #server.start()
+            pass
+        elif arguments['stop']:
+            #server.stop()
+            #server.kill()
+            pass
+            
+        elif arguments['status']:
+            Console.msg('Status of {0} Server'.format(kind))
+            # server.status()
+            pass
+            #print "status"
+            #queue_ls()
+            #mongo_info()
 
         
-    elif arguments['mongo'] and arguments['password']:
-        #set_mongo_password()
 
             

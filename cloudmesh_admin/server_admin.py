@@ -31,8 +31,8 @@ def isyes(value):
         print ("found", value, check)
         sys.exit()
 
-"""
-class server(object):
+
+class cloudmesh_server(object):
 
     def __init__(self):
         self.env = {
@@ -55,7 +55,7 @@ class server(object):
     def __str__(self):
         self.info()
     
-class mongo_server(server):
+class mongo_server(cloudmesh_server):
 
     def __init__(self):
         self.env = {
@@ -75,7 +75,7 @@ class mongo_server(server):
     def stop(self):
         pass
 
-class rabbitmq_server(server):
+class rabbitmq_server(cloudmesh_server):
 
     def __init__(self):
         self.env = {
@@ -95,7 +95,7 @@ class rabbitmq_server(server):
     def stop(self):
         pass
         
-class cellery_server(server):
+class celery_server(cloudmesh_server):
 
     def __init__(self):
         self.env = {
@@ -114,9 +114,9 @@ class cellery_server(server):
 
     def stop(self):
         pass
-"""
+
     
-class cloudmesh_server(object):
+class cloudmesh_server_old(object):
 
     def _ps(self):
         return sh.ps("-ax", _tty_out=False)
