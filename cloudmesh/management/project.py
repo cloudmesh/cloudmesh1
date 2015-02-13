@@ -9,7 +9,7 @@ from pprint import pprint
 from cloudmeshobject import CloudmeshObject
 from cloudmesh.config.ConfigDict import ConfigDict
 from cloudmesh_install import config_file
-from cloudmesh.config.cm_config import get_mongo_db, DBConnFactory
+from cloudmesh.config.cm_config import get_mongo_db, get_mongo_dbname_from_collection, DBConnFactory
 
 
 def IMPLEMENT():
@@ -69,6 +69,10 @@ REQUIRED = False
 
 
 class Project(CloudmeshObject):
+    # named connection (not 'default')
+    dbname = get_mongo_dbname_from_collection("manage")
+    if dbname:
+        meta = {'db_alias': dbname}
 
     '''
     The project object with its fields. The current fields include

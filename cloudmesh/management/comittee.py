@@ -2,6 +2,7 @@ from mongoengine import *
 from datetime import datetime
 from project import Project, Projects
 from user import User, Users
+from cloudmesh.config.cm_config import get_mongo_db, get_mongo_dbname_from_collection, DBConnFactory
 
 port = 27777
 db_name = 'project'
@@ -30,6 +31,10 @@ class Committee(Document):
     #--------------------------------------------------------------------
     default = StringField(choices=CHOICES, default='Yes')
     message = StringField()
+
+    dbname = get_mongo_dbname_from_collection("manage")
+    if dbname:
+        meta = {'db_alias': dbname}
 
     def __str__(self):
         return "{0} {1} {2} {3}".format(self.status, self.reviewers)

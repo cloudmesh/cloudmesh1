@@ -10,8 +10,12 @@ import uuid
 from pprint import pprint
 
 from cloudmesh.config.cm_config import get_mongo_db, DBConnFactory
-get_mongo_db("manage", DBConnFactory.TYPE_MONGOENGINE)
 
+# This is not encourged, as importing this file will try to establish a connection
+get_mongo_db("manage", DBConnFactory.TYPE_MONGOENGINE)
+# However this file was developed as an executable test/entrance so we leave it like this
+# alternatively, change this to more Object Oriented way so the connection is
+# only established when the object is instantiated.
 
 #----------------------------------------------------------
 #	The generate class generates 10 random users
@@ -130,7 +134,8 @@ def main():
     '''
     a test function to create 10 users and 3 projects
     '''
-
+    # get a connection first
+    get_mongo_db("manage", DBConnFactory.TYPE_MONGOENGINE)
     generate_users(10)
     generate_projects(3)
 

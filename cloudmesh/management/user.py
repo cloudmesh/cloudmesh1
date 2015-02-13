@@ -5,7 +5,7 @@ import datetime
 #    mongod --noauth --dbpath . --port 27777
 from cloudmesh.management.cloudmeshobject import CloudmeshObject
 import yaml
-from cloudmesh.config.cm_config import get_mongo_db, DBConnFactory
+from cloudmesh.config.cm_config import get_mongo_db, get_mongo_dbname_from_collection, DBConnFactory
 
 STATUS = ('pending', 'approved', 'blocked', 'denied')
 
@@ -55,9 +55,13 @@ def read_user(filename):
 
 class User(CloudmeshObject):
 
-    """This class is sued to represent a user"""
-
-    get_mongo_db("manage", DBConnFactory.TYPE_MONGOENGINE)
+    """This class is used to represent a user"""
+    dbname = get_mongo_dbname_from_collection("manage")
+    if dbname:
+        meta = {'db_alias': dbname}
+    #
+    # defer the connection to where the object is instantiated
+    # get_mongo_db("manage", DBConnFactory.TYPE_MONGOENGINE)
 
     def order(self):
         '''
@@ -209,12 +213,10 @@ class Users(object):
         config = ConfigDict(filename=config_file("/cloudmesh_server.yaml"))
         port = config['cloudmesh']['server']['mongo']['port']
 
-        get_mongo_db("manage", DBConnFactory.TYPE_MONGOENGINE)
         #db = connect('manage', port=port)
         self.users = User.objects()
 
-        # thism may be wrong
-        meta = {"db_alias": "default"}
+        get_mongo_db("manage", DBConnFactory.TYPE_MONGOENGINE)
 
     def objects(self):
         '''
