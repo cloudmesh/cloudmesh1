@@ -49,7 +49,7 @@ def random_user():
         phone=fake.phone_number(),
         department="IT",
         institution=fake.company(),
-        institution_role="Graduate Student",
+        institutionrole="Graduate Student",
         address=fake.address(),
         country="USA",
         citizenship="US",
@@ -69,7 +69,7 @@ def generate_users(n):
     users.clear()
     for i in range(0, n):
         data = random_user()
-        print data
+        # print data
         users.add(data)
 
 

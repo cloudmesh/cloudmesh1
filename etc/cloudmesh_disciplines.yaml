@@ -1,0 +1,159 @@
+101:
+    name: 'Aerospace Engineering (101)'
+901:
+    name: 'Agricultural Economics (901)'
+102:
+    name: 'Agricultural Engineering (102)'
+501:
+    name: 'Agricultural Sciences (501)'
+601:
+    name: 'Anatomy (601)'
+701:
+    name: 'Anesthesiology (701)'
+901:
+    name: 'Anthropology (901)'
+201:
+    name: 'Astronomy (201)'
+301:
+    name: 'Atomospheric Sciences (301)'
+602:
+    name: 'Biochemistry (602)'
+603:
+    name: 'Biology (603)'
+103:
+    name: 'Biomedical Engineering (103)'
+604:
+    name: 'Biometry and Epidemiology (604)'
+605:
+    name: 'Biophysics (605)'
+617:
+    name: 'Biosciences, n.e.c. (617)'
+606:
+    name: 'Botany (606)'
+702:
+    name: 'Cardiology (702)'
+607:
+    name: 'Cell and Molecular Biology (607)'
+104:
+    name: 'Chemical and Related Engineering (104)'
+202:
+    name: 'Chemistry (202)'
+105:
+    name: 'Civil and Related Engineering (105)'
+717:
+    name: 'Clinical Medicine, n.e.c. (717)'
+723:
+    name: 'Communication Disorders Sciences (723)'
+401:
+    name: 'Computer Science (401)'
+718:
+    name: 'Dental Sciences (718)'
+304:
+    name: 'Earth, Atmospheric, and Ocean Sciences, n.e.c. (304)'
+608:
+    name: 'Ecology (608)'
+903:
+    name: 'Economics (903)'
+106:
+    name: 'Electrical and Related Engineering (106)'
+704:
+    name: 'Endocrinology (704)'
+107:
+    name: 'Engineering Science and Engineering Physics (107)'
+114:
+    name: 'Engineering, n.e.c. (114)'
+609:
+    name: 'Entomology and Parasitology (609)'
+705:
+    name: 'Gastroenterology (705)'
+610:
+    name: 'Genetics (610)'
+904:
+    name: 'Geography (904)'
+302:
+    name: 'Geosciences (302)'
+722:
+    name: 'Health-related, n.e.c. (722)'
+706:
+    name: 'Hematology (706)'
+905:
+    name: 'History and Philosophy of Science (908)'
+108:
+    name: 'Industrial\/Manufacturing Engineering (108)'
+906:
+    name: 'Linguistics (906)'
+402:
+    name: 'Mathematics and Applied Mathematics (402)'
+109:
+    name: 'Mechanical and Related Engineering (109)'
+110:
+    name: 'Metallurgical and Materials Engineering (110)'
+611:
+    name: 'Microbiology, Immunology, and Virology (611)'
+111:
+    name: 'Mining and Related Engineering (111)'
+707:
+    name: 'Neurology (707)'
+112:
+    name: 'Nuclear Engineering (112)'
+719:
+    name: Nursing (719)
+612:
+    name: 'Nutrition (612)'
+708:
+    name: 'Obstetrics and Gynecology (708)'
+303:
+    name: 'Ocean Sciences (303)'
+703:
+    name: 'Oncology\/Cancer Research (703'
+709:
+    name: 'Ophthalmology (709)'
+710:
+    name: 'Otorhinolaryngology (710)'
+613:
+    name: 'Pathology (613)'
+711:
+    name: 'Pediatrics (711)'
+113:
+    name: 'Petroleum Engineering (113)'
+720:
+    name: 'Pharmaceutical Sciences (720)'
+614:
+    name: 'Pharmacology (614)'
+204:
+    name: 'Physical Sciences, n.e.c. (204)'
+203:
+    name: 'Physics (203)'
+615:
+    name: 'Physiology (615)'
+907:
+    name: 'Political Science\/Public Administration (907)'
+712:
+    name: 'Preventive Medicine and Community Health (712)'
+713:
+    name: 'Psychiatry (713)'
+802:
+    name: 'Psychology (except Clinical) (802)'
+803:
+    name: 'Psychology, Clinical (803)'
+801:
+    name: 'Psychology, Combined (801)'
+714:
+    name: 'Pulmonary Disease (714)'
+715:
+    name: 'Radiology (715)'
+910:
+    name: 'Social Sciences, n.e.c. (910)'
+908:
+    name: 'Sociology (908)'
+909:
+    name: 'Sociology and Anthropology (909)'
+403:
+    name: 'Statistics (403)'
+716:
+    name: 'Surgery (716)'
+721:
+    name: 'Veterinary Sciences (721)'
+616:
+    name: 'Zoology (616)'
+

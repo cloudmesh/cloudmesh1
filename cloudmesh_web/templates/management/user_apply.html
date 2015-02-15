@@ -85,13 +85,13 @@
                                             {% if field_name == 'country' %}
                                                 <select name="{{ key }}"{%if value['required'] %} required {% endif %}>>
                                                     {% for item in countries_list %}
-                                                        <option>{{ item }}</option>
+                                                        <option>{{ item.decode('utf-8') }}</option>
                                                     {% endfor %}
                                                 </select>
                                             {% elif field_name == 'citizenship' %}
                                                 <select name="{{ key }}"{%if value['required'] %} required {% endif %}>>
                                                     {% for item in countries_list %}
-                                                        <option>{{ item }}</option>
+                                                        <option>{{ item.decode('utf-8') }}</option>
                                                     {% endfor %}
                                                 </select>
                                                 {% elif field_name == 'institutionrole' %}

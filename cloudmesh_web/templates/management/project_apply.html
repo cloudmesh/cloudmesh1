@@ -76,9 +76,29 @@
                                     {% elif value['type'] == 'dropdown' %}
                                         <div class="form-inline">
                                             {% set option_value = value['value'] %}
-                                            <select name="{{ key }}"{% if value['required'] %} required {% endif %}>>
-                                                <option>{{ option_value }}</option>
-                                            </select>
+                                            {% set field_name = key %}
+                                            {% if field_name == 'country' %}
+                                                <select name="{{ key }}"{%if value['required'] %} required {% endif %}>>
+                                                    {% for item in countries_list %}
+                                                        <option>{{ item.decode('utf-8') }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            {% elif field_name == 'state' %}
+                                                <select name="{{ key }}"{%if value['required'] %} required {% endif %}>>
+                                                    {% for item in states_list %}
+                                                        <option>{{ item.decode('utf-8') }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                                {% elif field_name == 'discipline' %}
+                                                <select name="{{ key }}"{%if value['required'] %} required {% endif %}>>
+                                                    {% for item in disciplines_list %}
+                                                        <option>{{ item }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            {% endif %}
+{#                                            <select name="{{ key }}"{% if value['required'] %} required {% endif %}>>#}
+{#                                                <option>{{ option_value }}</option>#}
+{#                                            </select>#}
                                             </label>
                                         </div>
                                     {% endif %}
