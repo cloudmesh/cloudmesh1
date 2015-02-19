@@ -1,0 +1,13 @@
+
+* Goal
+** CM in Docker
+*** DONE ./install user fails with "USER"				:bug:
+    - State "DONE"       from "TODO"       [2015-02-19 Thu 15:24]
+    In `cloudmesh_install/install.py():190
+    Call to `string.Template(results).substitute(os.environ)` fails with a KeyError.
+    This is because in a docker build a user is not known
+
+    My hack: set the USER environment variable in a docker-local build
+    environment
+
+*** TODO fab server.start cannot connect to mongo			:bug:
