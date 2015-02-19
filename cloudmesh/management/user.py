@@ -5,6 +5,7 @@ from tabulate import tabulate
 import datetime
 import json
 import sys
+import pprint
 #    mongod --noauth --dbpath . --port 27777
 from cloudmesh.management.cloudmeshobject import CloudmeshObject
 import yaml
@@ -218,7 +219,7 @@ class User(CloudmeshObject):
     """
 
     @classmethod
-    def list_users(cls, username=None):
+    def list_users(cls, username=None, display_format=None):
         req_fields = ["username", "title", "firstname", "lastname",
                       "email", "phone", "url", "citizenship",
                       "institution", "institutionrole", "department",
@@ -226,12 +227,18 @@ class User(CloudmeshObject):
         try:
             if username is None:
                 user_json = User.objects.only(*req_fields).to_json()
-                user_dict = json.loads(user_json)
-                cls.display(user_dict)
+                if display_format != 'json':
+                    user_dict = json.loads(user_json)
+                    cls.display(user_dict)
+                else:
+                    cls.display_json(user_json)
             else:
                 user_json = User.objects(username=username).only(*req_fields).to_json()
-                user_dict = json.loads(user_json)
-                cls.display(user_dict)
+                if display_format != 'json':
+                    user_dict = json.loads(user_json)
+                    cls.display(user_dict)
+                else:
+                    cls.display_json(user_json)
         except:
             print "Oops.. Something went wrong in the list users method", sys.exc_info()[0]
         pass
@@ -258,8 +265,14 @@ class User(CloudmeshObject):
             print table
             print separator
         else:
-            print "No users in the system"
+            print "No user(s) in the system"
 
+
+    def display_json(self, user_json):
+        if bool(user_json):
+            pprint.pprint(user_json)
+        else:
+            print "No user(s) in the system"
 
 class Users(object):
 

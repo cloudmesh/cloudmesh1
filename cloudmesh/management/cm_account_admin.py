@@ -34,7 +34,7 @@ def management_command(args):
         cm-management user generate [--count=N]
         cm-management user clear
         cm-management user delete
-        cm-management user list
+        cm-management user list [--format=type]
         cm-management project generate
         cm-management version
 
@@ -51,7 +51,11 @@ def management_command(args):
             print cloudmesh.__version__
         elif arguments['user'] and arguments['list']:
             user = User()
-            user.list_users()
+            if arguments['--format']:
+                display_format = arguments['--format']
+                user.list_users(display_format)
+            else:
+                user.list_users()
         elif arguments['user'] and arguments['generate']:
             if arguments['--count']:
                 count = int(arguments['--count'])
@@ -67,7 +71,8 @@ def management_command(args):
         elif arguments['list']:
             print "Listing Users"
     except:
-        print "Invalid arguments Exception"
+        print "Invalid arguments Exception", sys.exc_info()[0]
+        raise
 
 
 if __name__ == '__main__':
