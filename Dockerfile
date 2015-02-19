@@ -13,9 +13,10 @@ RUN echo 'export USER=docker' >>/tmp/build-env
 RUN ./with-venv ~/ENV cloudmesh /tmp/build-env git checkout dev1.3
 RUN ./with-venv ~/ENV cloudmesh /tmp/build-env ./install system
 RUN ./with-venv ~/ENV cloudmesh /tmp/build-env ./install requirements
-RUN ./with-venv ~/ENV cloudmesh /tmp/build-env ./install new
-RUN ./with-venv ~/ENV cloudmesh /tmp/build-env ./install cloudmesh
+# RUN ./with-venv ~/ENV cloudmesh /tmp/build-env ./install new
+# RUN ./with-venv ~/ENV cloudmesh /tmp/build-env ./install cloudmesh
 RUN rm /tmp/build-env
 
-EXPOSE 5000 27017
-CMD source ~/ENV/bin/activate && cd cloudmesh && fab server.start
+EXPOSE 5000
+CMD bash -l
+# source ~/ENV/bin/activate && cd cloudmesh && fab server.start
