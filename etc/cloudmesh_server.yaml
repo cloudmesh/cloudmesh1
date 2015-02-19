@@ -44,6 +44,8 @@ cloudmesh:
             username: admin
             password: abc
             collections:
+                qsub:
+                    db: qsub
                 inventory:
                     db: cloudmesh
                 cloudmesh:
