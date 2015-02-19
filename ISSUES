@@ -11,3 +11,33 @@
     environment
 
 *** TODO fab server.start cannot connect to mongo			:bug:
+
+
+** allow user to specify ssh key for `cm-iu user fetch` 	:enhancement:
+   currently the key is expected to be ~/.ssh/id_rsa
+
+** `cm-iu user fetch` cannot find ~/.futuregrid directory on india	:bug:
+   #+BEGIN_SRC
+   cm-iu user fetch
+
+   # ######################################################################
+   # download rcfiles (novarc, eucarc, etc) from IaaS platforms
+   # ######################################################################
+
+   Please enter your portal user id [default: docker]: badi
+   fetching from  india.futuregrid.org{'dest': '/root/.cloudmesh/clouds/india',
+    'hostname': 'india.futuregrid.org',
+    'source': '.futuregrid/openstack_havana/novarc',
+    'userid': 'badi'}
+   create directory: /root/.cloudmesh/clouds/india
+       <- scp -o StricthostKeyChecking=no badi@india.futuregrid.org:.futuregrid/openstack_havana/novarc /root/.cloudmesh/clouds/india
+        failed None 
+
+     RAN: '/usr/bin/scp -o StrictHostKeyChecking=no badi@india.futuregrid.org:.futuregrid/openstack_havana/novarc /root/.cloudmesh/clouds/india'
+
+     STDOUT:
+
+
+     STDERR:
+   scp: .futuregrid/openstack_havana/novarc: No such file or directory
+   #+END_SRC
