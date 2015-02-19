@@ -17,6 +17,5 @@ RUN ./with-venv ~/ENV cloudmesh /tmp/build-env ./install new
 RUN ./with-venv ~/ENV cloudmesh /tmp/build-env ./install cloudmesh
 RUN rm /tmp/build-env
 
-EXPOSE 5000
-# cd cloudmesh && fab server.start
-CMD bash -l
+EXPOSE 5000 27017
+CMD source ~/ENV/bin/activate && cd cloudmesh && fab server.start
