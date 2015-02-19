@@ -9,17 +9,42 @@ log = LOGGER(__file__)
 
 State = ['running', 'pending', 'completed', 'failed']
 
-class Queue(Document):
+class QSub(Document):
 
-    name = StringField()
+    name = StringField()        
+        
+    dbname = get_mongo_dbname_from_collection("qsub")
+    if dbname:
+        meta = {'allow_inheritance': True, 'db_alias': dbname}
+        
+    @classmethod
+    def delete(cls, name):
+        element = cls.find(name)
+        element.delete()
+
+    @classmethod
+    def find(cls, name):
+        try:
+            return cls.objects(name=name)[0]
+        except:
+            None
+
+    @classmethod
+    def reset(cls):
+        for element in cls.objects:
+            element.delete()
+
+    @classmethod
+    def connect(cls):
+        get_mongo_db("qsub", DBConnFactory.TYPE_MONGOENGINE)
+            
+    
+class Queue(QSub):
+
     host = StringField()
-
     user = StringField()
     """name in ssh/config"""
 
-    dbname = get_mongo_dbname_from_collection("qsub")
-    if dbname:
-        meta = {'db_alias': dbname}
 
     def list():
         """lists the jobs in the queue"""
@@ -30,10 +55,8 @@ class Queue(Document):
         If name is other than none the specific queue info is given
         If the name is "all" info from all ques are returned."""
         pass        
-    
 
-
-class Job(Document):
+class Job(QSub):
 
     name = StringField()
     jobid = StringField()
@@ -42,10 +65,6 @@ class Job(Document):
     ssh_config = StringField()
     state = StringField()
     queue = ReferenceField(Queue)
-
-    dbname = get_mongo_dbname_from_collection("qsub")
-    if dbname:
-        meta = {'db_alias': dbname}
 
     @classmethod
     def list(cls):
@@ -111,14 +130,8 @@ class Job(Document):
     def rename(self, name):
         pass
         
-class qsub:
 
-    @classmethod
-    def connect(cls):
-        get_mongo_db("qsub", DBConnFactory.TYPE_MONGOENGINE)
-
-
-qsub.connect()
+QSub.connect()
 
 queue = Queue(host='india.futuregrid.org',
               name='batch',
@@ -139,7 +152,6 @@ job = Job(name=name,
 job.save()
 
 print (Job.status(name))
-
 
 jobs = Job.objects()
 
