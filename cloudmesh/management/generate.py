@@ -54,6 +54,9 @@ def random_user():
         country="USA",
         citizenship="US",
         bio=fake.paragraph(),
+        url=fake.url(),
+        advisor=fake.name(),
+        confirm=password,
     )
     return data
 
