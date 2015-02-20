@@ -28,7 +28,7 @@ def main():
 
 
 def management_command(args):
-    """cm-management.
+    """cm-management - Command line option to manage users and projects
 
     Usage:
         cm-management user generate [--count=N]
