@@ -219,7 +219,7 @@ class User(CloudmeshObject):
     """
 
     @classmethod
-    def list_users(cls, username=None, display_format=None):
+    def list_users(cls, disp_fmt=None, username=None):
         req_fields = ["username", "title", "firstname", "lastname",
                       "email", "phone", "url", "citizenship",
                       "institution", "institutionrole", "department",
@@ -227,18 +227,18 @@ class User(CloudmeshObject):
         try:
             if username is None:
                 user_json = User.objects.only(*req_fields).to_json()
-                if display_format != 'json':
-                    user_dict = json.loads(user_json)
+                user_dict = json.loads(user_json)
+                if disp_fmt != 'json':
                     cls.display(user_dict)
                 else:
-                    cls.display_json(user_json)
+                    cls.display_json(user_dict)
             else:
                 user_json = User.objects(username=username).only(*req_fields).to_json()
-                if display_format != 'json':
-                    user_dict = json.loads(user_json)
+                user_dict = json.loads(user_json)
+                if disp_fmt != 'json':
                     cls.display(user_dict)
                 else:
-                    cls.display_json(user_json)
+                    cls.display_json(user_dict)
         except:
             print "Oops.. Something went wrong in the list users method", sys.exc_info()[0]
         pass
@@ -267,10 +267,11 @@ class User(CloudmeshObject):
         else:
             print "No user(s) in the system"
 
-
-    def display_json(self, user_json):
-        if bool(user_json):
-            pprint.pprint(user_json)
+    @classmethod
+    def display_json(cls, user_json):
+        if user_json is not None:
+            # pprint.pprint(user_json)
+            print json.dumps(user_json, indent=4)
         else:
             print "No user(s) in the system"
 

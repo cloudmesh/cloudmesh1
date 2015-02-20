@@ -28,23 +28,27 @@ def main():
 
 
 def management_command(args):
-    """cm-management.
+    """cm-management - Command line option to manage users and projects
 
     Usage:
         cm-management user generate [--count=N]
+        cm-management user list [username|--all] [--format=FORMAT]
         cm-management user clear
-        cm-management user delete
-        cm-management user list [--format=type]
+        cm-management user add [YAMLFILE]
+        cm-management user delete [USERNAME]
+        cm-management user activate [USERNAME]
+        cm-management user deactivate [USERNAME]
         cm-management project generate
         cm-management version
 
     Options:
-        -h --help Show this screen
-        --version Show version
+        -h --help       Show this screen
+        --version       Show version
+        --format=FORMAT Output format: table, json
+        --all           Displays all users
     """
 
     arguments = docopt(management_command.__doc__, args[1:])
-    print arguments
 
     try:
         if arguments['version']:
@@ -52,8 +56,8 @@ def management_command(args):
         elif arguments['user'] and arguments['list']:
             user = User()
             if arguments['--format']:
-                display_format = arguments['--format']
-                user.list_users(display_format)
+                disp_fmt = arguments['--format']
+                user.list_users(disp_fmt)
             else:
                 user.list_users()
         elif arguments['user'] and arguments['generate']:
