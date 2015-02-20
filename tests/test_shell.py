@@ -12,16 +12,12 @@ nosetests -v  --nocapture test_shell.py:Test.test_list
 
 """
 from __future__ import print_function
-from sh import head
-from sh import fgrep
 import string
 import os
 import time
-from sh import cm
-
-from sh import ssh
 import json
 from pprint import pprint
+from cloudmesh.shell import Shell
 from cloudmesh_common.util import HEADING
 
 
@@ -37,7 +33,7 @@ class Test:
 
     def test_help(self):
         HEADING()
-        r = cm("help")
+        r = Shell.cm("help")
         print(r)
         assert "vm" in r and "cloud" in r and "list" in r
 
@@ -49,7 +45,7 @@ class Test:
 
     def grep_command(self, command, valid, invalid):
         ok = True
-        r = cm(command)
+        r = Shell.cm(command)
         print(r)
         if valid is not None:
             for word in valid:
@@ -84,7 +80,7 @@ class Test:
                          ]
         allok = True
         for (command, valid, invalid) in help_commands:
-            r = cm("help " + command)
+            r = Shell.cm("help " + command)
             testing = True
             if valid is not None:
                 testing = valid in r

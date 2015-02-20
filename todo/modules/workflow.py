@@ -1,5 +1,4 @@
-
-from sh import blockdiag
+from cloudmesh.shell import Shell
 from flask import Blueprint
 from flask import render_template, redirect, flash
 from datetime import datetime
@@ -14,7 +13,6 @@ from cloudmesh.provisioner.queue.tasks import provision
 from cloudmesh.config.cm_config import cm_config_server
 from pprint import pprint
 from cloudmesh.util.util import path_expand
-from sh import pwd
 from cloudmesh.util.util import cond_decorator
 from cloudmesh.inventory import Inventory
 
@@ -45,7 +43,7 @@ class ProvisionWorkflowForm(Form):
 
     # not so nice cludge, ask for location of statcic instead
 
-    web_pwd = pwd().strip()
+    web_pwd = Shell.pwd().strip()
     basename = "/static/{0}/{1}".format(dir, filename)
 
     print "BBBB", basename
@@ -90,7 +88,7 @@ def display_provision_workflow_form():
 
     filename = "abc"
 
-    web_pwd = pwd().strip()
+    web_pwd = Shell.pwd().strip()
     print "PWD", web_pwd
     basename = "/static/{0}/{1}".format(dir, filename,)
     # if form.validate_on_submit():
@@ -118,10 +116,10 @@ def display_provision_workflow_form():
     print "{0}.{1}".format(basename, diagram_format)
 
     print "OOOO", basename
-    blockdiag("--ignore-pil", "-Tsvg",
+    Shell.blockdiag("--ignore-pil", "-Tsvg",
               "-o", "{2}/{0}.{1}".format(basename, diagram_format, web_pwd),
               "{2}/{0}.{1}".format(basename, "diag", web_pwd))
-    # blockdiag("-Tpng",
+    # Shell.blockdiag("-Tpng",
     #          "-o", "." + dir + filename + ".png",
     #          "." + dir + filename + ".diag")
 

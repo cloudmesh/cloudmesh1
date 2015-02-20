@@ -9,7 +9,6 @@ nosetests -v
 """
 import sys
 
-from sh import grep
 import json
 import pprint
 pp = pprint.PrettyPrinter(indent=4)
