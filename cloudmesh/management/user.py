@@ -2,6 +2,7 @@ from cloudmesh.config.ConfigDict import ConfigDict
 from cloudmesh_install import config_file
 from mongoengine import *
 from tabulate import tabulate
+from cmd3.console import Console
 import datetime
 import json
 import sys
@@ -229,9 +230,9 @@ class User(CloudmeshObject):
                 user_json = User.objects.only(*req_fields).to_json()
                 user_dict = json.loads(user_json)
                 if disp_fmt != 'json':
-                    cls.display(user_dict)
+                    cls.display(username, user_dict)
                 else:
-                    cls.display_json(user_dict)
+                    cls.display_json(username, user_dict)
             else:
                 user_json = User.objects(username=username).only(*req_fields).to_json()
                 user_dict = json.loads(user_json)
@@ -244,8 +245,8 @@ class User(CloudmeshObject):
         pass
 
     @classmethod
-    def display(cls, user_dicts):
-        if bool(user_dicts):
+    def display(cls, user_dicts, user_name=None):
+        if user_dicts is not None:
             values = []
             for entry in user_dicts:
                 items = []
@@ -265,15 +266,17 @@ class User(CloudmeshObject):
             print table
             print separator
         else:
-            print "No user(s) in the system"
+            if user_name:
+                print("Error: No user in the system with name '{0}'".format(user_name))
 
     @classmethod
-    def display_json(cls, user_json):
+    def display_json(cls, user_json, user_name=None):
         if user_json is not None:
             # pprint.pprint(user_json)
             print json.dumps(user_json, indent=4)
         else:
-            print "No user(s) in the system"
+            if user_name:
+                print("Error: No user in the system with name '{0}'".format(user_name))
 
 class Users(object):
 

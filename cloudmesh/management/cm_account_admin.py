@@ -32,7 +32,7 @@ def management_command(args):
 
     Usage:
         cm-management user generate [--count=N]
-        cm-management user list [username|--all] [--format=FORMAT]
+        cm-management user list [USERNAME] [--format=FORMAT]
         cm-management user clear
         cm-management user add [YAMLFILE]
         cm-management user delete [USERNAME]
@@ -55,11 +55,15 @@ def management_command(args):
             print cloudmesh.__version__
         elif arguments['user'] and arguments['list']:
             user = User()
+            disp_fmt = None
+            user_name = None
             if arguments['--format']:
                 disp_fmt = arguments['--format']
-                user.list_users(disp_fmt)
+            if arguments['USERNAME']:
+                user_name = arguments['USERNAME']
             else:
-                user.list_users()
+                user_name = None
+            user.list_users(disp_fmt, user_name)
         elif arguments['user'] and arguments['generate']:
             if arguments['--count']:
                 count = int(arguments['--count'])
