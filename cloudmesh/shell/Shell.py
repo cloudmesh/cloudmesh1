@@ -10,9 +10,9 @@ class Shell(object):
     @classmethod
     def _execute(cls, f, arguments=None):
         if arguments is None:
-            return f()
+            return ' '.join(f().split()[-1:])
         else:
-            return f(arguments)
+            return ' '.join(f(arguments).split()[-1:])            
                                         
     @classmethod
     def VBoxManage	(cls, arguments=None):
