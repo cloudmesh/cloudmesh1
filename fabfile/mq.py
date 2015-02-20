@@ -2,7 +2,7 @@ from fabric.api import task, local
 import os
 import sys
 import platform
-from cloudmesh.shell import Shell
+from cloudmesh.shell.Shell import Shell
 from cloudmesh.config.cm_config import cm_config_server
 from cloudmesh.util.password import get_password, get_user, get_host
 from cloudmesh.util.menu import ascii_menu
