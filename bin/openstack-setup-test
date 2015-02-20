@@ -31,7 +31,7 @@ print-failure-msg() {
 test-file() {
     local path="$1"
     echo -n "Checking for $path..."
-    if test -f $path; then
+    if test -e $path; then
 	echo "OK"
 	return 0
     else
