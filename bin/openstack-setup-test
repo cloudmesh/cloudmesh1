@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
 RC_FILES=(
-    ~/.cloudmesh/clouds/india/havana
-    ~/.cloudmesh/clouds/india/juno
+    ~/.cloudmesh/clouds/india/havana/novarc
+    ~/.cloudmesh/clouds/india/juno/openrc.sh
 )
 
 print-help() {
