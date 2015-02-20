@@ -1,0 +1,110 @@
+
+Commands we use from sh 
+
+VBoxManage	
+blockdiag	
+cm			
+cm as cm_sh		
+fgmetric		
+fgrep				
+gchproject			
+gchuser					
+git						
+glusers							
+gmkproject						
+grep								
+grep as _grep							
+gstatement							
+head									
+keystone									
+kill											
+ls												
+mkdir													
+mongoimport												
+mysql														
+nosetests,pwd													
+nova															
+nova as sh_nova														
+pwd															 
+rackdiag														 
+rm															  
+rsync															   
+scp															    
+sort															     
+ssh															      
+sudo															       
+tail															        
+vagrant																 
+
+
+
+WHERE
+======================================================================
+from sh import ls		./bin/install.py:    
+from sh import vagrant 		./bin/install.py:
+from sh import gmkproject 	./cloudmesh/accounting/GoldAccounting.py:
+from sh import gchproject 	./cloudmesh/accounting/GoldAccounting.py:
+from sh import gchuser 		./cloudmesh/accounting/GoldAccounting.py:
+from sh import glusers 		./cloudmesh/accounting/GoldAccounting.py:
+from sh import gstatement 	./cloudmesh/accounting/GoldAccounting.py:
+from sh import fgrep 		./cloudmesh/accounting/metrics.py:
+from sh import nova 		./cloudmesh/accounting/metrics.py:
+from sh import tail 		./cloudmesh/accounting/metrics.py:
+from sh import fgmetric 	./cloudmesh/accounting/metrics.py:    # 
+from sh import fgmetric 	./cloudmesh/accounting/metrics.py:    # 
+from sh import scp 		./cloudmesh/config/cm_manage.py:
+from sh import fgrep 		./cloudmesh/iaas/eucalyptus/eucalyptus.py:
+from sh import vagrant 		./cloudmesh/iaas/vagrant/cm_vagrant.py:
+from sh import rsync 		./cloudmesh/iaas/vagrant/cm_vagrant.py:
+from sh import VBoxManage 	./cloudmesh/iaas/virtualbox/cm_vbox.py:
+from sh import VBoxManage 	./cloudmesh/iaas/virtualbox/v.py:
+from sh import mysql 		./cloudmesh/metric/openstack/migrating_mysql_to_mongodb.py:
+from sh import mongoimport 	./cloudmesh/metric/openstack/migrating_mysql_to_mongodb.py:
+from sh import ssh 		./cloudmesh/pbs/#pbs.py#:
+from sh import ssh 		./cloudmesh/pbs/pbs.py:
+from sh import ssh 		./cloudmesh/pbs/pbs_note.py:
+from sh import rackdiag     	./cloudmesh/rack/base_cluster_map.py:
+from sh import rm   		./cloudmesh/rack/base_cluster_map.py:
+from sh import pwd   		./cloudmesh/rack/base_cluster_map.py:
+from sh import mkdir   		./cloudmesh/rack/base_cluster_map.py:
+from sh import pwd    		./cloudmesh/rack/rack_work.py:
+from sh import ssh    		./cloudmesh/rack/tasks.py:
+from sh import cm as cm_sh	./cloudmesh/sh/cm.py:
+from sh import nova as sh_nova 	./cloudmesh/sh/openstack.py:        
+from sh import ssh     		./cloudmesh/shell/cm_vm.py:
+from sh import ssh  		./cloudmesh/temperature/cm_temperature.py:
+from sh import grep as _grep	./cloudmesh/user/cm_template.py:
+from sh import git     		./cloudmesh/util/gitinfo.py:
+from sh import sort		./cloudmesh/util/gitinfo.py:
+from sh import cm  		./cloudmesh_cmd3/plugins/cm_shell_cluster.py:
+from sh import ssh		./cloudmesh_examples/example_1/cloudmesh_task/tasks.py:
+from sh import ssh 		./cloudmesh_examples/example_mongo/cloudmesh_task/tasks.py:
+from sh import scp 		./cloudmesh_install/futuregrid.py:            
+from sh import git 		./cloudmesh_web/modules/git.py:
+from sh import nosetests, pwd	./cloudmesh_web/modules/nose.py:
+from sh import blockdiag  	./cloudmesh_web/modules/provisioner.py:
+from sh import pwd  		./cloudmesh_web/modules/rack.py:
+from sh import ls   		./fabfile/mongo.py:
+from sh import mkdir		./fabfile/mq.py:
+from sh import kill 		./fabfile/tunnel.py:
+from sh import sudo 		./fabfile/tunnel.py:
+from sh import keystone		./fabfile/user.py:
+from sh import head 		./tests/test_compute.py:
+from sh import fgrep 		./tests/test_compute.py:
+from sh import head 		./tests/test_eucalyptus.py:
+from sh import fgrep 		./tests/test_eucalyptus.py:
+from sh import grep 		./tests/test_pagestatus.py:
+from sh import head 		./tests/test_pbs.py:
+from sh import fgrep 		./tests/test_pbs.py:
+from sh import ssh 		./tests/test_pbs.py:
+from sh import head 		./tests/test_pbs_mongo.py:
+from sh import fgrep 		./tests/test_pbs_mongo.py:
+from sh import ssh 		./tests/test_pbs_mongo.py:
+from sh import head 		./tests/test_shell.py:
+from sh import fgrep 		./tests/test_shell.py:
+from sh import cm 		./tests/test_shell.py:
+from sh import ssh 		./tests/test_shell.py:
+from sh import blockdiag 	./todo/modules/workflow.py:
+from sh import pwd 		./todo/modules/workflow.py:
+
+======================================================================
