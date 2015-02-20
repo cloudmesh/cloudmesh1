@@ -1,3 +1,4 @@
+from cloudmesh.shell import Shell
 from fabric.api import task, local, settings, hide
 from pprint import pprint
 from cloudmesh.cm_mongo import cm_mongo
@@ -8,7 +9,6 @@ from cloudmesh_install.util import path_expand
 from cloudmesh_install.util import banner
 from cloudmesh_install.util import yn_choice
 from cloudmesh.inventory import Inventory
-from sh import ls
 import sys
 import os
 import time
@@ -187,7 +187,7 @@ def wipe():
 
     banner("{0}".format(path))
     local("mkdir -p {0}".format(path))
-    result = str(ls(path))
+    result = str(Shell.ls(path))
     banner(path, "-")
     print result
     print 70 * "-"
@@ -241,7 +241,7 @@ def boot(auth=True):
     config = cm_config_server().get("cloudmesh.server.mongo")
     path = path_expand(config["path"])
     banner(path)
-    print ls(path)
+    print Shell.ls(path)
     banner("PROCESS")
     with settings(warn_only=True):
         local("ps -ax | fgrep mongo")

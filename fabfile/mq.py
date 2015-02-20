@@ -2,12 +2,12 @@ from fabric.api import task, local
 import os
 import sys
 import platform
+from cloudmesh.shell import Shell
 from cloudmesh.config.cm_config import cm_config_server
 from cloudmesh.util.password import get_password, get_user, get_host
 from cloudmesh.util.menu import ascii_menu
 from cloudmesh_install.util import yn_choice, path_expand
 from pprint import pprint
-from sh import mkdir
 from cloudmesh_common.util import PROGRESS
 from cloudmesh_common.logger import LOGGER
 log = LOGGER(__file__)
@@ -34,7 +34,7 @@ def set_rabbitmq_env():
     location = path_expand("~/.cloudmesh/rabbitm")
 
     if sys.platform == "darwin":
-        mkdir("-p", location)
+        Shell.mkdir("-p", location)
         rabbit_env["RABBITMQ_MNESIA_BASE"] = location
         rabbit_env["RABBITMQ_LOG_BASE"] = location
         os.environ["RABBITMQ_MNESIA_BASE"] = location
@@ -43,7 +43,7 @@ def set_rabbitmq_env():
             "rabbitmq_server"] = "/usr/local/opt/rabbitmq/sbin/rabbitmq-server"
         rabbit_env["rabbitmqctl"] = "/usr/local/opt/rabbitmq/sbin/rabbitmqctl"
     elif sys.platform == "linux2":
-        mkdir("-p", location)
+        Shell.mkdir("-p", location)
         rabbit_env["RABBITMQ_MNESIA_BASE"] = location
         rabbit_env["RABBITMQ_LOG_BASE"] = location
         os.environ["RABBITMQ_MNESIA_BASE"] = location
