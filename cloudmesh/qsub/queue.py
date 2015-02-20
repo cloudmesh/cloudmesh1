@@ -4,6 +4,8 @@ from cloudmesh.config.cm_config import get_mongo_db, get_mongo_dbname_from_colle
 from cloudmesh_common.logger import LOGGER
 from pprint import pprint
 import json
+from cloudmesh.pbs.pbs import PBS
+from cloudmesh import banner
 
 log = LOGGER(__file__)
 
@@ -18,7 +20,7 @@ class QSub(Document):
         meta = {'allow_inheritance': True, 'db_alias': dbname}
         
     @classmethod
-    def delete(cls, name):
+    def remove(cls, name):
         element = cls.find(name)
         element.delete()
 
@@ -70,7 +72,8 @@ class Job(QSub):
     def list(cls):
         jobs = {}
         for job in cls.objects:
-            jobs[job.name] = {'jobid': job.jobid,
+            jobs[job.name] = {'name': job.name,
+                              'jobid': job.jobid,
                               'group': job.group,
                               'user': job.user,
                               'ssh_config': job.ssh_config,
@@ -79,33 +82,16 @@ class Job(QSub):
         print(jobs)
         print("======")      
         
-    @classmethod
-    def find(cls, name):
-        try:
-            return cls.objects(name=name)[0]
-        except:
-            None
-            
-    @classmethod
-    def delete(cls, name):
-        job = cls.find(name)
-        job.delete()
-
-    @classmethod
-    def reset(cls):
-        for job in cls.objects:
-            job.delete()
-
     @classmethod            
     def info(cls, name):
         """lists the info of the job"""
         job = cls.find(name)
-        print(job.name)
-        print(job.jobid)
-        print(job.group)
-        print(job.user)
-        print(job.ssh_config)
-        print(job.state)
+        attributes = ["name", "jobid", "group", "user", "ssh_config", "state"]
+        for attribute in attributes:
+            try:
+                print("{0:<10}: {1}".format(attribute, job[attribute]))
+            except:
+                print("{0}: {1}".format(attribute, 'undefind'))                
 
     @classmethod
     def status(cls, name):
@@ -121,14 +107,32 @@ class Job(QSub):
         """updates the information e.g. the state of the job"""
         pass
         
-    def add(self):
+    def submit(self):
         pass
     
-    def delete(self):        
+    def remove(self):
         pass
-    
-    def rename(self, name):
-        pass
+
+    @classmethod
+    def rename(cls, name_from, name_to):
+        """BUG: does not work"""
+        try:
+            job_from = Job.find(cls, name_from)
+            print (job_form)
+        except:
+            print("Error: the job to rename does not exist:", name_from)
+            return
+        
+        try:
+            job_to = Job.find(cls, name_to)
+            print("Error: the to rename to already exists:", name_to)
+            return
+        except:
+            pass
+        
+        job_from.name = name_to
+        job_from.save()
+
         
 
 QSub.connect()
@@ -139,6 +143,8 @@ queue = Queue(host='india.futuregrid.org',
 queue.save()
 
 Job.reset()
+Job.list()
+
 
 name = 'job1'
 
@@ -151,12 +157,27 @@ job = Job(name=name,
           queue=queue)
 job.save()
 
-print (Job.status(name))
+#print (Job.status(name))
 
-jobs = Job.objects()
+#jobs = Job.objects()
 
 Job.list()
 
 Job.info(name)
 
+j = Job.find(name)
+
+j.name='a'
+j.save()
+
+Job.list()
+
+## BUG
+#Job.rename(name, 'job2')
+# Job.info('job2')
+
+banner("PBS")
+pbs = PBS("gvonlasz", "india.futuregrid.org")
+#pprint (pbs.qinfo())
+pprint(pbs.qstat())
 

@@ -45,8 +45,33 @@ class ssh_config(object):
     def status(self):
         """executes a test with the given ssh config if a login is possible"""
 
-if __name__ == "__main__":
-    config = ssh_config()
-    print config.list()
-    print config    
+    def login(self, name):
+        """logs into the host defined by name in ssh config into an interactive shell"""
+        os.system("ssh {0}".format(name))
 
+    def execute(self, name, command):
+        """executes the command on the named host"""
+        if name in ["localhost"]:
+            r = '\n'.join(sh.sh("-c", command).split()[-1:])
+        else:
+            r = '\n'.join(sh.ssh(name, command).split()[-1:])
+        return r
+    
+    def local(self, command):
+        return self.execute("localhost", command)
+
+if __name__ == "__main__":
+    hosts = ssh_config()
+    print hosts.list()
+    print hosts
+
+    #hosts.login("india")
+
+    r = hosts.execute("india", "hostname")
+    print r
+
+    r = hosts.execute("localhost", "hostname")
+    print r
+
+    r = hosts.local("hostname")
+    print r
