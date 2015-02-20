@@ -1,9 +1,7 @@
 """managing information from GIT"""
 from __future__ import print_function
 from pprint import pprint
-from sh import git
-from sh import sort
-
+from cloudmesh.shell.Shell import Shell
 
 class GitInfo(object):
 
@@ -38,7 +36,7 @@ class GitInfo(object):
         retruns the verison of the code from github
         :rtype: the git tags
         '''
-        return str(git.describe("--tags"))[:-1]
+        return str(Shell.git("describe", "--tags"))[:-1]
 
     def emails(self, format_arg=None):
         '''
@@ -52,7 +50,7 @@ class GitInfo(object):
             format_string = "'%aN' <%cE>"
         elif format_arg == 'dict':
             format_string = "%aN\t%cE"
-        result = sort(git.log(
+        result = Shell.sort(Shell.git("log", 
             "--all", "--format=" + format_string,
             _tty_in=True, _tty_out=False, _piped=True), "-u")
 
@@ -72,7 +70,7 @@ class GitInfo(object):
 
         :param format_arg: if "dict" is specified a dict will be returned
         '''
-        result = git.shortlog("-s", "-n", _tty_in=True, _tty_out=False)
+        result = Shell.git("shortlog", "-s", "-n", _tty_in=True, _tty_out=False)
         if format_arg is None:
             return result
         elif format_arg == "dict":
@@ -107,7 +105,7 @@ class GitInfo(object):
         :rtype: a dict with the statistics
         '''
         sums = [0, 0, 0]
-        for line in git.log("--all", "--stat", '--author={0}'.format(email),
+        for line in Shell.git("log", "--all", "--stat", '--author={0}'.format(email),
                             _tty_in=True,
                             _tty_out=False,
                             _iter=True):
