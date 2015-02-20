@@ -2,6 +2,7 @@
 from __future__ import print_function
 from pprint import pprint
 from cloudmesh.shell.Shell import Shell
+from cloudmesh_install.util import banner
 
 class GitInfo(object):
 
@@ -163,30 +164,30 @@ if __name__ == "__main__":
 
     # print gitinfo.version()
 
-    print("A")
+    banner("a")
     print(gitinfo.authors())
 
-    print("b")
+    banner("b")
     pprint(gitinfo.authors("dict"))
 
-    print("c")
+    banner("c")
     pprint(gitinfo.emails())
 
-    print("d")
+    banner("d")
     pprint(gitinfo.emails("dict"))
 
-    print("e")
+    banner("e")
     pprint(gitinfo.info())
 
-    print("f")
+    banner("f")
     print(gitinfo.stat("laszewski@gmail.com"))
 
-    print("g")
+    banner("g")
     stats = gitinfo.compute()
 
     print(stats)
 
-    print("h")
+    banner("h")
     for email in stats:
         p = stats[email]["percentage"]
         print(("{0} {1:.3f}% {2:.3f}%  {3:.3f}% {4:.3f}%"

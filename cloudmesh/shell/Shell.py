@@ -15,6 +15,20 @@ class Shell(object):
             return f().rstrip('\n')
         else:
             return f(args).rstrip('\n')
+
+                
+    @classmethod
+    def git(cls, *args, **kwargs):
+        return cls._execute_kw(sh.git, *args, **kwargs)
+        
+    @classmethod
+    def _execute_kw(cls, f, *args, **kwargs):
+        """BUG: does not check if kwargs is empty"""
+        arguments = list(args)
+        if len(arguments) == 0:
+            return f().rstrip('\n')
+        else:
+            return f(*args, **kwargs).rstrip('\n')
                                         
     @classmethod
     def VBoxManage	(cls, *arguments):
@@ -43,10 +57,6 @@ class Shell(object):
     @classmethod
     def gchuser(cls, *arguments):
         return cls._execute(sh.gchuser, arguments)
-                
-    @classmethod
-    def git(cls, *arguments):
-        return cls._execute(sh.git, arguments)
                 
     @classmethod
     def glusers(cls, *arguments):
