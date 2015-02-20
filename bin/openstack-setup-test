@@ -1,0 +1,69 @@
+#!/usr/bin/env bash
+
+RC_FILES=(
+    ~/.cloudmesh/clouds/india/havana
+    ~/.cloudmesh/clouds/india/juno
+)
+
+print-help() {
+    echo "Usage: $0 [-h] -c"
+    echo "  -c    Run check"
+    echo "  -h    Print this help"
+    echo
+    echo "This script tests for the presence of cloudmesh RC files:"
+    for p in ${RC_FILES[@]}; do
+	echo "    $p"
+    done
+}
+
+usage() {
+    print-help
+    exit 1
+}
+
+
+print-failure-msg() {
+    echo "ERROR Cloud not find the needed cloudmesh files."
+    echo "Please send an email to help@futuresystems.org"
+}
+
+
+test-file() {
+    local path="$1"
+    echo -n "Checking for $path..."
+    if test -f $path; then
+	echo "OK"
+	return 0
+    else
+	echo "FAIL"
+	return 2
+    fi
+}
+
+
+main() {
+    fail=1
+    for path in ${RC_FILES[@]}; do
+	if ! test-file "$path"; then
+	    fail=0
+	fi
+    done
+    if [ fail ]; then
+	print-failure-msg
+	exit 2
+    fi
+    exit 0
+}
+
+test -z "$@" && usage
+
+while getopts ":hc" arg; do
+    case $arg in
+	c)
+	    main
+	    ;;
+	*)
+	    usage
+	    ;;
+    esac
+done
