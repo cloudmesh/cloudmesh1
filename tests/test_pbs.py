@@ -12,13 +12,9 @@ nosetests -v  --nocapture test_cm_compute.py:Test.test_06
 
 """
 from __future__ import print_function
-from sh import head
-from sh import fgrep
 import string
 import os
 import time
-
-from sh import ssh
 import json
 from pprint import pprint
 

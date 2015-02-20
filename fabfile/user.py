@@ -3,7 +3,7 @@ from cloudmesh_install.util import banner
 from cloudmesh.config.ConfigDict import ConfigDict
 from cloudmesh.config.cm_config import cm_config
 from cloudmesh.user.cm_user import cm_user
-from sh import keystone
+from cloudmesh.shell import Shell
 from cloudmesh_install import config_file
 
 
@@ -22,7 +22,7 @@ def password():
                     "user-password-update",
                     "--pass", user['OS_PASSWORD'], user['OS_USERNAME']]))
 
-    keystone("--os-username", server['OS_USERNAME'],
+    Shell.keystone("--os-username", server['OS_USERNAME'],
              "--os-password", server['OS_PASSWORD'],
              "--os-tenant-name", server['OS_TENANT_NAME'],
              "--os-auth-url", server['OS_AUTH_URL'],
