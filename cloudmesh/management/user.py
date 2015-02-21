@@ -1,16 +1,15 @@
+from cloudmesh.config.cm_config import get_mongo_db, get_mongo_dbname_from_collection, DBConnFactory
+from cloudmesh.management.cloudmeshobject import CloudmeshObject
 from cloudmesh.config.ConfigDict import ConfigDict
 from cloudmesh_install import config_file
 from mongoengine import *
 from tabulate import tabulate
-from cmd3.console import Console
 import datetime
 import json
 import sys
 import pprint
-#    mongod --noauth --dbpath . --port 27777
-from cloudmesh.management.cloudmeshobject import CloudmeshObject
 import yaml
-from cloudmesh.config.cm_config import get_mongo_db, get_mongo_dbname_from_collection, DBConnFactory
+
 
 STATUS = ('pending', 'approved', 'blocked', 'denied')
 
@@ -219,64 +218,6 @@ class User(CloudmeshObject):
         return content
     """
 
-    @classmethod
-    def list_users(cls, disp_fmt=None, username=None):
-        req_fields = ["username", "title", "firstname", "lastname",
-                      "email", "phone", "url", "citizenship",
-                      "institution", "institutionrole", "department",
-                      "advisor", "address", "status"]
-        try:
-            if username is None:
-                user_json = User.objects.only(*req_fields).to_json()
-                user_dict = json.loads(user_json)
-                if disp_fmt != 'json':
-                    cls.display(username, user_dict)
-                else:
-                    cls.display_json(username, user_dict)
-            else:
-                user_json = User.objects(username=username).only(*req_fields).to_json()
-                user_dict = json.loads(user_json)
-                if disp_fmt != 'json':
-                    cls.display(user_dict)
-                else:
-                    cls.display_json(user_dict)
-        except:
-            print "Oops.. Something went wrong in the list users method", sys.exc_info()[0]
-        pass
-
-    @classmethod
-    def display(cls, user_dicts, user_name=None):
-        if user_dicts is not None:
-            values = []
-            for entry in user_dicts:
-                items = []
-                headers = []
-                for key, value in entry.iteritems():
-                    items.append(value)
-                    headers.append(key.replace('_',' ').title())
-                values.append(items)
-            table_fmt = "orgtbl"
-            table = tabulate(values, headers, table_fmt)
-            separator = ''
-            try:
-                seperator = table.split("\n")[1].replace("|", "+")
-            except:
-                separator = "-" * 50
-            print separator
-            print table
-            print separator
-        else:
-            if user_name:
-                print("Error: No user in the system with name '{0}'".format(user_name))
-
-    @classmethod
-    def display_json(cls, user_json, user_name=None):
-        if user_json is not None:
-            # pprint.pprint(user_json)
-            print json.dumps(user_json, indent=4)
-        else:
-            if user_name:
-                print("Error: No user in the system with name '{0}'".format(user_name))
 
 class Users(object):
 
@@ -332,6 +273,34 @@ class Users(object):
         else:
             print "ERROR: a user with the e-mail `{0}` already exists".format(user.email)
 
+
+    @classmethod
+    def delete_user(cls, user_name=None):
+        if user_name:
+            try:
+                user=User.objects(username=user_name)
+                if user:
+                    user.delete()
+                else:
+                    print "Error: User with the name '{0}' does not exist.".format(user_name)
+            except:
+                print "Oops! Something went wrong while trying to remove a user", sys.exc_info()[0]
+        else:
+            print "Error: Please specity the user to be removed"
+    
+    @classmethod
+    def amend_user_status(self, user_name=None, status=None):
+        if user_name:
+            try:
+                user=User.objects(username=user_name)
+                if user:
+                    user.status=status
+                    user.save()
+            except:
+                print "Oops! Something went wrong while trying to amend user status", sys.exc_info()[0]
+        else:
+            print "Error: Please specity the user to be amended"
+
     @classmethod
     def validate_email(cls, email):
         """
@@ -379,6 +348,67 @@ class Users(object):
         """removes all elements form the mongo db that are users"""
         for user in User.objects:
             user.delete()
+            
+
+    @classmethod
+    def list_users(cls, disp_fmt=None, username=None):
+        req_fields = ["username", "title", "firstname", "lastname",
+                      "email", "phone", "url", "citizenship",
+                      "institution", "institutionrole", "department",
+                      "advisor", "address", "status"]
+        try:
+            if username is None:
+                user_json = User.objects.only(*req_fields).to_json()
+                user_dict = json.loads(user_json)
+                if disp_fmt != 'json':
+                    cls.display(user_dict, username)
+                else:
+                    cls.display_json(user_dict, username)
+            else:
+                user_json = User.objects(username=username).only(*req_fields).to_json()
+                user_dict = json.loads(user_json)
+                if disp_fmt != 'json':
+                    cls.display(user_dict, username)
+                else:
+                    cls.display_json(user_dict, username)
+        except:
+            print "Oops.. Something went wrong in the list users method", sys.exc_info()[0]
+        pass
+
+    @classmethod
+    def display(cls, user_dicts=None, user_name=None):
+        if bool(user_dicts):
+            values = []
+            for entry in user_dicts:
+                items = []
+                headers = []
+                for key, value in entry.iteritems():
+                    items.append(value)
+                    headers.append(key.replace('_',' ').title())
+                values.append(items)
+            table_fmt = "orgtbl"
+            table = tabulate(values, headers, table_fmt)
+            separator = ''
+            try:
+                seperator = table.split("\n")[1].replace("|", "+")
+            except:
+                separator = "-" * 50
+            print separator
+            print table
+            print separator
+        else:
+            if user_name:
+                print "Error: No user in the system with name '{0}'".format(user_name)
+                
+                
+    @classmethod
+    def display_json(cls, user_dict=None, user_name=None):
+        if bool(user_dict):
+            # pprint.pprint(user_json)
+            print json.dumps(user_dict, indent=4)
+        else:
+            if user_name:
+                print "Error: No user in the system with name '{0}'".format(user_name)
 
 
 def verified_email_domain(email):
