@@ -1,10 +1,9 @@
+from __future__ import print_function
 from cmd3.shell import command
 from cloudmesh.server.database import Database
 from cmd3.console import Console
-from cloudmesh_admin.server_admin import (cloudmesh_server, 
-                                          mongo_server,
-                                          rabbitmq_server,
-                                          celery_server)
+from cloudmesh_admin.server_admin import cloudmesh_server
+
 
 
 class cm_shell_admin:
@@ -16,31 +15,32 @@ class cm_shell_admin:
     def do_admin(self, args, arguments):
         """
         
-    Usage:
-      admin password reset
-      admin server start
-      admin server stop
-      admin server status
-      admin mongo start
-      admin mongo stop
-      admin mongo status
-      admin mongo password
-      admin celery start
-      admin celery stop
-      admin celery status
-      admin rabbitmq status
-      admin rabbitmq start
-      admin rabbitmq stop
-      admin version
+        Usage:
+          admin password reset
+          admin server start
+          admin server stop
+          admin server status
+          admin mongo start
+          admin mongo stop
+          admin mongo status
+          admin mongo password
+          admin celery start
+          admin celery stop
+          admin celery status
+          admin rabbitmq status
+          admin rabbitmq start
+          admin rabbitmq stop
+          admin version
 
-    Options:
+        Options:
 
 
-    Description:
-        admin password reset
-           reset portal password
+        Description:
+            admin password reset
+               reset portal password
         """
-
+        
+        '''
         def _comamnd_type(arguments):
             for kind in ['server', 'rabbitmq', 'mongo', 'celery']:
                 if arguments[kind] == True:
@@ -50,12 +50,12 @@ class cm_shell_admin:
             return None
                  
         if arguments['password'] and arguments['reset']:
-            #db = Database()
-            #db.set_password_local()
+            db = Database()
+            db.set_password_local()
             return
             
         elif arguments['mongo'] and arguments['password']:
-            #set_mongo_password()
+            set_mongo_password()
             return
             
         kind = _command_type(arguments)
@@ -86,6 +86,30 @@ class cm_shell_admin:
             #print "status"
             #queue_ls()
             #mongo_info()
+        '''
+        if arguments['password'] and arguments['reset']:
+            db = Database()
+            db.set_password_local()
+            return
+            
+        elif arguments['mongo'] and arguments['password']:
+            set_mongo_password()
+            return
+            
+        server = cloudmesh_server()
+        # ######################################################################
+        # MONGO SERVER
+        # ######################################################################
+        if arguments['mongo'] and arguments['status']:
+            print(server._info_mongo())
+        elif arguments['mongo'] and arguments['start']:
+            server._start_mongo()
+        elif arguments['mongo'] and arguments['stop']:
+            server._stop_mongo()
+        
+        
+        else:
+            print("UNDER DEVELOPMENT")
 
         
 

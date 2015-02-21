@@ -38,6 +38,8 @@ def management_command(args):
         cm-management user delete [USERNAME]
         cm-management user activate [USERNAME]
         cm-management user deactivate [USERNAME]
+        cm-management user approve [USERNAME]
+        cm-management user deny [USERNAME]
         cm-management project generate
         cm-management version
 
@@ -54,15 +56,13 @@ def management_command(args):
         if arguments['version']:
             print cloudmesh.__version__
         elif arguments['user'] and arguments['list']:
-            user = User()
+            user = Users()
             disp_fmt = None
             user_name = None
             if arguments['--format']:
                 disp_fmt = arguments['--format']
             if arguments['USERNAME']:
                 user_name = arguments['USERNAME']
-            else:
-                user_name = None
             user.list_users(disp_fmt, user_name)
         elif arguments['user'] and arguments['generate']:
             if arguments['--count']:
@@ -73,6 +73,20 @@ def management_command(args):
         elif arguments['user'] and arguments['clear']:
             user = Users()
             user.clear()
+        elif arguments['user'] and arguments['delete']:
+            if arguments['USERNAME']:
+                user = Users()
+                user.delete_user(arguments['USERNAME'])
+            else:
+                print "Error: Please specify a user to be removed."
+        elif arguments['user'] and arguments['approve']:
+            if arguments['USERNAME']:
+                user = Users()
+                user.amend_user_status(arguments['USERNAME'],status='approved')
+        elif arguments['user'] and arguments['deny']:
+            if arguments['USERNAME']:
+                user = Users()
+                user.amend_user_status(arguments['USERNAME'],status='denied')
         elif arguments['project']:
             print "Dummy Projects"
             project_fields()
