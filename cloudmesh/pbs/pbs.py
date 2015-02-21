@@ -298,7 +298,11 @@ class PBS:
                             for subchild in attribute.childNodes:
                                 job[attribute.nodeName][
                                     subchild.nodeName] = subchild.firstChild.nodeValue
-
+                        if attribute.nodeName in ['Job_Owner']:
+                            (name, host) = job[attribute.nodeName].split('@')
+                            job[u'cm_user'] = name
+                            job[u'cm_host'] = host
+                            
                     info[job['Job_Id']] = job
             except:
                 pass
