@@ -12,7 +12,7 @@ nosetests -v  --nocapture tests/test_compute.py:Test.test_06
 
 """
 from __future__ import print_function
-from cloudmesh.shell import Shell
+from cloudmesh.shell.Shell import Shell
 import string
 import os
 import time

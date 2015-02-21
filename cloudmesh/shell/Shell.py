@@ -1,4 +1,5 @@
 import sh
+import os
 
 class Shell(object):
 
@@ -14,6 +15,20 @@ class Shell(object):
             return f().rstrip('\n')
         else:
             return f(args).rstrip('\n')
+
+                
+    @classmethod
+    def git(cls, *args, **kwargs):
+        return cls._execute_kw(sh.git, *args, **kwargs)
+        
+    @classmethod
+    def _execute_kw(cls, f, *args, **kwargs):
+        """BUG: does not check if kwargs is empty"""
+        arguments = list(args)
+        if len(arguments) == 0:
+            return f().rstrip('\n')
+        else:
+            return f(*args, **kwargs).rstrip('\n')
                                         
     @classmethod
     def VBoxManage	(cls, *arguments):
@@ -42,10 +57,6 @@ class Shell(object):
     @classmethod
     def gchuser(cls, *arguments):
         return cls._execute(sh.gchuser, arguments)
-                
-    @classmethod
-    def git(cls, *arguments):
-        return cls._execute(sh.git, arguments)
                 
     @classmethod
     def glusers(cls, *arguments):
@@ -80,9 +91,25 @@ class Shell(object):
         return cls._execute(sh.ls, arguments)
                                         
     @classmethod
-    def mkdir(cls, *arguments):
-        return cls._execute(sh.mkdir, arguments)
-                                    
+    def mkdir(cls, newdir):
+        """works the way a good mkdir should :)
+        - already exists, silently complete
+        - regular file in the way, raise an exception
+        - parent directory(ies) does not exist, make them as well
+        """
+        """http://code.activestate.com/recipes/82465-a-friendly-mkdir/"""
+        if os.path.isdir(newdir):
+            pass
+        elif os.path.isfile(newdir):
+            raise OSError("a file with the same name as the desired " \
+                        "dir, '%s', already exists." % newdir)
+        else:
+            head, tail = os.path.split(newdir)
+            if head and not os.path.isdir(head):
+                mkdir(head)
+            if tail:
+                os.mkdir(newdir)
+
     @classmethod
     def mongoimport(cls, *arguments):
         return cls._execute(sh.mongoimport, arguments)

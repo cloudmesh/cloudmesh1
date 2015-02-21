@@ -34,7 +34,7 @@ def set_rabbitmq_env():
     location = path_expand("~/.cloudmesh/rabbitm")
 
     if sys.platform == "darwin":
-        Shell.mkdir("-p", location)
+        Shell.mkdir(location)
         rabbit_env["RABBITMQ_MNESIA_BASE"] = location
         rabbit_env["RABBITMQ_LOG_BASE"] = location
         os.environ["RABBITMQ_MNESIA_BASE"] = location
@@ -43,7 +43,7 @@ def set_rabbitmq_env():
             "rabbitmq_server"] = "/usr/local/opt/rabbitmq/sbin/rabbitmq-server"
         rabbit_env["rabbitmqctl"] = "/usr/local/opt/rabbitmq/sbin/rabbitmqctl"
     elif sys.platform == "linux2":
-        Shell.mkdir("-p", location)
+        Shell.mkdir(location)
         rabbit_env["RABBITMQ_MNESIA_BASE"] = location
         rabbit_env["RABBITMQ_LOG_BASE"] = location
         os.environ["RABBITMQ_MNESIA_BASE"] = location
