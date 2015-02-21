@@ -1,4 +1,12 @@
 from __future__ import print_function
+from cloudmesh.config.cm_config import cm_config_server
+from cloudmesh_install.util import banner
+import os
+from cloudmesh.shell.Shell import Shell
+
+import sh
+# need to get rid of fabric later
+from fabric.api import task, local, settings, hide
 
 import subprocess
 import json
@@ -6,14 +14,12 @@ import hostlist
 from cloudmesh_install import config_file
 from cloudmesh.config.ConfigDict import ConfigDict
 from cloudmesh_common.logger import LOGGER
-from cloudmesh_install.util import banner
 import sys
-import os
-import sh
 import time
 from cloudmesh_install.util import path_expand
-from cloudmesh.config.cm_config import cm_config_server
 from pprint import pprint
+
+
 
 # ----------------------------------------------------------------------
 # SETTING UP A LOGGER
@@ -31,7 +37,7 @@ def isyes(value):
         print ("found", value, check)
         sys.exit()
 
-
+'''
 class cloudmesh_server(object):
 
     def __init__(self):
@@ -114,15 +120,18 @@ class celery_server(cloudmesh_server):
 
     def stop(self):
         pass
-
+'''
     
-class cloudmesh_server_old(object):
+class cloudmesh_server(object):
 
     def _ps(self):
         return sh.ps("-ax", _tty_out=False)
 
     def __init__(self):
-
+        pass
+        
+        
+        '''
         self.server_env = {
             "name": "server"
         }
@@ -158,6 +167,7 @@ class cloudmesh_server_old(object):
         self.celery_cmd = sh.which("celery")
         # print ("CCCC", self.celery_cmd)
         # sys.exit()
+        '''
 
     def info(self):
         #
@@ -208,6 +218,14 @@ class cloudmesh_server_old(object):
     # WEB SERVER
     # ######################################################################
 
+    
+
+    def _start_web_server(self):
+        # from cloudmesh_web import server as cloudmesh_web_server_start
+        banner("start the web server")
+        os.system("cd cloudmesh_web; python server.py &")
+        time.sleep(4)
+        
     def _stop_web_server(self):
         # stop web server
         banner("stop the web server")
@@ -232,12 +250,132 @@ class cloudmesh_server_old(object):
                         print (e)
         except Exception, e:
             print ("INFO: cloudmesh web server not running")
+            
+            
+    # ######################################################################
+    # MONGO SERVER
+    # ######################################################################
 
-    def _start_web_server(self):
-        # from cloudmesh_web import server as cloudmesh_web_server_start
-        banner("start the web server")
-        os.system("cd cloudmesh_web; python server.py &")
-        time.sleep(4)
+    def _info_mongo(self):
+        config = cm_config_server().get("cloudmesh.server.mongo")
+        path = path_expand(config["path"])
+        port = config["port"]
+        # print (config)
+        # print(port, path)
+
+        #d = {
+        #    'pid': None,
+        #    'port': None,
+        #    'path': None,
+        #    'command': None
+        #}
+
+        #try:
+        #    lines = sh.grep(
+        #        sh.grep(self._ps(), "mongod"), "log").split("\n")[:-1]
+        #    if lines != ['']:
+        #        (pid) = lines[0].lstrip().split(" ")[0]
+        #        d = {'pid': pid,
+        #             'port': port,
+        #             'path': path,
+        #             'command': lines}
+        #except:
+        #    pass
+        #return d
+        
+        # need to get rid of fabric local later 
+        with settings(warn_only=True):
+            with hide('output', 'running', 'warnings'):
+                lines = local(
+                "ps -ax |grep '[m]ongod.*port {0}'".format(port), capture=True)\
+                .split("\n")
+
+        if lines != ['']:
+            pid = lines[0].split(" ")[0]
+            d = {'pid': pid,
+                 'port': port,
+                 'path': path,
+                 'command': lines}
+        else:
+            d = {'pid': "mongodb not active",
+                 'port': None,
+                 'path': None,
+                 'command': None}       
+        return d
+                 
+
+    def _start_mongo(self):
+        """
+        start the mongodb service in the location as specified in
+        cloudmesh_server.yaml
+        """
+        banner("Starting mongod")
+        config = cm_config_server().get("cloudmesh.server.mongo")
+        path = path_expand(config["path"])
+        port = config["port"]
+        
+        #pprint(config)
+        #print(path)
+        #print(port)
+        
+        
+        banner("creating dir")
+        if not os.path.exists(path):
+            print ("Creating mongodb directory in {0}".format(path))
+            sh.mkdir("-p", path)
+        
+        banner("check")
+
+        #lines = str(sh.grep(sh.ps("-ax"), "mongod", "*port {0}".format(port)))
+        # need to get rid of fabric local later
+        with settings(warn_only=True):
+            with hide('output', 'running', 'warnings'):
+                lines = local(
+                "ps -ax |grep '[m]ongod.*port {0}'".format(port), capture=True)\
+                .split("\n")
+        print ("search result:")
+        #print(type(lines))
+        print (lines)
+        if lines != ['']:
+            pid = lines[0].split(" ")[0]
+            print ("NO ACTION: mongo already running in pid "
+                       "{0} for port {1}".format(pid, port))
+            return
+
+        
+        print ("ACTION: Starting mongod")
+        print
+        print ("NOTE: the preparation of mongo may take a few minutes")
+        print ("      please do not interrupt this program.")
+        print
+        print ("      Please be patient!")
+        print
+
+        #sh.mongod("--auth",
+        #          "--bind_ip", "127.0.0.1"
+        #          "--fork",
+        #          "--dbpath", path,
+        #          "--logpath", "{0}/mongodb.log".format(path),
+        #          "--port",  port,
+        #          _bg=True)
+        
+        # need to get rid of fabric local later          
+        local(
+            'mongod --auth --bind_ip 127.0.0.1 '
+            '--fork --dbpath {0} '
+            '--logpath {0}/mongodb.log '
+            '--port {1}'
+            .format(path, port))
+        
+
+    def _stop_mongo(self):
+        """starts in dir webgui the program server.py and displays a
+            browser on the given port and link """
+        try:
+            sh.killall("-15", "mongod")
+        except:
+            print ("INFO: cloudmesh mongo server not running")
+
 
     # ######################################################################
     # CELERY SERVER
@@ -255,15 +393,6 @@ class cloudmesh_server_old(object):
         except:
             pass
         return d
-
-    def _stop_celery(self):
-        processes = self._info_celery()
-        print (processes.keys())
-        for pid in processes:
-            try:
-                sh.kill("-9", str(pid))
-            except:
-                print (pid, " process already deleted")
 
     def _celery_command(self, command, app, workers, queue, concurrency=None):
         """execute the celery command on the application and workers
@@ -304,94 +433,31 @@ class cloudmesh_server_old(object):
                 self.workers[worker]["hostlist"],
                 self.workers[worker]["queue"],
                 concurrency=concurrency)
+                
+    def _stop_celery(self):
+        processes = self._info_celery()
+        print (processes.keys())
+        for pid in processes:
+            try:
+                sh.kill("-9", str(pid))
+            except:
+                print (pid, " process already deleted")
 
+    
+    
     # ######################################################################
-    # MONGO SERVER
+    # RABBITMQ SERVER
     # ######################################################################
-
-    def _info_mongo(self):
-        config = cm_config_server().get("cloudmesh.server.mongo")
-        path = path_expand(config["path"])
-        port = config["port"]
-        # print (config)
-        # print(port, path)
-
-        d = {
-            'pid': None,
-            'port': None,
-            'path': None,
-            'command': None
-        }
-
-        try:
-            lines = sh.grep(
-                sh.grep(self._ps(), "mongod"), "log").split("\n")[:-1]
-            if lines != ['']:
-                (pid) = lines[0].lstrip().split(" ")[0]
-                d = {'pid': pid,
-                     'port': port,
-                     'path': path,
-                     'command': lines}
-        except:
-            pass
-        return d
-
-    def _start_mongo(self):
-        """
-        start the mongod service in the location as specified in
-        cloudmesh_server.yaml
-        """
-        banner("Starting mongod")
-        config = cm_config_server().get("cloudmesh.server.mongo")
-        path = path_expand(config["path"])
-        port = config["port"]
-
-        banner("creating dir")
-        if not os.path.exists(path):
-            print ("Creating mongodb directory in {0}".format(path))
-            sh.mkdir("-p", path)
-        banner("check")
-        try:
-            lines = sh.grep(sh.grep(sh.ps("-ax"), "mongod"), "log")
-            banner("LINES")
-            print (lines)
-            if lines != ['']:
-                pid = lines[0].split(" ")[0]
-                print ("NO ACTION: mongo already running in pid "
-                       "{0} for port {1}".format(pid, port))
-            return
-
-        except Exception, e:
-            print ("INFO: No cloudmesh mongo server running")
-
-        banner("LLLLLL")
-        print (lines)
-
-        print ("ACTION: Starting mongod")
-        print
-        print ("NOTE: the preparation of mongo may take a few minutes")
-        print ("      please do not interrupt this program.")
-        print
-        print ("      Please be patient!")
-        print
-
-        sh.mongod("--auth",
-                  "--bind_ip", "127.0.0.1"
-                  "--fork",
-                  "--dbpath", path,
-                  "--logpath", "{0}/mongodb.log".format(path),
-                  "--port",  port,
-                  _bg=True)
-
-    def _stop_mongo(self):
-        """starts in dir webgui the program server.py and displays a
-            browser on the given port and link """
-        try:
-            sh.killall("-15", "mongod")
-        except:
-            print ("INFO: cloudmesh mongo server not running")
-
-
+    
+    def _info_rabbitmq(self):
+        pass
+        
+    def _start_rabbitmq(self):
+        pass
+        
+    def _stop_rabbitmq(self):
+        pass
+        
 '''
         queue.start()
         # execute_command("START RABITMQ",
@@ -471,12 +537,17 @@ class cloudmesh_server_old(object):
 
 if __name__ == '__main__':
     server = cloudmesh_server()
-    server.info()
+    #server.info()
 
     # server.start()
     # server.stop()
-    # server._start_mongo()
+    print(server._info_mongo())
+    #server._start_mongo()
+    #server._stop_mongo()
     # server.stop()
 
-    server._stop_celery()
-    server._start_celery()
+    #server._stop_celery()
+    #server._start_celery()
+    
+    
+    
