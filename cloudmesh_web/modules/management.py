@@ -1,3 +1,4 @@
+from cloudmesh.config.cm_config import get_mongo_db, get_mongo_dbname_from_collection, DBConnFactory
 from pprint import pprint
 import re
 from cloudmesh.management.project import CLUSTERS as ProjectCLUSTERS, \
@@ -450,7 +451,11 @@ class UserRegistrationForm(Form):
             if domain in field.data:
                 raise ValidationError(
                     'Email form the domain {0} are not alloed'.format(field.data))
-        connect('user', port=27777)
+        dbname = get_mongo_dbname_from_collection("manage")
+        print "Database Name: ", dbname
+        if dbname:
+            meta = {'db_alias': dbname}
+#         connect('user', port=27777)
         users = Users()
         if not users.validate_email(field.data):
             raise ValidationError('A user with this email already exists')
@@ -463,7 +468,11 @@ class UserRegistrationForm(Form):
         if not field.data.islower():
             raise ValidationError('The username must be lower case')
 
-        connect('user', port=27777)
+        dbname = get_mongo_dbname_from_collection("manage")
+        print "Database Name: ", dbname
+        if dbname:
+            meta = {'db_alias': dbname}
+#         connect('user', port=27777)
         username = MongoUser.objects(username=field.data)
         if username.count() > 0:
             users = Users()
@@ -551,7 +560,11 @@ def user_apply():
 @management_module.route('/project/edit/<projectid>/', methods=['GET', 'POST'])
 @login_required
 def project_edit(projectid):
-    connect('user', port=27777)
+    dbname = get_mongo_dbname_from_collection("manage")
+    print "Database Name: ", dbname
+    if dbname:
+        meta = {'db_alias': dbname}
+#     connect('user', port=27777)
 
     try:
         project = MongoProject.objects(projectid=projectid)
@@ -642,8 +655,11 @@ def project_edit(projectid):
 @management_module.route('/project/profile/<projectid>', methods=['GET'])
 @login_required
 def project_profile(projectid):
-
-    connect('user', port=27777)
+    dbname = get_mongo_dbname_from_collection("manage")
+    print "Database Name: ", dbname
+    if dbname:
+        meta = {'db_alias': dbname}
+#     connect('user', port=27777)
     try:
         project = MongoProject.objects(projectid=projectid)
         if project.count() == 1:
@@ -662,8 +678,11 @@ def project_profile(projectid):
 @management_module.route('/m/project/manage', methods=['GET', 'POST'])
 @login_required
 def management_project_manage():
-
-    connect('user', port=27777)
+    dbname = get_mongo_dbname_from_collection("manage")
+    print "Database Name: ", dbname
+    if dbname:
+        meta = {'db_alias': dbname}
+#     connect('user', port=27777)
     projects = MongoProject.objects()
 
     if request.method == 'POST':
@@ -679,8 +698,11 @@ def management_project_manage():
                 project = MongoProject.objects(projectid=projectid)[0]
                 project.status = action
                 project.save()
-
-    connect('user', port=27777)
+    dbname = get_mongo_dbname_from_collection("manage")
+    print "Database Name: ", dbname
+    if dbname:
+        meta = {'db_alias': dbname}
+#     connect('user', port=27777)
     projects = MongoProject.objects()
 
     return render_template('management/project_manage.html',
@@ -692,8 +714,11 @@ def management_project_manage():
 @management_module.route('/m/project/list')
 @login_required
 def management_project_list():
-
-    connect('user', port=27777)
+    dbname = get_mongo_dbname_from_collection("manage")
+    print "Database Name: ", dbname
+    if dbname:
+        meta = {'db_alias': dbname}
+#     connect('user', port=27777)
     projects = MongoProject.objects()
 
     return render_template('management/project_list.html', projects=projects, with_edit="False", title="Project List")
@@ -702,8 +727,11 @@ def management_project_list():
 @management_module.route('/m/user/manage', methods=['GET', 'POST'])
 @login_required
 def management_user_manage():
-
-    connect('user', port=27777)
+    dbname = get_mongo_dbname_from_collection("manage")
+    print "Database Name: ", dbname
+    if dbname:
+        meta = {'db_alias': dbname}
+#     connect('user', port=27777)
     users = MongoUser.objects()
 
     if request.method == 'POST':
@@ -739,15 +767,22 @@ def management_user_manage():
 @management_module.route('/m/user/list')
 @login_required
 def management_user_list():
-
-    connect('user', port=27777)
+    dbname = get_mongo_dbname_from_collection("manage")
+    print "Database Name: ", dbname
+    if dbname:
+        meta = {'db_alias': dbname}
+#     connect('user', port=27777)
     users = MongoUser.objects()
     return render_template('management/user_manage.html', users=users, with_edit="False", title="User List")
 
 
 @management_module.route('/user/profile/<username>')
 def management_user_profile(username):
-    connect('user', port=27777)
+    dbname = get_mongo_dbname_from_collection("manage")
+    print "Database Name: ", dbname
+    if dbname:
+        meta = {'db_alias': dbname}
+#     connect('user', port=27777)
     try:
         user = MongoUser.objects(username=username)
         if user.count() == 1:
@@ -774,7 +809,11 @@ def management_user_profile(username):
 @management_module.route('/user/edit/<username>/', methods=['GET', 'POST'])
 @login_required
 def management_user_edit(username):
-    connect('user', port=27777)
+    dbname = get_mongo_dbname_from_collection("manage")
+    print "Database Name: ", dbname
+    if dbname:
+        meta = {'db_alias': dbname}
+#     connect('user', port=27777)
 
     try:
         user = MongoUser.objects(username=username)

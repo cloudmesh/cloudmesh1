@@ -232,7 +232,11 @@ class Users(object):
         #db = connect('manage', port=port)
         self.users = User.objects()
 
-        get_mongo_db("manage", DBConnFactory.TYPE_MONGOENGINE)
+        dbname = get_mongo_dbname_from_collection("manage")
+        if dbname:
+            meta = {'db_alias': dbname}
+
+#         get_mongo_db("manage", DBConnFactory.TYPE_MONGOENGINE)
 
     @classmethod
     def objects(cls):
@@ -272,7 +276,6 @@ class Users(object):
             user.save()
         else:
             print "ERROR: a user with the e-mail `{0}` already exists".format(user.email)
-
 
     @classmethod
     def delete_user(cls, user_name=None):
