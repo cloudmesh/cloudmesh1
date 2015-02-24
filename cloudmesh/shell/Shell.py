@@ -10,11 +10,14 @@ class Shell(object):
     
     @classmethod
     def _execute(cls, f, *arguments):
-        args = list(*arguments)
-        if len(args) == 0:
-            return f().rstrip('\n')
-        else:
-            return f(args).rstrip('\n')
+        args = args or []
+        kws  = kwargs or {}
+        return f(*args, **kws)
+#        args = list(*arguments)
+#        if len(args) == 0:
+#            return f().rstrip('\n')
+#       else:
+#           return f(args).rstrip('\n')
 
                 
     @classmethod
@@ -24,15 +27,18 @@ class Shell(object):
     @classmethod
     def _execute_kw(cls, f, *args, **kwargs):
         """BUG: does not check if kwargs is empty"""
-        arguments = list(args)
-        if len(arguments) == 0:
-            return f().rstrip('\n')
-        else:
-            return f(*args, **kwargs).rstrip('\n')
+        args = args or []
+        kws  = kwargs or {}
+        return f(*args, **kws)
+#        arguments = list(args)
+#        if len(arguments) == 0:
+#            return f().rstrip('\n')
+#        else:
+#            return f(*args, **kwargs).rstrip('\n')
                                         
     @classmethod
-    def VBoxManage	(cls, *arguments):
-        return cls._execute(sh.VBoxManage, arguments)
+    def VBoxManage	(cls, *args, **kwargs):
+        return cls._execute(sh.VBoxManage, *args, **kwargs)
 
     @classmethod
     def blockdiag	(cls, *arguments):
