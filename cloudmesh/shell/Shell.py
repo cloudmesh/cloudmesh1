@@ -9,7 +9,7 @@ class Shell(object):
     
     
     @classmethod
-    def _execute(cls, f, *arguments):
+    def _execute(cls, f, *args, **kwargs):
         args = args or []
         kws  = kwargs or {}
         return f(*args, **kws)
@@ -22,79 +22,67 @@ class Shell(object):
                 
     @classmethod
     def git(cls, *args, **kwargs):
-        return cls._execute_kw(sh.git, *args, **kwargs)
+        return cls._execute(sh.git, *args, **kwargs)
         
-    @classmethod
-    def _execute_kw(cls, f, *args, **kwargs):
-        """BUG: does not check if kwargs is empty"""
-        args = args or []
-        kws  = kwargs or {}
-        return f(*args, **kws)
-#        arguments = list(args)
-#        if len(arguments) == 0:
-#            return f().rstrip('\n')
-#        else:
-#            return f(*args, **kwargs).rstrip('\n')
-                                        
     @classmethod
     def VBoxManage	(cls, *args, **kwargs):
         return cls._execute(sh.VBoxManage, *args, **kwargs)
 
     @classmethod
-    def blockdiag	(cls, *arguments):
-        return cls._execute(sh.blockdiag	, arguments)
+    def blockdiag	(cls, *args, **kwargs):
+        return cls._execute(sh.blockdiag	, *args, **kwargs)
     
     @classmethod
-    def cm(cls, *arguments):
-        return cls._execute(sh.cm, arguments)
+    def cm(cls, *args, **kwargs):
+        return cls._execute(sh.cm, *args, **kwargs)
         
     @classmethod
-    def fgmetric(cls, *arguments):
-        return cls._execute(sh.fgmetric, arguments)
+    def fgmetric(cls, *args, **kwargs):
+        return cls._execute(sh.fgmetric, *args, **kwargs)
         
     @classmethod
-    def fgrep(cls, *arguments):
-        return cls._execute(sh.fgrep, arguments)
+    def fgrep(cls, *args, **kwargs):
+        return cls._execute(sh.fgrep, *args, **kwargs)
             
     @classmethod
-    def gchproject(cls, *arguments):
-        return cls._execute(sh.gchproject, arguments)
+    def gchproject(cls, *args, **kwargs):
+        return cls._execute(sh.gchproject, *args, **kwargs)
             
     @classmethod
-    def gchuser(cls, *arguments):
-        return cls._execute(sh.gchuser, arguments)
+    def gchuser(cls, *args, **kwargs):
+        return cls._execute(sh.gchuser, *args, **kwargs)
                 
     @classmethod
-    def glusers(cls, *arguments):
-        return cls._execute(sh.glusers, arguments)
+    def glusers(cls, *args, **kwargs):
+        return cls._execute(sh.glusers, *args, **kwargs)
                     
     @classmethod
-    def gmkproject(cls, *arguments):
-        return cls._execute(sh.gmkproject, arguments)
+    def gmkproject(cls, *args, **kwargs):
+        return cls._execute(sh.gmkproject, *args, **kwargs)
                     
     @classmethod
-    def grep(cls, *arguments):
-        return cls._execute(sh.grep, arguments)
+    def grep(cls, *args, **kwargs):
+        return cls._execute(sh.grep, *args, **kwargs)
                         
     @classmethod
-    def gstatement(cls, *arguments):
-        return cls._execute(sh.gstatement, arguments)
+    def gstatement(cls, *args, **kwargs):
+        return cls._execute(sh.gstatement, *args, **kwargs)
                         
     @classmethod
-    def head(cls, *arguments):
-        return cls._execute(sh.head, arguments)
+    def head(cls, *args, **kwargs):
+        return cls._execute(sh.head, *args, **kwargs)
                             
     @classmethod
-    def keystone(cls, *arguments):
-        return cls._execute(sh.keystone, arguments)
+    def keystone(cls, *args, **kwargs):
+        return cls._execute(sh.keystone, *args, **kwargs)
                             
     @classmethod
-    def kill(cls, *arguments):
-        return cls._execute(sh.kill, arguments)
+    def kill(cls, *args, **kwargs):
+        return cls._execute(sh.kill, *args, **kwargs)
 
     @classmethod
-    def ls(cls, *arguments):
-        return cls._execute(sh.ls, arguments)
+    def ls(cls, *args, **kwargs):
+        return cls._execute(sh.ls, *args, **kwargs)
                                         
     @classmethod
     def mkdir(cls, newdir):
@@ -117,60 +105,60 @@ class Shell(object):
                 os.mkdir(newdir)
 
     @classmethod
-    def mongoimport(cls, *arguments):
-        return cls._execute(sh.mongoimport, arguments)
+    def mongoimport(cls, *args, **kwargs):
+        return cls._execute(sh.mongoimport, *args, **kwargs)
                                     
     @classmethod
-    def mysql(cls, *arguments):
-        return cls._execute(sh.mysql, arguments)
+    def mysql(cls, *args, **kwargs):
+        return cls._execute(sh.mysql, *args, **kwargs)
                                         
     @classmethod
-    def nosetests(cls, *arguments):
-        return cls._execute(sh.nosetests,pwd, arguments)
+    def nosetests(cls, *args, **kwargs):
+        return cls._execute(sh.nosetests,pwd, *args, **kwargs)
                                         
     @classmethod
-    def nova(cls, *arguments):
-        return cls._execute(sh.nova, arguments)
+    def nova(cls, *args, **kwargs):
+        return cls._execute(sh.nova, *args, **kwargs)
                                             
     @classmethod
-    def pwd(cls, *arguments):
-        return cls._execute(sh.pwd, arguments)
+    def pwd(cls, *args, **kwargs):
+        return cls._execute(sh.pwd, *args, **kwargs)
                                             
     @classmethod
-    def rackdiag(cls, *arguments):
-        return cls._execute(sh.rackdiag, arguments)
+    def rackdiag(cls, *args, **kwargs):
+        return cls._execute(sh.rackdiag, *args, **kwargs)
                                                 
     @classmethod
-    def rm(cls, *arguments):
-        return cls._execute(sh.rm, arguments)
+    def rm(cls, *args, **kwargs):
+        return cls._execute(sh.rm, *args, **kwargs)
                                                 
     @classmethod
-    def rsync(cls, *arguments):
-        return cls._execute(sh.rsync, arguments)
+    def rsync(cls, *args, **kwargs):
+        return cls._execute(sh.rsync, *args, **kwargs)
                                                     
     @classmethod
-    def scp(cls, *arguments):
-        return cls._execute(sh.scp, arguments)
+    def scp(cls, *args, **kwargs):
+        return cls._execute(sh.scp, *args, **kwargs)
                                                     
     @classmethod
-    def sort(cls, *arguments):
-        return cls._execute(sh.sort, arguments)
+    def sort(cls, *args, **kwargs):
+        return cls._execute(sh.sort, *args, **kwargs)
                                                         
     @classmethod
-    def ssh(cls, *arguments):
-        return cls._execute(sh.ssh, arguments)
+    def ssh(cls, *args, **kwargs):
+        return cls._execute(sh.ssh, *args, **kwargs)
                                                         
     @classmethod
-    def sudo(cls, *arguments):
-        return cls._execute(sh.sudo, arguments)
+    def sudo(cls, *args, **kwargs):
+        return cls._execute(sh.sudo, *args, **kwargs)
                                                             
     @classmethod
-    def tail(cls, *arguments):
-        return cls._execute(sh.tail, arguments)
+    def tail(cls, *args, **kwargs):
+        return cls._execute(sh.tail, *args, **kwargs)
                                                             
     @classmethod
-    def vagrant(cls, *arguments):
-        return cls._execute(sh.vagrant, arguments)
+    def vagrant(cls, *args, **kwargs):
+        return cls._execute(sh.vagrant, *args, **kwargs)  
                                                                 
 if __name__ == "__main__":
     print Shell.ls("-1")
