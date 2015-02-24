@@ -159,6 +159,10 @@ class Shell(object):
     @classmethod
     def vagrant(cls, *args, **kwargs):
         return cls._execute(sh.vagrant, *args, **kwargs)  
+        
+    @classmethod
+    def mongod(cls, *args, **kwargs):
+        return cls._execute(sh.mongod, *args, **kwargs)
                                                                 
 if __name__ == "__main__":
     print Shell.ls("-1")

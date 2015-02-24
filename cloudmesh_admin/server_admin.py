@@ -2,6 +2,9 @@ from __future__ import print_function
 from cloudmesh.config.cm_config import cm_config_server
 from cloudmesh_install.util import banner
 import os
+import sys
+from cloudmesh_install.util import path_expand
+
 from cloudmesh.shell.Shell import Shell
 
 import sh
@@ -14,9 +17,7 @@ import hostlist
 from cloudmesh_install import config_file
 from cloudmesh.config.ConfigDict import ConfigDict
 from cloudmesh_common.logger import LOGGER
-import sys
 import time
-from cloudmesh_install.util import path_expand
 from pprint import pprint
 
 
@@ -127,8 +128,8 @@ class cloudmesh_server(object):
     def _ps(self):
         return sh.ps("-ax", _tty_out=False)
 
-    def __init__(self):
-        pass
+    #def __init__(self):
+        #pass
         
         
         '''
@@ -350,22 +351,26 @@ class cloudmesh_server(object):
         print
         print ("      Please be patient!")
         print
-
-        #sh.mongod("--auth",
-        #          "--bind_ip", "127.0.0.1"
-        #          "--fork",
-        #          "--dbpath", path,
-        #          "--logpath", "{0}/mongodb.log".format(path),
-        #          "--port",  port,
-        #          _bg=True)
         
-        # need to get rid of fabric local later          
+        '''
+        Shell.mongod("--auth",
+                  "--bind_ip", "127.0.0.1"
+                  "--fork",
+                  "--dbpath", path,
+                  "--logpath", "{0}/mongodb.log".format(path),
+                  "--port",  port,
+                  _bg=True)
+        '''
+        
+        # need to get rid of fabric local later     
+        
         local(
             'mongod --auth --bind_ip 127.0.0.1 '
             '--fork --dbpath {0} '
             '--logpath {0}/mongodb.log '
             '--port {1}'
             .format(path, port))
+         
         
 
     def _stop_mongo(self):
@@ -448,12 +453,51 @@ class cloudmesh_server(object):
     # ######################################################################
     # RABBITMQ SERVER
     # ######################################################################
-    
+class rabbitmq_server(object):
+    def __init__(self):
+        self.rabbit_env = {
+                         'rabbitmq_server': "sudo rabbitmq-server",
+                         'rabbitmqctl': "sudo rabbitmqctl",
+                         'detached': ""
+                     }
+                     
+        self._set_rabbitmq_env()
+        
+        
+    def _set_rabbitmq_env(self):
+
+        location = path_expand("~/.cloudmesh/rabbitm")
+
+        if sys.platform == "darwin":
+            mkdir("-p", location)
+            rabbit_env["RABBITMQ_MNESIA_BASE"] = location
+            rabbit_env["RABBITMQ_LOG_BASE"] = location
+            os.environ["RABBITMQ_MNESIA_BASE"] = location
+            os.environ["RABBITMQ_LOG_BASE"] = location
+            rabbit_env["rabbitmq_server"] = \
+                "/usr/local/opt/rabbitmq/sbin/rabbitmq-server"
+            rabbit_env["rabbitmqctl"] = \
+                "/usr/local/opt/rabbitmq/sbin/rabbitmqctl"
+        elif sys.platform == "linux2":
+            mkdir("-p", location)
+            rabbit_env["RABBITMQ_MNESIA_BASE"] = location
+            rabbit_env["RABBITMQ_LOG_BASE"] = location
+            os.environ["RABBITMQ_MNESIA_BASE"] = location
+            os.environ["RABBITMQ_LOG_BASE"] = location
+            rabbit_env["rabbitmq_server"] = "/usr/sbin/rabbitmq-server"
+            rabbit_env["rabbitmqctl"] = "/usr/sbin/rabbitmqctl"
+        else:
+            print("WARNING: cloudmesh rabbitmq user install not supported, "
+                  "using system install")
+                  
     def _info_rabbitmq(self):
         pass
         
-    def _start_rabbitmq(self):
-        pass
+    def _start_rabbitmq(self, detached=None):
+        """start the rabbit mq server"""
+        if detached is None:
+            rabbit_env['detached'] = "-detached"
+        local("{rabbitmq_server} {detached}".format(**self.rabbit_env))
         
     def _stop_rabbitmq(self):
         pass
@@ -542,7 +586,7 @@ if __name__ == '__main__':
     # server.start()
     # server.stop()
     print(server._info_mongo())
-    #server._start_mongo()
+    server._start_mongo()
     #server._stop_mongo()
     # server.stop()
 
