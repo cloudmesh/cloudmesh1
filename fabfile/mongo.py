@@ -12,8 +12,10 @@ from cloudmesh.inventory import Inventory
 import sys
 import os
 import time
+from datetime import datetime
 from cloudmesh_common.util import PROGRESS
 import progress
+import subprocess
 
 PROGRESS.set('Cloudmesh Services', 50)
 
@@ -133,7 +135,19 @@ def install():
         local('brew update')
         local('brew install mongodb')
 '''
-    
+
+def version():
+    ver = None
+    try:
+        out = subprocess.check_output("mongod --version", shell=True)\
+                        .split("\n")[0].split("version")[1].strip().split(".")
+        ver = (int(out[0][1:]), int(out[1]), int(out[2]))
+        #print "mongod service version is: ", ver
+    except:
+        #print "mongod serive not available"
+        pass
+    return ver
+
 @task
 def admin():
     """creates a password protected user for mongo"""
@@ -154,25 +168,38 @@ def admin():
 
     # setting the admin user
     script = []
-    script.append('db.addUser("{0}", "{1}");'.format(user, password))
-    script.append('db.auth("{0}", "{1}");'.format(user, password))
+    # script.append('db.addUser("{0}", "{1}");'.format(user, password))
+    # script.append('db.auth("{0}", "{1}");'.format(user, password))
 
+    mongoversion = version()
     # setting a password for each db
-
     for db in dbs:
         script.append('db = db.getSiblingDB("{0}");'.format(db))
+        # mongod has changes since v 2.6
+        # it uses createUser instead of addUser to add new user
+        # it does not create empty db if no records added
+        if mongoversion and mongoversion >= (2, 6, 0):
+            script.append('db.createUser({"user":"%s", "pwd":"%s", "roles":["dbOwner"]})' % (user, password))
+            script.append('use {0};'.format(db))
+            # a trick to ensure the db is created
+            script.append('db.cmsysmeta.save({"createdOn":"%s"})' % datetime.now())
+        else:
+            script.append('db.addUser("{0}", "{1}");'.format(user, password))
+
+    script.append('use admin;')
+    if mongoversion and mongoversion >= (2, 6, 0):
+        script.append('db.createUser({"user":"%s", "pwd":"%s", "roles":["root"]})' % (user, password))
+    else:
         script.append('db.addUser("{0}", "{1}");'.format(user, password))
-    script.append("use admin;")
-    script.append('db.addUser("{0}", "{1}");'.format(user, password))
+
     #script.append('db.auth("{0}", "{1}");'.format(user, password))
     #script.append('db.shutdownServer();')
 
     mongo_script = '\n'.join(script)
 
     # print mongo_script
-
     command = "echo '{0}' | mongo".format(mongo_script)
-    #print command
+    # print command
     banner("Executing js")
     os.system(command)
 
@@ -340,7 +367,10 @@ def stop():
     # Added to make sure the mongodb server is shutdown.
     # - killall does not work if the server is running on root or mongodb
     try:
-        local("echo \"use admin\ndb.shutdownServer()\" | mongo")
+        # this throw error messages in some cases
+        # local("echo \"use admin\ndb.shutdownServer()\" | mongo")
+        # this ignore the error message in case it occurs
+        subprocess.check_output('echo "use admin\ndb.shutdownServer()" | mongo', shell=TRUE)
     except:
         pass
 
