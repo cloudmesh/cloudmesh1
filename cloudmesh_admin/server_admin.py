@@ -469,39 +469,54 @@ class rabbitmq_server(object):
         location = path_expand("~/.cloudmesh/rabbitm")
 
         if sys.platform == "darwin":
-            mkdir("-p", location)
-            rabbit_env["RABBITMQ_MNESIA_BASE"] = location
-            rabbit_env["RABBITMQ_LOG_BASE"] = location
+            sh.mkdir("-p", location)
+            self.rabbit_env["RABBITMQ_MNESIA_BASE"] = location
+            self.rabbit_env["RABBITMQ_LOG_BASE"] = location
             os.environ["RABBITMQ_MNESIA_BASE"] = location
             os.environ["RABBITMQ_LOG_BASE"] = location
-            rabbit_env["rabbitmq_server"] = \
+            self.rabbit_env["rabbitmq_server"] = \
                 "/usr/local/opt/rabbitmq/sbin/rabbitmq-server"
-            rabbit_env["rabbitmqctl"] = \
+            self.rabbit_env["rabbitmqctl"] = \
                 "/usr/local/opt/rabbitmq/sbin/rabbitmqctl"
         elif sys.platform == "linux2":
-            mkdir("-p", location)
-            rabbit_env["RABBITMQ_MNESIA_BASE"] = location
-            rabbit_env["RABBITMQ_LOG_BASE"] = location
+            sh.mkdir("-p", location)
+            self.rabbit_env["RABBITMQ_MNESIA_BASE"] = location
+            self.rabbit_env["RABBITMQ_LOG_BASE"] = location
             os.environ["RABBITMQ_MNESIA_BASE"] = location
             os.environ["RABBITMQ_LOG_BASE"] = location
-            rabbit_env["rabbitmq_server"] = "/usr/sbin/rabbitmq-server"
-            rabbit_env["rabbitmqctl"] = "/usr/sbin/rabbitmqctl"
+            self.rabbit_env["rabbitmq_server"] = "/usr/sbin/rabbitmq-server"
+            self.rabbit_env["rabbitmqctl"] = "/usr/sbin/rabbitmqctl"
         else:
             print("WARNING: cloudmesh rabbitmq user install not supported, "
                   "using system install")
                   
-    def _info_rabbitmq(self):
-        pass
+    def info(self):
+        """print the status of rabbitmq"""
+        s = local("sudo {rabbitmqctl} status".format(**self.rabbit_env),
+                capture=True)
+        #s = Shell.sudo("{rabbitmqctl}".format(**self.rabbit_env), "status")
+        def list_queues(parameters):
+            """list all queues available in rabbitmq"""
+            self.rabbit_env['parameters'] = parameters
+            r = local("{rabbitmqctl} list_queues {parameters}"
+                          .format(**self.rabbit_env),
+                          capture=True)
+                          
+        l = ["name", "memory", "consumers", "messages",
+             "messages_ready", "messages_unacknowledged"]
+        r = list_queues(" ".join(l)).split("\n")[1].split("\t")
+        d = zip(l, r)
+        return s, d
         
-    def _start_rabbitmq(self, detached=None):
+    def start(self, detached=None):
         """start the rabbit mq server"""
         if detached is None:
-            rabbit_env['detached'] = "-detached"
+            self.rabbit_env['detached'] = "-detached"
         local("{rabbitmq_server} {detached}".format(**self.rabbit_env))
         
-    def _stop_rabbitmq(self):
-        pass
-        
+    def stop(self):
+        """stop the rabbit mq server"""
+        local("{rabbitmqctl} stop".format(**self.rabbit_env))
 '''
         queue.start()
         # execute_command("START RABITMQ",
@@ -581,12 +596,14 @@ class rabbitmq_server(object):
 
 if __name__ == '__main__':
     server = cloudmesh_server()
+    r_server = rabbitmq_server()
+    print(r_server.info())
     #server.info()
 
     # server.start()
     # server.stop()
-    print(server._info_mongo())
-    server._start_mongo()
+    #print(server._info_mongo())
+    #server._start_mongo()
     #server._stop_mongo()
     # server.stop()
 
