@@ -490,18 +490,20 @@ class rabbitmq_server(object):
             print("WARNING: cloudmesh rabbitmq user install not supported, "
                   "using system install")
                   
+              
     def info(self):
         """print the status of rabbitmq"""
-        s = local("sudo {rabbitmqctl} status".format(**self.rabbit_env),
-                capture=True)
+        s = os.popen("sudo {rabbitmqctl} status".format
+                    (**self.rabbit_env)).read()
         #s = Shell.sudo("{rabbitmqctl}".format(**self.rabbit_env), "status")
+        
         def list_queues(parameters):
             """list all queues available in rabbitmq"""
             self.rabbit_env['parameters'] = parameters
-            r = local("{rabbitmqctl} list_queues {parameters}"
-                          .format(**self.rabbit_env),
-                          capture=True)
-                          
+            r = os.popen("{rabbitmqctl} list_queues {parameters}"
+                          .format(**self.rabbit_env)).read()
+            return r
+            
         l = ["name", "memory", "consumers", "messages",
              "messages_ready", "messages_unacknowledged"]
         r = list_queues(" ".join(l)).split("\n")[1].split("\t")
@@ -512,11 +514,11 @@ class rabbitmq_server(object):
         """start the rabbit mq server"""
         if detached is None:
             self.rabbit_env['detached'] = "-detached"
-        local("{rabbitmq_server} {detached}".format(**self.rabbit_env))
+        os.popen("{rabbitmq_server} {detached}".format(**self.rabbit_env))
         
     def stop(self):
         """stop the rabbit mq server"""
-        local("{rabbitmqctl} stop".format(**self.rabbit_env))
+        os.popen("{rabbitmqctl} stop".format(**self.rabbit_env))
 '''
         queue.start()
         # execute_command("START RABITMQ",
@@ -597,7 +599,9 @@ class rabbitmq_server(object):
 if __name__ == '__main__':
     server = cloudmesh_server()
     r_server = rabbitmq_server()
-    print(r_server.info())
+    #print(r_server.info())
+    r_server.start()
+    
     #server.info()
 
     # server.start()

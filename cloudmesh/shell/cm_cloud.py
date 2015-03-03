@@ -146,6 +146,8 @@ class CloudManage(object):
 
     '''
     a class provides funtions used to manage cloud info in the mongo
+    cloud api for command line
+    
     '''
     connected_to_mongo = False
     mongo = None
@@ -169,6 +171,14 @@ class CloudManage(object):
             self.connected_to_mongo = True
 
     def _get_user(self, username):
+        """
+         get a dict of user information
+         
+         :param username: user id
+         :type username: string
+         :return: a dict of user information
+         :rtype: dict
+        """
         self._connect_to_mongo() # TODO: i think that cm_mongo does this?
         return self.mongo.db_user.find_one({'cm_user_id': username})
 
@@ -176,6 +186,20 @@ class CloudManage(object):
         '''
         retreive cloud information from db_clouds.
         TODO: duplicates functionality from Mongobase class and cm_mongo
+        
+        :param username: user id
+        :type username: string
+        :param admin: if True, the function will return clouds information 
+                      despite which user is using cloudmesh
+        :type admin: boolean
+        :param getone: if True, user need to provide a cloudname and the
+                       function will return the information for oly one cloud
+        :type getone: boolean
+        :param cloudname: cloud name
+        :type cloudname: string
+        :return: cloud information in dict or pymongo cursor
+        :rtype: dict if getone is True, otherwise pymongo cursor
+        
         '''
         # DEBUG
         try:
@@ -198,6 +222,18 @@ class CloudManage(object):
 
     def get_selected_cloud(self, username):
         # DEBUG
+        
+        """
+        get the current working cloud name. In command line, user can select a
+        cloud as a default cloud or a cloud as a temporary working cloud, this 
+        function returns user's selection
+        
+        :param username: user id
+        :type username: string
+        :return: selected cloud name
+        :rtype: string
+        """
+        
         try:
             _args = locals()
             del(_args['self'])
@@ -216,8 +252,9 @@ class CloudManage(object):
             try:
                 cloud = defaults['cloud']
             except:
-                Console.warning("no selected cloud and no default cloud is setup, "
-                                "please use command 'cloud select [CLOUD]' to select a cloud")
+                Console.warning("no selected cloud and no default cloud is "
+                                "setup, please use command 'cloud select "
+                                "[CLOUD]' to select a cloud")
                 sys.exit()
             self.mongo.db_user.update({'cm_user_id': username},
                                       {'$set': {'selected_cloud': cloud}})
@@ -227,6 +264,11 @@ class CloudManage(object):
     def update_selected_cloud(self, username, cloudname):
         '''
         set user selected cloud, which is current worked on cloud in the shell
+        
+        :param username: user id
+        :type username: string
+        :param cloudname: cloud name
+        :type cloudname: string
         '''
         self._connect_to_mongo()
         self.mongo.db_user.update({'cm_user_id': username},
@@ -235,6 +277,11 @@ class CloudManage(object):
     def get_default_cloud(self, username):
         '''
         get the default cloud, return None if not set
+        
+        :param username: user id
+        :type username: string
+        :return: name of the default cloud or None
+        :rtype: string or None if not set
         '''
         self._connect_to_mongo()
         try:
@@ -247,6 +294,11 @@ class CloudManage(object):
     def update_default_cloud(self, username, cloudname):
         '''
         set default cloud
+        
+        :param username: user id
+        :type username: string
+        :param cloudname: cloud name
+        :type cloudname: string
         '''
         self._connect_to_mongo()
         self.mongo.db_defaults.update({'cm_user_id': username},
@@ -257,6 +309,12 @@ class CloudManage(object):
         Gets the default cloud for nova command, return None if not set.
 
         Related to cloudmesh_cmd3/plugins/cm_shell_nova.py
+        
+        :param username: user id
+        :type username: string
+        :return: name of the default cloud or None
+        :rtype: string or None if not set
+        
         '''
         self._connect_to_mongo()
         try:
@@ -271,6 +329,13 @@ class CloudManage(object):
         Sets default cloud for nova command.
 
         Related to cloudmesh_cmd3/plugins/cm_shell_nova.py
+        
+        
+        :param username: user id
+        :type username: string
+        :param cloudname: cloud name
+        :type cloudname: string
+        
         '''
         self._connect_to_mongo()
         self.mongo.db_defaults.update({'cm_user_id': username},
@@ -278,8 +343,18 @@ class CloudManage(object):
 
     def update_cloud_name(self, username, cloudname, newname):
         '''
-        change the cloud name in db
+        update the name of a cloud in db, this will update the cloud name in
+        other places if it is used
+        
         before use this function, check whether cloud exists in db_clouds
+        
+        :param username: user id
+        :type username: string
+        :param cloudname: cloud name
+        :type cloudname: string
+        :param newname: new cloud name
+        :type newname: string
+       
         '''
         self._connect_to_mongo()
         self.mongo.db_clouds.update({'cm_kind': 'cloud',
@@ -300,7 +375,15 @@ class CloudManage(object):
 
     def activate_cloud(self, username, cloudname):
         '''
-        activate a cloud
+        activate a cloud, this function just try to modify the registered_clouds
+        and the activeclouds lists in db_defaults
+        
+        :param username: user id
+        :type username: string
+        :param cloudname: cloud name
+        :type cloudname: string
+        :return: 0 if fail, 1 if succeed
+        :rtype: 0 or 1
         '''
         # DEBUG
         try:
@@ -331,8 +414,14 @@ class CloudManage(object):
     def deactivate_cloud(self, username, cloudname):
         '''
         deactivate a cloud
-        simply delete the cloud name from activecloud in db_defaults
-        if the cloud is the current default cloud, it will be removed
+        what the function does: delete the cloud name from activecloud in 
+        db_defaults; if the cloud to deactivateis the current default cloud, 
+        the default cloud data will be removed
+        
+        :param username: user id
+        :type username: string
+        :param cloudname: cloud name
+        :type cloudname: string
         '''
         self._connect_to_mongo()
         defaults = self.mongo.db_defaults.find_one({'cm_user_id': username})
@@ -345,8 +434,17 @@ class CloudManage(object):
 
     def remove_cloud(self, username, cloudname):
         '''
-        remove selected_cloud value if such cloud is removed
-        [NOT IMPLEMENTED]default cloud, active cloud, register cloud too if necessary
+        remove a cloud from db
+        if the cloud is the selected_cloud, the selected_cloud value will be
+        wiped
+        [NOT IMPLEMENTED]default cloud, active cloud, register cloud too 
+        if necessary
+        
+        :param username: user id
+        :type username: string
+        :param cloudname: cloud name
+        :type cloudname: string
+        
         '''
         self._connect_to_mongo()
         self.mongo.db_clouds.remove({'cm_kind': 'cloud',
@@ -364,7 +462,15 @@ class CloudManage(object):
 
     def get_cloud_defaultinfo(self, username, cloudname):
         '''
-        return names of dfault flavor and image of a cloud, none if not exits
+        return names of default flavor and image of a cloud, none if not exits
+        
+        :param username: user id
+        :type username: string
+        :param cloudname: cloud name
+        :type cloudname: string
+        :return: {'flavor': ..., 'image': ...}
+        :rtype: dict
+        
         '''
         res = {}
 
@@ -397,6 +503,13 @@ class CloudManage(object):
     def get_default_flavor_id(self, username, cloudname):
         '''
         return the id of the dafault flavor of a cloud
+        
+        :param username: user id
+        :type username: string
+        :param cloudname: cloud name
+        :type cloudname: string
+        :return: flavor id
+        :rtype: string
         '''
         self._connect_to_mongo()
         flavor_id = None
@@ -407,9 +520,17 @@ class CloudManage(object):
             pass
         return flavor_id
 
-    def update_default_flavor_id(self, username, cloudname, id):
+    def update_default_flavor_id(self, username, cloudname, _id):
         '''
         update the id of default flavor of a cloud
+        
+        :param username: user id
+        :type username: string
+        :param cloudname: cloud name
+        :type cloudname: string
+        :param _id: flavor id
+        :type _id: string
+        
         '''
         self._connect_to_mongo()
         flavors = {}
@@ -418,19 +539,32 @@ class CloudManage(object):
                 {'cm_user_id': username})['flavors']
         except:
             pass
-        flavors[cloudname] = id
+        flavors[cloudname] = _id
         self.mongo.db_defaults.update({'cm_user_id': username},
                                       {'$set': {'flavors': flavors}})
 
-    def get_flavors(self, getall=False, cloudname=None, getone=False, id=None):
+    def get_flavors(self, getall=False, cloudname=None, getone=False, _id=None):
         '''
-        retrieve flavor information from db_clouds
+        retrieve flavors information from db_clouds
+        
+        :param getall: if True, return flavors information of all clouds
+        :type getall: boolean
+        :param cloudname: provide the cloud name, and the function returns its
+                          flavors
+        :type cloudname: string
+        :param getone: if True, return informaion of one spicific flavor, you 
+                       need to provide cloudname and _id as well
+        :type getone: boolean
+        :param _id: flavor id
+        :type _id: string
+        :return: flavor information in dict or pymongo cursor
+        :rtype: dict if getone is True, otherwise pymongo cursor
         '''
         self._connect_to_mongo()
         if getone:
             return self.mongo.db_clouds.find_one({'cm_kind': 'flavors',
                                                   'cm_cloud': cloudname,
-                                                  'id': id})
+                                                  'id': _id})
         elif getall:
             return self.mongo.db_clouds.find({'cm_kind': 'flavors'})
         else:
@@ -440,6 +574,13 @@ class CloudManage(object):
     def get_default_image_id(self, username, cloudname):
         '''
         return the id of the dafault image of a cloud
+        
+        :param username: user id
+        :type username: string
+        :param cloudname: cloud name
+        :type cloudname: string
+        :return: image id
+        :rtype: string
         '''
         self._connect_to_mongo()
         image_id = None
@@ -450,9 +591,16 @@ class CloudManage(object):
             pass
         return image_id
 
-    def update_default_image_id(self, username, cloudname, id):
+    def update_default_image_id(self, username, cloudname, _id):
         '''
         update the id of default image of a cloud
+        
+        :param username: user id
+        :type username: string
+        :param cloudname: cloud name
+        :type cloudname: string
+        :param _id: image id
+        :type _id: string
         '''
         self._connect_to_mongo()
         images = {}
@@ -461,22 +609,32 @@ class CloudManage(object):
                 {'cm_user_id': username})['images']
         except:
             pass
-        images[cloudname] = id
+        images[cloudname] = _id
         self.mongo.db_defaults.update({'cm_user_id': username},
                                       {'$set': {'images': images}})
 
-    #
-    # TODO: id is built in
-    #
-    def get_images(self, getall=False, cloudname=None, getone=False, id=None):
+    def get_images(self, getall=False, cloudname=None, getone=False, _id=None):
         '''
         retrieve image information from db_clouds
+        
+        :param getall: if True, return images information of all clouds
+        :type getall: boolean
+        :param cloudname: provide the cloud name, and the function returns its
+                          images
+        :type cloudname: string
+        :param getone: if True, return informaion of one spicific image, you 
+                       need to provide cloudname and _id as well
+        :type getone: boolean
+        :param _id: image id
+        :type _id: string
+        :return: image information in dict or pymongo cursor
+        :rtype: dict if getone is True, otherwise pymongo cursor
         '''
         self._connect_to_mongo()
         if getone:
             return self.mongo.db_clouds.find_one({'cm_kind': 'images',
                                                   'cm_cloud': cloudname,
-                                                  'id': id})
+                                                  'id': _id})
         elif getall:
             return self.mongo.db_clouds.find({'cm_kind': 'images'})
         else:
@@ -490,9 +648,12 @@ class CloudManage(object):
                             refresh=False, output=False, print_format="table"):
         '''
         prints flavors of a cloud in shell
-        :param username: string user name
-        :param cloudname: string one cloud name
-        :param itemkesys: a list of lists, The first item in a sublist
+        
+        :param username: user id
+        :type username: string
+        :param cloudname: cloud name
+        :type cloudname: string
+        :param itemkeys: a list of lists, The first item in a sublist
                           is used as header name, the folling ones are
                           the path to the value that user wants in the
                           dict, for example:
@@ -506,8 +667,17 @@ class CloudManage(object):
                                    ['refresh time', 'cm_refrsh']
                                  ]
                           The first id is the header name, second id is a path.
+        :type itemkeys: list
         :param refresh: refresh flavors of the cloud before printing
-        :param output: designed for shell command 'cloud setflavor', output flavor names
+        :type refresh: boolean
+        :param output: designed for shell command 'cloud set flavor' otherwise 
+                       leave it as False, if True the function will return 
+                       flavor names and ids
+        :type output: boolean
+        :param print_format: provide the printing format, such as table, json...
+        :type print_format: string
+        :return: if param output is True, return the flavor names and their ids
+        :rtype: list
         '''
         self._connect_to_mongo()
         if refresh:
@@ -653,23 +823,42 @@ class CloudManage(object):
                             print_format="table",
                             group=None):   #specify the group of the VM
         '''
-        prints a cloud's vms or a given list of vms
-        :param username: string user name
-        :param cloudname: string one cloud name
-        :param itemkesys: a list of lists, each list's first item will be used as header name, the folling ones
-        are the path to the value that user wants in the dict, for example:
-            itemkeys = [
-                         ['id', 'id'],
-                         ['name', 'name'],
-                         ['vcpus', 'vcpus'],
-                         ['ram', 'ram'],
-                         ['disk', 'disk'],
-                         ['refresh time', 'cm_refrsh']
-                       ]
-                       first id is the header name, second id is a path
-        :param refresh: refresh vms of the cloud before printing
-        :param output: designed for shell command for selection
-        :param serverdata: if provided, the function will print this data instead of vms of a cloud
+        prints a cloud's VMs(servers) or a given list of VMs
+        
+        :param username: user id
+        :type username: string
+        :param cloudname: cloud name
+        :type cloudname: string
+        :param itemkeys: a list of lists, The first item in a sublist
+                          is used as header name, the folling ones are
+                          the path to the value that user wants in the
+                          dict, for example:
+
+                          itemkeys = [
+                                   ['id', 'id'],
+                                   ['name', 'name'],
+                                   ['vcpus', 'vcpus'],
+                                   ['ram', 'ram'],
+                                   ['disk', 'disk'],
+                                   ['refresh time', 'cm_refrsh']
+                                 ]
+                          The first id is the header name, second id is a path.
+        :type itemkeys: list
+        :param output: designed for shell command otherwise 
+                       leave it as False, if True the function will return 
+                       server names and ids
+        :type output: boolean
+        :param print_format: provide the printing format, such as table, json...
+        :type print_format: string
+        :param serverdata: if provided, the function will print this data 
+                           instead of vms of a cloud, please learn the VM's
+                           data format in the database
+        :type serverdata: dict
+        :param group: provide a group name for VMs so that the function will 
+                      only print the VMs in the group
+        :type group: string
+        :return: if param output is True, return the flavor names and their ids
+        :rtype: list
         '''
        
         # GroupManagement loads Mongodb connections automatically by import.
@@ -792,7 +981,7 @@ class CloudManage(object):
 
 class CloudCommand(CloudManage):
     '''
-    a class provides cloud command functions
+    a class of functions serve shell command "cloud"
     '''
 
     def __init__(self, arguments):

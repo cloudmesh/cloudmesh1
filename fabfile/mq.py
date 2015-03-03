@@ -181,7 +181,7 @@ def status():
         print "Run '/etc/init.d/rabbitmq-server status' to check status"
     else:
         # BUG rabbit_mqenv not defined
-        local("sudo {rabbitmqctl} status".format(**rabbitmq_env))
+        local("sudo {rabbitmqctl} status".format(**rabbit_env))
 
 
 def list_queues(parameters):
