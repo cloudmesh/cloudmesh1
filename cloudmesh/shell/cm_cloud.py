@@ -146,6 +146,7 @@ class CloudManage(object):
 
     '''
     a class provides funtions used to manage cloud info in the mongo
+    
     cloud api for command line
     
     '''
@@ -998,6 +999,10 @@ class CloudCommand(CloudManage):
         self.username = self.config['cloudmesh']['profile']['username']
 
     def _cloud_list(self):
+        """
+        list the cloud names along with their activation status
+             
+        """
         if self.arguments["--column"]:
             col_option = [
                 'active', 'user', 'label', 'host',
@@ -1110,6 +1115,9 @@ class CloudCommand(CloudManage):
                                        count=False)
 
     def _cloud_info(self):
+        """
+        print detailed information for a cloud
+        """
         def printing(cloud):
             if '_id' in cloud:
                 del cloud['_id']
@@ -1176,6 +1184,10 @@ class CloudCommand(CloudManage):
             printing(cloud)
 
     def _cloud_select(self):
+        """
+        select a cloud as a temporary defaut cloud to work with, so that the
+        user doesn't need to type a cloud name everywhere in command line
+        """
         if self.arguments['CLOUD']:
             cloud = self.get_clouds(
                 self.username, getone=True, cloudname=self.arguments['CLOUD'])
@@ -1199,6 +1211,9 @@ class CloudCommand(CloudManage):
             Console.ok("cloud '{0}' is selected".format(cloud_names[res]))
 
     def _cloud_alias(self):
+        """
+        rename a cloud
+        """
         if self.arguments['CLOUD']:
             name = self.arguments['CLOUD']
         else:
@@ -1215,6 +1230,9 @@ class CloudCommand(CloudManage):
             return
 
     def _cloud_activate(self):
+        """
+        activate a cloud
+        """
         # DEBUG
         try:
             _args = locals()
@@ -1249,6 +1267,9 @@ class CloudCommand(CloudManage):
             Console.ok("cloud '{0}' activated.".format(name))
 
     def _cloud_deactivate(self):
+        """
+        deactivate a cloud 
+        """
         if self.arguments['CLOUD']:
             name = self.arguments['CLOUD']
         else:
@@ -1268,6 +1289,9 @@ class CloudCommand(CloudManage):
         Console.ok("cloud '{0}' deactivated.".format(name))
 
     def _cloud_import(self):
+        """
+        import cloud information into cloudmesh database from yaml file
+        """
         try:
             filename = path_expand(self.arguments["<cloudYAMLfile>"])
             fileconfig = ConfigDict(filename=filename)
@@ -1303,6 +1327,9 @@ class CloudCommand(CloudManage):
                 print("cloud '{0}' added.".format(key))
 
     def _cloud_remove(self):
+        """
+        remove a cloud from the cloudmesh database
+        """
         if self.arguments['--all']:
             if yn_choice("CAUTION: Do you want to remove all clouds from database?",
                          default='n',
@@ -1336,7 +1363,7 @@ class CloudCommand(CloudManage):
 
     def _cloud_list_default(self):
         '''
-        think: refresh before list?
+        lists the default flavor and defualt image settings for clouds 
         '''
         headers = ['cloud', 'default flavor', 'default image']
         to_print = []
@@ -1372,6 +1399,7 @@ class CloudCommand(CloudManage):
     
     def _cloud_set_flavor(self):
         '''
+        set a flavor for a cloud;
         refresh before actually select a flaovr of the cloud
         '''
         cloudname = self.get_working_cloud_name()
@@ -1437,6 +1465,7 @@ class CloudCommand(CloudManage):
 
     def _cloud_set_image(self):
         '''
+        select a image for a cloud;
         refresh before actually select a image of the cloud
         '''
         cloudname = self.get_working_cloud_name()

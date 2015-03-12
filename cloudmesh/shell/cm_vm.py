@@ -139,6 +139,10 @@ def shell_command_vm(arguments):
 
 
 class VMcommand(object):
+    """
+    a class of functions serve shell command "vm"
+     
+    """
 
     def __init__(self, arguments):
         self.arguments = arguments
@@ -155,8 +159,9 @@ class VMcommand(object):
     # IMPROVE NAME def _create(self):
     def _vm_create(self):
 
-        """creates a virtual machine through the command shell via the
-        arguments passed at initialization time of VMcommand"""
+        """
+        creates a VM instance through the command shell
+        """
 
         # -------------------------
         # check input
@@ -197,6 +202,9 @@ class VMcommand(object):
             print("to check realtime vm status: list vm --refresh")
 
     def _vm_delete(self):
+        """
+        delete a VM instance 
+        """
         # -------------------------
         # check input
         if self.arguments['NAME'] is None and\
@@ -244,6 +252,9 @@ class VMcommand(object):
                   refresh=False)
 
     def _assign_public_ip(self):
+        """
+        assign a public ip to a VM 
+        """
         cloudname = self.get_working_cloud_name()
         if not cloudname:
             return
@@ -254,6 +265,9 @@ class VMcommand(object):
             username=self.username, cloudname=cloudname, serverid=serverid)
 
     def _vm_login(self):
+        """
+        login to a VM  
+        """
         cloudname = self.get_working_cloud_name()
         if not cloudname:
             return
@@ -385,8 +399,8 @@ class VMcommand(object):
     # --------------------------------------------------------------------------
     def get_working_cloud_name(self):
         '''
-        get the name of a cloud to work on, if CLOUD not given, will pick the
-        selected or default cloud
+        get the name of a cloud to work on, if CLOUD not given, the function
+        will pick the selected or default cloud
         '''
         cloudname = None
         cloudobj = CloudManage()
@@ -404,12 +418,24 @@ class VMcommand(object):
             cloudname = cloudobj.get_selected_cloud(self.username)
         if cloudname not in mongo.active_clouds(self.username):
             Console.warning(
-                "cloud '{0}' is not active, to activate a cloud: cloud on [CLOUD]".format(cloudname))
+                "cloud '{0}' is not active, to activate a cloud: cloud on [CLOUD]".format(cloudname)) 
             return False
         else:
             return cloudname
 
     def get_working_server_id(self, cloudname):
+        """
+         returns the id of a VM
+         In the command line, the user can provide either VM name or VM id to 
+         identify a VM, this function figures out what the users input and check
+         the existence of the VM, then returns the VM id or False if check 
+         failed
+         
+         :param cloudname: cloud name
+         :type cloudname: string
+         :return: VM id, otherwise False
+         :rtype: string or boolean
+        """
         serverid = None
         mongo = cm_mongo()
         mongo.activate(cm_user_id=self.username, names=[cloudname])
@@ -480,19 +506,50 @@ def start_vm(username,
              groupname=None,
              servername=None):
     '''
-    create a vm of a cloud of a user
-    will check flavor, image existence if provided
-    user can specify groupname which will be written in metadata, servername which
-    will replace prefix+index as the vm name
+    create a VM on a cloud for a user
+    
+    If flavor or image is provided, the function will check the flavor, image 
+    existence;
     it's better to check cloud active status before use this function
-    :param username: string
-    :param cloudname: string
-    :param count: number of vms to start
-    :return False if error
+    
 
-    TODO: what if fail, how to acknowledge it; no return now as using celery
-          input key
+    TODO: this function should be relocated into a class;
+          what if fail to create, how to acknowledge it. no return now because
+          of using celery;
           missing security group
+        
+    :param username: user name
+    :type username: string
+    :param cloudname: cloud name
+    :type cloudname: string
+    :param count: give the number of vms to start at one call of this function,
+                  the default is 1
+    :type count: int
+    :param flavorname: flavor name, if flavor name or id is not provided, the
+                       function will try to find the user specified default 
+                       flavor
+    :type flavorname: string
+    :param flavorid: flavor id, if flavor name or id is not provided, the
+                     function will try to find the user specified default 
+                     flavor
+    :type flavorid: string
+    :param imagename: image name, if image name or id is not provided, the
+                      function will try to find the user specified default 
+                      image
+    :type imagename: string
+    :param imageid: image id, if image name or id is not provided, the
+                     function will try to find the user specified default 
+                     image
+    :type imageid: string
+    :param groupname: user can specify groupname of the VM, this groupname will
+                      be included in the metadata of the VM
+    :type groupname: string
+    :param servername: user can provide the name of the VM, which will replace 
+                       the default prefix+index form
+    :type servername: string
+    :return:  False if error occurs
+    :rtype: boolean
+    
     '''
     # Changed scope of this import - hyungro lee 12/01/2014
     from cloudmesh.experiment.group_usage import add_vm_to_group_while_creating
@@ -690,23 +747,6 @@ def start_vm(username,
 
         count = count - 1
 
-#
-# TODO: Mark this is very complicated, think about what we want to do
-#
-
-#
-#  delete all
-#  delete [1-10]
-#  delete gvonlasz[1-10]
-#  delate --group=test [1-10]
-#  delete --cloud=india [1-10]
-#
-
-# l = search_vm("[1-10]")
-# l = search_vm("gregor[1-10]")
-
-# delete_vms(l, interactive=False, force=True)
-
 
 def delete_vm(username,
               cloudname,
@@ -714,16 +754,32 @@ def delete_vm(username,
               preview=False,
               refresh=False):
     '''
-    delete vms of a cloud of a user, this function provides several ways to find and
-    delete vms
-    :param server_id_list:: the list of VMs(id) to delete
-    :param preview:: True if the user wants to preview and confirm before start to delete
-
-    TODO: what if fail, how to acknowledge it
-          range search: now if prefix not given, all vms whose index are in the range will
-          be deleted, regardless of its prefix
-          it looks like even though delete a vm and return {msg: seccess}, sometimes refresh
-          after 5 sec, it might be still there
+    delete vms of a cloud for a user 
+    
+    this function accepts a list of VM ids and delete them
+    
+    TODO: what if fail to delete, how to acknowledge it;
+          it looks like even though delete a vm and return {msg: seccess}, 
+          sometimes refresh after 5 sec, it might be still there
+    
+    :param username: user name
+    :type username: string
+    :param cloudname: cloud name
+    :type cloudname: string               
+    :param server_id_list: the list of VM ids to delete
+    :type server_id_list: list
+    :param preview: True if the user wants to preview and confirm before start 
+                    to delete
+    :type preview: boolean
+    :param refresh: True to refresh the database before processing, the database
+                    has to be refreshed before start processing here. Since 
+                    there are many
+                    places that refreshes the database, so if there is a place 
+                    in the program refreshes shortly before calling this 
+                    funtion, to avoid redundant work, make this argument False
+    :type refresh: boolean
+    :return: False if error occurs
+    :rtype: boolean
     '''
     # changed the scope of this import
     # Benefit: other functions are not affected with this import
@@ -888,6 +944,16 @@ def delete_vm(username,
 
 
 def assign_public_ip(username=None, cloudname=None, serverid=None):
+    """
+    assigns a public ip to a VM of a cloud for a user
+    
+    :param username: user name
+    :type username: string
+    :param cloudname: cloud name
+    :type cloudname: string
+    :param serverid: VM id
+    :type serverid: string
+    """
 
     config = cm_config()
     mongo = cm_mongo()
@@ -912,7 +978,11 @@ def assign_public_ip(username=None, cloudname=None, serverid=None):
 
 class VMs(object):
     """
-    vm api 
+    vm api, including vm command line related functions
+    
+    Started developing by Mark Xiao. The class itself is unfinished but all the
+    finished functions are functioning. The reason of starting this class was 
+    to reorganize the vm functions, but it is half done due to the time shortage  
     """
     def __init__(self):
         self.config = cm_config()
@@ -927,7 +997,29 @@ class VMs(object):
                                detailed=True):
         """
         accept a dict of VMs, change some informtion and get it ready for
-        printing such as tables in CLI
+        printing out such as tables in command line
+        
+        :param vms_dict: a dict contains VM information, please refer to the 
+                         VM data in mongodb for the data format
+        :type vms_dict: dict
+        :param print_format: specify the print format, such as table or json
+        :type print_format: string
+        :param columns: specify the columns to show instead of showing the 
+                        entire data
+        :type columns: list
+        :param refresh: True to refresh the database before processing, the 
+                        database has to be refreshed before start processing 
+                        here. Since there are many places that refreshes the 
+                        database, so if there is a place in the program 
+                        refreshes shortly before calling this funtion, to avoid 
+                        redundant work, make this argument False
+        :type refresh: boolean
+        :param detailed: sometimes there is too much information to show and
+                         this makes the table view looks messy, so user can
+                         make this argument False to show only crucial 
+                         information
+        :type detailed: boolean
+        :return: print the VM information in various format
         """
         clouds_list = []
         if columns:
@@ -1009,6 +1101,21 @@ class VMs(object):
                 
                 
     def _helper_itemkeys(self, cm_type, detailed=True):
+        """
+        returns columns to print in VM information printing according to the 
+        cloud type
+        
+        :param cm_type: cloud type in cloudmesh
+        :type cm_type: string
+        :param detailed: sometimes there is too much information to show and
+                         this makes the table view looks messy, so user can
+                         make this argument False to show only crucial 
+                         information
+        :type detailed: boolean
+        :return: a list of column names. Besides, in each list, it contains the
+                 the path information to the data in the database
+        :rtype: list
+        """
         if detailed:
             itemkeys = {"openstack":
                         [
