@@ -66,7 +66,7 @@ def install_command(args):
     Usage:
         install -h | --help
         install --version
-        install cloudmesh
+        install cloudmesh [--force]
         install delete_yaml
         install system
         install query
@@ -83,7 +83,8 @@ def install_command(args):
     # print arguments
 
     if arguments["cloudmesh"]:
-        deploy()
+        force = arguments['--force']
+        deploy(force=force)
 
     elif arguments["new"]:
 
@@ -229,8 +230,12 @@ def file_from_template(file_template, file_out, values):
     out_file.close()
 
 
-def deploy():
-    """deploys the system on supported distributions"""
+def deploy(force=False):
+    """
+    Deploys the system.
+    If "force" is False (default) then deployment will only be done on
+    a supported system.
+    """
     # download()
 
     print "version_info", sys.version_info
@@ -242,8 +247,12 @@ def deploy():
         centos()
     elif is_osx():
         osx()
+    elif force:
+        print "WARNING: Installation on an unsupported system detected."
+        print "         Proceeding at your own risk."
+        install()
     else:
-        print "ERROR: OS distribution not supported"
+        print "ERROR: OS distribution not supported (use --force)"
         print "       please see documatation for manual"
         print "       installation instructions."
         sys.exit()
