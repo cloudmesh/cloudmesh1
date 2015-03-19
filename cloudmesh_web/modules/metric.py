@@ -3,7 +3,7 @@ from flask import render_template, request
 from flask.ext.login import login_required
 import requests
 import yaml
-from cloudmesh_common.logger import LOGGER
+from cloudmesh_base.logger import LOGGER
 from pprint import pprint
 from cloudmesh.config.ConfigDict import ConfigDict
 import json

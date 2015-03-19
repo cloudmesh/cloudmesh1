@@ -2,7 +2,7 @@ from __future__ import print_function
 from docopt import docopt
 from cloudmesh.user.cm_user import cm_user
 
-from cloudmesh_common.logger import LOGGER
+from cloudmesh_base.logger import LOGGER
 
 log = LOGGER(__file__)
 

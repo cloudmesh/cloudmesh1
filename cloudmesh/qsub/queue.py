@@ -1,7 +1,7 @@
 from __future__ import print_function
 from mongoengine import *
 from cloudmesh.config.cm_config import get_mongo_db, get_mongo_dbname_from_collection, DBConnFactory
-from cloudmesh_common.logger import LOGGER
+from cloudmesh_base.logger import LOGGER
 from pprint import pprint
 import json
 from cloudmesh.pbs.pbs import PBS

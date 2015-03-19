@@ -12,7 +12,7 @@ import cloudmesh
 from flask.ext.login import login_required
 import webbrowser
 from cloudmesh_common.util import address_string
-from cloudmesh_common.logger import LOGGER
+from cloudmesh_base.logger import LOGGER
 from pprint import pprint
 from compiler.ast import Return
 

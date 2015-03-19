@@ -4,7 +4,7 @@ from flask import Blueprint, g, render_template, request, redirect
 from flask.ext.login import login_required
 from pprint import pprint
 from cloudmesh.config.cm_keys import cm_keys_mongo
-from cloudmesh_common.logger import LOGGER
+from cloudmesh_base.logger import LOGGER
 
 log = LOGGER(__file__)
 

@@ -5,7 +5,7 @@ from cloudmesh.management.project import CLUSTERS as ProjectCLUSTERS, \
     PROVISIONING as ProjectPROVISIONING, Project as MongoProject, Projects, \
     SERVICES as ProjectSERVICES, STATUS as ProjectSTATUS
 from cloudmesh.management.user import User as MongoUser, Users
-from cloudmesh_common.logger import LOGGER
+from cloudmesh_base.logger import LOGGER
 from flask import Blueprint, render_template, request, flash, redirect
 from mongoengine import connect
 from wtforms import Form, validators, widgets

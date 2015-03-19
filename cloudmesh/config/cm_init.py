@@ -22,7 +22,7 @@ from jinja2 import Undefined
 JINJA2_ENVIRONMENT_OPTIONS = {'undefined': Undefined}
 
 
-from cloudmesh_common.logger import LOGGER
+from cloudmesh_base.logger import LOGGER
 
 config_dir = cloudmesh_install.__config_dir__
 

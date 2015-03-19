@@ -1,6 +1,6 @@
 from __future__ import print_function
 # from cloudmesh.experiment.model_group import ExperimentGroup
-from cloudmesh_common.logger import LOGGER
+from cloudmesh_base.logger import LOGGER
 from cloudmesh.user.cm_user import cm_user
 from cloudmesh.config.cm_config import cm_config
 from cloudmesh.cm_mongo import cm_mongo

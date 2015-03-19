@@ -4,7 +4,7 @@ from flask import Blueprint, g, render_template, request
 import cloudmesh
 from pprint import pprint
 from cloudmesh.iaas.openstack.cm_compute import openstack
-from cloudmesh_common.logger import LOGGER
+from cloudmesh_base.logger import LOGGER
 import json
 
 log = LOGGER(__file__)

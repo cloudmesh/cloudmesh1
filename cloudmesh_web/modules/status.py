@@ -6,7 +6,7 @@ import cloudmesh
 from flask.ext.login import login_required
 from datetime import datetime
 
-from cloudmesh_common.logger import LOGGER
+from cloudmesh_base.logger import LOGGER
 
 log = LOGGER(__file__)
 

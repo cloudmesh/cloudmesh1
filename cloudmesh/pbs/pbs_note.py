@@ -11,7 +11,7 @@ from copy import deepcopy
 from cloudmesh.pbs.pbs import PBS
 from cloudmesh.inventory import Inventory
 import json
-from cloudmesh_common.logger import LOGGER
+from cloudmesh_base.logger import LOGGER
 
 # ----------------------------------------------------------------------
 # SETTING UP A LOGGER

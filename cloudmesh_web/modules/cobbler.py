@@ -5,7 +5,7 @@ from cloudmesh.provisioner.baremetal_db import BaremetalDB
 from flask.ext.principal import Permission, RoleNeed
 import json
 import requests
-from cloudmesh_common.logger import LOGGER
+from cloudmesh_base.logger import LOGGER
 
 log = LOGGER(__file__)
 

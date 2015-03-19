@@ -3,7 +3,7 @@ from cloudmesh.config.ConfigDict import ConfigDict
 from cloudmesh.config.cm_config import cm_config
 from cloudmesh.pbs import tasks
 from cloudmesh.pbs.pbs_mongo import pbs_mongo
-from cloudmesh_common.logger import LOGGER
+from cloudmesh_base.logger import LOGGER
 from cloudmesh_common.util import address_string, cond_decorator
 from datetime import datetime
 from flask import Blueprint, render_template, request, redirect, flash

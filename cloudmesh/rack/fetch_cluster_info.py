@@ -11,7 +11,7 @@ import threading
 from cloudmesh.rack.queue.tasks import temperature, pbs_service
 from cloudmesh.rack.rack_progress import get_temperature_progress, get_service_progress
 
-from cloudmesh_common.logger import LOGGER
+from cloudmesh_base.logger import LOGGER
 
 
 log = LOGGER(__file__)

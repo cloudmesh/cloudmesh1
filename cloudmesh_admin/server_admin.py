@@ -16,7 +16,7 @@ import json
 import hostlist
 from cloudmesh_base.locations import config_file
 from cloudmesh.config.ConfigDict import ConfigDict
-from cloudmesh_common.logger import LOGGER
+from cloudmesh_base.logger import LOGGER
 import time
 from pprint import pprint
 

@@ -2,7 +2,7 @@ from os import listdir
 from os.path import isfile, join
 from flask import Blueprint
 import flask
-from cloudmesh_common.logger import LOGGER
+from cloudmesh_base.logger import LOGGER
 
 flatpages_module = Blueprint('flatpages_module', __name__)
 

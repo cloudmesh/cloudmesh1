@@ -23,7 +23,7 @@ from wtforms.fields import TextField, BooleanField, PasswordField
 from wtforms.validators import Required
 
 from cloudmesh_base.locations import config_file
-from cloudmesh_common.logger import LOGGER
+from cloudmesh_base.logger import LOGGER
 
 
 from flask.ext.principal import Permission, RoleNeed

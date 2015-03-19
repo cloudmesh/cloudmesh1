@@ -1,7 +1,7 @@
 from cloudmesh.inventory import Inventory
 from datetime import datetime, timedelta
 
-from cloudmesh_common.logger import LOGGER
+from cloudmesh_base.logger import LOGGER
 
 log = LOGGER(__file__)
 

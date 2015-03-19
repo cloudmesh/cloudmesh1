@@ -5,7 +5,7 @@ from cloudmesh.user.cm_user import cm_user
 from cloudmesh.config.cm_config import cm_config
 
 
-from cloudmesh_common.logger import LOGGER
+from cloudmesh_base.logger import LOGGER
 
 log = LOGGER(__file__)
 

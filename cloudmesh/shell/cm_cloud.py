@@ -1,5 +1,5 @@
 from __future__ import print_function
-from cloudmesh_common.logger import LOGGER
+from cloudmesh_base.logger import LOGGER
 from cmd3.console import Console
 from cloudmesh.config.cm_config import cm_config
 from cloudmesh.cm_mongo import cm_mongo

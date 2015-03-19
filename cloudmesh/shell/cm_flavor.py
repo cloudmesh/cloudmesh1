@@ -4,7 +4,7 @@ from docopt import docopt
 
 from cloudmesh.cm_mongo import cm_mongo
 from cloudmesh.config.cm_config import cm_config
-from cloudmesh_common.logger import LOGGER
+from cloudmesh_base.logger import LOGGER
 from tabulate import tabulate
 
 log = LOGGER(__file__)

@@ -1,5 +1,5 @@
 # from cloudmesh.util.gitinfo import GitInfo
-from cloudmesh_common.logger import LOGGER
+from cloudmesh_base.logger import LOGGER
 from flask import Blueprint, render_template
 from sh import git
 import requests

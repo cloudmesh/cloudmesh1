@@ -7,7 +7,7 @@ from flask.ext.principal import Permission, RoleNeed
 from cloudmesh.config.cm_config import cm_config
 import subprocess
 from pprint import pprint
-from cloudmesh_common.logger import LOGGER
+from cloudmesh_base.logger import LOGGER
 
 LOG_MSG = LOGGER(__file__)
 launch_module = Blueprint('launch  _module', __name__)

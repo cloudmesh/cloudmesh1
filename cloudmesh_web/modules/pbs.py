@@ -6,7 +6,7 @@ from flask.ext.login import login_required
 from cloudmesh.pbs.pbs_mongo import pbs_mongo
 from flask.ext.principal import Permission, RoleNeed
 
-from cloudmesh_common.logger import LOGGER
+from cloudmesh_base.logger import LOGGER
 
 log = LOGGER(__file__)
 

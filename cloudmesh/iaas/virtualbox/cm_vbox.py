@@ -2,7 +2,7 @@ from sh import VBoxManage
 from collections import OrderedDict
 from pprint import pprint
 from cloudmesh.iaas.ComputeBaseType import ComputeBaseType
-from cloudmesh_common.logger import LOGGER
+from cloudmesh_base.logger import LOGGER
 
 
 log = LOGGER(__file__)

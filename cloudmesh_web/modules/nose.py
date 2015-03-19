@@ -1,5 +1,5 @@
 from ast import literal_eval
-from cloudmesh_common.logger import LOGGER
+from cloudmesh_base.logger import LOGGER
 from cloudmesh.util.ping import ping
 from cloudmesh_common.util import cond_decorator
 from datetime import datetime

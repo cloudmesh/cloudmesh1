@@ -7,7 +7,7 @@ import requests
 import json
 from time import sleep
 import threading
-from cloudmesh_common.logger import LOGGER
+from cloudmesh_base.logger import LOGGER
 #
 # SETTING UP A LOGGER
 #
