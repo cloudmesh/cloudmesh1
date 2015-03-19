@@ -3,6 +3,7 @@ from __future__ import print_function
 from cloudmesh_base.locations import config_file
 
 import cloudmesh_install
+import cloudmesh_base.locations
 import glob
 import shutil
 from jinja2.runtime import Undefined
@@ -24,7 +25,7 @@ JINJA2_ENVIRONMENT_OPTIONS = {'undefined': Undefined}
 
 from cloudmesh_base.logger import LOGGER
 
-config_dir = cloudmesh_install.__config_dir__
+config_dir = cloudmesh_base.locations.__config_dir__
 
 log = LOGGER(__file__)
 
