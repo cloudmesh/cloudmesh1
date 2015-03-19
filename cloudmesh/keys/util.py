@@ -2,7 +2,7 @@ from __future__ import print_function
 import base64
 import hashlib
 import struct
-from cloudmesh_install.util import path_expand
+from cloudmesh_base.util import path_expand
 
 
 def read_key(filename):

@@ -6,10 +6,10 @@ from cloudmesh.shell.Shell import Shell
 from cloudmesh.config.cm_config import cm_config_server
 from cloudmesh.util.password import get_password, get_user, get_host
 from cloudmesh.util.menu import ascii_menu
-from cloudmesh_install.util import yn_choice, path_expand
+from cloudmesh_base.util import yn_choice, path_expand
 from pprint import pprint
 from cloudmesh_common.util import PROGRESS
-from cloudmesh_common.logger import LOGGER
+from cloudmesh_base.logger import LOGGER
 log = LOGGER(__file__)
 
 debug = True

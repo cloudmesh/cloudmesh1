@@ -1,6 +1,6 @@
 from __future__ import print_function
 from cloudmesh.cm_mongo import cm_mongo
-from cloudmesh_install import config_file
+from cloudmesh_base.locations import config_file
 from cloudmesh.user.cm_user import cm_user
 from cloudmesh.config.cm_config import cm_config
 from pprint import pprint

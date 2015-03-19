@@ -1,7 +1,7 @@
 from __future__ import print_function
 import re
 import cloudmesh
-from cloudmesh_install import config_file
+from cloudmesh_base.locations import config_file
 
 class YAML(object):
     """

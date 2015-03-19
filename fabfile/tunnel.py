@@ -1,5 +1,5 @@
 from fabric.api import task, local, settings, hide
-from cloudmesh.config.ConfigDict import ConfigDict
+from cloudmesh_base.ConfigDict import ConfigDict
 from cloudmesh.config.cm_config import cm_config_server
 from sh import kill
 from sh import sudo

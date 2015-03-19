@@ -4,8 +4,8 @@ from string import Template
 from cloudmesh.keys.util import get_fingerprint, key_fingerprint, key_validate, _keyname_sanitation
 from cloudmesh.cm_mongo import cm_mongo
 import os
-from cloudmesh_install.util import path_expand
-from cloudmesh_common.logger import LOGGER
+from cloudmesh_base.util import path_expand
+from cloudmesh_base.logger import LOGGER
 
 
 log = LOGGER(__file__)
