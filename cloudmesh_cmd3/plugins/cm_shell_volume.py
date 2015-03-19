@@ -2,7 +2,7 @@ from __future__ import print_function
 import os
 import sys
 from cmd3.shell import command
-from cloudmesh_common.logger import LOGGER
+from cloudmesh_base.logger import LOGGER
 from cloudmesh_common.tables import row_table
 from cmd3.console import Console
 

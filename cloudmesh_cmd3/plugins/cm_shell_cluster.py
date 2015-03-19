@@ -15,7 +15,7 @@ from cloudmesh.config.cm_keys import cm_keys_mongo
 from cloudmesh.shell.cm_cloud import CloudManage
 from cloudmesh.util.ssh import generate_keypair
 from cloudmesh.keys.util import _keyname_sanitation
-from cloudmesh_common.logger import LOGGER
+from cloudmesh_base.logger import LOGGER
 from cloudmesh_common.util import get_rand_string
 from cloudmesh_install.util import yn_choice
 from cloudmesh.shell.shellutil import (shell_commands_dict_output,
