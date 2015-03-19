@@ -31,7 +31,7 @@ from hashlib import sha256
 from Crypto.Cipher import AES
 from base64 import b64encode, b64decode
 import uuid
-from cloudmesh_install import config_file_prefix
+from cloudmesh_base.locations import config_file_prefix
 
 
 def pad(data, bs):

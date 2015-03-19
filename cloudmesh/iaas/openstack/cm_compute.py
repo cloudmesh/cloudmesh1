@@ -22,7 +22,7 @@ from cloudmesh.config.cm_config import cm_config_server
 from cloudmesh.config.cm_config import cm_config_flavor
 from cloudmesh.iaas.ComputeBaseType import ComputeBaseType
 
-from cloudmesh_common.logger import LOGGER
+from cloudmesh_base.logger import LOGGER
 
 # import novaclient
 # from novaclient.openstack.common import strutils

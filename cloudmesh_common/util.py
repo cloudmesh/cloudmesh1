@@ -18,7 +18,7 @@ configuration files that are not yet present at the tome of the first
 instalation.
 """
 from __future__ import print_function
-from cloudmesh_install.util import path_expand
+from cloudmesh_base.util import path_expand
 import inspect
 import os
 import sys
@@ -28,8 +28,8 @@ import functools
 import string
 import random
 from cloudmesh_base.util import banner
-from cloudmesh_install.util import grep
-from cloudmesh_install import config_file
+from cloudmesh_base.util import grep
+from cloudmesh_base.locations import config_file
 
 try:
     from progress.bar import Bar
@@ -43,17 +43,6 @@ except:
         print(70 * "=")
         print("please make sure that a virtualenv and pip are installed")
         sys.exit()
-
-
-class dotdict(dict):
-    """dot.notation access to dictionary attributes"""
-
-    def __getattr__(self, attr):
-        return self.get(attr)
-
-    __setattr__= dict.__setitem__
-
-    __delattr__= dict.__delitem__
 
 class PROGRESS(object):
 
@@ -73,41 +62,6 @@ class PROGRESS(object):
     @classmethod
     def finish(cls):
         cls.bar.finish()
-
-
-def backup_name(filename):
-    """
-    :param filename: given a filename creates a backupname of the form
-                     filename.back.1. If the filename already exists
-                     the number will be increasd as  much as needed so
-                     the file does not exist in the given location.
-                     The filename can consists a path and is expanded
-                     with ~ and environment variables.
-    :type filename: string
-    :rtype: string
-    """
-    location = path_expand(filename)
-    n = 0
-    found = True
-    while found:
-        n = n + 1
-        backup = "{0}.bak.{1}".format(location, n)
-        found = os.path.isfile(backup)
-    return backup
-
-
-def HEADING(txt=None):
-    """
-    Prints a message to stdout with #### surrounding it. This is useful for
-    nosetests to better distinguish them.
-
-    :param txt: a text message to be printed
-    :type txt: string
-    """
-    if txt is None:
-        txt = inspect.getouterframes(inspect.currentframe())[1][3]
-
-    banner(txt)
 
 
 def cat(filename):

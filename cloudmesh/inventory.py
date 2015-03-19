@@ -1,14 +1,14 @@
 from __future__ import print_function
 from cloudmesh.config.cm_config import cm_config_server
-from cloudmesh_install import config_file
-from cloudmesh_common.logger import LOGGER
+from cloudmesh_base.locations import config_file
+from cloudmesh_base.logger import LOGGER
 from hostlist import expand_hostlist
 from pprint import pprint
 import sys
 from cloudmesh_install.util import path_expand as cm_path_expand
 from cloudmesh.config.cm_config import cm_config_server
 from cloudmesh.config.cm_config import get_mongo_db
-from cloudmesh.config.ConfigDict import ConfigDict
+from cloudmesh_base.ConfigDict import ConfigDict
 from datetime import datetime, timedelta
 from cloudmesh.provisioner.baremetal_db import BaremetalDB
 from cloudmesh.provisioner.baremetal_computer import BaremetalComputer

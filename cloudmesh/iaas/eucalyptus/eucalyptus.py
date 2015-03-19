@@ -18,7 +18,7 @@ import urlparse
 from cloudmesh.util.cm_table import cm_table
 from cloudmesh.config.cm_config import cm_config
 from cloudmesh.iaas.ComputeBaseType import ComputeBaseType
-from cloudmesh_install import config_file
+from cloudmesh_base.locations import config_file
 
 
 class eucalyptus(ComputeBaseType):

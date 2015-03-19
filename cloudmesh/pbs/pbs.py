@@ -11,7 +11,7 @@ import yaml
 import sys
 import re
 
-from cloudmesh_common.logger import LOGGER
+from cloudmesh_base.logger import LOGGER
 
 log = LOGGER(__file__)
 

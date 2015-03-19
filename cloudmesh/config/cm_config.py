@@ -1,17 +1,17 @@
 from __future__ import print_function
-from cloudmesh.config.ConfigDict import ConfigDict
+from cloudmesh_base.ConfigDict import ConfigDict
 # from cloudmesh.util.config import read_yaml_config
-from cloudmesh_common.logger import LOGGER
+from cloudmesh_base.logger import LOGGER
 # from cloudmesh_common.util import check_file_for_tabs, deprecated, path_expand
 
 from cloudmesh_common.util import deprecated
 
-from cloudmesh_install.util import path_expand
+from cloudmesh_base.util import path_expand
 
 from pymongo import MongoClient
 from mongoengine import connect
 import os
-from cloudmesh_install import config_file
+from cloudmesh_base.locations import config_file
 import traceback
 
 log = LOGGER(__file__)

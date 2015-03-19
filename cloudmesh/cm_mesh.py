@@ -1,7 +1,7 @@
 from __future__ import print_function
 import json
-from cloudmesh_common.util import HEADING
-from cloudmesh_common.logger import LOGGER
+from cloudmesh_base.util import HEADING
+from cloudmesh_base.logger import LOGGER
 
 # ----------------------------------------------------------------------
 # SETTING UP A LOGGER

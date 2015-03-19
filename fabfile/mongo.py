@@ -5,9 +5,9 @@ from cloudmesh.cm_mongo import cm_mongo
 from cloudmesh.config.cm_config import cm_config, cm_config_server
 from cloudmesh.user.cm_userLDAP import cm_userLDAP
 from cloudmesh.pbs.pbs_mongo import pbs_mongo
-from cloudmesh_install.util import path_expand
-from cloudmesh_install.util import banner
-from cloudmesh_install.util import yn_choice
+from cloudmesh_base.util import path_expand
+from cloudmesh_base.util import banner
+from cloudmesh_base.util import yn_choice
 from cloudmesh.inventory import Inventory
 import sys
 import os

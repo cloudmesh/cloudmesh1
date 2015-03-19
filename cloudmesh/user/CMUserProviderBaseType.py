@@ -1,5 +1,5 @@
 from cloudmesh.config.cm_config import cm_config_server, get_mongo_db
-from cloudmesh_common.logger import LOGGER
+from cloudmesh_base.logger import LOGGER
 import pymongo
 
 

@@ -1,7 +1,7 @@
 from __future__ import with_statement
 
 import sys
-from cloudmesh_common.logger import LOGGER
+from cloudmesh_base.logger import LOGGER
 from cloudmesh_base.util import banner
 from cloudmesh_base.locations import config_file
 from cloudmesh_common.util import PROGRESS
