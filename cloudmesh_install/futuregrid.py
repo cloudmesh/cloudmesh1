@@ -1,4 +1,4 @@
-from cloudmesh_install.util import banner
+from cloudmesh_base.util import banner
 from cloudmesh_install import config_file
 from paramiko import SSHClient, AutoAddPolicy, BadHostKeyException
 from paramiko import AuthenticationException, SSHException

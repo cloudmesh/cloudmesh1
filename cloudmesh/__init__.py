@@ -41,9 +41,7 @@ from cloudmesh.cm_mongo import cm_mongo
 # from cloudmesh.cm_mongo2 import cm_mongo2
 
 from cloudmesh.cm_mesh import cm_mesh
-from cloudmesh_install.util import banner
-from cloudmesh_install.util import path_expand
-from cloudmesh_install.util import yn_choice
+from cloudmesh_base.util import banner, path_expand, yn_choice
 
 #from cloudmesh_install.util import grep
 
