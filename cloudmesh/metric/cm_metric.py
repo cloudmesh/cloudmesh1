@@ -2,7 +2,7 @@
 from docopt import docopt
 from cloudmesh.metric.api.metric import metric_api
 
-from cloudmesh_common.logger import LOGGER
+from cloudmesh_base.logger import LOGGER
 
 log = LOGGER(__file__)
 
