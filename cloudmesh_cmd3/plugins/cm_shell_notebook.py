@@ -4,7 +4,7 @@ from cmd3.shell import command
 from cloudmesh_base.logger import LOGGER
 from IPython.lib import passwd
 from shutil import copyfile
-from cloudmesh_install.util import path_expand
+from cloudmesh_base.util import path_expand
 import os
 import sh
 

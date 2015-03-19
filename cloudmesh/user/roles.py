@@ -3,7 +3,7 @@ from cloudmesh.config.cm_config import cm_config, \
     cm_config_server, \
     get_mongo_db
 from cloudmesh_base.logger import LOGGER
-from cloudmesh_install.util import path_expand
+from cloudmesh_base.util import path_expand
 import yaml
 
 
