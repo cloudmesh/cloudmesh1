@@ -2,7 +2,7 @@ from __future__ import print_function
 from abc import ABCMeta, abstractmethod
 from multiprocessing import Pool
 import logging
-from cloudmesh_common.logger import LOGGER
+from cloudmesh_base.logger import LOGGER
 import time
 from random import randrange
 from cloudmesh.inventory import Inventory

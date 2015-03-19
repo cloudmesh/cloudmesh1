@@ -6,7 +6,7 @@ from baremetal_status import BaremetalStatus
 from baremetal_policy import BaremetalPolicy
 from hostlist import expand_hostlist, collect_hostlist
 from datetime import datetime
-from cloudmesh_common.logger import LOGGER
+from cloudmesh_base.logger import LOGGER
 #
 # SETTING UP A LOGGER
 #
