@@ -195,7 +195,7 @@ def web(server="server", browser='yes'):
 @task
 def view(link=""):
     """run the browser"""
-    from cloudmesh.config.ConfigDict import ConfigDict
+    from cloudmesh_base.ConfigDict import ConfigDict
 
     server_config = ConfigDict(filename=config_file("/cloudmesh_server.yaml"))
 

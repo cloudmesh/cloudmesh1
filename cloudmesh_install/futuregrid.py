@@ -258,7 +258,7 @@ def fetchrc(userid=None, outdir=None):
 
     '''
     try:
-        from cloudmesh.config.ConfigDict import ConfigDict
+        from cloudmesh_base.ConfigDict import ConfigDict
     except Exception, e:
         print "ERROR: your have not yet configured cloudmesh completely. "
         print "       Have you called"

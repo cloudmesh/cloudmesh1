@@ -1,5 +1,5 @@
 from cloudmesh.cm_mongo import cm_mongo
-from cloudmesh.config.ConfigDict import ConfigDict
+from cloudmesh_base.ConfigDict import ConfigDict
 from cloudmesh.config.cm_config import cm_config
 from cloudmesh.pbs import tasks
 from cloudmesh.pbs.pbs_mongo import pbs_mongo

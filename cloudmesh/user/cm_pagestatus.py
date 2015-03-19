@@ -1,7 +1,7 @@
 from __future__ import print_function
 from cloudmesh_base.logger import LOGGER
 from cloudmesh.cm_mongo import cm_MongoBase
-from cloudmesh.config.ConfigDict import ConfigDict
+from cloudmesh_base.ConfigDict import ConfigDict
 import os
 from pprint import pprint
 

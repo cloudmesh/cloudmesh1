@@ -4,7 +4,7 @@ from cloudmesh.util.stopwatch import StopWatch
 from cloudmesh_base.util import banner
 from pprint import pprint
 from cloudmesh.config.cm_config import cm_config
-from cloudmesh.config.ConfigDict import ConfigDict
+from cloudmesh_base.ConfigDict import ConfigDict
 import sys
 
 config = ConfigDict(

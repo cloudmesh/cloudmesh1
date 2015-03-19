@@ -1,6 +1,6 @@
 from __future__ import print_function
 from cloudmesh.config.cm_config import cm_config, cm_config_server, get_mongo_db
-# from cloudmesh.config.ConfigDict import ConfigDict
+# from cloudmesh_base.ConfigDict import ConfigDict
 from cloudmesh.iaas.eucalyptus.eucalyptus import eucalyptus
 from cloudmesh.iaas.openstack.cm_compute import openstack
 from cloudmesh.iaas.ec2.cm_compute import ec2

@@ -10,7 +10,7 @@ nosetests -v
 
 from cloudmesh.config.cm_config import cm_config_server
 from cloudmesh.config.cm_config import cm_config
-from cloudmesh.config.ConfigDict import ConfigDict
+from cloudmesh_base.ConfigDict import ConfigDict
 
 import json
 import os

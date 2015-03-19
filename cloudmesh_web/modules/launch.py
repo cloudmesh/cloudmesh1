@@ -1,7 +1,7 @@
 from cloudmesh_base.locations import config_file
 from flask import Blueprint, g, render_template, request
 from flask.ext.login import login_required
-from cloudmesh.config.ConfigDict import ConfigDict
+from cloudmesh_base.ConfigDict import ConfigDict
 from cloudmesh.launcher.cm_launcher_db import cm_launcher_db
 from flask.ext.principal import Permission, RoleNeed
 from cloudmesh.config.cm_config import cm_config

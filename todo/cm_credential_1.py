@@ -1,4 +1,4 @@
-from cloudmesh.config.ConfigDict import ConfigDict
+from cloudmesh_base.ConfigDict import ConfigDict
 from cloudmesh.config.cm_config import get_mongo_db
 from cloudmesh_base.logger import LOGGER
 from cloudmesh_base.util import banner

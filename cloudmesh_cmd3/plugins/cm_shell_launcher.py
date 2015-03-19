@@ -7,7 +7,7 @@ from cloudmesh_base.util import path_expand
 from cloudmesh_base.logger import LOGGER
 # from cloudmesh_common.tables import row_table
 from cloudmesh_common.util import get_rand_string
-from cloudmesh.config.ConfigDict import ConfigDict
+from cloudmesh_base.ConfigDict import ConfigDict
 from cloudmesh.config.cm_config import cm_config
 from cloudmesh.user.cm_user import cm_user
 from cloudmesh.cm_mongo import cm_mongo
