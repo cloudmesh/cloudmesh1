@@ -7,7 +7,7 @@ from cloudmesh.provisioner.queue.celery import celery_provisiner_queue
 from cloudmesh.provisioner.queue.tasks import provision
 from cloudmesh_common.logger import LOGGER
 from cloudmesh_common.util import cond_decorator
-from cloudmesh_install.util import path_expand
+from cloudmesh_base.util import path_expand
 from datetime import datetime
 from flask import Blueprint, render_template, redirect, flash
 from flask.ext.login import login_required

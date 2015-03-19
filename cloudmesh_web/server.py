@@ -8,7 +8,7 @@ from cloudmesh.user.cm_user import cm_user
 from cloudmesh.user.cm_userLDAP import cm_userLDAP, get_ldap_user_from_yaml
 from cloudmesh.user.roles import Roles
 from cloudmesh_base.util import banner
-from cloudmesh_install.util import path_expand
+from cloudmesh_base.util import path_expand
 from cloudmesh_common.util import cond_decorator
 from datetime import datetime
 from flask import Flask, current_app, request, session, Flask, render_template, \

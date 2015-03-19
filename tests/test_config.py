@@ -18,7 +18,7 @@ import warnings
 from pprint import pprint
 
 from cloudmesh_base.util import HEADING
-from cloudmesh_install.util import path_expand
+from cloudmesh_base.util import path_expand
 from cloudmesh_install import config_file
 
 

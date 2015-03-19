@@ -10,7 +10,7 @@ from matplotlib.lines import Line2D
 import matplotlib.patches as patches
 
 from cloudmesh_base.ConfigDict import ConfigDict
-from cloudmesh_install.util import path_expand as cm_path_expand
+from cloudmesh_base.util import path_expand as cm_path_expand
 from cloudmesh.rack.rack_progress import get_temperature_progress, get_service_progress
 from jinja2 import Template
 from hostlist import expand_hostlist

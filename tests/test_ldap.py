@@ -14,7 +14,7 @@ import getpass
 from cloudmesh.user.cm_userLDAP import cm_userLDAP
 from cloudmesh_base.util import HEADING
 from cloudmesh.config.ConfigDict import ConfigDict
-from cloudmesh_install.util import path_expand
+from cloudmesh_base.util import path_expand
 
 from pprint import pprint
 from cloudmesh_install import config_file
