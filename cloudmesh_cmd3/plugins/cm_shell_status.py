@@ -1,6 +1,6 @@
 from __future__ import print_function
 from cmd3.shell import command
-from cloudmesh_common.logger import LOGGER
+from cloudmesh_base.logger import LOGGER
 from pprint import pprint
 from cloudmesh.cm_mongo import cm_mongo_status
 # from cloudmesh_common.tables import two_column_table

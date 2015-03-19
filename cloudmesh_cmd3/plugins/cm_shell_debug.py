@@ -1,7 +1,7 @@
 from __future__ import print_function
 from cmd3.shell import command
 from cloudmesh.config.cm_config import cm_config_server
-from cloudmesh_common.logger import LOGGER
+from cloudmesh_base.logger import LOGGER
 
 log = LOGGER(__file__)
 

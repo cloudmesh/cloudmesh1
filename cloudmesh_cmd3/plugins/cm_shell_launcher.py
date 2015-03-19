@@ -4,7 +4,7 @@ import sys
 import traceback
 from pprint import pprint
 from cloudmesh_install.util import path_expand
-from cloudmesh_common.logger import LOGGER
+from cloudmesh_base.logger import LOGGER
 # from cloudmesh_common.tables import row_table
 from cloudmesh_common.util import get_rand_string
 from cloudmesh.config.ConfigDict import ConfigDict

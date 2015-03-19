@@ -1,7 +1,7 @@
 from __future__ import print_function
 # import subprocess
 from cmd3.shell import command
-from cloudmesh_common.logger import LOGGER
+from cloudmesh_base.logger import LOGGER
 from IPython.lib import passwd
 from shutil import copyfile
 from cloudmesh_install.util import path_expand
