@@ -29,7 +29,7 @@ import string
 import random
 from cloudmesh_base.util import banner
 from cloudmesh_install.util import grep
-from cloudmesh_install import config_file
+from cloudmesh_base.locations import config_file
 
 try:
     from progress.bar import Bar

@@ -12,7 +12,7 @@ from cloudmesh_common.tables import two_column_table
 # from cloudmesh.util.menu import menu_return_num
 from os import listdir
 from os.path import expanduser, isfile, abspath
-from cloudmesh_install import config_file
+from cloudmesh_base.locations import config_file
 from cloudmesh_install.util import path_expand
 # from cloudmesh.util.keys import read_key
 from cloudmesh.keys.util import get_fingerprint, key_parse, key_validate

@@ -1,4 +1,4 @@
-from cloudmesh_install import config_file
+from cloudmesh_base.locations import config_file
 import logging
 import os
 from cloudmesh_install.util import grep

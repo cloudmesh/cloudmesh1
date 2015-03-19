@@ -16,7 +16,7 @@ from cmd3.console import Console
 from cloudmesh.shell.shellutil import shell_commands_dict_output
 from cloudmesh.util.config import ordered_dump
 from cloudmesh_common.util import dict_uni_to_ascii
-from cloudmesh_install import config_file
+from cloudmesh_base.locations import config_file
 from cloudmesh.keys.util import _keyname_sanitation
 from cloudmesh.util.ssh import generate_keypair
 from cloudmesh.config.cm_keys import cm_keys_mongo

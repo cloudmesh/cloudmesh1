@@ -2,7 +2,7 @@ from __future__ import print_function
 from cmd3.shell import command
 from cloudmesh.user.cm_user import cm_user
 from cloudmesh.config.cm_projects import cm_projects
-from cloudmesh_install import config_file
+from cloudmesh_base.locations import config_file
 from cloudmesh_common.tables import two_column_table, print_format_dict
 from cloudmesh_common.logger import LOGGER
 import json

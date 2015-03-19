@@ -14,7 +14,7 @@ from fabric.api import task, local, settings, hide
 import subprocess
 import json
 import hostlist
-from cloudmesh_install import config_file
+from cloudmesh_base.locations import config_file
 from cloudmesh.config.ConfigDict import ConfigDict
 from cloudmesh_common.logger import LOGGER
 import time

@@ -12,7 +12,7 @@ from pprint import pprint
 import cloudmesh
 from flask.ext.principal import Permission, RoleNeed
 import traceback
-from cloudmesh_install import config_file
+from cloudmesh_base.locations import config_file
 
 log = LOGGER(__file__)
 
