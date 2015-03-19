@@ -17,7 +17,7 @@ from cloudmesh.util.ssh import generate_keypair
 from cloudmesh.keys.util import _keyname_sanitation
 from cloudmesh_base.logger import LOGGER
 from cloudmesh_common.util import get_rand_string
-from cloudmesh_install.util import yn_choice
+from cloudmesh_base.util import yn_choice
 from cloudmesh.shell.shellutil import (shell_commands_dict_output,
         ALLOWED_PRINT_FORMAT)
 from cloudmesh.experiment.group import GroupManagement
