@@ -3,7 +3,7 @@ from cloudmesh.config.cm_config import cm_config_server
 from cloudmesh_base.util import banner
 import os
 import sys
-from cloudmesh_install.util import path_expand
+from cloudmesh_base.util import path_expand
 
 from cloudmesh.shell.Shell import Shell
 
