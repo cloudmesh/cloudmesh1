@@ -6,7 +6,7 @@
 #    changes the ~/.cloudmesh/cloudmesh_server.yaml
 import sys
 from cloudmesh.config.cm_config import cm_config
-from cloudmesh_install import config_file
+from cloudmesh_base.locations import config_file
 
 filename = config_file("/cloudmesh_server.yaml")
 

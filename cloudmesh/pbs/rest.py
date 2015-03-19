@@ -15,13 +15,13 @@
 from cloudmesh.pbs.pbs import PBS
 from cloudmesh.pbs.pbs_mongo import pbs_mongo
 
-from cloudmesh.config.ConfigDict import ConfigDict
+from cloudmesh_base.ConfigDict import ConfigDict
 from pprint import pprint
 
 from flask import Flask, jsonify
 from flask.ext import restful
 from flask.ext.restful import reqparse
-from cloudmesh_install import config_file
+from cloudmesh_base.locations import config_file
 
 version = "v1.0"
 

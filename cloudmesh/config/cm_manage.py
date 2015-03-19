@@ -1,6 +1,5 @@
 #! /usr/bin/env python
 from __future__ import print_function
-from cloudmesh_install import config_file
 from pprint import pprint
 import getpass
 import yaml
@@ -15,8 +14,7 @@ from getpass import getpass
 from cloudmesh import yn_choice, path_expand, banner
 from cloudmesh.user.cm_user import cm_user
 from cloudmesh_base.ConfigDict import ConfigDict
-from cloudmesh_install import config_file
-from cloudmesh_install import config_file_prefix
+from cloudmesh_base.locations import config_file, config_file_prefix
 
 debug = True
 

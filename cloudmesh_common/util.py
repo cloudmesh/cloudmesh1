@@ -28,7 +28,11 @@ import functools
 import string
 import random
 from cloudmesh_base.util import banner
+<<<<<<< HEAD
 from cloudmesh_base.util import grep
+=======
+from cloudmesh_install.util import grep
+>>>>>>> 064ba72f1b3aa55be61ad705ca2a066e2731232e
 from cloudmesh_base.locations import config_file
 
 try:

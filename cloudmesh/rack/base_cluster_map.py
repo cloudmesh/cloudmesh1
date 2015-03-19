@@ -1,7 +1,7 @@
 """
 Base class for different .diag render with rackdiag
 """
-from cloudmesh_install import config_file
+from cloudmesh_base.locations import config_file
 import matplotlib
 # matplotlib.use("SVG")
 import matplotlib.pyplot as plt
@@ -9,7 +9,7 @@ from matplotlib.path import Path
 from matplotlib.lines import Line2D
 import matplotlib.patches as patches
 
-from cloudmesh.config.ConfigDict import ConfigDict
+from cloudmesh_base.ConfigDict import ConfigDict
 from cloudmesh_install.util import path_expand as cm_path_expand
 from cloudmesh.rack.rack_progress import get_temperature_progress, get_service_progress
 from jinja2 import Template
@@ -28,7 +28,7 @@ from PIL import Image
 from pprint import pprint
 
 
-from cloudmesh_common.logger import LOGGER
+from cloudmesh_base.logger import LOGGER
 
 log = LOGGER(__file__)
 

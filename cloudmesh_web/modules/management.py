@@ -12,7 +12,7 @@ from wtforms import Form, validators, widgets
 from wtforms.fields import BooleanField, TextField, TextAreaField, PasswordField, \
     SelectMultipleField, StringField, RadioField
 from cloudmesh.config.ConfigDict import ConfigDict
-from cloudmesh_install import config_file
+from cloudmesh_base.locations import config_file
 from wtforms.validators import ValidationError
 from flask.ext.login import login_required
 import yaml

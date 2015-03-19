@@ -1,4 +1,4 @@
-from cloudmesh_install import config_file
+from cloudmesh_base.locations import config_file
 from cloudmesh.config.cm_config import cm_config, cm_config_server
 from cloudmesh.rack.cluster_map_heat import HeatClusterMap
 from cloudmesh.rack.cluster_map_service import ServiceClusterMap

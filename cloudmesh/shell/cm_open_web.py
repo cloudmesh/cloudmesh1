@@ -1,10 +1,10 @@
 from __future__ import print_function
-from cloudmesh_common.logger import LOGGER
+from cloudmesh_base.logger import LOGGER
 from docopt import docopt
-from cloudmesh.config.ConfigDict import ConfigDict
+from cloudmesh_base.ConfigDict import ConfigDict
 import os
 import sys
-from cloudmesh_install import config_file
+from cloudmesh_base.locations import config_file
 
 log = LOGGER(__file__)
 

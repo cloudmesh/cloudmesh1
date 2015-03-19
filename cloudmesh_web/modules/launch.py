@@ -1,4 +1,4 @@
-from cloudmesh_install import config_file
+from cloudmesh_base.locations import config_file
 from flask import Blueprint, g, render_template, request
 from flask.ext.login import login_required
 from cloudmesh.config.ConfigDict import ConfigDict

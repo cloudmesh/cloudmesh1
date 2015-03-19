@@ -4,7 +4,7 @@
 """
 
 import yaml
-from cloudmesh_install import config_file
+from cloudmesh_base.locations import config_file
 
 DB_CLASS_FIELDS = ""
 DB_CLASS_DICT = {}
