@@ -17,7 +17,7 @@ from cloudmesh.config.ConfigDict import ConfigDict
 from cloudmesh_base.util import path_expand
 
 from pprint import pprint
-from cloudmesh_install import config_file
+from cloudmesh_base.locations import config_file
 
 
 class Test_cloudmesh:

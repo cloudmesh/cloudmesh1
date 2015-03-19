@@ -25,7 +25,7 @@ import json
 from pprint import pprint
 
 from cloudmesh_base.util import HEADING
-from cloudmesh_install import config_file
+from cloudmesh_base.locations import config_file
 
 
 class Test:

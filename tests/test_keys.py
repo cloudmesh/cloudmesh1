@@ -12,7 +12,7 @@ import os
 from cloudmesh.config.cm_keys import cm_keys_yaml, keytype
 from cloudmesh_base.util import HEADING
 from cloudmesh.util.keys import get_fingerprint
-from cloudmesh_install import config_file
+from cloudmesh_base.locations import config_file
 
 
 class Test_cloudmesh:
