@@ -1,12 +1,12 @@
 #! /usr/bin/env python
 from __future__ import print_function
-from cloudmesh_install import config_file
+from cloudmesh_base.locations import config_file
 
 import cloudmesh_install
 import glob
 import shutil
 from jinja2.runtime import Undefined
-from cloudmesh.config.ConfigDict import ConfigDict
+from cloudmesh_base.ConfigDict import ConfigDict
 import json
 from docopt import docopt
 from cloudmesh.config.cm_config import cm_config

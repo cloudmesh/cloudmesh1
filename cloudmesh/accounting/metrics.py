@@ -19,7 +19,7 @@ from cloudmesh.iaas.openstack.cm_compute import openstack
 from cloudmesh.iaas.eucalyptus.eucalyptus_new import eucalyptus
 from cloudmesh.iaas.azure.cm_azure import cm_azure as azure
 
-from cloudmesh_install import config_file
+from cloudmesh_base.locations import config_file
 
 try:
     # from sh import fgmetric

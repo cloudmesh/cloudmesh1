@@ -1,16 +1,15 @@
 from __future__ import print_function
-from cloudmesh_install import config_file
+from cloudmesh_base.locations import config_file
 from jinja2 import UndefinedError
 import sys
 import yaml
 from jinja2 import Template
-from cloudmesh_install.util import path_expand
-from cloudmesh_base.util import banner
-from cloudmesh.config.ConfigDict import ConfigDict
+from cloudmesh_base.util import path_expand, banner
+from cloudmesh_base.ConfigDict import ConfigDict
 import yaml
 from sh import grep as _grep
 from pprint import pprint
-from cloudmesh_common.logger import LOGGER
+from cloudmesh_base.logger import LOGGER
 
 
 # ----------------------------------------------------------------------

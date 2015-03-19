@@ -1,5 +1,5 @@
 from fabric.api import task, local
-from cloudmesh.config.ConfigDict import ConfigDict
+from cloudmesh_base.ConfigDict import ConfigDict
 from cloudmesh_base.locations import config_file
 
 @task

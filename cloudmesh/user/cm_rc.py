@@ -3,7 +3,7 @@ import os
 import sys
 import glob
 from pprint import pprint
-from cloudmesh_install import config_file
+from cloudmesh_base.locations import config_file
 from ConfigParser import SafeConfigParser, NoOptionError
 
 def get_rcfiles(fpath=None):

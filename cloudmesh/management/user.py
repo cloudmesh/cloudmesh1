@@ -1,7 +1,7 @@
 from cloudmesh.config.cm_config import get_mongo_db, get_mongo_dbname_from_collection, DBConnFactory
 from cloudmesh.management.cloudmeshobject import CloudmeshObject
-from cloudmesh.config.ConfigDict import ConfigDict
-from cloudmesh_install import config_file
+from cloudmesh_base.ConfigDict import ConfigDict
+from cloudmesh_base.locations import config_file
 from mongoengine import *
 from tabulate import tabulate
 import datetime

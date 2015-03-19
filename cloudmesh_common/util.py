@@ -18,7 +18,7 @@ configuration files that are not yet present at the tome of the first
 instalation.
 """
 from __future__ import print_function
-from cloudmesh_install.util import path_expand
+from cloudmesh_base.util import path_expand
 import inspect
 import os
 import sys

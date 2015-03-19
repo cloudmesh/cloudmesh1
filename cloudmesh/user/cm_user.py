@@ -12,12 +12,12 @@
 
 """
 from __future__ import print_function
-from cloudmesh_install import config_file
+from cloudmesh_base.locations import config_file
 from cloudmesh.config.cm_config import cm_config_server, get_mongo_db, cm_config
 from cloudmesh.util.encryptdata import encrypt, decrypt
-from cloudmesh_common.logger import LOGGER
+from cloudmesh_base.logger import LOGGER
 from cloudmesh_common.util import deprecated
-from cloudmesh_install.util import path_expand
+from cloudmesh_base.util import path_expand
 from cloudmesh.user.cm_template import cm_template
 from cloudmesh.user.cm_userLDAP import cm_userLDAP, get_ldap_user_from_yaml
 from cloudmesh.cm_mongo import cm_mongo

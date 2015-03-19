@@ -1,9 +1,9 @@
 from __future__ import print_function
-from cloudmesh_install import config_file
+from cloudmesh_base.locations import config_file
 from CMUserProviderBaseType import CMUserProviderBaseType
-from cloudmesh.config.ConfigDict import ConfigDict
+from cloudmesh_base.ConfigDict import ConfigDict
 from cloudmesh.config.cm_config import cm_config_server
-from cloudmesh_common.logger import LOGGER
+from cloudmesh_base.logger import LOGGER
 from pprint import pprint
 import ldap
 import sys

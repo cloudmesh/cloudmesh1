@@ -12,8 +12,6 @@ from string import Template
 import os
 import sys
 
-
-
 def get_system():
     if is_ubuntu():
         return "ubuntu"
