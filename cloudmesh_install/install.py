@@ -20,7 +20,7 @@ except:
 
 from string import Template
 
-from cloudmesh_install.util import banner
+from cloudmesh_base.util import banner
 from cloudmesh_install.util import is_ubuntu, is_centos, is_osx
 from cloudmesh_install.util import yn_choice
 from cloudmesh_install import config_file_prefix, config_file
