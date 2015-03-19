@@ -27,7 +27,7 @@ import functools
 # import warnings
 import string
 import random
-from cloudmesh_install.util import banner
+from cloudmesh_base.util import banner
 from cloudmesh_install.util import grep
 from cloudmesh_install import config_file
 

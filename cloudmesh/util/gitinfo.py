@@ -2,7 +2,7 @@
 from __future__ import print_function
 from pprint import pprint
 from cloudmesh.shell.Shell import Shell
-from cloudmesh_install.util import banner
+from cloudmesh_base.util import banner
 
 class GitInfo(object):
 
