@@ -52,5 +52,5 @@ class cm_shell_loglevel:
             return
 
         self.cm_config_server._update(key, value)
-        self.cm_config_server.write(format="yaml")
+        self.cm_config_server.write(output="yaml")
         print ("Log level: {0} is set".format(value))

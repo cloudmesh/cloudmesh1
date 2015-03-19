@@ -73,7 +73,7 @@ class Database(object):
         key = "cloudmesh.server.mongo.password"
         value = passwd
         cm_config_server._update(key, value)
-        cm_config_server.write(format="yaml")
+        cm_config_server.write(output="yaml")
  
     def set_credentials(self):
         for cloudname in self.config.cloudnames():

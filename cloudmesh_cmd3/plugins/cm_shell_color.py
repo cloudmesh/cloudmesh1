@@ -44,14 +44,14 @@ class cm_shell_color:
             key = "cloudmesh.shell.color"
             value = True
             self.cm_config._update(key, value)
-            self.cm_config.write(format="yaml")
+            self.cm_config.write(output="yaml")
             Console.color = True
             print ("color on.")
         elif arguments['off']:
             key = "cloudmesh.shell.color"
             value = False
             self.cm_config._update(key, value)
-            self.cm_config.write(format="yaml")
+            self.cm_config.write(output="yaml")
             Console.color = False
             print ("color off.")
         else:
