@@ -1,7 +1,7 @@
-from cloudmesh.config.ConfigDict import ConfigDict
+from cloudmesh_base.ConfigDict import ConfigDict
 from cloudmesh.config.cm_config import get_mongo_db
-from cloudmesh.util.logger import LOGGER
-from cloudmesh import banner
+from cloudmesh_base.logger import LOGGER
+from cloudmesh_base.util import banner
 from pprint import pprint
 import traceback
 from cloudmesh.util.encryptdata import encrypt as cm_encrypt

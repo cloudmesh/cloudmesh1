@@ -3,15 +3,15 @@ from __future__ import with_statement
 from pprint import pprint
 import time
 
-from cloudmesh.config.ConfigDict import ConfigDict
+from cloudmesh_base.ConfigDict import ConfigDict
 from cloudmesh.config.cm_config import cm_config_server
 from cloudmesh.launcher.queue.celery import celery_launcher_queue as l_queue
 from cloudmesh.pbs.celery import celery_pbs_queue as pbs_queue
 from cloudmesh.provisioner.queue.celery import \
     celery_provisiner_queue as p_queue
 from cloudmesh_common.util import PROGRESS
-from cloudmesh_install import config_file
-from cloudmesh_install.util import banner
+from cloudmesh_base.locations import config_file
+from cloudmesh_base.util import banner
 from fabric.api import task, local, hide, settings
 import hostlist
 import progress

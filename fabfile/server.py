@@ -2,8 +2,8 @@ from __future__ import with_statement
 
 import sys
 from cloudmesh_common.logger import LOGGER
-from cloudmesh_install.util import banner
-from cloudmesh_install import config_file
+from cloudmesh_base.util import banner
+from cloudmesh_base.locations import config_file
 from cloudmesh_common.util import PROGRESS
 from cloudmesh.config.cm_config import cm_config_server
 

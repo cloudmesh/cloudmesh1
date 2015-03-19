@@ -20,8 +20,8 @@ from pprint import pprint
 
 from cloudmesh.pbs.pbs import PBS
 from cloudmesh.config.cm_config import cm_config
-from cloudmesh_common.util import HEADING
-from cloudmesh import banner
+from cloudmesh_base.util import HEADING
+from cloudmesh_base.util import banner
 
 
 class Test:

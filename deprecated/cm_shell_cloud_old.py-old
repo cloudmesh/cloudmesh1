@@ -9,13 +9,14 @@ from collections import OrderedDict
 from cloudmesh.cm_mongo import cm_mongo
 from cmd3.shell import command
 from cloudmesh_common.tables import column_table
-from cloudmesh import yn_choice
+from cloudmesh_base.util import yn_choice
 from pprint import pprint
-from cloudmesh import banner
+from cloudmesh_base.util import banner
 from cloudmesh_common.util import dict_uni_to_ascii
+# BUG
 from cloudmesh.util.menu import menu_return_num
-from cloudmesh.config.ConfigDict import ConfigDict
-from cloudmesh import path_expand
+from cloudmesh_base.ConfigDict import ConfigDict
+from cloudmesh_base.util import path_expand
 
 log = LOGGER(__file__)
 

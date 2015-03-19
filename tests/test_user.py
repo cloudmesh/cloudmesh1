@@ -10,16 +10,16 @@ nosetests -v
 from __future__ import print_function
 import sys
 
-from cloudmesh.config.ConfigDict import ConfigDict
-from cloudmesh_common.util import HEADING
-from cloudmesh import banner
-from cloudmesh import path_expand
+from cloudmesh_base.ConfigDict import ConfigDict
+from cloudmesh_base.util import HEADING
+from cloudmesh_base.util import banner
+from cloudmesh_base.util import path_expand
 from cloudmesh.user.cm_template import cm_template
 from cloudmesh.user.cm_user import cm_user
 from cloudmesh.user.cm_userLDAP import cm_userLDAP
 from pprint import pprint
 import os
-from cloudmesh_install import config_file
+from cloudmesh_base.locations import config_file
 
 
 class Test_cloudmesh:
