@@ -13,7 +13,7 @@ import pprint
 pp = pprint.PrettyPrinter(indent=4)
 
 from cloudmesh.config.cm_projects import cm_projects
-from cloudmesh_common.util import HEADING
+from cloudmesh_base.util import HEADING
 from cloudmesh_install import config_file
 
 

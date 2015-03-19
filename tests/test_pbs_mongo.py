@@ -20,7 +20,7 @@ from pprint import pprint
 
 from cloudmesh.pbs.pbs_mongo import pbs_mongo
 from cloudmesh.config.cm_config import cm_config
-from cloudmesh_common.util import HEADING
+from cloudmesh_base.util import HEADING
 
 
 class Test:

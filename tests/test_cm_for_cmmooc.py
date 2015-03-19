@@ -3,8 +3,8 @@
 nosetests -v --nocapture test_cm_cmmooc.py
 
 """
-from cloudmesh_common.util import HEADING
-from cloudmesh_common.logger import LOGGER, LOGGING_ON, LOGGING_OFF
+from cloudmesh_base.util import HEADING
+from cloudmesh_base.logger import LOGGER, LOGGING_ON, LOGGING_OFF
 import sys
 import os
 import cloudmesh

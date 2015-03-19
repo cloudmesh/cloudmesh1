@@ -12,7 +12,7 @@ import sys
 import getpass
 
 from cloudmesh.user.cm_userLDAP import cm_userLDAP
-from cloudmesh_common.util import HEADING
+from cloudmesh_base.util import HEADING
 from cloudmesh.config.ConfigDict import ConfigDict
 from cloudmesh_install.util import path_expand
 

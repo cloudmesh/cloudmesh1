@@ -1,7 +1,6 @@
 from fabric.api import task, local
 from cloudmesh.config.ConfigDict import ConfigDict
-from cloudmesh_install import config_file
-
+from cloudmesh_base.locations import config_file
 
 @task
 def check(username=None):

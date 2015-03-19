@@ -12,11 +12,11 @@ nosetests -v  --nocapture test_cm_compute.py:Test.test_06
 
 """
 from __future__ import print_function
-from cloudmesh_install import config_file
 import json
 import sh
+from cloudmesh_base.util import HEADING
+from cloudmesh_base.locations import config_file
 
-from cloudmesh_common.util import HEADING
 
 
 class Test:

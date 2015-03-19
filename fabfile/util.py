@@ -1,6 +1,6 @@
 from cloudmesh.iaas.openstack.cm_compute import openstack
 from cloudmesh.iaas.Ec2SecurityGroup import Ec2SecurityGroup
-from cloudmesh_install import config_file
+from cloudmesh_base.locations import config_file
 '''
 utility/helper functions that cannot be properly categorized into the
 exsiting fab files

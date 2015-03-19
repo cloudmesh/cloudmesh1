@@ -29,10 +29,10 @@ from pprint import pprint
 import os
 import getopt
 import sys
-from cloudmesh_install.util import banner
+from cloudmesh_base.util import banner
 from cloudmesh_install.util import get_system
-from cloudmesh_install import config_file_prefix, config_file
-from cloudmesh_install.util import yn_choice
+from cloudmesh_base.locations import config_file_prefix, config_file
+from cloudmesh_base.util import yn_choice
 
 def print_help():
 

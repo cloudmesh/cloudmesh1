@@ -4,8 +4,8 @@ nosetests -v --nocapture
 
 """
 from __future__ import print_function
-from cloudmesh_common.util import HEADING
-from cloudmesh_common.logger import LOGGER, LOGGING_ON, LOGGING_OFF
+from cloudmesh_base.util import HEADING
+from cloudmesh_base.logger import LOGGER, LOGGING_ON, LOGGING_OFF
 
 log = LOGGER(__file__)
 

@@ -10,7 +10,7 @@ nosetests -v tests/test_keys.py
 from __future__ import print_function
 import os
 from cloudmesh.config.cm_keys import cm_keys_yaml, keytype
-from cloudmesh_common.util import HEADING
+from cloudmesh_base.util import HEADING
 from cloudmesh.util.keys import get_fingerprint
 from cloudmesh_install import config_file
 

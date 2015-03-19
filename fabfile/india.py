@@ -1,6 +1,6 @@
 from fabric.api import task
 from util import ec2secgroup_openport, yaml_file_replace
-from cloudmesh_install import config_file
+from cloudmesh_base.locations import config_file
 from cloudmesh.config.cm_config import yaml_attribute_replace
 
 @task

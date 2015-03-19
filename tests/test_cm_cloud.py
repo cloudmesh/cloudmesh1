@@ -6,8 +6,8 @@ nosetests -v --nocapture
 TODO:: rest cloud commands
 
 """
-from cloudmesh_common.util import HEADING
-from cloudmesh_common.logger import LOGGER
+from cloudmesh_base.util import HEADING
+from cloudmesh_base.logger import LOGGER
 import os
 import unittest
 

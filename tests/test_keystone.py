@@ -18,7 +18,7 @@ import os
 import warnings
 import pprint
 
-from cloudmesh_common.util import HEADING
+from cloudmesh_base.util import HEADING
 
 
 class Test_cloudmesh_keystone:

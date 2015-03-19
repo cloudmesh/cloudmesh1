@@ -16,7 +16,8 @@ from cloudmesh.cm_mesh import cm_mesh
 import json
 from pprint import pprint
 
-from cloudmesh_common.util import HEADING
+from cloudmesh_base.util import HEADING
+from cloudmesh_base.locations import config_file
 
 
 class Test_cloudmesh:

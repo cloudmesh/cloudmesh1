@@ -23,7 +23,7 @@ from string import Template
 from cloudmesh_base.util import banner
 from cloudmesh_install.util import is_ubuntu, is_centos, is_osx
 from cloudmesh_install.util import yn_choice
-from cloudmesh_install import config_file_prefix, config_file
+from cloudmesh_base.locations import config_file_prefix, config_file
 
 ######################################################################
 # STOP IF PYTHON VERSION IS NOT 2.7.5

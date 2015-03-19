@@ -8,7 +8,7 @@ nosetests -v
 from __future__ import print_function
 from datetime import datetime
 
-from cloudmesh_common.util import HEADING
+from cloudmesh_base.util import HEADING
 from cloudmesh.inventory import Inventory
 from pprint import pprint
 

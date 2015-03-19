@@ -3,8 +3,7 @@ from cloudmesh.config.ConfigDict import ConfigDict
 from cloudmesh.config.cm_config import cm_config_server
 from sh import kill
 from sh import sudo
-from cloudmesh_install import config_file
-
+from cloudmesh_base.locations import config_file
 
 def get_server_config():
     return ConfigDict(filename=config_file("/cloudmesh_server.yaml"))
