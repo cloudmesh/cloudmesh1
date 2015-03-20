@@ -26,9 +26,9 @@ class Committee(Document):
     projects = ListField(StringField())
     reviewers = ListField(ReferenceField(User), default=[])
     reviews = StringField()
-    #--------------------------------------------------------------------
-    #	Default value showing if this is the first time the project is being applied for or not
-    #--------------------------------------------------------------------
+    # --------------------------------------------------------------------
+    # Default value showing if this is the first time the project is being applied for or not
+    # --------------------------------------------------------------------
     default = StringField(choices=CHOICES, default='Yes')
     message = StringField()
 

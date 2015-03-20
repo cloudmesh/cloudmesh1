@@ -2,11 +2,12 @@ import os
 import sh
 import json
 
+
 class ssh_config(object):
 
     def __init__(self, filename=None):
         if filename is not None:
-            #load
+            # load
             pass
         else:
             filename = "~/.ssh/config"
@@ -24,7 +25,7 @@ class ssh_config(object):
         host = "NA"
         for line in content:
             if line[0].startswith('#') or line[0] is '':
-                pass # ignore line
+                pass  # ignore line
             else:
                 attribute = line[0]
                 value = line[1]
@@ -65,7 +66,7 @@ if __name__ == "__main__":
     print hosts.list()
     print hosts
 
-    #hosts.login("india")
+    # hosts.login("india")
 
     r = hosts.execute("india", "hostname")
     print r

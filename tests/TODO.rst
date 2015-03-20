@@ -11,8 +11,8 @@ how this works, you can now define your own functiions in test_shell and use the
 	if you use None for one of the lists the list check is removed
 
 def test_list(self):
-        print
-        a = self.grep_command("list", ["alamo", "india_openstack_havana"], None)
+    print
+    a = self.grep_command("list", ["alamo", "india_openstack_havana"], None)
 
 
 On Jul 17, 2014, at 9:34 AM, Gregor von Laszewski <laszewski@gmail.com> wrote:
@@ -50,7 +50,7 @@ cm help inventory
 cm help metric
 cm help register
 cm help security_group (this one has wrrnng name and I suggest we replace underscore with space)
-   cm help security
+cm help security
 
 cm help user
 cm help keys
@@ -79,7 +79,8 @@ do something useful here
 
 # flavor comamnd
 
-bug: use capital letters by in DOCOPT e.g. instead of cm_cloud use CLOUD to be compatible with other commands. check all commands and use capital letters inseatd of <> notation
+bug: use capital letters by in DOCOPT e.g. instead of cm_cloud use CLOUD to be compatible with other commands.
+check all commands and use capital letters instaet of <> notation
 
 bug: when i say 
 
@@ -88,7 +89,7 @@ cm flavor india_openstack_grizzly
 (non existing cloud) it tries to authenticate with all clouds instead of just returning quickly an error. 
 I assume its not necessary to autheticate to all clouds firs, but just do it when we call the appropriate cloud
 
-bug: cm falvor —column=label,id
+bug: cm flavor —column=label,id
 
 does not exist (low priority)
 
@@ -273,5 +274,5 @@ defaults
 --------
 
 metrics
---------
+-------
 

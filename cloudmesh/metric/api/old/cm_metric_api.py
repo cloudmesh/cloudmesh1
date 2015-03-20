@@ -1,8 +1,8 @@
 # from fgmetric.shell.FGDatabase import FGDatabase
 import sys
 from pprint import pprint
-#from fgmetric.shell.FGSearch import FGSearch
-#from fgmetric.shell.FGInstances import FGInstances
+# from fgmetric.shell.FGSearch import FGSearch
+# from fgmetric.shell.FGInstances import FGInstances
 
 
 class CMMetricAPI:
@@ -13,8 +13,10 @@ class CMMetricAPI:
 
     In a nutshell,
     CM Metric retrieves all records on the database and collects matching records on Python programmatically.
-    However, CM Metric API retrieves records on the database with search condition, especially 'ownerid' is required field to search.
-    Mainly, this API calls database with a query look like " select * from instance where start >= date and end <= date and ownerid = id "
+    However, CM Metric API retrieves records on the database with search condition, especially 'ownerid' is
+    required field to search.
+    Mainly, this API calls database with a query look like " select * from instance where start >= date and
+    end <= date and ownerid = id "
     Other than that, rest of processes are same as CM Metric.
 
     return value is python 'dict' type

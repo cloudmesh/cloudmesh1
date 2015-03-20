@@ -6,10 +6,11 @@ from pprint import pprint
 from cloudmesh_base.locations import config_file
 from ConfigParser import SafeConfigParser, NoOptionError
 
+
 def get_rcfiles(fpath=None):
     dir = config_file("")
     read_values = ["OS_TENANT_NAME", "OS_USERNAME", "OS_PASSWORD",
-                   "OS_AUTH_URL"] #, "OS_CACERT"]
+                   "OS_AUTH_URL"]   #, "OS_CACERT"]
 
     rcfile_path = dir + "/clouds/"
     new_values = {}
@@ -20,6 +21,7 @@ def get_rcfiles(fpath=None):
         new_values[cloud_name] = get_variables(filepath, read_values)
 
     return new_values
+
 
 class _Readrcfile(object):
     ''' Read novarc, eucarc and store variables with configparser
@@ -41,6 +43,7 @@ class _Readrcfile(object):
                 self.head = None
         else:
             return self.fp.readline().replace("export ", "")
+
 
 def get_variables(fpath, read_values=["OS_TENANT_NAME", "OS_USERNAME",
                                       "OS_PASSWORD"]):

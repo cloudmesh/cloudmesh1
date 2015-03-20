@@ -36,7 +36,7 @@ def build_db_field(item):
                     if key == 'required':
                         required = key + "=" + str(value)
                     elif key == 'type':
-                        if value in ['text', 'textarea', 'dropdown','password']:
+                        if value in ['text', 'textarea', 'dropdown', 'password']:
                             field_type = "StringField"
                         elif value == 'checkbox':
                             field_type = "StringField"
@@ -161,10 +161,10 @@ def country_list():
     countries = []
     for key, value in data.items():
         item = ''
-        item = item + str(value.encode(encoding='UTF-8',errors='strict')) + "("+str(key)+")"
+        item = item + str(value.encode(encoding='UTF-8', errors='strict')) + "("+str(key)+")"
         countries.append(item)
     countries.sort()
-    countries.insert(0,'United States(US)')
+    countries.insert(0, 'United States(US)')
     print countries
     pass
 

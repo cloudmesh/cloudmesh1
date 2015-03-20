@@ -67,7 +67,7 @@ def filtered_access_hosts(raw_hosts):
     valid_bm_hosts = filtered_hosts_based_baremetal(raw_hosts)
     user = "XXX"  # FIXME, try to get username
     projects = ["XXX"]  # FIXME, try to get projcts that user belongs to
-    #policy_hosts = filtered_hosts_based_policy(user, projects, valid_bm_hosts)
+    # policy_hosts = filtered_hosts_based_policy(user, projects, valid_bm_hosts)
     # ONLY for test, MUST be replaced by the above line
     policy_hosts = valid_bm_hosts
     all_hosts = hostlist.expand_hostlist(raw_hosts)

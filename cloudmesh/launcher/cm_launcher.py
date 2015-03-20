@@ -55,7 +55,7 @@ class SimulatorLauncher(BaseClassLauncher):
         query["server"] = server
         query["recipie"] = recipie
         # print query["host"]
-        if self.db.find_one(query) == None:
+        if self.db.find_one(query) is None:
             query["status"] = ""
             query["error"] = ""
             self.db.insert(query)
@@ -98,21 +98,21 @@ class SimulatorLauncher(BaseClassLauncher):
 
     @property
     def status(self):
-        if self.status != None:
+        if self.status is not None:
             return self.status
         else:
             return None
 
     @property
     def error(self):
-        if self.error != None:
+        if self.error is not None:
             return self.error
         else:
             return None
 
     @property
     def traceback(self):
-        if self.traceback != None:
+        if self.traceback is not None:
             return self.traceback
         else:
             return None

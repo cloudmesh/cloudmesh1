@@ -52,11 +52,11 @@ class Database(object):
         # to verify
         # sha256_crypt.verify(passwd, passhash)
         self.user_obj.set_credential(
-                self.cm_user_id,
-                LOCAL_PASS_KEY,
-                {'password': passhash},  # to be consistent
-                LOCAL_PASS_KEY
-                )
+            self.cm_user_id,
+            LOCAL_PASS_KEY,
+            {'password': passhash},  # to be consistent
+            LOCAL_PASS_KEY
+        )
         print("password set successfully!")
 
     def set_password_local_mongodb(self, passwd=None):

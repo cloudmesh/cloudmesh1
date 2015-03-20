@@ -26,6 +26,7 @@ from cloudmesh_common.util import address_string
 
 log = LOGGER(__file__)
 
+
 def shell_command_vm(arguments):
     """
         ::
@@ -132,8 +133,6 @@ def shell_command_vm(arguments):
                         json format
 
     """
-
-
     command_execute = VMcommand(arguments)
     return command_execute.execute()
 
@@ -1119,7 +1118,7 @@ class VMs(object):
         if detailed:
             itemkeys = {"openstack":
                         [
-                            #['name', 'name'],
+                            # ['name', 'name'],
                             ['status', 'status'],
                             ['addresses', 'addresses'],
                             ['id', 'id'],
@@ -1133,7 +1132,7 @@ class VMs(object):
                         ],
                         "ec2":
                         [
-                            #["name", "id"],
+                            # ["name", "id"],
                             ["status", "extra", "status"],
                             ["addresses", "public_ips"],
                             ['id', 'id'],
@@ -1146,7 +1145,7 @@ class VMs(object):
                         ],
                         "aws":
                         [
-                            #["name", "name"],
+                            # ["name", "name"],
                             ["status", "extra", "status"],
                             ["addresses", "public_ips"],
                             ["flavor", "extra", "instance_type"],
@@ -1159,7 +1158,7 @@ class VMs(object):
                         ],
                         "azure":
                         [
-                            #['name', 'name'],
+                            # ['name', 'name'],
                             ['status', 'status'],
                             ['addresses', 'vip'],
                             ['flavor', 'flavor', 'id'],
@@ -1174,7 +1173,7 @@ class VMs(object):
         else:
             itemkeys = {"openstack":
                         [
-                            #['name', 'name'],
+                            # ['name', 'name'],
                             ['status', 'status'],
                             ['addresses', 'addresses'],
                             ['flavor', 'flavor', 'id'],
@@ -1182,7 +1181,7 @@ class VMs(object):
                         ],
                         "ec2":
                         [
-                            #["name", "id"],
+                            # ["name", "id"],
                             ["status", "extra", "status"],
                             ["addresses", "public_ips"],
                             ["flavor", "extra", "instance_type"],
@@ -1190,7 +1189,7 @@ class VMs(object):
                         ],
                         "aws":
                         [
-                            #["name", "name"],
+                            # ["name", "name"],
                             ["status", "extra", "status"],
                             ["addresses", "public_ips"],
                             ["flavor", "extra", "instance_type"],
@@ -1198,7 +1197,7 @@ class VMs(object):
                         ],
                         "azure":
                         [
-                            #['name', 'name'],
+                            # ['name', 'name'],
                             ['status', 'status'],
                             ['addresses', 'vip'],
                             ['flavor', 'flavor', 'id'],
@@ -1209,6 +1208,3 @@ class VMs(object):
             return itemkeys[cm_type]
         else:
             raise Exception("no itemkeys for cm_type '{0}'".format(cm_type))
-            
-    
-    

@@ -1,6 +1,7 @@
 '''Ascii menu class'''
 from __future__ import print_function
 
+
 def ascii_menu(title=None, menu_list=None):
     '''
     creates a simple ASCII menu from a list of tuples containing a label

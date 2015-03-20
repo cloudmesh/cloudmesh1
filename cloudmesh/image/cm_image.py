@@ -26,7 +26,7 @@ import sh
 import cloudmesh
 
 
-#definitions = ["~/veewee", "$CLOUDMESH/images/veewee"]
+# definitions = ["~/veewee", "$CLOUDMESH/images/veewee"]
 definitions = ["$CLOUDMESH/images/veewee"]
 
 

@@ -169,7 +169,7 @@ class PBS:
 
         self.pbs_qinfo_data = d
 
-        #pprint(self.qinfo_extract(self.cluster_queues, self.pbs_qinfo_data))
+        # pprint(self.qinfo_extract(self.cluster_queues, self.pbs_qinfo_data))
 
         if self.cluster_queues is None:
             return {self.host: self.pbs_qinfo_data}

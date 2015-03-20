@@ -44,7 +44,7 @@ class Test:
         self.configuration = cm_config()
         print("OK")
 
-        self.name = 'india_juno'#self.configuration.active()[3]
+        self.name = 'india_juno'  # self.configuration.active()[3]
         print("ACTIVE CLOUD", self.name)
 
         self.cloud = openstack(self.name)
@@ -89,7 +89,7 @@ class Test:
         # assert self.cloud.flavors['m1.tiny']['ram'] == 512
         print("Currently running vms:", len(self.cloud.images))
         # we assume cloud is always busy which may actually not true
-        # we shoudl start our own vm and than probe for it for now > 0 will do
+        # we should start our own vm and than probe for it for now > 0 will do
         assert self.cloud.images > 0
 
     def test_03_flavors(self):
@@ -351,7 +351,7 @@ class Test:
     def test_20_create_secgroup(self):
         """test security group"""
         # print "defining a group"
-        #mygroup = Ec2SecurityGroup("testSecGroupCM")
+        # mygroup = Ec2SecurityGroup("testSecGroupCM")
         mygroup = Ec2SecurityGroup("default")
         # print "defining a security rule"
         # rule1 = Ec2SecurityGroup.Rule(8088, 8088)
@@ -364,7 +364,7 @@ class Test:
         # print groupid
         assert groupid is not None
         rule3 = Ec2SecurityGroup.Rule(5000, 5000)
-        #rule3 = Ec2SecurityGroup.Rule(22,22)
+        # rule3 = Ec2SecurityGroup.Rule(22,22)
         rule4 = Ec2SecurityGroup.Rule(-1, -1, 'ICMP')
         print(self.cloud.add_security_group_rules(groupid, [rule3, rule4]))
         groupid = self.cloud.find_security_groupid_by_name(

@@ -133,8 +133,8 @@ class RainCobblerWrapper:
         # check the exist of the profile
         profiles = self.rest_api.get_cobbler_profile_list()
         if profile in profiles:
-            #hosts = expand_hostlist(raw_hosts)
-            #log.debug("after expand, raw_hosts {0} is: {1}".format(raw_hosts, hosts))
+            # hosts = expand_hostlist(raw_hosts)
+            # log.debug("after expand, raw_hosts {0} is: {1}".format(raw_hosts, hosts))
             systems = self.rest_api.get_cobbler_system_list()
             # check the system named host exist in cobbler or not
             not_exist_hosts = [h for h in hosts if h not in systems]

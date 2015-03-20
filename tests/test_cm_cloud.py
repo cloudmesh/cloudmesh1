@@ -14,6 +14,7 @@ import unittest
 
 log = LOGGER(__file__)
 
+
 class Test(unittest.TestCase):
 
     def setUp(self):
@@ -68,6 +69,3 @@ class Test(unittest.TestCase):
         res = os.popen("echo y | cm \"cloud alias {1} {0}\"".format(name, self.cloudname))
         res = os.popen("cm \"cloud select {0}\"".format(self.cloudname)).read()
         assert res.find("cloud '{0}' is selected".format(self.cloudname)) != -1
-        
-    
-    

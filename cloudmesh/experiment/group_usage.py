@@ -17,6 +17,7 @@ def add_vm_to_group_while_creating(username, groupname, vmname):
         GroupManage.create_group(groupname)
     GroupManage.add_item_to_group(groupname, "VM", vmname)
 
+
 def remove_vm_from_group_while_deleting(username, vmname):
     '''
     remove a vm from the group, assume there is no duplicate vm names, so
@@ -41,7 +42,8 @@ def get_group_names_list_by_vms_metadata(username, cloudname, refresh=False):
                       names=[cloudname],
                       types=['servers'])
     servers_dict = mongo.servers(
-                clouds=[cloudname], cm_user_id=username)[cloudname]
+        clouds=[cloudname],
+        cm_user_id=username)[cloudname]
                 
     res = []
     for k, v in servers_dict.iteritems():
@@ -51,6 +53,7 @@ def get_group_names_list_by_vms_metadata(username, cloudname, refresh=False):
                 res.append(temp)
     
     return res
+
 
 def add_item_to_group(username, groupname, _type, value, refresh=False):
     '''
@@ -71,11 +74,11 @@ def add_item_to_group(username, groupname, _type, value, refresh=False):
                 if 'name' in v0 and v0['name'] == value:
                     _vm_exists = True
                     break
-            if _vm_exists: break
+            if _vm_exists:
+                break
         if _vm_exists:
             GroupManage.add_item_to_group(groupname, _type, value)
         else:
             raise Exception("VM '{0}' doesn't exist".format(value))
     else:
         GroupManage.add_item_to_group(groupname, _type, value)
-        

@@ -56,7 +56,7 @@ class Test:
         if invalid is not None:
             for word in invalid:
                 msg = "passed"
-                testing = not word in r
+                testing = word not in r
                 print("Testing", command, self.message(testing, word))
                 ok = ok and testing
         return ok
@@ -85,7 +85,7 @@ class Test:
             if valid is not None:
                 testing = valid in r
             if invalid is not None:
-                testing = testing and not invalid in r
+                testing = testing and invalid not in r
             if testing:
                 msg = "pass"
             else:

@@ -5,7 +5,7 @@ from cloudmesh.iaas.ec2.queue.celery import celery_ec2_queue
 from cloudmesh.cm_mongo import cm_mongo
 
 #
-#logger = get_task_logger(__name__)
+# logger = get_task_logger(__name__)
 #
 
 

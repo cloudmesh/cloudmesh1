@@ -14,6 +14,7 @@ import cloudmesh
 
 import unittest
 
+
 class Test(unittest.TestCase):
     vm = []
 
@@ -33,7 +34,7 @@ class Test(unittest.TestCase):
     def test_04_start_a_vm(cls):
         HEADING()
         import random
-        vm_name = "nosetests_"+str(random.randint(1,100))
+        vm_name = "nosetests_"+str(random.randint(1, 100))
         cloudmesh.shell("vm start --name={0} --cloud=india \
                         --image=futuregrid/ubuntu-14.04 \
                         --flavor=m1.small".format(vm_name))
@@ -59,7 +60,7 @@ class Test(unittest.TestCase):
     def test_09_quick_start(cls):
         HEADING()
         import random
-        vm_name = "nosetests_"+str(random.randint(1,100))
+        vm_name = "nosetests_"+str(random.randint(1, 100))
         cloudmesh.shell("vm start --name={0} --cloud=india".format(vm_name))
         cls.vm.append(vm_name)
 

@@ -7,6 +7,7 @@ from cloudmesh_base.util import path_expand
 
 from cloudmesh.shell.Shell import Shell
 
+# BUG: replace with Shell
 import sh
 # need to get rid of fabric later
 from fabric.api import task, local, settings, hide
@@ -21,7 +22,6 @@ import time
 from pprint import pprint
 
 
-
 # ----------------------------------------------------------------------
 # SETTING UP A LOGGER
 # ----------------------------------------------------------------------
@@ -34,9 +34,10 @@ def isyes(value):
     if check in ['true', 'false', 'y', 'n', 'yes', 'no']:
         return check in ['true', 'y', 'yes']
     else:
-        print ("parameter not in", ['true', 'false', 'y', 'n', 'yes', 'no'])
-        print ("found", value, check)
+        print("parameter not in", ['true', 'false', 'y', 'n', 'yes', 'no'])
+        print("found", value, check)
         sys.exit()
+
 
 '''
 class cloudmesh_server(object):
@@ -122,16 +123,14 @@ class celery_server(cloudmesh_server):
     def stop(self):
         pass
 '''
-    
-class cloudmesh_server(object):
 
+
+class cloudmesh_server(object):
     def _ps(self):
         return sh.ps("-ax", _tty_out=False)
 
-    #def __init__(self):
-        #pass
-        
-        
+        # def __init__(self):
+        # pass
         '''
         self.server_env = {
             "name": "server"
@@ -177,8 +176,8 @@ class cloudmesh_server(object):
         banner("mongo info")
         d = {}
         d['mongo'] = self._info_mongo()
-        print ("Mongo pid", d['mongo']['pid'])
-        print ("Mongo port", d['mongo']['port'])
+        print("Mongo pid", d['mongo']['pid'])
+        print("Mongo port", d['mongo']['port'])
 
         d['celery'] = self._info_celery()
         pprint(d)
@@ -194,17 +193,17 @@ class cloudmesh_server(object):
 
         # mongo.start()
         # execute_command("START MONGO",
-        #            "fab mongo.start",
-        #             debug)
+        # "fab mongo.start",
+        # debug)
 
         # queue.start()
         # execute_command("START RABITMQ",
-        #        "fab queue.start", debug)
+        # "fab queue.start", debug)
 
         # queue.flower_server()
         # execute_command("START FLOWER",
-        #        "fab queue.flower_server",
-        #        debug)
+        # "fab queue.flower_server",
+        # debug)
 
         pass
 
@@ -219,40 +218,36 @@ class cloudmesh_server(object):
     # WEB SERVER
     # ######################################################################
 
-    
-
     def _start_web_server(self):
         # from cloudmesh_web import server as cloudmesh_web_server_start
         banner("start the web server")
         os.system("cd cloudmesh_web; python server.py &")
         time.sleep(4)
-        
+
     def _stop_web_server(self):
         # stop web server
         banner("stop the web server")
         try:
             result = sh.fgrep(
-                sh.fgrep(self._ps(),
-                         "python {name}.py".format(**self.server_env)),
+                sh.fgrep(self._ps(), "python {name}.py".format(**self.server_env)),
                 "-v", "fgrep"
             ).split("\n")[:-1]
-            print (result)
+            print(result)
 
             for line in result:
                 if line is not '':
                     pid = line.split(" ")[0]
-                    print (line)
-                    print ("PID", pid)
-                    print ("KILL")
+                    print(line)
+                    print("PID", pid)
+                    print("KILL")
                     try:
                         sh.kill("-9", str(pid))
                     except Exception, e:
-                        print ("ERROR")
-                        print (e)
+                        print("ERROR")
+                        print(e)
         except Exception, e:
-            print ("INFO: cloudmesh web server not running")
-            
-            
+            print("INFO: cloudmesh web server not running")
+
     # ######################################################################
     # MONGO SERVER
     # ######################################################################
@@ -264,32 +259,32 @@ class cloudmesh_server(object):
         # print (config)
         # print(port, path)
 
-        #d = {
-        #    'pid': None,
-        #    'port': None,
-        #    'path': None,
-        #    'command': None
-        #}
+        # d = {
+        # 'pid': None,
+        # 'port': None,
+        # 'path': None,
+        # 'command': None
+        # }
 
-        #try:
-        #    lines = sh.grep(
-        #        sh.grep(self._ps(), "mongod"), "log").split("\n")[:-1]
-        #    if lines != ['']:
-        #        (pid) = lines[0].lstrip().split(" ")[0]
-        #        d = {'pid': pid,
-        #             'port': port,
-        #             'path': path,
-        #             'command': lines}
-        #except:
-        #    pass
-        #return d
-        
+        # try:
+        # lines = sh.grep(
+        # sh.grep(self._ps(), "mongod"), "log").split("\n")[:-1]
+        # if lines != ['']:
+        # (pid) = lines[0].lstrip().split(" ")[0]
+        # d = {'pid': pid,
+        # 'port': port,
+        # 'path': path,
+        # 'command': lines}
+        # except:
+        # pass
+        # return d
+
         # need to get rid of fabric local later 
         with settings(warn_only=True):
             with hide('output', 'running', 'warnings'):
                 lines = local(
-                "ps -ax |grep '[m]ongod.*port {0}'".format(port), capture=True)\
-                .split("\n")
+                    "ps -ax |grep '[m]ongod.*port {0}'".format(port), capture=True) \
+                    .split("\n")
 
         if lines != ['']:
             pid = lines[0].split(" ")[0]
@@ -301,9 +296,8 @@ class cloudmesh_server(object):
             d = {'pid': "mongodb not active",
                  'port': None,
                  'path': None,
-                 'command': None}       
+                 'command': None}
         return d
-                 
 
     def _start_mongo(self):
         """
@@ -314,44 +308,41 @@ class cloudmesh_server(object):
         config = cm_config_server().get("cloudmesh.server.mongo")
         path = path_expand(config["path"])
         port = config["port"]
-        
-        #pprint(config)
-        #print(path)
-        #print(port)
-        
-        
+
+        # pprint(config)
+        # print(path)
+        # print(port)
+
         banner("creating dir")
         if not os.path.exists(path):
-            print ("Creating mongodb directory in {0}".format(path))
+            print("Creating mongodb directory in {0}".format(path))
             sh.mkdir("-p", path)
-        
+
         banner("check")
 
-        #lines = str(sh.grep(sh.ps("-ax"), "mongod", "*port {0}".format(port)))
+        # lines = str(sh.grep(sh.ps("-ax"), "mongod", "*port {0}".format(port)))
         # need to get rid of fabric local later
         with settings(warn_only=True):
             with hide('output', 'running', 'warnings'):
                 lines = local(
-                "ps -ax |grep '[m]ongod.*port {0}'".format(port), capture=True)\
-                .split("\n")
-        print ("search result:")
-        #print(type(lines))
-        print (lines)
+                    "ps -ax |grep '[m]ongod.*port {0}'".format(port), capture=True) \
+                    .split("\n")
+        print("search result:")
+        # print(type(lines))
+        print(lines)
         if lines != ['']:
             pid = lines[0].split(" ")[0]
-            print ("NO ACTION: mongo already running in pid "
-                       "{0} for port {1}".format(pid, port))
+            print("NO ACTION: mongo already running in pid "
+                  "{0} for port {1}".format(pid, port))
             return
 
-        
-        print ("ACTION: Starting mongod")
-        print
-        print ("NOTE: the preparation of mongo may take a few minutes")
-        print ("      please do not interrupt this program.")
-        print
-        print ("      Please be patient!")
-        print
-        
+        print("ACTION: Starting mongod")
+        print()
+        print("NOTE: the preparation of mongo may take a few minutes")
+        print("      please do not interrupt this program.")
+        print()
+        print("      Please be patient!")
+        print()
         '''
         Shell.mongod("--auth",
                   "--bind_ip", "127.0.0.1"
@@ -361,17 +352,14 @@ class cloudmesh_server(object):
                   "--port",  port,
                   _bg=True)
         '''
-        
+
         # need to get rid of fabric local later     
-        
+
         local(
             'mongod --auth --bind_ip 127.0.0.1 '
             '--fork --dbpath {0} '
             '--logpath {0}/mongodb.log '
-            '--port {1}'
-            .format(path, port))
-         
-        
+            '--port {1}'.format(path, port))
 
     def _stop_mongo(self):
         """starts in dir webgui the program server.py and displays a
@@ -379,8 +367,7 @@ class cloudmesh_server(object):
         try:
             sh.killall("-15", "mongod")
         except:
-            print ("INFO: cloudmesh mongo server not running")
-
+            print("INFO: cloudmesh mongo server not running")
 
     # ######################################################################
     # CELERY SERVER
@@ -427,8 +414,8 @@ class cloudmesh_server(object):
         # mq.start()
 
         for worker in self.workers:
-            print (worker)
-            print (json.dumps(self.workers[worker]))
+            print(worker)
+            print(json.dumps(self.workers[worker]))
             concurrency = None
             if "concurrency" in self.workers[worker]:
                 concurrency = self.workers[worker]["concurrency"]
@@ -438,32 +425,31 @@ class cloudmesh_server(object):
                 self.workers[worker]["hostlist"],
                 self.workers[worker]["queue"],
                 concurrency=concurrency)
-                
+
     def _stop_celery(self):
         processes = self._info_celery()
-        print (processes.keys())
+        print(processes.keys())
         for pid in processes:
             try:
                 sh.kill("-9", str(pid))
             except:
-                print (pid, " process already deleted")
+                print(pid, " process already deleted")
 
-    
-    
-    # ######################################################################
-    # RABBITMQ SERVER
-    # ######################################################################
+                # ######################################################################
+                # RABBITMQ SERVER
+                # ######################################################################
+
+
 class rabbitmq_server(object):
     def __init__(self):
         self.rabbit_env = {
-                         'rabbitmq_server': "sudo rabbitmq-server",
-                         'rabbitmqctl': "sudo rabbitmqctl",
-                         'detached': ""
-                     }
-                     
+            'rabbitmq_server': "sudo rabbitmq-server",
+            'rabbitmqctl': "sudo rabbitmqctl",
+            'detached': ""
+        }
+
         self._set_rabbitmq_env()
-        
-        
+
     def _set_rabbitmq_env(self):
 
         location = path_expand("~/.cloudmesh/rabbitm")
@@ -489,36 +475,37 @@ class rabbitmq_server(object):
         else:
             print("WARNING: cloudmesh rabbitmq user install not supported, "
                   "using system install")
-                  
-              
+
     def info(self):
         """print the status of rabbitmq"""
         s = os.popen("sudo {rabbitmqctl} status".format
-                    (**self.rabbit_env)).read()
-        #s = Shell.sudo("{rabbitmqctl}".format(**self.rabbit_env), "status")
-        
+                     (**self.rabbit_env)).read()
+        # s = Shell.sudo("{rabbitmqctl}".format(**self.rabbit_env), "status")
+
         def list_queues(parameters):
             """list all queues available in rabbitmq"""
             self.rabbit_env['parameters'] = parameters
             r = os.popen("{rabbitmqctl} list_queues {parameters}"
-                          .format(**self.rabbit_env)).read()
+                         .format(**self.rabbit_env)).read()
             return r
-            
+
         l = ["name", "memory", "consumers", "messages",
              "messages_ready", "messages_unacknowledged"]
         r = list_queues(" ".join(l)).split("\n")[1].split("\t")
         d = zip(l, r)
         return s, d
-        
+
     def start(self, detached=None):
         """start the rabbit mq server"""
         if detached is None:
             self.rabbit_env['detached'] = "-detached"
         os.popen("{rabbitmq_server} {detached}".format(**self.rabbit_env))
-        
+
     def stop(self):
         """stop the rabbit mq server"""
         os.popen("{rabbitmqctl} stop".format(**self.rabbit_env))
+
+
 '''
         queue.start()
         # execute_command("START RABITMQ",
@@ -599,20 +586,17 @@ class rabbitmq_server(object):
 if __name__ == '__main__':
     server = cloudmesh_server()
     r_server = rabbitmq_server()
-    #print(r_server.info())
+    # print(r_server.info())
     r_server.start()
-    
-    #server.info()
+
+    # server.info()
 
     # server.start()
     # server.stop()
-    #print(server._info_mongo())
-    #server._start_mongo()
-    #server._stop_mongo()
+    # print(server._info_mongo())
+    # server._start_mongo()
+    # server._stop_mongo()
     # server.stop()
 
-    #server._stop_celery()
-    #server._start_celery()
-    
-    
-    
+    # server._stop_celery()
+    # server._start_celery()

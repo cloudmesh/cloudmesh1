@@ -81,7 +81,7 @@ class Test:
         # assert self.cloud.flavors['m1.tiny']['ram'] == 512
         print("Currently running vms:", len(self.cloud.images))
         # we assume cloud is always busy which may actually not true
-        # we shoudl start our own vm and than probe for it for now > 0 will do
+        # we should start our own vm and than probe for it for now > 0 will do
         assert self.cloud.images > 0
 
     def test_list_flavors(self):

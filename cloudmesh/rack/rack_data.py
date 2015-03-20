@@ -58,7 +58,7 @@ class RackData:
                 "set_status_start_refresh rackname is: {0} ".format(rack_name))
             tmp_racks = self.inventory.get_clusters(rack_name)
             racks[rack_name] = tmp_racks[0]
-            #self.mydebug("set_status_start_refresh racks[{0}] is: {1}".format(rack_name, racks[rack_name]))
+            # self.mydebug("set_status_start_refresh racks[{0}] is: {1}".format(rack_name, racks[rack_name]))
             element['data'] = dict((h, None)
                                    for h in racks[rack_name]['cm_value'])
             self.partly_update(query_dict[rack_name], {"$set": element})
@@ -79,7 +79,7 @@ class RackData:
             rack_name_list = [
                 rack_name_lower] if rack_name_lower in rack_name_list else None
 
-        #self.mydebug("exit from get_rack_name_list {0}".format(rack_name_list))
+        # self.mydebug("exit from get_rack_name_list {0}".format(rack_name_list))
         return rack_name_list
 
     # generate a query dict to query the rack table in inventory
@@ -116,7 +116,7 @@ class RackData:
         for rack_name in query_dict:
             rack_info_dict[rack_name] = self.inventory.find_one(
                 query_dict[rack_name])
-        #self.mydebug("get_rack_info of {0}".format(rack_info_dict.keys()))
+        # self.mydebug("get_rack_info of {0}".format(rack_info_dict.keys()))
         return rack_info_dict
 
     # result: {'rack_name': True, 'rack_name': False, ...}

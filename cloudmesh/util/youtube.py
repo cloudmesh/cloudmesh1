@@ -3,7 +3,6 @@ from pprint import pprint
 from cloudmesh_common.util import dotdict
 
 
-
 class youtube:
     """
     gets information from public youtube videos
@@ -14,7 +13,6 @@ class youtube:
     print video.title
     """
 
-    
     def __init__(self, id, filename=None):
 
         try:
@@ -23,7 +21,7 @@ class youtube:
             self.entry["found"] = "ok"
         except:
             self.entry = dotdict()
-            self.entry.title= {'$t': None}
+            self.entry.title = {'$t': None}
             self.entry.content = {'$t': None}
             self.entry.id = {'$t': 'https://gdata.youtube.com/feeds/api/videos/{0}?alt=json'.format(str(id))}
             self.entry.updated = {'$t': None}

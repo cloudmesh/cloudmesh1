@@ -55,8 +55,8 @@ class keystone(object):
         self.users = {}
         self.tenants = {}
         self.roles = {}
-        #self.admin_token = None
-        #self.admin_credentials = None
+        # self.admin_token = None
+        # self.admin_credentials = None
 
     # obtain admin token
     def connect(self):
@@ -70,7 +70,7 @@ class keystone(object):
 
     # load users, tenants, roles from keystone
     def load(self, types=None):
-        #banner("admin token before loading...")
+        # banner("admin token before loading...")
         # print self.admin_token
         if self.admin_token:
             if types is None or types == ['all']:

@@ -11,8 +11,7 @@ from cloudmesh.cm_mongo import cm_mongo
 log = LOGGER(__file__)
 
 
-class CredentialBaseClass (dict):
-
+class CredentialBaseClass(dict):
     def __init__(self, username, cloud, datasource):
         dict.__init__({'username': username,
                        'cloud': cloud,
@@ -26,7 +25,6 @@ class CredentialBaseClass (dict):
 
 
 class CredentialFromYaml(CredentialBaseClass):
-
     password = None
 
     def __init__(self,
@@ -41,7 +39,7 @@ class CredentialFromYaml(CredentialBaseClass):
 
         self.password = password
 
-        if datasource != None:
+        if datasource is not None:
             self.filename = datasource
         else:
             self.filename = "~/.cloudmesh/cloudmesh.yaml"
@@ -82,6 +80,7 @@ class CredentialFromYaml(CredentialBaseClass):
                 new_key = key.replace('cm_', '')
                 self['cm'][new_key] = self[key]
                 del self[key]
+
     """
     def remove_default(self):
         if 'default' in self.keys():
@@ -97,7 +96,6 @@ class CredentialFromYaml(CredentialBaseClass):
 
 
 class CredentialStore(dict):
-
     password = None
 
     def __init__(self, username, filename, Credential, style=2.0, password=None):
@@ -125,9 +123,9 @@ class CredentialStore(dict):
     def encrypt(self, username, cloud, style):
         if style >= 2.0:
             cloudtype = self[username][cloud]['cm']['type']
-            if cloudtype == 'openstack' and self.password != None:
+            if cloudtype == 'openstack' and self.password is not None:
                 self.encrypt_value(username, cloud, 'OS_PASSWORD')
-            elif cloudtype == 'ec2' and self.password != None:
+            elif cloudtype == 'ec2' and self.password is not None:
                 self.encrypt_value(username, cloud, 'EC2_ACCESS_KEY')
                 self.encrypt_value(username, cloud, 'EC2_SECRET_KEY')
 
@@ -135,10 +133,10 @@ class CredentialStore(dict):
         credential = self[username][cloud]['credentials']
         if style >= 2.0:
             cloudtype = self[username][cloud]['cm']['type']
-            if cloudtype == 'openstack' and self.password != None:
+            if cloudtype == 'openstack' and self.password is not None:
                 password = self.decrypt_value(username, cloud, 'OS_PASSWORD')
                 credential['OS_PASSWORD'] = password
-            elif cloudtype == 'ec2' and self.password != None:
+            elif cloudtype == 'ec2' and self.password is not None:
                 access_key = self.decrypt_value(
                     username, cloud, 'EC2_ACCESS_KEY')
                 secrest_key = self.decrypt_value(
@@ -149,11 +147,11 @@ class CredentialStore(dict):
 
 
 class CredentialFromMongo(CredentialBaseClass):
-
     def __init__(self, user, cloud, datasource=None):
         """data source is a collectionname in cloudmesh_server.yaml"""
         """if day=tasource is none than use the default on which is ?"""
         raise NotImplementedError()
+
 
 if __name__ == "__main__":
 

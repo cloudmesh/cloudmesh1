@@ -7,11 +7,12 @@ from pprint import pprint
 log = LOGGER(__file__)
 
 # Anyone who imports this file will have db connection automatically
-#get_mongo_db("experiment", DBConnFactory.TYPE_MONGOENGINE)
+# get_mongo_db("experiment", DBConnFactory.TYPE_MONGOENGINE)
 
 TYPES_OF_ITEMS_IN_GROUP = ['VM', 'VOLUME']
 TYPES_IDENTITY_VALUE = {"VM": "vm_name",
                         "VOLUME": "volume_name"}
+
 
 class ExperimentGroup(Document):
     name = StringField(required=True)
@@ -22,6 +23,7 @@ class ExperimentGroup(Document):
     if dbname:
         meta = {'db_alias': dbname}
 
+
 class Comment(EmbeddedDocument):
     content = StringField()
     name = StringField(max_length=120)
@@ -29,6 +31,7 @@ class Comment(EmbeddedDocument):
     if dbname:
         meta = {'db_alias': dbname}
     
+
 class GroupItem(Document):
     group = ReferenceField(ExperimentGroup, reverse_delete_rule=CASCADE)
     tags = ListField(StringField(max_length=30))
@@ -39,6 +42,7 @@ class GroupItem(Document):
     else:
         meta = {'allow_inheritance': True}
         
+
 class VM(GroupItem):
     vm_name = StringField()
     vm_id = StringField()
@@ -63,9 +67,8 @@ class GroupManagement(object):
     def check_type(self, _type):
         if _type.upper() not in TYPES_OF_ITEMS_IN_GROUP:
             raise Exception("item type '{0}' not acceptable, allowed item types in group are: {1}".format(
-                                    _type, ", ".join(TYPES_OF_ITEMS_IN_GROUP)))
-            
-        
+                            _type, ", ".join(TYPES_OF_ITEMS_IN_GROUP)))
+
     def get_groups(self, groupname=None):
         if groupname:
             return ExperimentGroup.objects.get(userid__exact=self.username, name=groupname)
@@ -107,8 +110,7 @@ class GroupManagement(object):
                            vm_metadata=None,
                            vm_status=None):
         raise Exception("NOT IMPLEMENTED")
-       
-        
+
     def get_item_of_group(self, groupname, _type, value):
         self.check_type(_type)
         group = self.get_groups(groupname=groupname)  
@@ -116,8 +118,7 @@ class GroupManagement(object):
         temp = {"group": group,
                 v: value}
         return globals()[_type.upper()].objects.get(**temp)
-          
-    
+
     def add_item_to_group(self, groupname, _type, value):
         self.check_type(_type)
         group = self.get_groups(groupname=groupname)
@@ -125,18 +126,18 @@ class GroupManagement(object):
         # check item existence
         temp = None   
         try:
-            self.get_item_of_group(groupname,_type,value)
+            self.get_item_of_group(groupname, _type, value)
         except Exception as ex:
             temp = type(ex).__name__
             if temp != "DoesNotExist":
                 raise ex
-        if temp == None:
-            raise Exception("item '{0}' of type '{1}' exists in group '{2}'".format(
-                                                value, _type, groupname))
+        if temp is None:
+            raise Exception("item '{0}' of type '{1}' exists in group '{2}'".format(value,
+                                                                                    _type,
+                                                                                    groupname))
         elif temp == "DoesNotExist":
             v = TYPES_IDENTITY_VALUE[_type.upper()]
-            a = {"group": group,
-                v: value}
+            a = {"group": group, v: value}
             globals()[_type.upper()](**a).save()
             
     def delete_item_of_group(self, groupname, _type, value):
@@ -175,7 +176,6 @@ class GroupManagement(object):
         v = TYPES_IDENTITY_VALUE[_type.upper()]
         a = {v: value}
         return globals()[_type.upper()].objects(**a)
-    
 
     def add_tag_to_group(self, groupname, tag):
         group = self.get_groups(groupname=groupname)

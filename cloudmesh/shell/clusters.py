@@ -6,6 +6,7 @@ import time
 
 from pprint import pprint
 
+
 class ClusterExistsError(Exception):
 
     def __init__(self, value):
@@ -65,8 +66,7 @@ class Clusters(object):
         returns a list of ips belonging to the named cluster
         """
         return None
-        
-    
+
     def names(self, name):
         """
         returns a lsit of names of the vms belonging to the cluster
@@ -82,8 +82,9 @@ class Clusters(object):
         """
         group_ = self.GroupManage.get_groups(groupname=name)
         if self.check_group_is_a_cluster(group_):
-            VM_name_list = self.GroupManage.list_items_of_group(name, 
-                    _type="VM")["VM"]
+            VM_name_list = self.GroupManage.list_items_of_group(
+                name,
+                _type="VM")["VM"]
             if refresh:
                 self.mongodb.activate(cm_user_id=self.username)
                 self.mongodb.refresh(cm_user_id=self.username, types=['servers'])
@@ -101,8 +102,6 @@ class Clusters(object):
         else:
             raise Exception("group '{0}' is not a cluster group".format(name))
 
-
-                
     def delete(self, name, grouponly=False):
         """
         deletes the named cluster
@@ -132,7 +131,6 @@ class Clusters(object):
         self.GroupManage.delete_group(name)
 
 
-        
     def info(self, name):
         """returns a simplified information about the cluster in json format"""
         """each vm contains the ips and the name, as well as the status of the vm"""
@@ -157,7 +155,6 @@ class Clusters(object):
         """
         pass
 
-        
     def check_group_is_a_cluster(self, groupobj):
         """
         a cluster group object shoud have a 'cluster' tag in its tags

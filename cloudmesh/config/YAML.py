@@ -3,6 +3,7 @@ import re
 import cloudmesh
 from cloudmesh_base.locations import config_file
 
+
 class YAML(object):
     """
     Examples::
@@ -38,7 +39,7 @@ class YAML(object):
                         return spaces
                 except Exception, e:
                     print("ERROR(", no, ")", e)
-            no = no +1
+            no = no + 1
         return 0
 
     @staticmethod        
@@ -68,12 +69,11 @@ class YAML(object):
                         success = False
                         raise ValueError("Line {0}. The indenetation is not a "
                                          "multiple of {1}. Indent found: {2}\n"
-                                         "{0}: {3}"
-                                        .format(no, indent, spaces, line))
+                                         "{0}: {3}".format(no, indent, spaces, line))
                 except Exception, e:
                     success = False
                     print("ERROR(indent)", e)
-            no = no +1
+            no = no + 1
         return success
     
 

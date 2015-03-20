@@ -34,6 +34,7 @@ from cloudmesh_install.util import get_system
 from cloudmesh_base.locations import config_file_prefix, config_file
 from cloudmesh_base.util import yn_choice
 
+
 def print_help():
 
     deep_commands = ""

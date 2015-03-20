@@ -9,6 +9,7 @@ from cloudmesh_base.logger import LOGGER
 
 log = LOGGER(__file__)
 
+
 class HeatClusterMap(BaseClusterMap):
 
     # maximum h, 240/360 = 2/3

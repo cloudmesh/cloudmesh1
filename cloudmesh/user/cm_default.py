@@ -89,7 +89,7 @@ class DefaultCommand(object):
     
     def __init__(self, arguments):
         self.arguments = arguments
-        #print (self.arguments)
+        # print (self.arguments)
         try:
             self.config = cm_config()
         except:
@@ -171,15 +171,15 @@ class DefaultCommand(object):
         else:
             p_format = None
 
-        #if p_format == 'table' or p_format is None:
-            #print(row_table(to_print, order=None, labels=["Default", "Value"]))
-        #else:
+        # if p_format == 'table' or p_format is None:
+            # print(row_table(to_print, order=None, labels=["Default", "Value"]))
+        # else:
         shell_commands_dict_output(self.username,
                                    to_print,
-                                       print_format=p_format,
-                                       header=columns,
-                                       oneitem=True,
-                                       vertical_table=True)
+                                   print_format=p_format,
+                                   header=columns,
+                                   oneitem=True,
+                                   vertical_table=True)
 
     def _default_cloud(self):
         self._start_cm_user()

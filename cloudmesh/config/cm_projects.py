@@ -3,6 +3,7 @@ from string import Template
 import os
 import json
 
+
 class cm_projects:
 
     """A class to manage the project ids for the various clouds."""
@@ -18,7 +19,7 @@ class cm_projects:
         """returns the default project"""
         return self.config.get('cloudmesh.projects.default')
 
-    #@default.setter
+    # @default.setter
     def default(self, name):
         """sets the default project"""
         # check if name is in active projects

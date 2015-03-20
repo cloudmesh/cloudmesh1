@@ -4,6 +4,7 @@ from pprint import pprint
 from cloudmesh.shell.Shell import Shell
 from cloudmesh_base.util import banner
 
+
 class GitInfo(object):
 
     """This class can be used to return some elementary information
@@ -51,9 +52,12 @@ class GitInfo(object):
             format_string = "'%aN' <%cE>"
         elif format_arg == 'dict':
             format_string = "%aN\t%cE"
-        result = Shell.sort(Shell.git("log", 
-            "--all", "--format=" + format_string,
-            _tty_in=True, _tty_out=False, _piped=True), "-u")
+        result = Shell.sort(Shell.git("log",
+                                      "--all",
+                                      "--format=" + format_string,
+                                      _tty_in=True,
+                                      _tty_out=False,
+                                      _piped=True), "-u")
 
         if format_arg is None:
             return result
@@ -107,9 +111,9 @@ class GitInfo(object):
         '''
         sums = [0, 0, 0]
         for line in Shell.git("log", "--all", "--stat", '--author={0}'.format(email),
-                            _tty_in=True,
-                            _tty_out=False,
-                            _iter=True):
+                              _tty_in=True,
+                              _tty_out=False,
+                              _iter=True):
             line = line[:-1]
 
             if " files changed" in line:

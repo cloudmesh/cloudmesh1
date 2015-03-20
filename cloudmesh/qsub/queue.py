@@ -11,6 +11,7 @@ log = LOGGER(__file__)
 
 State = ['running', 'pending', 'completed', 'failed']
 
+
 class QSub(Document):
 
     name = StringField()        
@@ -47,7 +48,6 @@ class Queue(QSub):
     user = StringField()
     """name in ssh/config"""
 
-
     def list():
         """lists the jobs in the queue"""
         pass
@@ -57,6 +57,7 @@ class Queue(QSub):
         If name is other than none the specific queue info is given
         If the name is "all" info from all ques are returned."""
         pass        
+
 
 class Job(QSub):
 
@@ -133,7 +134,6 @@ class Job(QSub):
         job_from.name = name_to
         job_from.save()
 
-        
 
 QSub.connect()
 
@@ -157,9 +157,9 @@ job = Job(name=name,
           queue=queue)
 job.save()
 
-#print (Job.status(name))
+# print (Job.status(name))
 
-#jobs = Job.objects()
+# jobs = Job.objects()
 
 Job.list()
 
@@ -167,13 +167,13 @@ Job.info(name)
 
 j = Job.find(name)
 
-j.name='a'
+j.name = 'a'
 j.save()
 
 Job.list()
 
-## BUG
-#Job.rename(name, 'job2')
+# # BUG
+# Job.rename(name, 'job2')
 # Job.info('job2')
 
 banner("PBS")

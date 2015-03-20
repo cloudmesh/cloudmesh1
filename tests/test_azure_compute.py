@@ -18,7 +18,6 @@ from cloudmesh_base.util import HEADING
 from cloudmesh_base.locations import config_file
 
 
-
 class Test:
 
     # assuming first - is the prefered cloud

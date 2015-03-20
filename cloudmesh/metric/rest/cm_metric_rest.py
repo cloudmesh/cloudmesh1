@@ -3,7 +3,7 @@ import json
 import argparse
 from pprint import pprint
 from datetime import datetime, timedelta
-#from fgmetric.shell.CMMetricAPI import CMMetricAPI
+# from fgmetric.shell.CMMetricAPI import CMMetricAPI
 
 
 class CMMetricREST:

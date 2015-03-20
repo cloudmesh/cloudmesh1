@@ -54,9 +54,9 @@ class cm_user(object):
     def authenticate(self, userId, password):
         if not self.with_ldap:
             # return True
-            passhash = self.get_credential(userId,
-                            'cm_password_local',
-                            'cm_password_local')['password']
+            passhash = self.get_credential(
+                userId, 'cm_password_local',
+                'cm_password_local')['password']
             return sha256_crypt.verify(password, passhash)
         try:
             idp = cm_userLDAP()

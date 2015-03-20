@@ -10,7 +10,7 @@ import time
 def deploy_server(server_name):
     handle = capi.BootAPI()
     msystem = handle.find_system(name=server_name)
-    #msystem = handle.systems().find(name=server_name)
+    # msystem = handle.systems().find(name=server_name)
     # print "system {0} status: netboot_enabled {1}".format(msystem.name, msystem.netboot_enabled)
     # print "*"*50
     # pprint(msystem.to_datastruct())
@@ -44,7 +44,7 @@ def get_interface_ip(csystem, exclude_loop=True):
 def poweron_server(server_name):
     handle = capi.BootAPI()
     msystem = handle.find_system(name=server_name)
-    #msystem = handle.systems().find(name=server_name)
+    # msystem = handle.systems().find(name=server_name)
     # print "system {0} status: netboot_enabled {1}".format(msystem.name, msystem.netboot_enabled)
     # print "*"*50
     # pprint(msystem.to_datastruct())
@@ -53,7 +53,7 @@ def poweron_server(server_name):
         msystem.netboot_enabled = False
         # save modified system
         handle.add_system(msystem)
-    #msystem = handle.find_system(name=server_name)
+    # msystem = handle.find_system(name=server_name)
     # print "system {0} status: netboot_enabled {1}".format(msystem.name,
     # msystem.netboot_enabled)
     server_ip = get_interface_ip(msystem)

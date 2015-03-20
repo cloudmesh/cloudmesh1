@@ -23,6 +23,7 @@ log = LOGGER(__file__)
 MONGOCLIENT = 0
 MONGOENGINE = 1
 
+
 class DBConnFactory(object):
     connectors = {}
     DBCONFIG = None
@@ -96,6 +97,7 @@ class DBConnFactory(object):
                 cls.connectors[dbkey] = conn
         return conn
 
+
 def get_mongo_db(mongo_collection, clientType=MONGOCLIENT):
     """
     Read in the mongo db information from the cloudmesh_server.yaml
@@ -107,7 +109,7 @@ def get_mongo_db(mongo_collection, clientType=MONGOCLIENT):
     #    del(_args['self'])
     #    log.debug("[{0}()] called with [{1}]".format(sys._getframe().f_code.co_name,
     #                                    str(_args)))
-    #except:
+    # except:
     #    pass
 
     db_name = get_mongo_dbname_from_collection(mongo_collection)
@@ -126,6 +128,7 @@ def get_mongo_db(mongo_collection, clientType=MONGOCLIENT):
 
     return conn
 
+
 def get_mongo_dbname_from_collection(mongo_collection):
     config = cm_config_server().get("cloudmesh.server.mongo")
     db_name = None
@@ -135,6 +138,7 @@ def get_mongo_dbname_from_collection(mongo_collection):
         pass
     return db_name
     
+
 class cm_config_server(ConfigDict):
 
     """

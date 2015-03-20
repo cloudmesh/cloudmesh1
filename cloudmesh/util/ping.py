@@ -2,6 +2,7 @@
 
 import sh 
 
+
 def ping(host):
     '''ping the specified host.
 

@@ -33,12 +33,12 @@ api = restful.Api(app)
 
 queue_stat_parser = reqparse.RequestParser()
 queue_stat_parser.add_argument('resource', type=str, required=True)
-#queue_stat_parser.add_argument('user', type=str)
+# queue_stat_parser.add_argument('user', type=str)
 queue_stat_parser.add_argument('id', type=str)
 
 queue_info_parser = reqparse.RequestParser()
 queue_info_parser.add_argument('resource', type=str, required=True)
-#queue_info_parser.add_argument('user', type=str)
+# queue_info_parser.add_argument('user', type=str)
 queue_info_parser.add_argument('queue', type=str)
 
 config = ConfigDict(

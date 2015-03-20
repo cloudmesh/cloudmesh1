@@ -13,6 +13,7 @@ from cloudmesh.util.naming import server_name_analyzer
 
 ALLOWED_PRINT_FORMAT = ['table', 'json', 'csv']
 
+
 def get_default_print_format(username):
     '''
     the funtion will try to find the default printing form from db_defaults

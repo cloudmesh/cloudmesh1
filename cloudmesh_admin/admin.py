@@ -9,9 +9,11 @@ from docopt import docopt
 import cloudmesh
 import sys
 
+
 def main():
     admin_command(sys.argv)
-        
+
+
 def admin_command(args):
     """cm-admin.
 
@@ -33,7 +35,7 @@ def admin_command(args):
 
     if arguments['version']:
         print cloudmesh.__version__
-    
+
     if arguments['start']:
         start()
     elif arguments['stop']:

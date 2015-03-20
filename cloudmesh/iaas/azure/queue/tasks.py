@@ -5,7 +5,7 @@ from cloudmesh.iaas.azure.queue.celery import celery_azure_queue
 from cloudmesh.iaas.azure.cm_compute import azure as windows_azure
 from cloudmesh.cm_mongo import cm_mongo
 #
-#logger = get_task_logger(__name__)
+# logger = get_task_logger(__name__)
 #
 
 

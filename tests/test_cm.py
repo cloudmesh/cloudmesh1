@@ -13,7 +13,6 @@ import sys
 import os
 
 
-
 if os.path.isdir(os.path.expanduser("~/.cloudmesh")):
     print("ERROR", "you must not have a .cloudmesh dir to run this test")
     sys.exit()
@@ -26,7 +25,6 @@ class Test:
         config = cloudmesh.load("user")
         self.username = config.get("cloudmesh.hpc.username")
 
-    
     def setup(self):
         self.project_id = "fg82"
 
@@ -66,7 +64,6 @@ class Test:
     def test_08_project(self):
         os.system("cm project default {0}".format(self.project_id))
 
-        
     def test_09_help(self):
         HEADING()
 
@@ -111,8 +108,6 @@ class Test:
                 print("ok")
         assert success 
 
-        
     def test_10_cloud_on(self):
         HEADING()
         os.system("cm cloud on india")
-                

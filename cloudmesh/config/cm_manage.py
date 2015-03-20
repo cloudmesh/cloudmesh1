@@ -106,7 +106,7 @@ def cm_manage():
     # This secion deals with handeling "cm config" related commands
 
     ######################################################################
-    is_config = arguments['config'] != None
+    is_config = arguments['config'] is not None
 
     if is_config:
 

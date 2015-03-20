@@ -18,7 +18,7 @@ def generate():
         key = key.lstrip("\t")
         fields_dict[key] = value
     print fields_dict
-    user_class = type('User','CloudmeshObject',fields_dict)
+    user_class = type('User', 'CloudmeshObject', fields_dict)
     print repr(user_class)
     pass
 
@@ -82,11 +82,11 @@ def management_command(args):
         elif arguments['user'] and arguments['approve']:
             if arguments['USERNAME']:
                 user = Users()
-                user.amend_user_status(arguments['USERNAME'],status='approved')
+                user.amend_user_status(arguments['USERNAME'], status='approved')
         elif arguments['user'] and arguments['deny']:
             if arguments['USERNAME']:
                 user = Users()
-                user.amend_user_status(arguments['USERNAME'],status='denied')
+                user.amend_user_status(arguments['USERNAME'], status='denied')
         elif arguments['project']:
             print "Dummy Projects"
             project_fields()

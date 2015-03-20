@@ -6,7 +6,7 @@ from cloudmesh.iaas.aws.cm_compute import aws as amazon_ec2
 from cloudmesh.cm_mongo import cm_mongo
 
 #
-#logger = get_task_logger(__name__)
+# logger = get_task_logger(__name__)
 #
 
 

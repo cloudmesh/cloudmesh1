@@ -11,6 +11,7 @@ log = LOGGER(__file__)
 import sys
 import os
 
+
 class Test:
 
     def test_01_debug_on(self):
@@ -24,4 +25,3 @@ class Test:
     def test_03_debug_on(self):
         HEADING()
         os.system("cm debug on")
- 

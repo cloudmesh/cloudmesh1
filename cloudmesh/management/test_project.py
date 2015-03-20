@@ -18,12 +18,12 @@ class user_project():
 
     title = ""
     category = ""
-    #keywords = ""
+    # keywords = ""
     contact = ""
-    #members = ""
-    #alumni = ""
-    #nsf_grant_number = ""
-    #nsf_grant_url = ""
+    # members = ""
+    # alumni = ""
+    # nsf_grant_number = ""
+    # nsf_grant_url = ""
     results = ""
     nsf_Aggreement = ""  # Yes/No
     slide_collection_aggreement = ""  # Yes/No

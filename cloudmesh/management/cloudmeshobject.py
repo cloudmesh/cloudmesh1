@@ -27,7 +27,7 @@ def order(mongo_class, exclude=None, include=None, custom=None, kind=None):
         if include is not None:
             fields = include
             for key in fields:
-                if not key in class_fields:
+                if key not in class_fields:
                     print "Error: {0} not in fields".format(class_fields)
         else:
             fields = class_fields

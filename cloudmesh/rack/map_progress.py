@@ -175,14 +175,14 @@ class RackMapProgress(BaseProgress):
         self.set_map_progress_status(self.status_text)
 
     def set_map_progress_status(self, status, factor=1):
-        #print("map_progress_type is: {0}, status is: {1}".format(self.map_progress_type, status))
+        # print("map_progress_type is: {0}, status is: {1}".format(self.map_progress_type, status))
         curr_status = self.status_data_dict[self.map_progress_type][status]
         if factor == 1:
             value = curr_status["begin"] + curr_status["range"]
         else:
             value = curr_status["begin"] + \
                 int(round(curr_status["range"] * factor))
-        #print("process status, status: '{0}', value: '{1}'".format(status, value))
+        # print("process status, status: '{0}', value: '{1}'".format(status, value))
         next_status = curr_status["next"] if factor == 1 else status
         self.set_status(status, value, next_status)
 

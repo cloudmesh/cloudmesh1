@@ -18,7 +18,6 @@ from cloudmesh_common.util import address_string
 log = LOGGER(__file__)
 
 
-
 def shell_command_cloud(arguments):
     """
     ::
@@ -1396,7 +1395,6 @@ class CloudCommand(CloudManage):
             else:
                 return
 
-    
     def _cloud_set_flavor(self):
         '''
         set a flavor for a cloud;

@@ -80,7 +80,7 @@ class aws(ComputeBaseType):
         # pprint(self.credential)
 
         # libcloud.security.CA_CERTS_PATH.append(self.credential['EUCALYPTUS_CERT'])
-        #### libcloud.security.VERIFY_SSL_CERT = False
+        # ### libcloud.security.VERIFY_SSL_CERT = False
 
         # Driver = get_driver(Provider.EUCALYPTUS)
         # self.cloud = Driver(key=euca_id, secret=euca_key, secure=False, host=host, path=path, port=port)

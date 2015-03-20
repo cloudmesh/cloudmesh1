@@ -117,9 +117,9 @@ class UserDictStore(dict):
 
     def encrypt(self, username, cloud, password):
         cloudtype = self[username]['clouds'][cloud]['cm_type']
-        if cloudtype == 'openstack' and password != None:
+        if cloudtype == 'openstack' and password is not None:
             self.encrypt_value(username, cloud, 'OS_PASSWORD', password)
-        elif cloudtype == 'ec2' and password != None:
+        elif cloudtype == 'ec2' and password is not None:
             self.encrypt_value(username, cloud, 'EC2_ACCESS_KEY', password)
             self.encrypt_value(username, cloud, 'EC2_SECRET_KEY', password)
 
@@ -138,11 +138,11 @@ class UserDictStore(dict):
     def credential(self, username, cloud, password=None):
         credential = self[username]['clouds'][cloud]['credentials']
         cloudtype = self[username]['clouds'][cloud]['cm_type']
-        if cloudtype == 'openstack' and self.password != None:
+        if cloudtype == 'openstack' and self.password is not None:
             password = self.decrypt_value(
                 username, cloud, 'OS_PASSWORD', password)
             credential['OS_PASSWORD'] = password
-        elif cloudtype == 'ec2' and self.password != None:
+        elif cloudtype == 'ec2' and self.password is not None:
             access_key = self.decrypt_value(
                 username, cloud, 'EC2_ACCESS_KEY', password)
             secrest_key = self.decrypt_value(
@@ -181,10 +181,10 @@ class UserMongoStore():
         if password is None and self.password is not None:
             password = self.password
 
-        if cloudtype == 'openstack' and self.password != None:
+        if cloudtype == 'openstack' and self.password is not None:
             password = self.decrypt_value(user, cloud, 'OS_PASSWORD', password)
             credential['OS_PASSWORD'] = password
-        elif cloudtype == 'ec2' and self.password != None:
+        elif cloudtype == 'ec2' and self.password is not None:
             access_key = self.decrypt_value(
                 user, cloud, 'EC2_ACCESS_KEY', password)
             secrest_key = self.decrypt_value(

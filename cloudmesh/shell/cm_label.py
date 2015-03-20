@@ -7,6 +7,7 @@ from cloudmesh.cm_mongo import cm_mongo
 
 log = LOGGER(__file__)
 
+
 # TODO: [--width=WIDTH]
 # WIDTH   The width of the ID in teh label, padded with 0
 def shell_command_label(arguments):
@@ -70,7 +71,6 @@ def _helper(username, prefix=None, idx=None, raw=False):
         else:
             print("next vm name:")
     print(mongo.vmname(prefix=prefix, idx=idx, cm_user_id=username))
-    
 
 
 def main():

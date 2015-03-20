@@ -1,5 +1,6 @@
 from __future__ import print_function
 
+
 def nova_provider(kind):
     sh_nova = None
     if kind is "sh":

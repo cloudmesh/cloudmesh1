@@ -1,17 +1,17 @@
 import sh
 import os
 
+
 class Shell(object):
 
     #    @classmethod
     #    def ls(cls, arguments=None):
     #        return cls._execute(sh.ls, arguments)
-    
-    
+
     @classmethod
     def _execute(cls, f, *args, **kwargs):
         args = args or []
-        kws  = kwargs or {}
+        kws = kwargs or {}
         return f(*args, **kws)
 #        args = list(*arguments)
 #        if len(args) == 0:
@@ -19,17 +19,16 @@ class Shell(object):
 #       else:
 #           return f(args).rstrip('\n')
 
-                
     @classmethod
     def git(cls, *args, **kwargs):
         return cls._execute(sh.git, *args, **kwargs)
         
     @classmethod
-    def VBoxManage	(cls, *args, **kwargs):
+    def VBoxManage(cls, *args, **kwargs):
         return cls._execute(sh.VBoxManage, *args, **kwargs)
 
     @classmethod
-    def blockdiag	(cls, *args, **kwargs):
+    def blockdiag(cls, *args, **kwargs):
         return cls._execute(sh.blockdiag	, *args, **kwargs)
     
     @classmethod
@@ -95,8 +94,8 @@ class Shell(object):
         if os.path.isdir(newdir):
             pass
         elif os.path.isfile(newdir):
-            raise OSError("a file with the same name as the desired " \
-                        "dir, '%s', already exists." % newdir)
+            raise OSError("a file with the same name as the desired "
+                          "dir, '%s', already exists." % newdir)
         else:
             head, tail = os.path.split(newdir)
             if head and not os.path.isdir(head):
@@ -114,7 +113,7 @@ class Shell(object):
                                         
     @classmethod
     def nosetests(cls, *args, **kwargs):
-        return cls._execute(sh.nosetests,pwd, *args, **kwargs)
+        return cls._execute(sh.nosetests, pwd, *args, **kwargs)
                                         
     @classmethod
     def nova(cls, *args, **kwargs):

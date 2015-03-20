@@ -54,7 +54,7 @@ class RackWork:
         # guess absolute path of cloudmesh_web
         rack_py_dir = pwd().strip().split("/")
         cloudmesh_web_dir = rack_py_dir
-        #log.debug("cloudmesh_web dir, {0}".format(cloudmesh_web_dir))
+        # log.debug("cloudmesh_web dir, {0}".format(cloudmesh_web_dir))
         list_image_dir = [flask_dir] + relative_dir_image.strip().split("/")
         abs_dir_image = "/".join(cloudmesh_web_dir + list_image_dir)
         abs_dir_diag = dir_base + "/" + relative_dir_diag
@@ -66,7 +66,7 @@ class RackWork:
         if False:
             dict_data = map_class.genRandomValues()
         else:
-            #flag_filter = None if rack_name == "all" else rack_name
+            # flag_filter = None if rack_name == "all" else rack_name
             # If user want to customize the action, user can set optional param here
             # by calling map_class.set_optional_param(value)
             # optional param

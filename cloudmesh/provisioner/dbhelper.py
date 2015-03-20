@@ -166,6 +166,6 @@ if __name__ == "__main__":
     update_elem = {"$set": {"value3": "my value3"}}
     result = dbc.atom_update(query_elem, update_elem, flag_new=False)
     print("update result is: ", result)
-    #query_elem = {"cm_id": "chen_test_insert"}
-    #result = dbc.remove(query_elem)
+    # query_elem = {"cm_id": "chen_test_insert"}
+    # result = dbc.remove(query_elem)
     # print "remove result is: ", result

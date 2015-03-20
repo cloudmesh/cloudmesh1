@@ -5,7 +5,7 @@ from pprint import pprint
 
 # print "sys len is: ", len(sys.argv)
 # print "para: ", sys.argv[1]
-if (len(sys.argv) < 2):
+if len(sys.argv) < 2:
     print("usage: ")
     print("    {0} your_user_name".format(sys.argv[0]))
     sys.exit()

@@ -78,9 +78,9 @@ class pbs_note_builder:
 
         # convert the dict to a unique string
         # e.g., "'other': 'test', 'temperature': '10.2', 'service': 'hpc'"
-        #kvpair_list = ", ".join([": ".join(map(lambda x: "'".join(["", str(x), ""]), [key, prev_note[key]])) for key in sorted(prev_note.keys())])
-        #snote = "".join(['{', kvpair_list, '}'])
-        #sshnote = '"'.join(["", snote, ""])
+        # kvpair_list = ", ".join([": ".join(map(lambda x: "'".join(["", str(x), ""]), [key, prev_note[key]])) for key in sorted(prev_note.keys())])
+        # snote = "".join(['{', kvpair_list, '}'])
+        # sshnote = '"'.join(["", snote, ""])
 
         # try get the dict string with json dumps
         sshnote = json.dumps(curr_note)
@@ -92,7 +92,7 @@ class pbs_note_builder:
             str_ssh, command))
 
         # This operation NEED authorization ...
-        #ssh(str_ssh, command)
+        # ssh(str_ssh, command)
 
     # set server's temperature
     # a shortcut of set_note

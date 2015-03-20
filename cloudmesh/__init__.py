@@ -2,8 +2,8 @@
 A package to manage virtual machines on various clouds infrastructures and bare metal images.
 """
 
-#import pkg_resources
-#__version_full__  = pkg_resources.get_distribution("cloudmesh").version
+# import pkg_resources
+# __version_full__  = pkg_resources.get_distribution("cloudmesh").version
 from __future__ import print_function
 
 __version__ = '1.3'
@@ -43,7 +43,7 @@ from cloudmesh.cm_mongo import cm_mongo
 from cloudmesh.cm_mesh import cm_mesh
 from cloudmesh_base.util import banner, path_expand, yn_choice
 
-#from cloudmesh_install.util import grep
+# from cloudmesh_install.util import grep
 
 
 from cloudmesh.user.cm_user import cm_user as cm_user

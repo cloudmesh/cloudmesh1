@@ -11,8 +11,9 @@ import cloudmesh
 import unittest
 import random
 import time
-        
+
 log = LOGGER(__file__)
+
 
 def activate_cloud():
     res = os.popen("cm cloud on india").read()

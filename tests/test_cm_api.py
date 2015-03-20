@@ -12,8 +12,8 @@ log = LOGGER(__file__)
 import sys
 import os
 import cloudmesh
-
 import unittest
+
 
 class Test(unittest.TestCase):
     mesh = None

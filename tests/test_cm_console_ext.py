@@ -48,7 +48,7 @@ class Test(unittest.TestCase):
     def test_03_start_a_vm(self):
         HEADING()
         global vm
-        vmname = "{0}_{1}_{2}".format(self.username, "test",str(random.randint(1,100)))
+        vmname = "{0}_{1}_{2}".format(self.username, "test", str(random.randint(1, 100)))
         cmd = ('cm "vm start'
                ' --name={0}'
                ' --cloud=india'
@@ -58,7 +58,7 @@ class Test(unittest.TestCase):
         res = os.popen(cmd).read()
         vm.append(vmname)
         assert ("job status: PENDING" in res 
-                or "job status: STARTED" in res) == True
+                or "job status: STARTED" in res)
         time.sleep(1)
 
     def test_04_validate_vm_running(self):
@@ -99,7 +99,7 @@ class Test(unittest.TestCase):
     def test_09_default_image(self):
         HEADING()
         res = os.popen('cm "cloud set image india'
-                 ' --name=futuregrid/ubuntu-14.04"').read()
+                       ' --name=futuregrid/ubuntu-14.04"').read()
         assert res.find("'futuregrid/ubuntu-14.04' is selected") != -1
 
     def test_10_validate_default_image(self):
@@ -110,10 +110,10 @@ class Test(unittest.TestCase):
     def test_11_quick_start(self):
         HEADING()
         global vm
-        vmname = "nosetests_" + str(random.randint(1,100))
+        vmname = "nosetests_" + str(random.randint(1, 100))
         res = os.popen('cm "vm start --name={0}"'.format(vmname)).read()
         assert ("job status: PENDING" in res 
-                or "job status: STARTED" in res) == True
+                or "job status: STARTED" in res)
         vm.append(vmname)
         time.sleep(1)
 
@@ -132,7 +132,7 @@ class Test(unittest.TestCase):
             cmd = ('cm "vm delete {0} --cloud=india --force"'.format(vmname))
             res = os.popen(cmd).read()
             assert res.find("{'msg': 'success'}") != -1
-            #cls.vm.remove(vmname)
+            # cls.vm.remove(vmname)
 
     def test_14_validate_vm_deleted(self):
         HEADING()

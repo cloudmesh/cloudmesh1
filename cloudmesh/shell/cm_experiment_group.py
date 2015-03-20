@@ -10,6 +10,7 @@ from pprint import pprint
 
 log = LOGGER(__file__)
 
+
 def shell_command_experiment_group(arguments):
     """
     ::
@@ -49,7 +50,6 @@ def shell_command_experiment_group(arguments):
           group show sample vm --format=json
               list all VMs of group sample in json format
     """
-
 
     """
       Example:
@@ -152,7 +152,6 @@ def shell_command_experiment_group(arguments):
                                    table_format="key_list",
                                    indexed=True)
 
-        
     elif arguments["create"]:
         try:
             GroupManage.create_group(name)
@@ -168,7 +167,6 @@ def shell_command_experiment_group(arguments):
             Console.error(str(err))
             return
         Console.ok("group {0} removed".format(name))
-
 
     elif arguments["add"] and arguments['item']:
         try:

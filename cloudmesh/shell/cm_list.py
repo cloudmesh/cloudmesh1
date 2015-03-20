@@ -101,7 +101,7 @@ class ListInfo(object):
 
         self.arguments = arguments
         
-        #pprint(self.arguments)
+        # pprint(self.arguments)
         
         self.cloudmanage = CloudManage()
         try:

@@ -27,7 +27,6 @@ from cloudmesh_base.util import banner
 class Test:
 
     hosts = ["india.futuregrid.org"]
-    
 
     def setup(self):
         # self.configuration = cm_config()

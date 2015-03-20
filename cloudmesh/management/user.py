@@ -151,7 +151,6 @@ class User(CloudmeshObject):
             "message",
         ]
 
-
     # def save(self,db):
     # 	db.put({"firname":user.firname,...})
 
@@ -161,7 +160,7 @@ class User(CloudmeshObject):
         '''
         """finds if a user is active or not"""
         d1 = datetime.datetime.now()
-        return (self.active == True) and (datetime.datetime.now() < self.date_deactivate)
+        return (self.active and (datetime.datetime.now() < self.date_deactivate)
 
     @classmethod
     def set_password(cls, password):
@@ -171,7 +170,7 @@ class User(CloudmeshObject):
         :param password:
         :type password:
         '''
-        #self.password_hash = generate_password_hash(password)
+        # self.password_hash = generate_password_hash(password)
         pass
 
     @classmethod

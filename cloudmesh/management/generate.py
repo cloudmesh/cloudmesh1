@@ -1,7 +1,7 @@
 # generates test users and projects
 
 from mongoengine import *
-#from other.user_dict import *
+# from other.user_dict import *
 from cloudmesh.management.user import User, Users
 from cloudmesh.management.project import Project, Projects
 import sys
@@ -17,9 +17,9 @@ get_mongo_db("manage", DBConnFactory.TYPE_MONGOENGINE)
 # alternatively, change this to more Object Oriented way so the connection is
 # only established when the object is instantiated.
 
-#----------------------------------------------------------
-#	The generate class generates 10 random users
-#----------------------------------------------------------
+# ----------------------------------------------------------
+# The generate class generates 10 random users
+# ----------------------------------------------------------
 
 users = Users()
 projects = Projects()
@@ -115,7 +115,7 @@ def random_project():
 
     )
     return data
-    #projects.add_member("gregvon1", data)
+    # projects.add_member("gregvon1", data)
 
 
 def generate_projects(n):
