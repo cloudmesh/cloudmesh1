@@ -25,6 +25,7 @@ def html():
     local("cd docs; make html")
     cursor_on()
 
+
 @task
 def publish():
     """deploy the documentation on gh-pages"""
@@ -49,7 +50,7 @@ def man():
 @task
 def api():
     for modulename in ["cloudmesh",
-                       "cloudmesh_admin",                       
+                       "cloudmesh_admin",
                        "cloudmesh_common",
                        "cloudmesh_install",
                        "cloudmesh_cmd3",

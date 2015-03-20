@@ -26,7 +26,6 @@ def configure():
 
     # new way to replace an attribute in yaml
 
-
     filename = config_file("/cloudmesh.yaml")
     print "modify ->", filename
     replacements = {

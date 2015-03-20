@@ -45,7 +45,7 @@ def get_pid(command):
         print "No mongod running"
     else:
         print "SUCCESS: mongod PID", pid
-    return (pid, line)
+    return pid, line
 
 
 @task
@@ -64,11 +64,13 @@ def reset(password=None):
     simple()
     local("reset")
 
+
 @task
 def install_osx():
     # local('ruby -e "$(curl -fsSL https://raw.github.com/mxcl/homebrew/go)"')
     # local('brew update')
     local('brew install mongodb')
+
 
 '''
 @task
@@ -136,17 +138,19 @@ def install():
         local('brew install mongodb')
 '''
 
+
 def version():
     ver = None
     try:
-        out = subprocess.check_output("mongod --version", shell=True)\
-                        .split("\n")[0].split("version")[1].strip().split(".")
+        out = subprocess.check_output("mongod --version", shell=True) \
+            .split("\n")[0].split("version")[1].strip().split(".")
         ver = (int(out[0][1:]), int(out[1]), int(out[2]))
-        #print "mongod service version is: ", ver
+        # print "mongod service version is: ", ver
     except:
-        #print "mongod serive not available"
+        # print "mongod serive not available"
         pass
     return ver
+
 
 @task
 def admin():
@@ -192,8 +196,8 @@ def admin():
     else:
         script.append('db.addUser("{0}", "{1}");'.format(user, password))
 
-    #script.append('db.auth("{0}", "{1}");'.format(user, password))
-    #script.append('db.shutdownServer();')
+    # script.append('db.auth("{0}", "{1}");'.format(user, password))
+    # script.append('db.shutdownServer();')
 
     mongo_script = '\n'.join(script)
 
@@ -238,7 +242,6 @@ def isyes(value):
 
 @task
 def boot(auth=True):
-
     # wipe mongo
     wipe()
 
@@ -250,7 +253,6 @@ def boot(auth=True):
     time.sleep(5)
     PROGRESS.next()
     if isyes(auth):
-
         # create users
         admin()
 
@@ -277,10 +279,10 @@ def boot(auth=True):
 
 @task
 def start(auth=True):
-    '''
+    """
     start the mongod service in the location as specified in
     cloudmesh_server.yaml
-    '''
+    """
     banner("Starting mongod")
     config = cm_config_server().get("cloudmesh.server.mongo")
 
@@ -294,12 +296,12 @@ def start(auth=True):
     with settings(warn_only=True):
         with hide('output', 'running', 'warnings'):
             lines = local(
-                "ps -ax |grep '[m]ongod.*port {0}'".format(port), capture=True)\
+                "ps -ax |grep '[m]ongod.*port {0}'".format(port), capture=True) \
                 .split("\n")
 
     if lines != ['']:
         pid = lines[0].split(" ")[0]
-        print "NO ACTION: mongo already running in pid {0} for port {1}"\
+        print "NO ACTION: mongo already running in pid {0} for port {1}" \
             .format(pid, port)
     else:
         print "ACTION: Starting mongod"
@@ -308,8 +310,8 @@ def start(auth=True):
         print "      please do not interrupt this program."
         print
         print "      Please be patient!"
-        print        
-                
+        print
+
         with_auth = ""
         if isyes(auth):
             with_auth = "--auth"
@@ -318,16 +320,14 @@ def start(auth=True):
             'mongod {2} --bind_ip 127.0.0.1 '
             '--fork --dbpath {0} '
             '--logpath {0}/mongodb.log '
-            '--port {1}'
-            .format(path, port, with_auth))
+            '--port {1}'.format(path, port, with_auth))
 
 
 @task
 def clean():
     port = cm_config_server().get("cloudmesh.server.mongo.port")
     result = local(
-        'echo "show dbs" | mongo --quiet --port {0}'
-        .format(port), capture=True).splitlines()
+        'echo "show dbs" | mongo --quiet --port {0}'.format(port), capture=True).splitlines()
     for line in result:
         name = line.split()[0]
         local('mongo {0} --port {1} --eval "db.dropDatabase();"'
@@ -355,9 +355,9 @@ def kill():
 
 @task
 def stop():
-    '''
+    """
     stops the currently running mongod
-    '''
+    """
     # for some reason shutdown does not work
     # local("mongod --shutdown")
     with settings(warn_only=True):
@@ -370,16 +370,17 @@ def stop():
         # this throw error messages in some cases
         # local("echo \"use admin\ndb.shutdownServer()\" | mongo")
         # this ignore the error message in case it occurs
+        # BUG: True
         subprocess.check_output('echo "use admin\ndb.shutdownServer()" | mongo', shell=TRUE)
     except:
         pass
 
-    # (pid, line) = get_pid("mongod")
-    # if pid is None:
-    #     print "No mongod running"
-    # else:
-    #     print "Kill mongod"
-    #     local ("killall -15 mongod")
+        # (pid, line) = get_pid("mongod")
+        # if pid is None:
+        # print "No mongod running"
+        # else:
+        # print "Kill mongod"
+        # local ("killall -15 mongod")
 
 
 @task
@@ -391,7 +392,6 @@ def vms_find():
 
 
 def refresh(types):
-
     user = cm_config().get("cloudmesh.hpc.username")
 
     c = cm_mongo()
@@ -401,9 +401,9 @@ def refresh(types):
 
 @task
 def cloud():
-    '''
+    """
     puts a snapshot of users, servers, images, and flavors into mongo
-    '''
+    """
     refresh(types=['users', 'servers', 'images', 'flavors'])
     ldap()
     inventory()
@@ -411,9 +411,9 @@ def cloud():
 
 @task
 def simple():
-    '''
+    """
     puts a snapshot of servers, images, and flavors into mongo (no users)
-    '''
+    """
     refresh(types=['servers', 'images', 'flavors'])
     PROGRESS.next()
     print
@@ -424,9 +424,9 @@ def simple():
 
 @task
 def users():
-    '''
+    """
     puts a snapshot of the users into mongo
-    '''
+    """
     refresh(types=['users'])
 
 
@@ -440,9 +440,9 @@ def errormetric():
 
 @task
 def ldap(username=None):
-    '''
+    """
     fetches a user list from ldap and displays it
-    '''
+    """
 
     idp = cm_userLDAP()
     idp.connect("fg-ldap", "ldap")
@@ -458,21 +458,20 @@ def ldap(username=None):
 
 # @task
 # def fg():
-#     """create a simple testbed"""
-#     start()
-#     local("python cloudmesh_web/fg.py")
+# """create a simple testbed"""
+# start()
+# local("python cloudmesh_web/fg.py")
 
 
 @task
 def projects():
     print "NOT IMPLEMENTED YET"
     print "this class will when finished be able to import project titles" \
-        " and description from the fg portal"
+          " and description from the fg portal"
 
 
 @task
 def pbs(host, kind):
-
     _pbs = pbs_mongo()
 
     # get hpc user

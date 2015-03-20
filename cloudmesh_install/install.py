@@ -261,7 +261,7 @@ def deploy(force=False):
 
 
 def download():
-    '''downloads cloudmesh'''
+    """downloads cloudmesh"""
     local("git clone git@github.com:cloudmesh/cloudmesh.git")
 
 
@@ -302,8 +302,8 @@ def install_packages(packages):
 
 
 def ubuntu():
-    '''prepares an system and installs all
-    needed packages before we install cloudmesh'''
+    """prepares an system and installs all
+    needed packages before we install cloudmesh"""
 
     # Note: package installations (apt-get install) are now done in
     # bin/prepare-ubuntu.sh

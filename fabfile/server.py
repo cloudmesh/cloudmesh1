@@ -241,9 +241,9 @@ def wsgi(action="start"):
       --chdir=cloudmesh_web \
       --module=server \
       --callable=app".format(user_logfile, user_pidfile)
-    elif (action == "stop" or action == "kill"):
+    elif action == "stop" or action == "kill":
         command = "kill -INT `cat {0}`".format(user_pidfile)
-    elif (action == "reload"):
+    elif action == "reload":
         command = "kill -HUP `cat {0}`".format(user_pidfile)
-    if (command):
+    if command:
         local(command)

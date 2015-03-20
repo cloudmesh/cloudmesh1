@@ -3,8 +3,6 @@ from cloudmesh_base.util import banner
 from cloudmesh_base.locations import config_file
 import server
 
-import os
-
 
 @task
 def dir():

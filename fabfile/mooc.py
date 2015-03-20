@@ -1,5 +1,4 @@
-from fabric.api import task, local, execute, hide, settings
-from fabric.contrib.console import confirm
+from fabric.api import task, local
 
 
 @task

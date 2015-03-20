@@ -1,5 +1,5 @@
 import fabric
-from fabric.api import task, local, execute
+from fabric.api import task, local
 import clean
 import os
 

@@ -29,6 +29,7 @@ rabbit_env = {
 
 def set_rabbitmq_env():
 
+    # BUG undefined
     global RABBITMQ_SERVER
 
     location = path_expand("~/.cloudmesh/rabbitm")
@@ -103,10 +104,10 @@ def install():
 
 @task
 def user(name=None):
-    ''' create a user in rabbit mq
+    """ create a user in rabbit mq
 
     :param name: if the name is ommited it will be queried for it.
-    '''
+    """
     if name is None:
         rabbit_env["user"] = get_user()
     rabbit_env["password"] = get_password()

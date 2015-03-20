@@ -52,15 +52,15 @@ def iu_credential_fetch_command(args):
     elif arguments["user"] and arguments["login"]:
         verify_ssh_login(arguments["--username"])
 
-def download_rc_files(userid):
 
+def download_rc_files(userid):
     for hostname in rc_file_locations:
         host = rc_file_locations[hostname]
         host["userid"] = userid
         host["dest"] = os.path.expanduser(host["dest"])
 
         print "fetching from ", host["hostname"],
-        pprint (host)
+        pprint(host)
         print "create directory:", "%(dest)s" % host
 
         os.system("mkdir -p %(dest)s" % host)
@@ -71,6 +71,7 @@ def download_rc_files(userid):
         result = None
         try:
             from sh import scp
+
             result = scp("-o", "StrictHostKeyChecking=no",
                          "%(userid)s@%(hostname)s:%(source)s" % host, "%(dest)s" % host)
             print "ok", result
@@ -250,7 +251,6 @@ def apply_credentials_to_yaml_file():
 
 
 def fetchrc(userid=None, outdir=None):
-
     banner("download rcfiles (novarc, eucarc, etc) from IaaS platforms")
 
     print ""
@@ -284,7 +284,7 @@ def fetchrc(userid=None, outdir=None):
 
     # user input is disabled
     # host_ids = raw_input("Please enter host identifications [default: %s]: "
-    #                     % ", ".join(host_ids)) or host_ids
+    # % ", ".join(host_ids)) or host_ids
 
     if isinstance(host_ids, str):
         host_ids = map(lambda x: x.strip(), host_ids.split(","))
@@ -355,6 +355,7 @@ def verify_ssh_login(userid):
 
 def main(args=sys.argv):
     iu_credential_fetch_command(args)
+
 
 if __name__ == '__main__':
     main(sys.argv)

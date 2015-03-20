@@ -22,7 +22,7 @@ def ec2secgroup_openport(cloudname, port):
 
     mygroup = Ec2SecurityGroup("default")
     groupid = cloud.find_security_groupid_by_name(mygroup.name)
-        # print groupid
+    # print groupid
     rule = Ec2SecurityGroup.Rule(portnum, portnum)
     cloud.add_security_group_rules(groupid, [rule])
 

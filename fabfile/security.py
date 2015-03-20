@@ -1,7 +1,4 @@
 from fabric.api import task, local
-import sys
-import os
-
 from build import cursor_on
 
 

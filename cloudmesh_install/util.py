@@ -12,13 +12,14 @@ from string import Template
 import os
 import sys
 
+
 def get_system():
     if is_ubuntu():
         return "ubuntu"
     elif is_centos():
         return "centos"
     elif is_osx():
-        return"osx"
+        return "osx"
     else:
         return "unsupported"
 
