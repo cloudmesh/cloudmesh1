@@ -2,22 +2,19 @@ from fabric.api import task, local
 from util import yaml_file_replace
 import progress
 
+
 @task
 def create():
-        
     from IPython.lib import passwd
     from fabfile.util import yaml_file_replace
-
 
     local("ipython profile create nbserver")
     local('cp etc/ipython_notebook_config.py ~/.ipython/profile_nbserver')
     result = passwd()
 
-    
     yaml_file_replace(filename='/../.ipython/profile_nbserver/ipython_notebook_config.py',
                       replacements={'SHAPASSWD': result}
                       )
-
 
     progress.off()
     filename = "~/.ipython/profile_nbserver/mycert.pem"

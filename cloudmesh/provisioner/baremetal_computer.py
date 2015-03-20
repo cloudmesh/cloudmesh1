@@ -13,7 +13,6 @@ log = LOGGER(__file__)
 
 
 class BaremetalComputer:
-
     """Baremetal computer class.
     First, this class also provide a easy API to initialize the cobbler baremetal computers in mongodb, e.g., mac and power info,
     Second, this class have an API through which user can get the detail information to provision a cobbler baremetal computer
@@ -291,6 +290,7 @@ class BaremetalComputer:
 # test
 if __name__ == "__main__":
     from pprint import pprint
+
     bmc = BaremetalComputer()
     """
     data = bmc.insert_mac_data_to_inventory()
@@ -299,9 +299,9 @@ if __name__ == "__main__":
         data = bmc.get_host_info(host)
         pprint(data)
     """
-    #result = bmc.get_host_info("i080")
-    #result = bmc.insert_blank_baremetal_list()
-    #result = bmc.enable_baremetal_computers(["i001", "i003", "i007", "i189"])
-    #result = bmc.disable_baremetal_computers(["i001", "i007",])
+    # result = bmc.get_host_info("i080")
+    # result = bmc.insert_blank_baremetal_list()
+    # result = bmc.enable_baremetal_computers(["i001", "i003", "i007", "i189"])
+    # result = bmc.disable_baremetal_computers(["i001", "i007",])
     result = bmc.get_baremetal_computers()
     pprint(result)

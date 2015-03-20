@@ -142,7 +142,6 @@ def shell_command_cloud(arguments):
 
 
 class CloudManage(object):
-
     '''
     a class provides funtions used to manage cloud info in the mongo
     
@@ -161,7 +160,7 @@ class CloudManage(object):
         #
         # TODO: Fugang i think that cm_mongo or the get function in cm_mongo should be used here
         #
-        
+
         if not self.connected_to_mongo:
             try:
                 self.mongo = cm_mongo()
@@ -179,7 +178,7 @@ class CloudManage(object):
          :return: a dict of user information
          :rtype: dict
         """
-        self._connect_to_mongo() # TODO: i think that cm_mongo does this?
+        self._connect_to_mongo()  # TODO: i think that cm_mongo does this?
         return self.mongo.db_user.find_one({'cm_user_id': username})
 
     def get_clouds(self, username, admin=False, getone=False, cloudname=None):
@@ -204,9 +203,9 @@ class CloudManage(object):
         # DEBUG
         try:
             _args = locals()
-            del(_args['self'])
+            del (_args['self'])
             log.debug("[{0}()] called with [{1}]".format(sys._getframe().f_code.co_name,
-                                            str(_args)))
+                                                         str(_args)))
         except:
             pass
         self._connect_to_mongo()
@@ -222,7 +221,7 @@ class CloudManage(object):
 
     def get_selected_cloud(self, username):
         # DEBUG
-        
+
         """
         get the current working cloud name. In command line, user can select a
         cloud as a default cloud or a cloud as a temporary working cloud, this 
@@ -233,12 +232,12 @@ class CloudManage(object):
         :return: selected cloud name
         :rtype: string
         """
-        
+
         try:
             _args = locals()
-            del(_args['self'])
+            del (_args['self'])
             log.debug("[{0}()] called with [{1}]".format(sys._getframe().f_code.co_name,
-                                            str(_args)))
+                                                         str(_args)))
         except:
             pass
 
@@ -388,9 +387,9 @@ class CloudManage(object):
         # DEBUG
         try:
             _args = locals()
-            del(_args['self'])
+            del (_args['self'])
             log.debug("[{0}()] called with [{1}]".format(sys._getframe().f_code.co_name,
-                                            str(_args)))
+                                                         str(_args)))
         except:
             pass
 
@@ -731,14 +730,14 @@ class CloudManage(object):
                 w.writeheader()
                 w.writerow(flavors_dict[cloudname])
         else:
-            #sentence = "flavors of cloud '{0}'".format(cloudname)
+            # sentence = "flavors of cloud '{0}'".format(cloudname)
             # print "+" + "-" * (len(sentence) - 2) + "+"
             # print sentence
             if to_print:
                 print(tabulate(to_print, headers, tablefmt="grid"))
-            #sentence = "count: {0}".format(count)
-            # print sentence
-            # print "+" + "-" * (len(sentence) - 2) + "+"
+                # sentence = "count: {0}".format(count)
+                # print sentence
+                # print "+" + "-" * (len(sentence) - 2) + "+"
 
         if output:
             return [flavor_names, flavor_ids]
@@ -801,14 +800,14 @@ class CloudManage(object):
                 w.writeheader()
                 w.writerow(images_dict[cloudname])
         else:
-            #sentence = "images of cloud '{0}'".format(cloudname)
+            # sentence = "images of cloud '{0}'".format(cloudname)
             # print "+" + "-" * (len(sentence) - 2) + "+"
             # print sentence
             if to_print:
                 print(tabulate(to_print, headers, tablefmt="grid"))
-            #sentence = "count: {0}".format(count)
-            # print sentence
-            # print "+" + "-" * (len(sentence) - 2) + "+"
+                # sentence = "count: {0}".format(count)
+                # print sentence
+                # print "+" + "-" * (len(sentence) - 2) + "+"
 
         if output:
             return [image_names, image_ids]
@@ -821,7 +820,7 @@ class CloudManage(object):
                             output=False,
                             serverdata=None,
                             print_format="table",
-                            group=None):   #specify the group of the VM
+                            group=None):  # specify the group of the VM
         '''
         prints a cloud's VMs(servers) or a given list of VMs
         
@@ -860,12 +859,13 @@ class CloudManage(object):
         :return: if param output is True, return the flavor names and their ids
         :rtype: list
         '''
-       
+
         # GroupManagement loads Mongodb connections automatically by import.
         # I moved this import inside of this function which is limiting import
         # scope, so that other functions in this file can freely be used without
         # loading the db connection. hyungro lee 12/01/2014
         from cloudmesh.experiment.group import GroupManagement
+
         self._connect_to_mongo()
         if refresh:
             self.mongo.activate(cm_user_id=username, names=[cloudname])
@@ -879,11 +879,11 @@ class CloudManage(object):
         else:
             servers_dict = self.mongo.servers(
                 clouds=[cloudname], cm_user_id=username)[cloudname]
-                
+
         for k, v in servers_dict.iteritems():
             if '_id' in v:
-                del v['_id']        
-        
+                del v['_id']
+
         if group:
             GroupManage = GroupManagement(username)
             groups_list = GroupManage.get_groups_names_list()
@@ -965,18 +965,18 @@ class CloudManage(object):
                 w.writeheader()
                 w.writerow(servers_dict)
         else:
-            #sentence = "cloud '{0}'".format(cloudname)
+            # sentence = "cloud '{0}'".format(cloudname)
             # print "+" + "-" * (len(sentence) - 2) + "+"
             # print sentence
             if to_print:
                 print(tabulate(to_print, headers, tablefmt="grid"))
-            #sentence = "count: {0}".format(count)
-            # print sentence
-            # print "+" + "-" * (len(sentence) - 2) + "+"
+                # sentence = "count: {0}".format(count)
+                # print sentence
+                # print "+" + "-" * (len(sentence) - 2) + "+"
 
         if output:
             return [server_names, server_ids]
-    # ------------------------------------------------------------------------
+            # ------------------------------------------------------------------------
 
 
 class CloudCommand(CloudManage):
@@ -994,7 +994,7 @@ class CloudCommand(CloudManage):
             self.config = cm_config()
         except:
             Console.error("There is a problem with the configuration yaml files")
-    
+
         self.username = self.config['cloudmesh']['profile']['username']
 
     def _cloud_list(self):
@@ -1094,7 +1094,7 @@ class CloudCommand(CloudManage):
                         except:
                             pass
                 d[cloud['cm_cloud']] = res
-                
+
             if self.arguments['--format']:
                 if self.arguments['--format'] not in ['table', 'json', 'csv']:
                     Console.error("please select printing format among table, json and csv")
@@ -1117,6 +1117,7 @@ class CloudCommand(CloudManage):
         """
         print detailed information for a cloud
         """
+
         def printing(cloud):
             if '_id' in cloud:
                 del cloud['_id']
@@ -1138,7 +1139,7 @@ class CloudCommand(CloudManage):
             cloud["default image"] = defaultinfo['image']
             # print "#", 70 * "#", "\n"
             # -------------------------------------------------
-            
+
             if self.arguments['--format']:
                 if self.arguments['--format'] not in ['table', 'json', 'csv']:
                     Console.error("please select printing format among table, json and csv")
@@ -1147,7 +1148,7 @@ class CloudCommand(CloudManage):
                     p_format = self.arguments['--format']
             else:
                 p_format = None
-            
+
             shell_commands_dict_output(self.username,
                                        cloud,
                                        print_format=p_format,
@@ -1191,8 +1192,9 @@ class CloudCommand(CloudManage):
             cloud = self.get_clouds(
                 self.username, getone=True, cloudname=self.arguments['CLOUD'])
             if cloud is None:
-                Console.warning("no cloud information of '{0}' in database, please import it by 'cloud add <cloudYAMLfile>'".format(
-                    self.arguments['CLOUD']))
+                Console.warning(
+                    "no cloud information of '{0}' in database, please import it by 'cloud add <cloudYAMLfile>'".format(
+                        self.arguments['CLOUD']))
                 return
             self.update_selected_cloud(self.username, self.arguments['CLOUD'])
             Console.ok("cloud '{0}' is selected".format(self.arguments['CLOUD']))
@@ -1235,9 +1237,9 @@ class CloudCommand(CloudManage):
         # DEBUG
         try:
             _args = locals()
-            del(_args['self'])
+            del (_args['self'])
             log.debug("[{0}()] called with [{1}]".format(sys._getframe().f_code.co_name,
-                                            str(_args)))
+                                                         str(_args)))
         except:
             pass
 
@@ -1251,8 +1253,8 @@ class CloudCommand(CloudManage):
 
         # confirmation
         # if yn_choice("activate cloud '{0}'?".format(name), default = 'n', tries = 3):
-        #    res = self.activate_cloud(self.username, name)
-        #    if res == 0:
+        # res = self.activate_cloud(self.username, name)
+        # if res == 0:
         #        return
         #    elif res == 1:
         #        print "cloud '{0}' activated.".format(name)
@@ -1303,8 +1305,8 @@ class CloudCommand(CloudManage):
             cloudsdict = fileconfig.get("cloudmesh", "clouds")
         except:
             Console.error("ERROR: could not get clouds information from yaml file, "
-                      "please check you yaml file, clouds information must be "
-                      "under 'cloudmesh' -> 'clouds' -> cloud1...")
+                          "please check you yaml file, clouds information must be "
+                          "under 'cloudmesh' -> 'clouds' -> cloud1...")
             return
         cloud_names = []
         clouds = self.get_clouds(self.username)
@@ -1319,7 +1321,9 @@ class CloudCommand(CloudManage):
                         cloudsdict[key], key, self.username)
                     print("cloud '{0}' overwritten.".format(key))
                 else:
-                    print("ERROR: cloud '{0}' exists in database, please remove it from database first, or use '--force' when adding".format(key))
+                    print(
+                        "ERROR: cloud '{0}' exists in database, please remove it from database first, or use '--force' when adding".format(
+                            key))
             else:
                 Database.import_cloud_to_mongo(
                     cloudsdict[key], key, self.username)
@@ -1444,12 +1448,12 @@ class CloudCommand(CloudManage):
                                                         itemkeys=itemkeys,
                                                         refresh=True,
                                                         output=True)
-                
-                current_default_flavor = self.get_cloud_defaultinfo(self.username, 
-                                                                   cloudname)['flavor']
-                
+
+                current_default_flavor = self.get_cloud_defaultinfo(self.username,
+                                                                    cloudname)['flavor']
+
                 res = menu_return_num(
-                    title="select a flavor by index (current default: {0})".format(current_default_flavor), 
+                    title="select a flavor by index (current default: {0})".format(current_default_flavor),
                     menu_list=flavor_lists[0], tries=3)
                 if res == 'q':
                     return
@@ -1498,63 +1502,63 @@ class CloudCommand(CloudManage):
                         return
             else:
                 itemkeys = {"openstack":
-                            [
-                                # [ "Metadata", "metadata"],
-                                ["name", "name"],
-                                ["status", "status"],
-                                ["id", "id"],
-                                ["type_id", "metadata", "instance_type_id"],
-                                ["iname", "metadata", "instance_type_name"],
-                                ["location", "metadata", "image_location"],
-                                ["state", "metadata", "image_state"],
-                                ["updated", "updated"],
-                                # [ "minDisk" , "minDisk"],
-                                ["memory_mb", "metadata",
-                                    'instance_type_memory_mb'],
-                                ["fid", "metadata", "instance_type_flavorid"],
-                                ["vcpus", "metadata", "instance_type_vcpus"],
-                                # [ "user_id" , "metadata", "user_id"],
-                                # [ "owner_id" , "metadata", "owner_id"],
-                                # [ "gb" , "metadata", "instance_type_root_gb"],
-                                # [ "arch", ""]
-                            ],
+                                [
+                                    # [ "Metadata", "metadata"],
+                                    ["name", "name"],
+                                    ["status", "status"],
+                                    ["id", "id"],
+                                    ["type_id", "metadata", "instance_type_id"],
+                                    ["iname", "metadata", "instance_type_name"],
+                                    ["location", "metadata", "image_location"],
+                                    ["state", "metadata", "image_state"],
+                                    ["updated", "updated"],
+                                    # [ "minDisk" , "minDisk"],
+                                    ["memory_mb", "metadata",
+                                     'instance_type_memory_mb'],
+                                    ["fid", "metadata", "instance_type_flavorid"],
+                                    ["vcpus", "metadata", "instance_type_vcpus"],
+                                    # [ "user_id" , "metadata", "user_id"],
+                                    # [ "owner_id" , "metadata", "owner_id"],
+                                    # [ "gb" , "metadata", "instance_type_root_gb"],
+                                    # [ "arch", ""]
+                                ],
                             "ec2":
-                            [
-                                # [ "Metadata", "metadata"],
-                                ["state", "extra", "state"],
-                                ["name", "name"],
-                                ["id", "id"],
-                                ["public", "extra", "is_public"],
-                                ["ownerid", "extra", "owner_id"],
-                                ["imagetype", "extra", "image_type"]
-                            ],
+                                [
+                                    # [ "Metadata", "metadata"],
+                                    ["state", "extra", "state"],
+                                    ["name", "name"],
+                                    ["id", "id"],
+                                    ["public", "extra", "is_public"],
+                                    ["ownerid", "extra", "owner_id"],
+                                    ["imagetype", "extra", "image_type"]
+                                ],
                             "azure":
-                            [
-                                ["name", "label"],
-                                ["category", "category"],
-                                ["id", "id"],
-                                ["size", "logical_size_in_gb"],
-                                ["os", "os"]
-                            ],
+                                [
+                                    ["name", "label"],
+                                    ["category", "category"],
+                                    ["id", "id"],
+                                    ["size", "logical_size_in_gb"],
+                                    ["os", "os"]
+                                ],
                             "aws":
-                            [
-                                ["state", "extra", "state"],
-                                ["name", "name"],
-                                ["id", "id"],
-                                ["public", "extra", "ispublic"],
-                                ["ownerid", "extra", "ownerid"],
-                                ["imagetype", "extra", "imagetype"]
-                            ]
+                                [
+                                    ["state", "extra", "state"],
+                                    ["name", "name"],
+                                    ["id", "id"],
+                                    ["public", "extra", "ispublic"],
+                                    ["ownerid", "extra", "ownerid"],
+                                    ["imagetype", "extra", "imagetype"]
+                                ]
                             }
                 image_lists = self.print_cloud_images(username=self.username,
                                                       cloudname=cloudname,
                                                       itemkeys=itemkeys,
                                                       refresh=True,
                                                       output=True)
-                current_default_image = self.get_cloud_defaultinfo(self.username, 
+                current_default_image = self.get_cloud_defaultinfo(self.username,
                                                                    cloudname)['image']
                 res = menu_return_num(
-                    title="select a image by index (current default: {0})".format(current_default_image), 
+                    title="select a image by index (current default: {0})".format(current_default_image),
                     menu_list=image_lists[0], tries=3)
                 if res == 'q':
                     return

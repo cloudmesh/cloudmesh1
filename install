@@ -36,10 +36,10 @@ from cloudmesh_base.util import yn_choice
 
 
 def print_help():
-
     deep_commands = ""
     try:
         from cloudmesh_install.install import install_command
+
         deep_commands = dedent(install_command.__doc__)
     except:
         deep_commands = ""
@@ -76,22 +76,22 @@ def main():
         else:
             upgrade = ""
         try:
-            f = open('requirements.txt', 'rU') 
+            f = open('requirements.txt', 'rU')
             for line in f:
                 line = line.rstrip()
                 if line.startswith("#"):
                     print line
                 else:
-                        banner (line, c="-")
-                        try:
-                            os.system("pip install '{0}' {1}".format(line, upgrade))
-                        except Exception, e:
-                            print e
-                            sys.exit(1)
+                    banner(line, c="-")
+                    try:
+                        os.system("pip install '{0}' {1}".format(line, upgrade))
+                    except Exception, e:
+                        print e
+                        sys.exit(1)
         except Exception, e:
             print "ERROR: There is a problem"
             print e
-            
+
         # In some linux distributions (Ubuntu, others?)
         # fabric does not install properly until the
         # preceeding requirements are in place.
@@ -101,14 +101,15 @@ def main():
         # cloudmesh.yaml and cloudmesh_server.yaml to exist.
         os.system("bash -c 'mkdir -m 0700 -p {0}'".format(config_file_prefix()))
         os.system(
-            "bash -c 'test -f {0}/cloudmesh.yaml || touch {0}/cloudmesh.yaml'".format(config_file_prefix()))
+            "bash -c 'test -f {0}/cloudmesh.yaml || "
+            "touch {0}/cloudmesh.yaml'".format(config_file_prefix()))
         os.system(
-            "bash -c 'test -f {0}/cloudmesh_server.yaml || touch {0}/cloudmesh_server.yaml'".format(config_file_prefix()))
+            "bash -c 'test -f {0}/cloudmesh_server.yaml || "
+            "touch {0}/cloudmesh_server.yaml'".format(config_file_prefix()))
 
         sys.exit(0)
 
     if "path" in args:
-
         banner("sys.path", c="-")
         pprint(sys.path)
         banner("-")
@@ -124,11 +125,11 @@ def main():
             os.system("bin/prepare-%s.sh" % os_system)
         except:
             print "OS distribution not supported; please see documatation for manual installation instructions.", os_system
-            #sys.exit(1)
+            # sys.exit(1)
 
-            #if sys.platform in ['darwin']:
+            # if sys.platform in ['darwin']:
             # from cloudmesh_install.install import osx
-            #osx()
+            # osx()
 
         sys.exit(0)
 
@@ -137,6 +138,7 @@ def main():
     try:
 
         from cloudmesh_install.install import install_command
+
         install_command(arguments)
 
     except Exception, e:

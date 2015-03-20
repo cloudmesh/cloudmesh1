@@ -15,6 +15,7 @@ from cloudmesh.config.cm_config import get_mongo_db, get_mongo_dbname_from_colle
 def IMPLEMENT():
     print "IMPLEMENT ME"
 
+
 STATUS = ('pending',
           'approved',
           'completed',
@@ -63,7 +64,6 @@ GRANT_ORG = ('NSF',
              'DoD',
              'NIH',
              'other', 'None')
-
 
 REQUIRED = False
 
@@ -223,7 +223,6 @@ class Project(CloudmeshObject):
     # comittee = ReferenceField(Committee)
 
 
-
     # BUG how can we add also arbitray info in case of other, mabe ommit
     # choices
 
@@ -263,7 +262,6 @@ class Project(CloudmeshObject):
 
 
 class Projects(object):
-
     '''
     convenience opbject to manage multiple prpojects
     '''
@@ -347,7 +345,7 @@ class Projects(object):
             return found[0].to_json()
         else:
             return None
-        # User ID or project ID
+            # User ID or project ID
 
     def find_by_category(self, category):
         '''
@@ -392,8 +390,8 @@ class Projects(object):
             proposedid = None
 
             # while not found:
-            #    proposedid = uuid.uuid4()
-            #    result = Project.objects(projectid=proposedid)
+            # proposedid = uuid.uuid4()
+            # result = Project.objects(projectid=proposedid)
             #    print "PPPPP", result
             #    found = result.count() > 0
             #    print result.count()

@@ -18,7 +18,6 @@ log = LOGGER(__file__)
 
 
 class FetchClusterInfo:
-
     map_progress = None
     username = None
     data_valid_time = 0
@@ -115,7 +114,7 @@ class FetchClusterInfo:
 
     # API of refresh map
     # return True means start refresh process
-    #        False means NOT start refresh process, "fresh" gives the reason
+    # False means NOT start refresh process, "fresh" gives the reason
     #               if "fresh" is True, that means the data in db is fresh, does NOT need a refresh
     #                             Flase, means ERROR occured in db
     def start_refresh_map(self, service, rack_name):
@@ -221,7 +220,7 @@ class FetchClusterInfo:
 if __name__ == "__main__":
     config = cm_config()
     mytest = FetchClusterInfo()
-    #data = mytest.fetch_temperature_ipmi()
+    # data = mytest.fetch_temperature_ipmi()
     # print "=" * 30
     # print data
     # print "-" * 30

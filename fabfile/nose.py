@@ -14,6 +14,7 @@ def install():
     print ("INSTALLING")
     local("cd /tmp/nose-json; python setup.py install", capture=True)
 
+
 @task
 def run():
     """run the nosetests"""
@@ -23,6 +24,7 @@ def run():
 @task
 def view():
     local("fab server.start:test/nose")
+
 
 @task
 def test_activation():

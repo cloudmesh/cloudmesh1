@@ -191,7 +191,7 @@ class Inventory:
 
             for key in keys:
                 if (type(cluster[key]) is str) and \
-                        (not key in ["id", "network"]):
+                        (key not in ["id", "network"]):
                     element = dict({'cm_cluster': name,
                                     'cm_id': name,
                                     'cm_type': "inventory",

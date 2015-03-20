@@ -311,7 +311,7 @@ class cm_azure:
             'settings']
 
         text = commands.getstatusoutput(cmd)
-        if not errmsg in text[1]:
+        if errmsg not in text[1]:
             print 'Activated'
         else:
             print 'There was an error while activation'

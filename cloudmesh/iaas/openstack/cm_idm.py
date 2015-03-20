@@ -97,17 +97,17 @@ class keystone(object):
                 "username": credential['OS_USERNAME'],
                 "password": credential['OS_PASSWORD'],
             },
-                "tenantName": credential['OS_TENANT_NAME']
-            }
-            }
+                              "tenantName": credential['OS_TENANT_NAME']
+                              }
+                     }
         elif 'OS_TENANT_ID' in credential:
             param = {"auth": {"passwordCredentials": {
                 "username": credential['OS_USERNAME'],
                 "password": credential['OS_PASSWORD'],
             },
-                "tenantId": credential['OS_TENANT_ID']
-            }
-            }
+                              "tenantId": credential['OS_TENANT_ID']
+                              }
+                     }
         url = "{0}/tokens".format(credential['OS_AUTH_URL'])
 
         # print "URL", url
@@ -140,8 +140,8 @@ class keystone(object):
         verify = False
         if 'OS_CACERT' in credential:
             if credential['OS_CACERT'] is not None and \
-               credential['OS_CACERT'] != "None" and \
-               os.path.isfile(credential['OS_CACERT']):
+                            credential['OS_CACERT'] != "None" and \
+                    os.path.isfile(credential['OS_CACERT']):
                 verify = credential['OS_CACERT']
         return verify
 
@@ -211,7 +211,7 @@ class keystone(object):
         token = self.admin_token
         if credential:
             token = self.get_token(credential)
-            #banner("user token")
+            # banner("user token")
             # pprint(token)
         conf = {}
         if 'access' in token:
@@ -287,6 +287,7 @@ class keystone(object):
         ret = self._post(posturl, tenantdata)
         self.refresh()
         return ret
+
     # create a new user
     # or if username exist and password provided, reset the password
 
@@ -299,8 +300,8 @@ class keystone(object):
                 "name": "%s" % username,
                 "email": "%s" % email,
                 "enabled": enabled,
-                #"passowrd": "%s" % password
-                #"OS-KSADM:password": "%s" % password
+                # "passowrd": "%s" % password
+                # "OS-KSADM:password": "%s" % password
             }
         }
         ret = self._post(posturl, userinfo)
@@ -400,8 +401,8 @@ class keystone(object):
         mycredential = cm_config().get(
             "cloudmesh.clouds.{0}.credentials".format(cloudlabel))
         userid = self.get_user_by_name('cmdevtesting')
-        #oldpass = 'password02'
-        #newpass = 'password03'
+        # oldpass = 'password02'
+        # newpass = 'password03'
         return self.change_own_password(mycredential, userid, oldpass, newpass)
 
     def _list_to_dict(self, list, id, type, time_stamp):

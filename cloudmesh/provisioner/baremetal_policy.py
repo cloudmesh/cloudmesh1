@@ -217,11 +217,11 @@ class BaremetalPolicy:
 
 if __name__ == "__main__":
     bmp = BaremetalPolicy()
-    #result = bmp.add_user_policy("chen,heng", "i[001-003]")
-    #result = bmp.add_user_policy("chen,fugang,heng", "i[101-103]")
-    #result = bmp.get_all_policy()
-    #result = bmp.get_policy_based_user("fugang")
-    #result = bmp.get_policy_based_user("gregor")
-    #result = bmp.add_group_policy("fg[1-3]", "i[111-113]")
+    # result = bmp.add_user_policy("chen,heng", "i[001-003]")
+    # result = bmp.add_user_policy("chen,fugang,heng", "i[101-103]")
+    # result = bmp.get_all_policy()
+    # result = bmp.get_policy_based_user("fugang")
+    # result = bmp.get_policy_based_user("gregor")
+    # result = bmp.add_group_policy("fg[1-3]", "i[111-113]")
     result = bmp.get_all_group_policy(True)
     print("result is: ", result)

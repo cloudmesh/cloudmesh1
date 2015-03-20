@@ -7,6 +7,7 @@ import json
 import yaml
 import hostlist
 
+
 def print_format_dict(d, header=None, kind='table'):
     """kind = json, yaml, table, pprint"""
     if kind == "json":
@@ -30,7 +31,7 @@ def array_dict_table_printer(array, order=None, header=None, vertical=False):
     """
     if array is None or array == []:
         return None
-        
+
     # header
     if header is None:
         header = array[0].keys()
@@ -40,7 +41,7 @@ def array_dict_table_printer(array, order=None, header=None, vertical=False):
 
     if header is None:
         if vertical:
-            
+
             x = PrettyTable()
             x.add_column("Item", order)
         else:
@@ -86,6 +87,7 @@ def column_table(column_dict, order=None):
     x.align = "l"
     return x
 
+
 def row_table(d, order=None, labels=None):
     """prints a pretty table from data in the dict.
     :param d: A dict to be printed
@@ -100,20 +102,19 @@ def row_table(d, order=None, labels=None):
     for key in order:
         value = d[key]
         if type(value) == list:
-            x.add_row([key, value[0]])            
+            x.add_row([key, value[0]])
             for element in value[1:]:
                 x.add_row(["", element])
         elif type(value) == dict:
             value_keys = value.keys()
             first_key = value_keys[0]
             rest_keys = value_keys[1:]
-            x.add_row([key, "{0} : {1}".format(first_key,value[first_key])])            
+            x.add_row([key, "{0} : {1}".format(first_key, value[first_key])])
             for element in rest_keys:
-                x.add_row(["", "{0} : {1}".format(element,value[element])])
-        else: 
+                x.add_row(["", "{0} : {1}".format(element, value[element])])
+        else:
             x.add_row([key, value])
 
-        
     x.align = "l"
     return x
 
@@ -156,15 +157,15 @@ def table_printer(the_dict, header_info=None):
     """
     # header_info ["attribute", "value"]
     if (header_info is not None) or (header_info == ""):
-        result = '<tr><th>{0}</th><th>{1}</th></tr>'\
+        result = '<tr><th>{0}</th><th>{1}</th></tr>' \
             .format(header_info[0], header_info[1])
     else:
         result = ''
     if isinstance(the_dict, dict):
         for name, value in the_dict.iteritems():
             result = result + \
-                '<tr><td>{0}</td><td>{1}</td></tr>'\
-                .format(name.title(), str(table_printer(value)))
+                     '<tr><td>{0}</td><td>{1}</td></tr>' \
+                         .format(name.title(), str(table_printer(value)))
         result = '<table>' + result + '</table>'
         return result
     elif isinstance(the_dict, list):
@@ -172,8 +173,8 @@ def table_printer(the_dict, header_info=None):
             try:
                 for name, value in element.iteritems():
                     result = result + \
-                        '<tr><td>{0}</td><td>{1}</td></tr>'\
-                        .format(name.title(), str(table_printer(value)))
+                             '<tr><td>{0}</td><td>{1}</td></tr>' \
+                                 .format(name.title(), str(table_printer(value)))
             except:
                 # If the element is not dict
                 return str(element)
@@ -231,16 +232,16 @@ def dict_key_list_table_printer(d, indexed=False):
         l0 = len(item)
         if l0 > l:
             l = l0
-            
+
     if indexed:
         if l == 0:
             index_list = []
         else:
             index_list = hostlist.expand_hostlist("[1-{0}]".format(str(l)))
         x.add_column("index", index_list)
-        
-    for k,v in d.iteritems():
-        v0 = v + [" "]*(l - len(v))
+
+    for k, v in d.iteritems():
+        v0 = v + [" "] * (l - len(v))
         x.add_column(k, v0)
     x.align = "l"
     return x

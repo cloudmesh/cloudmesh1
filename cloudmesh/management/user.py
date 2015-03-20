@@ -16,6 +16,8 @@ STATUS = ('pending', 'approved', 'blocked', 'denied')
 
 def IMPLEMENT():
     print "IMPLEMENT ME"
+
+
 '''
 def generate_password_hash(password)
     # maybe using passlib https://pypi.python.org/pypi/passlib
@@ -58,7 +60,6 @@ def read_user(filename):
 
 
 class User(CloudmeshObject):
-
     """
     This class is used to represent a Cloudmesh User
     """
@@ -152,7 +153,7 @@ class User(CloudmeshObject):
         ]
 
     # def save(self,db):
-    # 	db.put({"firname":user.firname,...})
+    # db.put({"firname":user.firname,...})
 
     def is_active(self):
         '''
@@ -160,7 +161,7 @@ class User(CloudmeshObject):
         '''
         """finds if a user is active or not"""
         d1 = datetime.datetime.now()
-        return (self.active and (datetime.datetime.now() < self.date_deactivate)
+        return (self.active and (datetime.datetime.now() < self.date_deactivate))
 
     @classmethod
     def set_password(cls, password):
@@ -203,6 +204,7 @@ class User(CloudmeshObject):
         '''
         """prints the user as a json object"""
         return self.__str__(fields=True, all=True)
+
     """
     def __str__(self, fields=False, all=False):
         content = ""
@@ -219,7 +221,6 @@ class User(CloudmeshObject):
 
 
 class Users(object):
-
     """
     convenience object to manage several users
     """
@@ -228,14 +229,14 @@ class Users(object):
         config = ConfigDict(filename=config_file("/cloudmesh_server.yaml"))
         port = config['cloudmesh']['server']['mongo']['port']
 
-        #db = connect('manage', port=port)
+        # db = connect('manage', port=port)
         self.users = User.objects()
 
         dbname = get_mongo_dbname_from_collection("manage")
         if dbname:
             meta = {'db_alias': dbname}
 
-#         get_mongo_db("manage", DBConnFactory.TYPE_MONGOENGINE)
+            # get_mongo_db("manage", DBConnFactory.TYPE_MONGOENGINE)
 
     @classmethod
     def objects(cls):
@@ -280,7 +281,7 @@ class Users(object):
     def delete_user(cls, user_name=None):
         if user_name:
             try:
-                user=User.objects(username=user_name)
+                user = User.objects(username=user_name)
                 if user:
                     user.delete()
                 else:
@@ -289,14 +290,14 @@ class Users(object):
                 print "Oops! Something went wrong while trying to remove a user", sys.exc_info()[0]
         else:
             print "Error: Please specity the user to be removed"
-    
+
     @classmethod
     def amend_user_status(self, user_name=None, status=None):
         if user_name:
             try:
-                user=User.objects(username=user_name)
+                user = User.objects(username=user_name)
                 if user:
-                    user.status=status
+                    user.status = status
                     user.save()
             except:
                 print "Oops! Something went wrong while trying to amend user status", sys.exc_info()[0]
@@ -350,7 +351,7 @@ class Users(object):
         """removes all elements form the mongo db that are users"""
         for user in User.objects:
             user.delete()
-            
+
 
     @classmethod
     def list_users(cls, disp_fmt=None, username=None):
@@ -386,7 +387,7 @@ class Users(object):
                 headers = []
                 for key, value in entry.iteritems():
                     items.append(value)
-                    headers.append(key.replace('_',' ').title())
+                    headers.append(key.replace('_', ' ').title())
                 values.append(items)
             table_fmt = "orgtbl"
             table = tabulate(values, headers, table_fmt)
@@ -401,8 +402,8 @@ class Users(object):
         else:
             if user_name:
                 print "Error: No user in the system with name '{0}'".format(user_name)
-                
-                
+
+
     @classmethod
     def display_json(cls, user_dict=None, user_name=None):
         if bool(user_dict):

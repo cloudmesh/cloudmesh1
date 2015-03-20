@@ -13,13 +13,12 @@ State = ['running', 'pending', 'completed', 'failed']
 
 
 class QSub(Document):
+    name = StringField()
 
-    name = StringField()        
-        
     dbname = get_mongo_dbname_from_collection("qsub")
     if dbname:
         meta = {'allow_inheritance': True, 'db_alias': dbname}
-        
+
     @classmethod
     def remove(cls, name):
         element = cls.find(name)
@@ -40,10 +39,9 @@ class QSub(Document):
     @classmethod
     def connect(cls):
         get_mongo_db("qsub", DBConnFactory.TYPE_MONGOENGINE)
-            
-    
-class Queue(QSub):
 
+
+class Queue(QSub):
     host = StringField()
     user = StringField()
     """name in ssh/config"""
@@ -56,11 +54,10 @@ class Queue(QSub):
         """lists the info of the queue if the name is None. 
         If name is other than none the specific queue info is given
         If the name is "all" info from all ques are returned."""
-        pass        
+        pass
 
 
 class Job(QSub):
-
     name = StringField()
     jobid = StringField()
     group = StringField()
@@ -81,9 +78,9 @@ class Job(QSub):
                               'state': job.state}
         print("======")
         print(jobs)
-        print("======")      
-        
-    @classmethod            
+        print("======")
+
+    @classmethod
     def info(cls, name):
         """lists the info of the job"""
         job = cls.find(name)
@@ -92,7 +89,7 @@ class Job(QSub):
             try:
                 print("{0:<10}: {1}".format(attribute, job[attribute]))
             except:
-                print("{0}: {1}".format(attribute, 'undefind'))                
+                print("{0}: {1}".format(attribute, 'undefind'))
 
     @classmethod
     def status(cls, name):
@@ -103,14 +100,14 @@ class Job(QSub):
             return job.state
         except:
             return 'undefined'
-                    
+
     def update(self):
         """updates the information e.g. the state of the job"""
         pass
-        
+
     def submit(self):
         pass
-    
+
     def remove(self):
         pass
 
@@ -119,18 +116,18 @@ class Job(QSub):
         """BUG: does not work"""
         try:
             job_from = Job.find(cls, name_from)
-            print (job_form)
+            print(job_form)
         except:
             print("Error: the job to rename does not exist:", name_from)
             return
-        
+
         try:
             job_to = Job.find(cls, name_to)
             print("Error: the to rename to already exists:", name_to)
             return
         except:
             pass
-        
+
         job_from.name = name_to
         job_from.save()
 
@@ -144,7 +141,6 @@ queue.save()
 
 Job.reset()
 Job.list()
-
 
 name = 'job1'
 
@@ -178,6 +174,6 @@ Job.list()
 
 banner("PBS")
 pbs = PBS("gvonlasz", "india.futuregrid.org")
-#pprint (pbs.qinfo())
+# pprint (pbs.qinfo())
 pprint(pbs.qstat())
 

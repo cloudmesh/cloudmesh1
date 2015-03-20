@@ -68,8 +68,8 @@ class RackData:
 
     # get valid list of rack name
     # result: if rack_name is 'all', then ['india', 'echo', ...]
-    #         else if rack_name is a valid rack name, then ['rack_name.lower()']
-    #         else None
+    # else if rack_name is a valid rack name, then ['rack_name.lower()']
+    # else None
     def get_rack_name_list(self, rack_name="all"):
         self.mydebug("enter into get_rack_name_list of {0}".format(rack_name))
         racks = self.inventory.get_clusters()
@@ -178,7 +178,7 @@ class RackData:
             element['data.{0}'.format(server)] = data
             # atomic update
             update_result = self.inventory.db_inventory.find_and_modify(query=query_dict[rack_name], update={
-                                                                        '$inc': {'updated_node': 1}, '$set': element}, new=True, fields={'updated_node': 1})
+                '$inc': {'updated_node': 1}, '$set': element}, new=True, fields={'updated_node': 1})
 
             if update_result['updated_node'] == rack_info['max_node']:
                 self.partly_update(
@@ -311,9 +311,9 @@ class RackData:
 if __name__ == '__main__':
     rackdata = RackData()
     rack_name = 'echo'
-    #bready = rackdata.is_rack_temperature_ready(rack_name)
-    #rackdata.mydebug("{0} is ready or not: {1}".format(rack_name, bready))
-    #bready = rackdata.can_start_refresh("temperature", rack_name)
-    #rackdata.mydebug("{0} can start refresh: {1}".format(rack_name, bready))
+    # bready = rackdata.is_rack_temperature_ready(rack_name)
+    # rackdata.mydebug("{0} is ready or not: {1}".format(rack_name, bready))
+    # bready = rackdata.can_start_refresh("temperature", rack_name)
+    # rackdata.mydebug("{0} can start refresh: {1}".format(rack_name, bready))
     bready = rackdata.set_status_start_refresh("temperature", rack_name)
     rackdata.mydebug("{0} can start refresh: {1}".format(rack_name, bready))

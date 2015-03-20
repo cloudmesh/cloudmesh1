@@ -44,13 +44,13 @@ def build_db_field(item):
                         elif value == 'email':
                             field_type = "EmailField"
         if default_value and required:
-            field_entry = '{0} = {1}({2}, default={3})'\
+            field_entry = '{0} = {1}({2}, default={3})' \
                 .format(field_entry, field_type, required, default_value)
         elif default_value and not required:
-            field_entry = '{0} = {1}(default={2})'\
+            field_entry = '{0} = {1}(default={2})' \
                 .format(field_entry, field_type, default_value)
         else:
-            field_entry = '{0} = {1}({2})'\
+            field_entry = '{0} = {1}({2})' \
                 .format(field_entry, field_type, required)
         return field_entry
 
@@ -111,13 +111,13 @@ def build_ui_field(item):
                         elif value == 'email':
                             field_type = "EmailField"
         if default_value and required:
-            field_entry = '{0} = {1}({2}, default={3})'\
+            field_entry = '{0} = {1}({2}, default={3})' \
                 .format(field_entry, field_type, required, default_value)
         elif default_value and not required:
-            field_entry = '{0} = {1}(default={2})'\
+            field_entry = '{0} = {1}(default={2})' \
                 .format(field_entry, field_type, default_value)
         else:
-            field_entry = '{0} = {1}({2})'\
+            field_entry = '{0} = {1}({2})' \
                 .format(field_entry, field_type, required)
         return field_entry, keys
 
@@ -137,7 +137,7 @@ def traverse_ui_data(datum):
         if isinstance(value, dict):
             traverse_ui_data(value)
             # if key not in ('cloudmesh','user', 'meta'):
-            #     KEYS = KEYS + "\"" + key + "\"" + ","
+            # KEYS = KEYS + "\"" + key + "\"" + ","
         else:
             if key == 'fields':
                 for item in value:
@@ -161,7 +161,7 @@ def country_list():
     countries = []
     for key, value in data.items():
         item = ''
-        item = item + str(value.encode(encoding='UTF-8', errors='strict')) + "("+str(key)+")"
+        item = item + str(value.encode(encoding='UTF-8', errors='strict')) + "(" + str(key) + ")"
         countries.append(item)
     countries.sort()
     countries.insert(0, 'United States(US)')
@@ -175,10 +175,10 @@ def states_list():
     states = []
     for key, value in data.items():
         item = ''
-        item = item + str(value['name']) + "("+str(key)+")"
+        item = item + str(value['name']) + "(" + str(key) + ")"
         states.append(item)
     states.sort()
-    states.insert(0,'Other(OTH)')
+    states.insert(0, 'Other(OTH)')
     print states
     pass
 
@@ -192,7 +192,7 @@ def disciplines_list():
         item = item + str(value['name'])
         disciplines.append(item)
     disciplines.sort()
-    disciplines.insert(0,'Other(OTH)')
+    disciplines.insert(0, 'Other(OTH)')
     print disciplines
     pass
 
@@ -203,6 +203,7 @@ def project_fields():
     fields = traverse_db_data(data)
     print fields
     return fields
+
 
 if __name__ == '__main__':
     # country_list()

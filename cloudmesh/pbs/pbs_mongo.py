@@ -7,7 +7,6 @@ from datetime import datetime
 
 
 class pbs_mongo:
-
     hosts = {}
     db_qstat = None
     db_pbsnodes = None
@@ -173,7 +172,6 @@ class pbs_mongo:
 
 
 def main():
-
     host = "india.futuregrid.org"
     pbs = pbs_mongo()
     pbs.activate(host, "gvonlasz")
@@ -184,10 +182,11 @@ def main():
     for e in d:
         pprint(e)
 
-    #d = pbs.refresh_pbsnodes(host)
-    #d = pbs.get_pbsnodes(host)
-    # for e in d:
-    #    pprint(e)
+        # d = pbs.refresh_pbsnodes(host)
+        # d = pbs.get_pbsnodes(host)
+        # for e in d:
+        #    pprint(e)
+
 
 if __name__ == "__main__":
     main()

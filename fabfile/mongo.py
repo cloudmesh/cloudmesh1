@@ -66,8 +66,8 @@ def reset(password=None):
 
 @task
 def install_osx():
-    #local('ruby -e "$(curl -fsSL https://raw.github.com/mxcl/homebrew/go)"')
-    #local('brew update')
+    # local('ruby -e "$(curl -fsSL https://raw.github.com/mxcl/homebrew/go)"')
+    # local('brew update')
     local('brew install mongodb')
 
 '''

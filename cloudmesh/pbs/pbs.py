@@ -1,5 +1,5 @@
 # with open ("pbs_nodes_data.txt", "r") as myfile:
-#    pbs_nodes_data=myfile.readlines()
+# pbs_nodes_data=myfile.readlines()
 from __future__ import print_function
 from ast import literal_eval
 from collections import Counter
@@ -17,7 +17,6 @@ log = LOGGER(__file__)
 
 
 class PBS:
-
     user = None
     host = None
     pbs_qstat_data = None
@@ -108,9 +107,9 @@ class PBS:
 
         list_qstat = qstat.split("\n")
         try:
-                # delete a delimiter line between a header and contents looks
-                # like '-------- --- ---'
-            del(list_qstat[1])
+            # delete a delimiter line between a header and contents looks
+            # like '-------- --- ---'
+            del (list_qstat[1])
         except:
             pass
         pattern = re.compile(r'\s+')
@@ -248,7 +247,8 @@ class PBS:
                                     pbsinfo[name][attribute][a] = v
                             elif attribute == 'jobs':
                                 pbsinfo[name][attribute] = value.split(',')
-                            elif attribute == 'note' and (value.strip().startswith("{") or value.strip().startswith("[")):
+                            elif attribute == 'note' and (
+                                        value.strip().startswith("{") or value.strip().startswith("[")):
                                 pbsinfo[name][attribute] = literal_eval(value)
                             else:
                                 pbsinfo[name][attribute] = value
@@ -302,14 +302,14 @@ class PBS:
                             (name, host) = job[attribute.nodeName].split('@')
                             job[u'cm_user'] = name
                             job[u'cm_host'] = host
-                            
+
                     info[job['Job_Id']] = job
             except:
                 pass
             self.pbs_qstat_data = info
         # return self.pbs_qstat_data
 
-        #pprint (self.pbs_qstat_data)
+        # pprint (self.pbs_qstat_data)
 
         if self.cluster_queues is None:
             return {self.host: self.pbs_qstat_data}
@@ -330,7 +330,7 @@ class PBS:
             for cluster in cluster_queues:
                 if queue in cluster_queues[cluster]:
                     queues[cluster][job] = qstat_data[job]
-            # log.error("no data found for {0}".format(q))
+                    # log.error("no data found for {0}".format(q))
         return queues
 
     def get_uniq_users(self, refresh=False):
@@ -411,8 +411,8 @@ class PBS:
         #
     """
 
-if __name__ == "__main__":
 
+if __name__ == "__main__":
     pbs = PBS("gvonlasz", "echo.futuregrid.org")
-    #pprint (pbs.qinfo())
+    # pprint (pbs.qinfo())
     pprint(pbs.qstat())

@@ -204,7 +204,7 @@ class CMMetricAPI:
             self.projectinfo = prj_info
             return self.projectinfo
             # self.instances.read_projectinfo()
-            #self.projectinfo = self.instances.projectinfo
+            # self.projectinfo = self.instances.projectinfo
         except:
             print "failed to read project info %s" % sys.exc_info()
             return None

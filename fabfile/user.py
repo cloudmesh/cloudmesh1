@@ -23,11 +23,11 @@ def password():
                     "--pass", user['OS_PASSWORD'], user['OS_USERNAME']]))
 
     Shell.keystone("--os-username", server['OS_USERNAME'],
-             "--os-password", server['OS_PASSWORD'],
-             "--os-tenant-name", server['OS_TENANT_NAME'],
-             "--os-auth-url", server['OS_AUTH_URL'],
-             "user-password-update",
-             "--pass", user['OS_PASSWORD'], user['OS_USERNAME'])
+                   "--os-password", server['OS_PASSWORD'],
+                   "--os-tenant-name", server['OS_TENANT_NAME'],
+                   "--os-auth-url", server['OS_AUTH_URL'],
+                   "user-password-update",
+                   "--pass", user['OS_PASSWORD'], user['OS_USERNAME'])
 
 
 @task
@@ -50,6 +50,7 @@ def delete_defaults():
 @task
 def register():
     from cloudmesh.server.database import Database
+
     database = Database()
     database.set_credentials()
 

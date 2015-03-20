@@ -19,7 +19,6 @@ from cloudmesh_common.util import get_unique_name, get_rand_string
 
 
 class azure(ComputeBaseType):
-
     DEFAULT_LABEL = "azure"
     name_prefix = "cm-"
 
@@ -189,7 +188,7 @@ class azure(ComputeBaseType):
         # start with a letter and must end with a letter or a number.
         # The hosted service name is invalid.
         # Set a name from uuid random string
-        #vm_name = get_unique_name(name)
+        # vm_name = get_unique_name(name)
         vm_name = name.replace("_", "-")
         vm_name = vm_name  # + "-" + get_rand_string()
         return vm_name
@@ -298,7 +297,7 @@ class azure(ComputeBaseType):
                 self.sms.delete_disk(disk_name)
             except:
                 pass
-        # self.bc.delete_container(self.container_name)
+                # self.bc.delete_container(self.container_name)
 
     def list_cloud_services(self):
         return self.sms.list_hosted_services()
@@ -375,7 +374,7 @@ class azure(ComputeBaseType):
         container = self.get_container()
         blob_filename = blobname + self.blob_ext
         media_url = "http://" + storage_account + "." + blob_domain \
-            + "/" + container + "/" + blob_filename
+                    + "/" + container + "/" + blob_filename
         self.media_url = media_url
 
         return media_url
@@ -570,7 +569,7 @@ class azure(ComputeBaseType):
 
     def get_authorized_keys_path(self):
         self.authorized_keys_path = "/home/" + self.userid + \
-            "/.ssh/authorized_keys"
+                                    "/.ssh/authorized_keys"
 
         return self.authorized_keys_path
 
@@ -628,19 +627,19 @@ class azure(ComputeBaseType):
         for deployment_id in deployments:
             deployment = deployments[deployment_id]
             deployment.update({  # "name": exist
-                "status": self.convert_states(deployment['status']),
-                "addresses":
-                self.convert_ips(
-                    deployment['role_instance_list']),
-                "flavor":
-                self.convert_flavors(
-                    deployment['role_instance_list']),
-                "id": deployment['name'],
-                "user_id": unicode(""),
-                "metadata": {},
-                "key_name": unicode(""),
-                "created": deployment['created_time']
-            })
+                                 "status": self.convert_states(deployment['status']),
+                                 "addresses":
+                                     self.convert_ips(
+                                         deployment['role_instance_list']),
+                                 "flavor":
+                                     self.convert_flavors(
+                                         deployment['role_instance_list']),
+                                 "id": deployment['name'],
+                                 "user_id": unicode(""),
+                                 "metadata": {},
+                                 "key_name": unicode(""),
+                                 "created": deployment['created_time']
+                                 })
 
             '''
             try:
@@ -702,12 +701,12 @@ class azure(ComputeBaseType):
 
         # Openstack's type
         res = {  # u'private':[ {u'version':None, u'addr':None,
-            #              u'OS-EXT-IPS:type': None} ],
-            u'private': [
-                {u'version': ip_ver, u'addr': ip_address,
-                 u'OS-EXT-IPS:type': ip_type}
-            ]
-        }
+                 # u'OS-EXT-IPS:type': None} ],
+                 u'private': [
+                     {u'version': ip_ver, u'addr': ip_address,
+                      u'OS-EXT-IPS:type': ip_type}
+                 ]
+                 }
         return res
 
     def convert_flavors(self, role_instance_list):
@@ -726,8 +725,8 @@ class azure(ComputeBaseType):
             flavor = ""
         res = {u'id': unicode(flavor),
                u'links':
-               [{u'href': None,
-                 u'rel': None}]}
+                   [{u'href': None,
+                     u'rel': None}]}
         return res
 
     def release_unused_public_ips(self):
@@ -753,6 +752,7 @@ class azure(ComputeBaseType):
 
         self.flavors = self.def_flavors
         return self.flavors
+
 
 '''
 class oJSONEncoder(json.JSONEncoder):

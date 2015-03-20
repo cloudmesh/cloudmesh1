@@ -36,7 +36,7 @@ import os
 #
 try:
     RSTPAGES = os.environ['RSTPAGES']
-    RSTPAGES = (RSTPAGES == None) or RSTPAGES.lower() == 'true'
+    RSTPAGES = (RSTPAGES is None) or RSTPAGES.lower() == 'true'
 except:
     RSTPAGES = True
 
@@ -307,7 +307,7 @@ def timesince(dt, format="float", default="just now"):
     Returns string representing "time since" e.g.
     3 days ago, 5 hours ago etc.
     """
-    if dt == "None" or dt == "" or dt == None or dt == "completed":
+    if dt == "None" or dt == "" or dt is None or dt == "completed":
         return "completed"
 
     # now = datetime.utcnow()

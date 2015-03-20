@@ -4,7 +4,8 @@ import clean
 import os
 
 __all__ = ['fast', 'sdist', 'install', 'sphinx']
-    
+
+
 def cursor_on():
     """If one uses progress in python the cursor may disapear if the
     progress is not properly finished. THis command will create a fake
@@ -15,6 +16,7 @@ def cursor_on():
 
     os.system("python bin/cursor_on.py")
 
+
 @task
 def sdist():
     """create the sdist"""
@@ -23,13 +25,15 @@ def sdist():
     local("python setup.py sdist --format=bztar,zip")
     cursor_on()
 
+
 @task
 def fast():
     """install cloudmesh"""
     fabric.state.output.stdout = True
     local("python setup.py install")
     cursor_on()
-        
+
+
 @task
 def install():
     """install cloudmesh"""
@@ -37,7 +41,8 @@ def install():
     local("./install requirements")
     local("python setup.py install")
     cursor_on()
-    
+
+
 @task
 def sphinx():
     fabric.state.output.stdout = True

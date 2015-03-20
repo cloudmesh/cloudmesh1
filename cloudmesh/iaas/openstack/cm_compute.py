@@ -32,6 +32,7 @@ def lineno():
     """Returns the current line number in our program."""
     return inspect.currentframe().f_back.f_lineno
 
+
 log = LOGGER(__file__)
 
 
@@ -40,7 +41,6 @@ def donotchange(fn):
 
 
 class openstack(ComputeBaseType):
-
     # : the type of the cloud. It is "openstack"
     type = "openstack"  # global var
 
@@ -102,6 +102,7 @@ class openstack(ComputeBaseType):
             return self.admin_credential
         else:
             return None
+
     #
     # initialize
     #
@@ -179,7 +180,7 @@ class openstack(ComputeBaseType):
                           + "keystone, credential or server name is invalid")
 
     def DEBUG(self, msg, line_number=None):
-        if line_number == None:
+        if line_number is None:
             line_number = ""
         if msg == "credential":
             debug_dict = dict(self.user_credential)
@@ -194,9 +195,10 @@ class openstack(ComputeBaseType):
         # DEBUG
         try:
             _args = locals()
-            if 'self' in _args: del(_args['self'])
+            if 'self' in _args:
+                del (_args['self'])
             log.debug("[{0}()] called with [{1}]".format(sys._getframe().f_code.co_name,
-                                            str(_args)))
+                                                         str(_args)))
             log.debug("user_token:{0}".format(str(self.user_token)))
         except:
             pass
@@ -208,10 +210,12 @@ class openstack(ComputeBaseType):
         # DEBUG
         try:
             import sys
+
             _args = locals()
-            if 'self' in _args: del(_args['self'])
+            if 'self' in _args:
+                del (_args['self'])
             log.debug("[{0}()] called with [{1}]".format(sys._getframe().f_code.co_name,
-                                            str(_args)))
+                                                         str(_args)))
         except:
             pass
 
@@ -226,17 +230,17 @@ class openstack(ComputeBaseType):
                 "username": credential['OS_USERNAME'],
                 "password": credential['OS_PASSWORD'],
             },
-                "tenantName": credential['OS_TENANT_NAME']
-            }
-            }
+                              "tenantName": credential['OS_TENANT_NAME']
+                              }
+                     }
         elif 'OS_TENANT_ID' in credential:
             param = {"auth": {"passwordCredentials": {
                 "username": credential['OS_USERNAME'],
                 "password": credential['OS_PASSWORD'],
             },
-                "tenantId": credential['OS_TENANT_ID']
-            }
-            }
+                              "tenantId": credential['OS_TENANT_ID']
+                              }
+                     }
         url = "{0}/tokens".format(credential['OS_AUTH_URL'])
 
         log.debug(str(lineno()) + ": URL {0}".format(url))
@@ -316,8 +320,8 @@ class openstack(ComputeBaseType):
         verify = False
         if 'OS_CACERT' in credential:
             if credential['OS_CACERT'] is not None and \
-               credential['OS_CACERT'] != "None" and \
-               os.path.isfile(credential['OS_CACERT']):
+                            credential['OS_CACERT'] != "None" and \
+                    os.path.isfile(credential['OS_CACERT']):
                 verify = credential['OS_CACERT']
         return verify
 
@@ -364,7 +368,8 @@ class openstack(ComputeBaseType):
     #
     def ks_get_extensions(self):
         pass
-    #    conf = self._get_service_endpoint("identity")
+
+    # conf = self._get_service_endpoint("identity")
 
     def keypair_list(self):
         apiurl = "os-keypairs"
@@ -426,7 +431,7 @@ class openstack(ComputeBaseType):
         # ...)
 
         # if keyname is None:
-        #    get the default key from the profile information
+        # get the default key from the profile information
 
         url = self._get_service_endpoint("compute")[self.service_url_type]
 
@@ -443,14 +448,14 @@ class openstack(ComputeBaseType):
         params = {
             "server": {
                 "name": "%s" % name,
-                        "imageRef": "%s" % image_id,
-                        "flavorRef": "%s" % flavor_name,
-                        # max_count is the number of instances to launch
-                        # If 3 specified, three vm instances will be launched
-                        # "max_count": 1,
-                        # "min_count": 1,
-                        "security_groups": secgroups,
-                        "metadata": meta,
+                "imageRef": "%s" % image_id,
+                "flavorRef": "%s" % flavor_name,
+                # max_count is the number of instances to launch
+                # If 3 specified, three vm instances will be launched
+                # "max_count": 1,
+                # "min_count": 1,
+                "security_groups": secgroups,
+                "metadata": meta,
             }
         }
         if key_name:
@@ -507,7 +512,7 @@ class openstack(ComputeBaseType):
             "stack_name": "%s" % name,
             "template_url": "%s" % template_url,
             "parameters": param,
-            "timeout_mins": "%s" % timeout_mins 
+            "timeout_mins": "%s" % timeout_mins
         }
 
         log.debug(str(lineno()) + ":POST PARAMS {0}".format(params))
@@ -531,14 +536,14 @@ class openstack(ComputeBaseType):
         msg = "stacks/%s" % stack_name
         service = "orchestration"
         r1 = self._get(msg, service=service,
-                      urltype=self.service_url_type)
+                       urltype=self.service_url_type)
         try:
             stack_id = r1['stack']['id']
         except KeyError:
             log.warning("stack does not exist ({0})".format(stack_name))
             ret = {"msg": "failed"}
             return ret
- 
+
         url = "%s/stacks/%s/%s" % (url, stack_name, stack_id)
 
         # no return from http delete via rest api
@@ -582,7 +587,7 @@ class openstack(ComputeBaseType):
                 if 'floating_ip_pools' in r:
                     # use the first pool
                     pool = r['floating_ip_pools'][0]['name']
-                    params = {'pool':pool}
+                    params = {'pool': pool}
                     # reissue the request with returned pool name
                     r = self._post(posturl, params)
         if "floating_ip" in r:
@@ -590,10 +595,10 @@ class openstack(ComputeBaseType):
         #
         # currently not being used
         # Nureon related operations
-        #else:
-        #    gatewayinfo = self.get_network_id()
-        #    url = self._get_service_endpoint("network")[self.service_url_type]
-        #    posturl = '%s/v2.0/floatingips' % url
+        # else:
+        # gatewayinfo = self.get_network_id()
+        # url = self._get_service_endpoint("network")[self.service_url_type]
+        # posturl = '%s/v2.0/floatingips' % url
         #    tenant_id = self.user_token['access']['token']['tenant']['id']
         #    params = {"floatingip":{"floating_network_id":<UUID from gatewayinfo>}}
         #    r = self._post(posturl)
@@ -609,9 +614,9 @@ class openstack(ComputeBaseType):
 
         posturl = "%s/servers/%s/action" % (url, serverid)
         params = {"addFloatingIp": {
-                    "address": "%s" % ip
-                    }
-                }
+            "address": "%s" % ip
+        }
+                  }
         log.debug("POST PARAMS {0}".format(params))
         return self._post(posturl, params)
 
@@ -688,6 +693,7 @@ class openstack(ComputeBaseType):
             return r.json()
         else:
             return r
+
     # http
 
     def _get_service_endpoint(self, type=None):
@@ -771,25 +777,25 @@ class openstack(ComputeBaseType):
 
         limits = self.get_limits()
         if view == "fraction":
-            new_limits = { "Cores": None, 
-                          "Instances": None, 
+            new_limits = {"Cores": None,
+                          "Instances": None,
                           "RAM": None,
                           "SecurityGroups": None,
-                          "FloatingIps": None }
+                          "FloatingIps": None}
 
             new_limits['Cores'] = str(limits['absolute']['totalCoresUsed']) + \
-                    " / " + str(limits['absolute']['maxTotalCores'])
+                                  " / " + str(limits['absolute']['maxTotalCores'])
             new_limits['Instances'] = \
-                    str(limits['absolute']['totalInstancesUsed']) + " / " + \
-                    str(limits['absolute']['maxTotalInstances'])
+                str(limits['absolute']['totalInstancesUsed']) + " / " + \
+                str(limits['absolute']['maxTotalInstances'])
             new_limits['RAM'] = str(limits['absolute']['totalRAMUsed']) + \
-            " / " + str(limits['absolute']['maxTotalRAMSize'])
+                                " / " + str(limits['absolute']['maxTotalRAMSize'])
             new_limits['SecurityGroups'] = \
-                    str(limits['absolute']['totalSecurityGroupsUsed']) + " / " + \
-                    str(limits['absolute']['maxSecurityGroups'])
+                str(limits['absolute']['totalSecurityGroupsUsed']) + " / " + \
+                str(limits['absolute']['maxSecurityGroups'])
             new_limits['FloatingIps'] = \
-                    str(limits['absolute']['totalFloatingIpsUsed']) + " / " + \
-                    str(limits['absolute']['maxTotalFloatingIps'])
+                str(limits['absolute']['totalFloatingIpsUsed']) + " / " + \
+                str(limits['absolute']['maxTotalFloatingIps'])
 
             return new_limits
         else:
@@ -868,10 +874,10 @@ class openstack(ComputeBaseType):
         time_stamp = self._now()
         tenant_id = self.user_token['access']['token']['tenant']['id']
         msg = "os-simple-tenant-usage/{0}".format(tenant_id)
-        param = { "start": datetime.now() - timedelta(hours=24),
-                 "end": datetime.now() }
+        param = {"start": datetime.now() - timedelta(hours=24),
+                 "end": datetime.now()}
         _dict = self._get(msg, urltype=self.service_url_type,
-                         payload=param)['tenant_usage']
+                          payload=param)['tenant_usage']
         log.debug(_dict)
         self.usage = _dict
         return _dict
@@ -1056,10 +1062,10 @@ class openstack(ComputeBaseType):
         url = self._get_service_endpoint("compute")[self.service_url_type]
         posturl = "%s/os-security-groups" % url
         params = {"security_group":
-                    {
-                    "name": secgroup.name,
-                    "description": secgroup.description
-                    }
+                      {
+                          "name": secgroup.name,
+                          "description": secgroup.description
+                      }
                   }
         # log.debug ("POST PARAMS {0}".format(params))
         ret = self._post(posturl, params)
@@ -1089,13 +1095,13 @@ class openstack(ComputeBaseType):
         ret = None
         for rule in rules:
             params = {"security_group_rule":
-                        {
-                        "ip_protocol": rule.ip_protocol,
-                        "from_port": rule.from_port,
-                        "to_port": rule.to_port,
-                        "cidr": rule.cidr,
-                        "parent_group_id": groupid
-                        }
+                          {
+                              "ip_protocol": rule.ip_protocol,
+                              "from_port": rule.from_port,
+                              "to_port": rule.to_port,
+                              "cidr": rule.cidr,
+                              "parent_group_id": groupid
+                          }
                       }
             # log.debug ("POST PARAMS {0}".format(params))
             ret = self._post(posturl, params)
@@ -1107,6 +1113,7 @@ class openstack(ComputeBaseType):
                         "Failed to create security group rule(s). Error message: '%s'" % ret)
                     break
         return ret
+
     #
     # security Groups of VMS
     #
@@ -1566,10 +1573,10 @@ class openstack(ComputeBaseType):
         # matrix[0].append(end)
 
         # if format == 'dict':
-        #    result = {}
-        #    for i in range(0, len(headline)):
-        #        result[headline[i]] = matrix[0][i]
-        #    return result
+        # result = {}
+        # for i in range(0, len(headline)):
+        # result[headline[i]] = matrix[0][i]
+        # return result
         # else:
         #    return (headline, matrix[0])
 
@@ -1577,8 +1584,8 @@ class openstack(ComputeBaseType):
     # CLI call of absolute-limits
     #
     # def limits(self):
-    #    conf = get_conf()
-    #    return _get(conf, "%s/limits")
+    # conf = get_conf()
+    # return _get(conf, "%s/limits")
 
     '''
     def check_key_pairs(self, key_name):
@@ -1655,7 +1662,7 @@ class openstack(ComputeBaseType):
         print(state_check)
         for (id, vm) in self.servers.items():
             vm['cm_display'] = eval(state_check)
-            #            vm['cm_display'] = vm['status'] in states
+            # vm['cm_display'] = vm['status'] in states
             if userid is not None:
                 vm['cm_display'] = vm['cm_display'] and (
                     vm['user_id'] == userid)
@@ -1665,7 +1672,6 @@ class openstack(ComputeBaseType):
 # MAIN FOR TESTING
 #
 if __name__ == "__main__":
-
     """
     cloud = openstack("india-openstack")
 
@@ -1678,11 +1684,11 @@ if __name__ == "__main__":
     # cloud = openstack("india")
     # flavors = cloud.get_flavors()
     # for flavor in flavors:
-    #    print(flavor)
+    # print(flavor)
 
     # keys = cloud.list_key_pairs()
     # for key in keys:
-    #    print key.name
+    # print key.name
     """
     print cloud.find_user_id()
 

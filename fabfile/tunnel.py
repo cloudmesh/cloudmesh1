@@ -5,6 +5,7 @@ from sh import kill
 from sh import sudo
 from cloudmesh_base.locations import config_file
 
+
 def get_server_config():
     return ConfigDict(filename=config_file("/cloudmesh_server.yaml"))
 

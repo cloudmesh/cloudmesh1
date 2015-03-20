@@ -43,7 +43,6 @@ except Exception, e:
     print e
     sys.exit()
 
-
 __all__ = ['start', 'stop', 'kill', 'view', 'clean',
            'agent', 'quick', 'wsgi', 'web']
 
@@ -94,7 +93,7 @@ def execute_command(msg, command, debug):
 @task
 def agent():
     # with settings(warn_only=True):
-    #    local("killall ssh-agent")
+    # local("killall ssh-agent")
     print 70 * "="
     print" PLEASE COPY THE FOLLOWING COMMNADS AND EXECUTE IN YOUR SHELL"
     print 70 * "="
@@ -108,6 +107,7 @@ def stop(server="server"):
     kill(server)
     cursor_on()
 
+
 @task
 def kill(server="server", debug=True):
     """kills all server processes """
@@ -119,7 +119,7 @@ def kill(server="server", debug=True):
             if line is not '':
                 pid = line.split(" ")[0]
                 local("kill -9 {0}".format(pid))
-    # local("fab queue.stop")
+                # local("fab queue.stop")
 
 
 @task
@@ -164,7 +164,7 @@ def start(server="server", browser='yes', debug=False):
 
     mongo.start()
     # execute_command("START MONGO",
-    #            "fab mongo.start",
+    # "fab mongo.start",
     #            debug)
 
     queue.start()
@@ -206,7 +206,7 @@ def view(link=""):
 
     local("%s %s" % (web_browser, url_link))
     # if browser == 'yes':
-    #    local("sleep 2; {0} http://127.0.0.1:{2}/{1}".format(web_browser, link, port))
+    # local("sleep 2; {0} http://127.0.0.1:{2}/{1}".format(web_browser, link, port))
 
 
 @task

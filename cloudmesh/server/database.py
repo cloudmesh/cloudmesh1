@@ -29,7 +29,6 @@ def getpassword(prompt):
 
 
 class Database(object):
-
     def __init__(self):
         self.filename = config_file("/cloudmesh.yaml")
         self.config = cm_config(filename=self.filename)
@@ -63,18 +62,19 @@ class Database(object):
         if passwd is None:
             prompt1st = "Please set a password to mongodb.\nMongo Password:"
             prompt_not_strong = "\nPassword not strong enough. Minimum " + \
-                    "length is 6. Please enter again.\nMongo Password:"
+                                "length is 6. Please enter again.\nMongo Password:"
             passwd = getpassword(prompt1st)
             while not validate_password(passwd):
                 passwd = getpassword(prompt_not_strong)
 
         from cloudmesh.config.cm_config import cm_config_server
+
         cm_config_server = cm_config_server()
         key = "cloudmesh.server.mongo.password"
         value = passwd
         cm_config_server._update(key, value)
         cm_config_server.write(output="yaml")
- 
+
     def set_credentials(self):
         for cloudname in self.config.cloudnames():
             self.user_obj.set_credential(

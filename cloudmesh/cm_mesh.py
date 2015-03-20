@@ -239,7 +239,7 @@ class cm_mesh:
         if cloud name !=None and type = none update everything in the
         specified clouds
 
-        if cloud name != None and type != none
+        if cloud name is not None and type != none
            refresh the given types for the given clouds
 
         """

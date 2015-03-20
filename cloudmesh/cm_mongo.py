@@ -33,7 +33,6 @@ except:
 
 
 class cm_MongoBase(object):
-
     def __init__(self):
         self.cm_type = "overwriteme"
         self.connect()
@@ -92,7 +91,6 @@ class cm_MongoBase(object):
 
 
 class cm_mongo:
-
     clouds = {}
     client = None
     db_clouds = None
@@ -116,9 +114,9 @@ class cm_mongo:
         # DEBUG
         try:
             _args = locals()
-            del(_args['self'])
+            del (_args['self'])
             log.debug("[{0}()] called with [{1}]".format(sys._getframe().f_code.co_name,
-                                            str(_args)))
+                                                         str(_args)))
         except:
             pass
 
@@ -151,7 +149,7 @@ class cm_mongo:
         return provider
 
     #
-    #  BUG NO USER IS INVOLVED
+    # BUG NO USER IS INVOLVED
     #
 
     def get_credential(self, cm_user_id, cloud):
@@ -159,9 +157,9 @@ class cm_mongo:
         try:
             _args = locals()
             if 'self' in _args:
-                del(_args['self'])
+                del (_args['self'])
             log.debug("[{0}()] called with [{1}]".format(sys._getframe().f_code.co_name,
-                                            str(_args)))
+                                                         str(_args)))
         except:
             pass
 
@@ -189,9 +187,9 @@ class cm_mongo:
         try:
             _args = locals()
             if 'self' in _args:
-                del(_args['self'])
+                del (_args['self'])
             log.debug("[{0}()] called with [{1}]".format(sys._getframe().f_code.co_name,
-                                            str(_args)))
+                                                         str(_args)))
         except:
             pass
 
@@ -233,9 +231,9 @@ class cm_mongo:
         try:
             _args = locals()
             if 'self' in _args:
-                del(_args['self'])
+                del (_args['self'])
             log.debug("[{0}()] called with [{1}]".format(sys._getframe().f_code.co_name,
-                                            str(_args)))
+                                                         str(_args)))
         except:
             pass
 
@@ -270,10 +268,11 @@ class cm_mongo:
         elif not self.clouds[cm_user_id][cloud_name]['manager']:
             recreate = True
         # for openstack, we check if tenant_name was recently changed
-        elif 'OS_TENANT_NAME' in credentials and\
-            hasattr(self.clouds[cm_user_id][cloud_name]['manager'], 'user_token') and\
-             'access' in self.clouds[cm_user_id][cloud_name]['manager'].user_token and\
-             self.clouds[cm_user_id][cloud_name]['manager'].user_token['access']['token']['tenant']['name'] != credentials['OS_TENANT_NAME']:
+        elif 'OS_TENANT_NAME' in credentials and \
+                hasattr(self.clouds[cm_user_id][cloud_name]['manager'], 'user_token') and \
+                        'access' in self.clouds[cm_user_id][cloud_name]['manager'].user_token and \
+                        self.clouds[cm_user_id][cloud_name]['manager'].user_token['access']['token']['tenant'][
+                            'name'] != credentials['OS_TENANT_NAME']:
             recreate = True
         # in most case we return the existing object ref
         else:
@@ -296,7 +295,7 @@ class cm_mongo:
                         cloud = provider(cloud_name, credentials, service_url_type=cm_service_url_type)
                     else:
                         cloud = provider(cloud_name, credentials)
-                        
+
                     log.debug("Created new cloud instance for cloud name: %s, type: %s"
                               % (cloud_name, cm_type))
                     if cm_service_url_type == 'internalURL':
@@ -327,15 +326,17 @@ class cm_mongo:
                                         )
                                         if existRule == self.ssh_ec2_rule:
                                             foundsshrule = True
-                                            log.debug("Ec2 security group rule allowing ssh exists for cloud: %s, type: %s, tenant: %s"
-                                                      % (cloud_name, cm_type, credentials['OS_TENANT_NAME']))
+                                            log.debug(
+                                                "Ec2 security group rule allowing ssh exists for cloud: %s, type: %s, tenant: %s"
+                                                % (cloud_name, cm_type, credentials['OS_TENANT_NAME']))
                                     if not foundsshrule:
                                         iddefault = cloud.find_security_groupid_by_name(
                                             'default')
                                         cloud.add_security_group_rules(iddefault,
                                                                        [self.ssh_ec2_rule])
-                                        log.debug("Added Ec2 security group rule to allow ssh for cloud: %s, type: %s, tenant: %s"
-                                                  % (cloud_name, cm_type, credentials['OS_TENANT_NAME']))
+                                        log.debug(
+                                            "Added Ec2 security group rule to allow ssh for cloud: %s, type: %s, tenant: %s"
+                                            % (cloud_name, cm_type, credentials['OS_TENANT_NAME']))
 
             except Exception, e:
                 cloud = None
@@ -368,9 +369,9 @@ class cm_mongo:
         try:
             _args = locals()
             if 'self' in _args:
-                del(_args['self'])
+                del (_args['self'])
             log.debug("[{0}()] called with [{1}]".format(sys._getframe().f_code.co_name,
-                                            str(_args)))
+                                                         str(_args)))
         except:
             pass
 
@@ -418,6 +419,7 @@ class cm_mongo:
     def activate_userinfo(self, cm_user_id):
         # Set userinfo
         from cloudmesh.user.cm_user import cm_user
+
         self.cm_user = cm_user()
         self.userinfo = self.cm_user.info(cm_user_id)
         self.userid = cm_user_id
@@ -456,7 +458,7 @@ class cm_mongo:
         if cloud name !=None and type = none update everything in the
         specified clouds
 
-        if cloud name != None and type != none
+        if cloud name is not None and type != none
            refresh the given types for the given clouds
 
         """
@@ -541,7 +543,7 @@ class cm_mongo:
 
                     # exception.
                     if "_id" in result[element]:
-                        del(result[element]['_id'])
+                        del (result[element]['_id'])
 
                     self.db_clouds.insert(result[element])
 
@@ -690,11 +692,9 @@ class cm_mongo:
         """Launch a new VM instance with a default setting for flavor, image and
         key name"""
 
-        
-
         arg_flavor = flavor
         arg_image = image
-        
+
         if not self.check_activated():
             return None
 
@@ -702,7 +702,6 @@ class cm_mongo:
         prefix = prefix or userinfo['defaults']['prefix']
         index = index or userinfo['defaults']['index']
 
-        
         try:
             flavor = flavor['id']
         except:
@@ -711,7 +710,7 @@ class cm_mongo:
                 flavor = arg_flavor or userinfo['defaults']['flavors'][cloud]
             else:
                 flavor = flavor['id']
-                                                
+
         try:
             image = image['id']
         except:
@@ -738,7 +737,7 @@ class cm_mongo:
         #
         result["flavor"] = self.flavors([cloud])[cloud][flavor]['name']
         result["image"] = self.images([cloud])[cloud][image]['name']
-        
+
         return result
 
     def vm_create(self,
@@ -863,7 +862,7 @@ class cm_mongo:
             return cloudmanager.stack_delete(server)
         except KeyError:
             return None
-   
+
     def usage(self, cloud, cm_user_id):
         '''Gets usage reports'''
         try:
@@ -904,7 +903,7 @@ class cm_mongo:
         d['cm_kind'] = 'launcher'
         d['cm_user_id'] = username
         self.db_clouds.insert(d)
-        
+
     def launcher_get(self, username, launcher_name=None):
         if launcher_name:
             return self.db_clouds.find_one({'cm_kind': 'launcher',
@@ -913,12 +912,12 @@ class cm_mongo:
         else:
             return self.db_clouds.find({'cm_kind': 'launcher',
                                         'cm_user_id': username})
-            
+
     def launcher_remove(self, username, launcher_name):
         self.db_clouds.remove({'cm_kind': 'launcher',
                                'cm_user_id': username,
                                'cm_launcher': launcher_name})
-        
+
 
     def vmname(self, prefix=None, idx=None, cm_user_id=None):
         """Return a vm name to use next time. prefix or index can be
@@ -933,7 +932,7 @@ class cm_mongo:
         userinfo = self.get_userinfo(cm_user_id)
         cm_user_id = cm_user_id or self.userid
         userinfo['defaults']['prefix'] = prefix or \
-            userinfo['defaults']['prefix']
+                                         userinfo['defaults']['prefix']
         if idx:
             if str(idx).isdigit():
                 userinfo['defaults']['index'] = idx
@@ -981,13 +980,14 @@ class cm_mongo:
         #
         return success
 
-class cm_mongo_status(object):
 
+class cm_mongo_status(object):
     def __init__(self):
         self.conn = DBConnFactory.getconn("admin")
 
     def serverStatus(self):
         return self.conn.command("serverStatus")
+
 
 '''
 def main():

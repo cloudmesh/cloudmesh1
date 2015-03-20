@@ -37,6 +37,7 @@ def say_error(msg):
 def authorization(func):
     """decorator. authorizate the user's action according to his token and current accessing API.
     """
+
     @wraps(func)
     def wrap_authorization(self, *args, **kwargs):
         """
@@ -51,6 +52,7 @@ def authorization(func):
         # print "[TEST ONLY] Authorizate function {0}
         # ...".format(func.__name__)
         return func(self, *args, **kwargs)
+
     return wrap_authorization
 
 
@@ -59,6 +61,7 @@ def cobbler_object_exist(object_type, ensure_exist=True):
     :param string object_type: a name in ["distro", "profile", "system"]
     :param boolean ensure_exist: True means the object MUST exist, otherwise must NOT exist.
     """
+
     def _cobbler_object_exist(func):
         @wraps(func)
         def wrap_cobbler_object_exist(self, object_name, *args, **kwargs):
@@ -72,18 +75,21 @@ def cobbler_object_exist(object_type, ensure_exist=True):
                 if flag_exist:
                     return func(self, name, *args, **kwargs)
                 else:
-                    return self._simple_result_dict(False, "The name {0} in {1} does NOT exist.".format(name, object_type))
+                    return self._simple_result_dict(False,
+                                                    "The name {0} in {1} does NOT exist.".format(name, object_type))
             else:  # must NOT exist
                 if not flag_exist:
                     return func(self, name, *args, **kwargs)
                 else:
-                    return self._simple_result_dict(False, "The name {0} in {1} already exists.".format(name, object_type))
+                    return self._simple_result_dict(False,
+                                                    "The name {0} in {1} already exists.".format(name, object_type))
+
         return wrap_cobbler_object_exist
+
     return _cobbler_object_exist
 
 
 class CobblerProvision:
-
     """ Stand on top of cobbler, provide simple and easy API for deploying new OS.
 
      NOTE: As described in "https://fedorahosted.org/cobbler/wiki/CobblerApi",
@@ -306,7 +312,8 @@ class CobblerProvision:
                         "type": "kickstart",
                         "name": filename,
                         "data": {"name": filename,
-                                 "contents": self.read_file_to_list("{0}/{1}".format(self.KICKSTART_LOCATION, filename)),
+                                 "contents": self.read_file_to_list(
+                                     "{0}/{1}".format(self.KICKSTART_LOCATION, filename)),
                                  },
                     })
         else:
@@ -363,7 +370,7 @@ class CobblerProvision:
             return self._simple_result_dict(False, "User does NOT have write permission in /tmp directory.")
         # fetch image iso
         (flag_result, iso_filename) = self.iso_exist(url, dir_iso)
-        if not flag_result:    # if has NOT downloaded, then do it now.
+        if not flag_result:  # if has NOT downloaded, then do it now.
             (flag_result, msg) = self.wget(url, dir_iso)
             if not flag_result:
                 return self._simple_result_dict(False, msg)
@@ -372,14 +379,15 @@ class CobblerProvision:
         # mount image
         # check mount location is idle or not
         if len(os.listdir(dir_mount)) > 0:
-            self.umount_image(dir_mount)    # must umount first
+            self.umount_image(dir_mount)  # must umount first
         if self.mount_image(iso_filename, dir_mount):
             cmd_args = [
                 "cobbler", "import", "--path={0}".format(dir_mount), "--name={0}".format(udistro_name), ]
             flag_result = self.shell_command(cmd_args)
             self.umount_image(dir_mount)
             if not flag_result:
-                return self._simple_result_dict(False, "Failed to import distro [{0}] from [{1}]".format(udistro_name, url))
+                return self._simple_result_dict(False,
+                                                "Failed to import distro [{0}] from [{1}]".format(udistro_name, url))
             curr_distro_names = self._list_item_names("distro")
             # double check the result of import distro
             possible_names = [
@@ -389,8 +397,12 @@ class CobblerProvision:
             # automatically
             distro_return_data = {
                 "distro": distro_name, "profile": distro_name, }
-            return self._simple_result_dict(True if distro_name else False, "Add distro {0} {1}successfully.".format(udistro_name, "" if distro_name else "un"), data=distro_return_data)
-        return self._simple_result_dict(False, "Failed to mount unsupported image [{0}] in add distro {1}.".format(url, udistro_name))
+            return self._simple_result_dict(True if distro_name else False,
+                                            "Add distro {0} {1}successfully.".format(udistro_name,
+                                                                                     "" if distro_name else "un"),
+                                            data=distro_return_data)
+        return self._simple_result_dict(False, "Failed to mount unsupported image [{0}] in add distro {1}.".format(url,
+                                                                                                                   udistro_name))
 
     @cobbler_object_exist("distro")
     @authorization
@@ -410,7 +422,8 @@ class CobblerProvision:
         flag_result = True
         if len(cmd_args) > len(cmd_args_edit):
             flag_result = self.shell_command(cmd_args)
-        return self._simple_result_dict(flag_result, "Update distro {0} {1}successfully.".format(distro_name, "" if flag_result else "un"))
+        return self._simple_result_dict(flag_result, "Update distro {0} {1}successfully.".format(distro_name,
+                                                                                                 "" if flag_result else "un"))
 
     @cobbler_object_exist("profile", False)
     @authorization
@@ -436,7 +449,8 @@ class CobblerProvision:
             if flag_result:
                 kwargs.pop("distro")
                 flag_result = self._edit_profile(profile_name, kwargs)
-            return self._simple_result_dict(flag_result, "Add profile {0} {1}successfully.".format(profile_name, "" if flag_result else "un"))
+            return self._simple_result_dict(flag_result, "Add profile {0} {1}successfully.".format(profile_name,
+                                                                                                   "" if flag_result else "un"))
         return self._simple_result_dict(False, "Must provide a valid distro name.")
 
     @cobbler_object_exist("profile")
@@ -459,7 +473,8 @@ class CobblerProvision:
                 return self._simple_result_dict(False, "Must provide a valid kickstart file.")
 
         flag_result = self._edit_profile(profile_name, kwargs)
-        return self._simple_result_dict(flag_result, "Update profile {0} {1}successfully.".format(profile_name, "" if flag_result else "un"))
+        return self._simple_result_dict(flag_result, "Update profile {0} {1}successfully.".format(profile_name,
+                                                                                                  "" if flag_result else "un"))
 
     def _edit_profile(self, profile_name, contents):
         """edit a profile, a inner function called by add_profile and update_profile
@@ -528,7 +543,8 @@ class CobblerProvision:
             if profile_name in self._list_item_names("profile"):
                 flag_result = True
         if not flag_result:
-            return self._simple_result_dict(False, "Profile [{0}] does NOT exist.".format(profile_name) if profile_name else "Must provide a profile to add system.")
+            return self._simple_result_dict(False, "Profile [{0}] does NOT exist.".format(
+                profile_name) if profile_name else "Must provide a profile to add system.")
         cmd_args = ["cobbler", "system", "add",
                     "--name={0}".format(system_name),
                     "--profile={0}".format(profile_name),
@@ -543,7 +559,8 @@ class CobblerProvision:
         # completely
         if not flag_result:
             self._remove_item("system", system_name)
-        return self._simple_result_dict(flag_result, "Add system {0} {1}successfully.".format(system_name, "" if flag_result else "un"))
+        return self._simple_result_dict(flag_result, "Add system {0} {1}successfully.".format(system_name,
+                                                                                              "" if flag_result else "un"))
 
     @cobbler_object_exist("system")
     @authorization
@@ -558,10 +575,13 @@ class CobblerProvision:
         profile_name = contents.get("profile", None)
         if profile_name:
             if profile_name not in self._list_item_names("profile"):
-                return self._simple_result_dict(False, "Failed to update system, because profile [{0}] does NOT exist.".format(profile_name))
+                return self._simple_result_dict(False,
+                                                "Failed to update system, because profile [{0}] does NOT exist.".format(
+                                                    profile_name))
         # update other objects in system
         flag_result = self._edit_system(system_name, contents)
-        return self._simple_result_dict(flag_result, "Update system {0} {1}successfully.".format(system_name, "" if flag_result else "un"))
+        return self._simple_result_dict(flag_result, "Update system {0} {1}successfully.".format(system_name,
+                                                                                                 "" if flag_result else "un"))
 
     def _edit_system(self, system_name, contents):
         """
@@ -639,8 +659,10 @@ class CobblerProvision:
                 os.remove(filename)
             except:
                 flag_result = False
-            return self._simple_result_dict(flag_result, "The object {0} in kickstart removed {1}successfully.".format(kickstart_name, "" if flag_result else "un"))
-        return self._simple_result_dict(True, "The name {0} in kickstart does NOT exist. Not need to remove.".format(kickstart_name))
+            return self._simple_result_dict(flag_result, "The object {0} in kickstart removed {1}successfully.".format(
+                kickstart_name, "" if flag_result else "un"))
+        return self._simple_result_dict(True, "The name {0} in kickstart does NOT exist. Not need to remove.".format(
+            kickstart_name))
 
     def _remove_item(self, object_type, name):
         """remove a cobbler object
@@ -649,8 +671,11 @@ class CobblerProvision:
             "cobbler", object_type, "remove", "--name={0}".format(name)]
         if name in self._list_item_names(object_type):
             flag_result = self.shell_command(cmd_args)
-            return self._simple_result_dict(flag_result, "The object {0} in {1} removed {2}successfully.".format(name, object_type, "" if flag_result else "un"))
-        return self._simple_result_dict(True, "The name {0} in {1} does NOT exist. Not need to remove.".format(name, object_type))
+            return self._simple_result_dict(flag_result,
+                                            "The object {0} in {1} removed {2}successfully.".format(name, object_type,
+                                                                                                    "" if flag_result else "un"))
+        return self._simple_result_dict(True, "The name {0} in {1} does NOT exist. Not need to remove.".format(name,
+                                                                                                               object_type))
 
     @cobbler_object_exist("system")
     @authorization
@@ -673,11 +698,12 @@ class CobblerProvision:
                             ]
                 flag_result = self.shell_command(cmd_args)
                 result = self._simple_result_dict(flag_result,
-                                                  "Interface {0} removed {1}succefully.".format(interface_name, "" if flag_result else "un"))
+                                                  "Interface {0} removed {1}succefully.".format(interface_name,
+                                                                                                "" if flag_result else "un"))
             else:
                 result = self._simple_result_dict(
                     True, "Interface {0} does NOT exist. Not need to remove.".format(interface_name))
-            break   # ONLY remove the first interface name
+            break  # ONLY remove the first interface name
         return result
 
     # find system in cobbler
@@ -858,9 +884,9 @@ if __name__ == "__main__":
         "name": "mysys140313",
         "profile": "test-profile-140313",
         "power": {
-                   "power-address": "1.2.3.4",
-                   "power-user": "test",
-                   "power-pass": "nopassword",
+            "power-address": "1.2.3.4",
+            "power-user": "test",
+            "power-pass": "nopassword",
             "power-type": "ipmilan",
             "power-id": 1,
         },
@@ -944,7 +970,7 @@ if __name__ == "__main__":
 
     # add distro
     if debug_status["add_distro"]:
-        #url = "http://ftp.ussg.iu.edu/linux/ubuntu-releases/13.04/ubuntu-13.04-server-amd64.iso"
+        # url = "http://ftp.ussg.iu.edu/linux/ubuntu-releases/13.04/ubuntu-13.04-server-amd64.iso"
         # CentOS
         url = "http://mirrors.usc.edu/pub/linux/distributions/centos/6.5/isos/x86_64/CentOS-6.5-x86_64-bin-DVD1.iso"
         result = cp.add_distro(distro_name, url)

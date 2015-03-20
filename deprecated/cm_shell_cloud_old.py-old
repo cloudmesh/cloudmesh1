@@ -222,7 +222,7 @@ class cm_shell_cloud:
 
             if not arguments["NAME"]:
                 cloud = self._get_selected_cloud()
-                if cloud == None:
+                if cloud is None:
                     return
                 else:
                     printing(cloud)
@@ -243,7 +243,7 @@ class cm_shell_cloud:
                         if cloud['cm_cloud'] == arguments["NAME"]:
                             res = cloud
                     self.clouds.rewind()
-                    if res == None:
+                    if res is None:
                         print "ERROR: could not find cloud '{0}'".format(arguments["NAME"])
                     else:
                         printing(res)
@@ -251,7 +251,7 @@ class cm_shell_cloud:
         if arguments["set"] and arguments["NAME"]:
             self._load_mongodb()
             cloud = self._get_selected_cloud()
-            if cloud == None:
+            if cloud is None:
                 return
             if yn_choice("rename cloud '{0}' to '{1}'?".format(cloud['cm_cloud'], arguments["NAME"]), default='n', tries=3):
                 self.cloudsinfo.set_name(cloud['cm_cloud'], arguments["NAME"])
@@ -263,7 +263,7 @@ class cm_shell_cloud:
             self._load_mongodb()
             if arguments["NAME"]:
                 def selecting(cloud):
-                    if cloud == None:
+                    if cloud is None:
                         print "'{0}' is not in the database".format(arguments["NAME"])
                         return
                     else:
@@ -282,7 +282,7 @@ class cm_shell_cloud:
                     selecting(res)
             else:
                 current_selected = self._get_selected_cloud()
-                if current_selected == None:
+                if current_selected is None:
                     return
                 current_selected = current_selected['cm_cloud'].encode("ascii")
                 self._requery_db()
@@ -309,7 +309,7 @@ class cm_shell_cloud:
             self._load_mongodb()
             if not arguments["NAME"]:
                 current_selected = self._get_selected_cloud()
-                if current_selected == None:
+                if current_selected is None:
                     return
                 current_selected = current_selected['cm_cloud'].encode("ascii")
                 res = self.cloudsinfo.activate_one_cloud(current_selected)
@@ -320,7 +320,7 @@ class cm_shell_cloud:
                     print "cloud '{0}' activated.".format(current_selected)
             else:
                 def activating(cloud):
-                    if cloud == None:
+                    if cloud is None:
                         print "ERROR: Could not find '{0}' in database.".format(arguments["NAME"])
                         return
                     cloudname = cloud['cm_cloud'].encode("ascii")
@@ -346,7 +346,7 @@ class cm_shell_cloud:
             self._load_mongodb()
             if not arguments["NAME"]:
                 current_selected = self._get_selected_cloud()
-                if current_selected == None:
+                if current_selected is None:
                     return
                 current_selected = current_selected['cm_cloud'].encode("ascii")
                 self.cloudsinfo.deactivate_one_cloud(current_selected)
@@ -354,7 +354,7 @@ class cm_shell_cloud:
                 print "cloud '{0}' deactivated.".format(current_selected)
             else:
                 def deactivating(cloud):
-                    if cloud == None:
+                    if cloud is None:
                         print "ERROR: Could not find '{0}' in database.".format(arguments["NAME"])
                         return
                     cloudname = cloud['cm_cloud'].encode("ascii")
@@ -430,7 +430,7 @@ class cm_shell_cloud:
             self._requery_db()
             if not arguments["NAME"]:
                 current_selected = self._get_selected_cloud()
-                if current_selected == None:
+                if current_selected is None:
                     return
                 current_selected = current_selected['cm_cloud'].encode("ascii")
                 ans = yn_choice("Remove cloud '{0}' from database?".format(

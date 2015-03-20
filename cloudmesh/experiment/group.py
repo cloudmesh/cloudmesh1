@@ -183,5 +183,3 @@ class GroupManagement(object):
         if tag not in tags:
             tags.append(tag)
             group.update(set__tags=tags)
-          
-            

@@ -46,7 +46,7 @@ class UserFromYaml(dict):
 
         self.password = password
 
-        if datasource != None:
+        if datasource is not None:
             self.filename = datasource
         else:
             self.filename = "~/.cloudmesh/cloudmesh.yaml"

@@ -383,4 +383,4 @@ if __name__ == "__main__":
     """
     result = bmdb.init_base_document_structure()
     print(result)
-    #result = bmdb.assign_baremetal_to_user(dict_computers, "testXXX")
+    # result = bmdb.assign_baremetal_to_user(dict_computers, "testXXX")

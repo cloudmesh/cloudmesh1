@@ -123,7 +123,7 @@ def shell_command_experiment_group(arguments):
     username = config.username()
     # print username
     user = cm_user()
-    
+
     GroupManage = GroupManagement(username)
 
     '''
@@ -140,12 +140,12 @@ def shell_command_experiment_group(arguments):
             return
         d = {}
         d["groups"] = res
-        
+
         if arguments['--format']:
             p_format = arguments['--format']
         else:
             p_format = None
-            
+
         shell_commands_dict_output(username,
                                    d,
                                    print_format=p_format,
@@ -175,8 +175,8 @@ def shell_command_experiment_group(arguments):
             Console.error(str(err))
             return
         Console.ok("item '{0}' of type '{1}' added to group '{2}'".format(
-                                                value, type_, name))
-            
+            value, type_, name))
+
     elif arguments['show']:
         try:
             res = GroupManage.list_items_of_group(name, _type=type_)
@@ -188,13 +188,13 @@ def shell_command_experiment_group(arguments):
             p_format = arguments['--format']
         else:
             p_format = None
-            
+
         shell_commands_dict_output(username,
                                    res,
                                    print_format=p_format,
                                    table_format="key_list",
                                    indexed=True)
-            
+
     elif arguments["remove"] and arguments['item']:
         try:
             GroupManage.delete_item_of_group(name, type_, value)
@@ -202,15 +202,13 @@ def shell_command_experiment_group(arguments):
             Console.error(str(err))
             return
         Console.ok("item '{0}' of type '{1}' removed from group '{2}'".format(
-                                                value, type_, name))
-
-
-    
+            value, type_, name))
 
 
 def main():
     # cmd3_call(shell_command_experiment_group)
     pass
+
 
 if __name__ == '__main__':
     main()

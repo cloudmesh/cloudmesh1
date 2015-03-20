@@ -35,7 +35,7 @@ class DBConnFactory(object):
 
         # DEBUG
         # try:
-        #     import sys
+        # import sys
         #     _args = locals()
         #     log.debug("[{0}()] called with [{1}]".format(sys._getframe().f_code.co_name,
         #                                      str(_args)))
@@ -104,7 +104,7 @@ def get_mongo_db(mongo_collection, clientType=MONGOCLIENT):
     """
     # DEBUG
     # try:
-    #    import sys
+    # import sys
     #    _args = locals()
     #    del(_args['self'])
     #    log.debug("[{0}()] called with [{1}]".format(sys._getframe().f_code.co_name,
@@ -137,10 +137,9 @@ def get_mongo_dbname_from_collection(mongo_collection):
     except:
         pass
     return db_name
-    
+
 
 class cm_config_server(ConfigDict):
-
     """
     reads the information contained in the file
     cloudmesh_server.yaml
@@ -163,11 +162,10 @@ def load(kind="user"):
     elif kind in ["user"]:
         return cm_config()
     else:
-        raise("kind not found")
+        raise ("kind not found")
 
 
 class cm_config_launcher(ConfigDict):
-
     """
     reads the information contained in the file
     cloudmesh_launcher.yaml
@@ -181,7 +179,6 @@ class cm_config_launcher(ConfigDict):
 
 
 class cm_config_flavor(ConfigDict):
-
     """
     reads the information contained in the file
     cloudmesh_flavor.yaml
@@ -195,7 +192,6 @@ class cm_config_flavor(ConfigDict):
 
 
 class cm_config(ConfigDict):
-
     # ----------------------------------------------------------------------
     # global variables
     # ----------------------------------------------------------------------
@@ -482,20 +478,19 @@ def yaml_attribute_replace(filename='abc.yaml',
     result = ""
 
     max_indent = 10
-    
+
     with open(filename, 'r') as f:
         content = f.read()
 
-        
     for replacement in replacements:
         attributes = replacement.split('.')
-        found = [''] * max_indent # just a high number
-        
+        found = [''] * max_indent  # just a high number
+
         for line in content.split('\n'):
             # find the indentation level
             indent = (len(line) - len(line.lstrip(' '))) / indent_by
             # set all previously higher found indent to '' 
-            for x in range(indent,max_indent):
+            for x in range(indent, max_indent):
                 found[x] = ''
             # get the attribute name    
             attribute = line.split(":")[0].strip()
@@ -511,7 +506,7 @@ def yaml_attribute_replace(filename='abc.yaml',
                 result += line
             result += '\n'
     # for _old, _new in replacements.iteritems():
-    #    content = content.replace(_old, _new)
+    # content = content.replace(_old, _new)
 
     outfile = open(filename, 'w')
     outfile.write(result)

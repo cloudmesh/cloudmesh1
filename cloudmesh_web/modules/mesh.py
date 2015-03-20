@@ -77,7 +77,7 @@ def mesh_register_clouds():
         if cloudtypes[cloudname] == "openstack":
 
             d = {}
-            if credentials[cloudname] == None:
+            if credentials[cloudname] is None:
                 d = {'OS_USERNAME': cm_user_id,
                      'OS_PASSWORD': '',
                      'OS_TENANT_NAME': ''

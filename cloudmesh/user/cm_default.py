@@ -86,7 +86,6 @@ def shell_command_default(arguments):
 
 
 class DefaultCommand(object):
-    
     def __init__(self, arguments):
         self.arguments = arguments
         # print (self.arguments)
@@ -95,9 +94,9 @@ class DefaultCommand(object):
         except:
             Console.error("There is a problem with the "
                           "configuration yaml files")
-    
+
         self.username = self.config['cloudmesh']['profile']['username']
-    
+
         self.started_cm_user = False
         self.user_obj = None
 
@@ -160,7 +159,7 @@ class DefaultCommand(object):
             for index, item in enumerate(columns):
                 if item in ['format']:
                     columns[index] = "shell_print_format"
-            # ----------------------------------
+                    # ----------------------------------
 
         if self.arguments['--format']:
             if self.arguments['--format'] not in ['table', 'json', 'csv']:
@@ -171,7 +170,7 @@ class DefaultCommand(object):
         else:
             p_format = None
 
-        # if p_format == 'table' or p_format is None:
+            # if p_format == 'table' or p_format is None:
             # print(row_table(to_print, order=None, labels=["Default", "Value"]))
         # else:
         shell_commands_dict_output(self.username,
@@ -187,7 +186,7 @@ class DefaultCommand(object):
         if self.arguments['VALUE']:
             value = self.arguments['VALUE']
             if (value in defaults_data['activeclouds'] and
-                value in defaults_data['registered_clouds']):
+                        value in defaults_data['registered_clouds']):
                 defaults_data['cloud'] = value
                 self.user_obj.set_defaults(self.username, defaults_data)
                 Console.ok("set '{0}' as default cloud".format(value))
@@ -217,7 +216,7 @@ class DefaultCommand(object):
         arguments["cloud"] = True
         arguments["set"] = True
         shell_command_cloud(arguments)
-        
+
     def _default_key(self):
         key_store = cm_keys_mongo(self.username)
         # print key_store.names()
@@ -233,7 +232,7 @@ class DefaultCommand(object):
         else:
             print("ERROR: Specified key is not registered.")
         return
-    
+
     def _default_list_refresh(self):
         if self.arguments['--on']:
             self._start_cm_user()
@@ -246,7 +245,7 @@ class DefaultCommand(object):
             defaults_data["shell_command_list_refresh_default_setting"] = False
             self.user_obj.set_defaults(self.username, defaults_data)
         else:
-            print ("refresh as default: ", get_command_list_refresh_default_setting(self.username))
+            print("refresh as default: ", get_command_list_refresh_default_setting(self.username))
 
     def execute(self):
         if self.arguments['format']:

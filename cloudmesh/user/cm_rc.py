@@ -10,7 +10,7 @@ from ConfigParser import SafeConfigParser, NoOptionError
 def get_rcfiles(fpath=None):
     dir = config_file("")
     read_values = ["OS_TENANT_NAME", "OS_USERNAME", "OS_PASSWORD",
-                   "OS_AUTH_URL"]   #, "OS_CACERT"]
+                   "OS_AUTH_URL"]  # , "OS_CACERT"]
 
     rcfile_path = dir + "/clouds/"
     new_values = {}
@@ -64,7 +64,7 @@ def get_variables(fpath, read_values=["OS_TENANT_NAME", "OS_USERNAME",
                 tmp = cp.get(section_title, read_value)
             # Exception for missing key
             # e.g. OS_CACERT is only available after openstack havana
-            #      Old openstack has it as NOVA_CACERT.
+            # Old openstack has it as NOVA_CACERT.
             except NoOptionError:
                 tmp = ""
             if tmp.startswith("$"):

@@ -206,12 +206,12 @@ class VMcommand(object):
         """
         # -------------------------
         # check input
-        if self.arguments['NAME'] is None and\
-           self.arguments['--id'] is None and\
-           self.arguments['--group'] is None and\
-           self.arguments['--cloud'] is None and\
-           self.arguments['--prefix'] is None and\
-           self.arguments['--names'] is None:
+        if self.arguments['NAME'] is None and \
+                        self.arguments['--id'] is None and \
+                        self.arguments['--group'] is None and \
+                        self.arguments['--cloud'] is None and \
+                        self.arguments['--prefix'] is None and \
+                        self.arguments['--names'] is None:
             print("Please specify at least one option, to get more information: vm help")
             return
 
@@ -221,12 +221,12 @@ class VMcommand(object):
 
         deleteAllCloudVMs = False
         if (self.arguments['--cloud'] and
-            self.arguments['NAME'] is None and
-            self.arguments['--id'] is None and
-            self.arguments['--group'] is None and
-            self.arguments['--prefix'] is None and
-            self.arguments['--names'] is None):
-                deleteAllCloudVMs = True
+                    self.arguments['NAME'] is None and
+                    self.arguments['--id'] is None and
+                    self.arguments['--group'] is None and
+                    self.arguments['--prefix'] is None and
+                    self.arguments['--names'] is None):
+            deleteAllCloudVMs = True
 
         if self.arguments['--force']:
             preview = False
@@ -334,12 +334,12 @@ class VMcommand(object):
 
         AllCloudVMs = False
         if (self.arguments['--cloud'] and
-            self.arguments['NAME'] is None and
-            self.arguments['--id'] is None and
-            self.arguments['--group'] is None and
-            self.arguments['--prefix'] is None and
-            self.arguments['--names'] is None):
-                AllCloudVMs = True
+                    self.arguments['NAME'] is None and
+                    self.arguments['--id'] is None and
+                    self.arguments['--group'] is None and
+                    self.arguments['--prefix'] is None and
+                    self.arguments['--names'] is None):
+            AllCloudVMs = True
 
         server_id_list = get_vms_look_for(self.username,
                                           cloudname,
@@ -417,7 +417,7 @@ class VMcommand(object):
             cloudname = cloudobj.get_selected_cloud(self.username)
         if cloudname not in mongo.active_clouds(self.username):
             Console.warning(
-                "cloud '{0}' is not active, to activate a cloud: cloud on [CLOUD]".format(cloudname)) 
+                "cloud '{0}' is not active, to activate a cloud: cloud on [CLOUD]".format(cloudname))
             return False
         else:
             return cloudname
@@ -478,17 +478,18 @@ class VMcommand(object):
         elif 'delete' in self.arguments and self.arguments['delete']:
             self._vm_delete()
         elif ('ip' in self.arguments and self.arguments['ip'] and
-              'assign' in self.arguments and self.arguments['assign']):
+                      'assign' in self.arguments and self.arguments['assign']):
             self._assign_public_ip()
         elif 'login' in self.arguments and self.arguments['login']:
             self._vm_login()
         elif 'list' in self.arguments and self.arguments['list']:
             self._vm_list()
         elif ('ip' in self.arguments and self.arguments['ip'] and
-              'show' in self.arguments and self.arguments['show']):
+                      'show' in self.arguments and self.arguments['show']):
             self._show_ip()
 
-    # --------------------------------------------------------------------------
+            # --------------------------------------------------------------------------
+
 
 # ------------------------------------------------------------------------
 # supporting functions
@@ -612,7 +613,7 @@ def start_vm(username,
             pass
         if vm_flavor_id in [None, 'none']:
             error = error + \
-                "Please specify a default flavor(command: cloud set flavor [CLOUD]). "
+                    "Please specify a default flavor(command: cloud set flavor [CLOUD]). "
     # -------------------------
     # image handler
     if imagename is not None or imageid is not None:
@@ -641,7 +642,7 @@ def start_vm(username,
             pass
         if vm_image_id in [None, 'none']:
             error = error + \
-                "Please specify a default image(command: cloud set flavor [CLOUD]). "
+                    "Please specify a default image(command: cloud set flavor [CLOUD]). "
 
     # -------------------------
     # key handler
@@ -658,7 +659,7 @@ def start_vm(username,
         keynamenew = _keyname_sanitation(username, key)
     else:
         error = error + \
-            "No sshkey found. Please Upload one"
+                "No sshkey found. Please Upload one"
     # -------------------------
 
     if error != '':
@@ -811,58 +812,58 @@ def delete_vm(username,
                 resserverdata[i] = serverdata[i]
             cloudobj = CloudManage()
             itemkeys = {"openstack":
-                        [
-                            ['name', 'name'],
-                            ['status', 'status'],
-                            ['addresses', 'addresses'],
-                            ['id', 'id'],
-                            ['flavor', 'flavor', 'id'],
-                            ['image', 'image', 'id'],
-                            ['user_id', 'cm_user_id'],
-                            ['metadata', 'metadata'],
-                            ['key_name', 'key_name'],
-                            ['created', 'created'],
-                            ['cloud', 'cm_cloud']
-                        ],
+                            [
+                                ['name', 'name'],
+                                ['status', 'status'],
+                                ['addresses', 'addresses'],
+                                ['id', 'id'],
+                                ['flavor', 'flavor', 'id'],
+                                ['image', 'image', 'id'],
+                                ['user_id', 'cm_user_id'],
+                                ['metadata', 'metadata'],
+                                ['key_name', 'key_name'],
+                                ['created', 'created'],
+                                ['cloud', 'cm_cloud']
+                            ],
                         "ec2":
-                        [
-                            ["name", "id"],
-                            ["status", "extra", "status"],
-                            ["addresses", "public_ips"],
-                            ["flavor", "extra", "instance_type"],
-                            ['id', 'id'],
-                            ['image', 'extra', 'imageId'],
-                            ["user_id", 'user_id'],
-                            ["metadata", "metadata"],
-                            ["key_name", "extra", "key_name"],
-                            ["created", "extra", "launch_time"]
-                        ],
+                            [
+                                ["name", "id"],
+                                ["status", "extra", "status"],
+                                ["addresses", "public_ips"],
+                                ["flavor", "extra", "instance_type"],
+                                ['id', 'id'],
+                                ['image', 'extra', 'imageId'],
+                                ["user_id", 'user_id'],
+                                ["metadata", "metadata"],
+                                ["key_name", "extra", "key_name"],
+                                ["created", "extra", "launch_time"]
+                            ],
                         "aws":
-                        [
-                            ["name", "name"],
-                            ["status", "extra", "status"],
-                            ["addresses", "public_ips"],
-                            ["flavor", "extra", "instance_type"],
-                            ['id', 'id'],
-                            ['image', 'extra', 'image_id'],
-                            ["user_id", "user_id"],
-                            ["metadata", "metadata"],
-                            ["key_name", "extra", "key_name"],
-                            ["created", "extra", "launch_time"]
-                        ],
+                            [
+                                ["name", "name"],
+                                ["status", "extra", "status"],
+                                ["addresses", "public_ips"],
+                                ["flavor", "extra", "instance_type"],
+                                ['id', 'id'],
+                                ['image', 'extra', 'image_id'],
+                                ["user_id", "user_id"],
+                                ["metadata", "metadata"],
+                                ["key_name", "extra", "key_name"],
+                                ["created", "extra", "launch_time"]
+                            ],
                         "azure":
-                        [
-                            ['name', 'name'],
-                            ['status', 'status'],
-                            ['addresses', 'vip'],
-                            ['flavor', 'flavor', 'id'],
-                            ['id', 'id'],
-                            ['image', 'image', 'id'],
-                            ['user_id', 'user_id'],
-                            ['metadata', 'metadata'],
-                            ['key_name', 'key_name'],
-                            ['created', 'created'],
-                        ]
+                            [
+                                ['name', 'name'],
+                                ['status', 'status'],
+                                ['addresses', 'vip'],
+                                ['flavor', 'flavor', 'id'],
+                                ['id', 'id'],
+                                ['image', 'image', 'id'],
+                                ['user_id', 'user_id'],
+                                ['metadata', 'metadata'],
+                                ['key_name', 'key_name'],
+                                ['created', 'created'],
+                            ]
                         }
 
             cloudobj.print_cloud_servers(username=username,
@@ -905,7 +906,7 @@ def delete_vm(username,
                 except Exception, err:
                     Console.error(str(err))
                     return
-                # print result.traceback  #########
+                    # print result.traceback  #########
             imported.wait.apply_async(
                 args=None, kwargs={'t': 10}, queue=queue_name)
             handleip = imported.release_unused_public_ips.apply_async(
@@ -964,10 +965,9 @@ def assign_public_ip(username=None, cloudname=None, serverid=None):
         mongo.assign_public_ip(cloudname, serverid, username)
         mongo.refresh(
             names=[cloudname], types=["servers"], cm_user_id=username)
-    # else:
-    # return "Manual public ip assignment is not allowed for {0}
-    # cloud".format(cloud)
-
+        # else:
+        # return "Manual public ip assignment is not allowed for {0}
+        # cloud".format(cloud)
 
 
 # import json
@@ -983,14 +983,15 @@ class VMs(object):
     finished functions are functioning. The reason of starting this class was 
     to reorganize the vm functions, but it is half done due to the time shortage  
     """
+
     def __init__(self):
         self.config = cm_config()
         self.username = self.config.username()
         self.mongodb = cm_mongo()
         pass
-        
-    def _helper_vm_cli_printer(self, vms_dict, 
-                               print_format=None, 
+
+    def _helper_vm_cli_printer(self, vms_dict,
+                               print_format=None,
                                columns=None,
                                refresh=True,
                                detailed=True):
@@ -1027,8 +1028,8 @@ class VMs(object):
             if 'cm_cloud' in value and value['cm_cloud'] not in clouds_list:
                 clouds_list.append(value['cm_cloud'])
             if '_id' in value:
-                del value['_id']  
-        if print_format == "json" and columns == None:
+                del value['_id']
+        if print_format == "json" and columns is None:
             print(json.dumps(vms_dict, indent=4))
         else:
             res = {}
@@ -1040,11 +1041,11 @@ class VMs(object):
                 self.mongodb.refresh(cm_user_id=self.username,
                                      names=clouds_list,
                                      types=['images', 'flavors'])
-            images_dict = self.mongodb.images(clouds=clouds_list, 
+            images_dict = self.mongodb.images(clouds=clouds_list,
                                               cm_user_id=self.username)
-            flavors_dict = self.mongodb.flavors(clouds=clouds_list, 
+            flavors_dict = self.mongodb.flavors(clouds=clouds_list,
                                                 cm_user_id=self.username)
-            
+
             for key, value in vms_dict.iteritems():
                 res[key] = {}
                 cm_type = value['cm_type']
@@ -1090,15 +1091,14 @@ class VMs(object):
                     if item in temp_columns:
                         columns_to_print.append(item)
                 headers = columns_to_print
-            
+
             shell_commands_dict_output(self.username,
                                        res,
                                        print_format=print_format,
                                        firstheader="name",
                                        header=headers)
-                        
-                
-                
+
+
     def _helper_itemkeys(self, cm_type, detailed=True):
         """
         returns columns to print in VM information printing according to the 
@@ -1117,92 +1117,92 @@ class VMs(object):
         """
         if detailed:
             itemkeys = {"openstack":
-                        [
-                            # ['name', 'name'],
-                            ['status', 'status'],
-                            ['addresses', 'addresses'],
-                            ['id', 'id'],
-                            ['flavor', 'flavor', 'id'],
-                            ['image', 'image', 'id'],
-                            ['user_id', 'cm_user_id'],
-                            ['metadata', 'metadata'],
-                            ['key_name', 'key_name'],
-                            ['created', 'created'],
-                            ['cloud', 'cm_cloud']
-                        ],
+                            [
+                                # ['name', 'name'],
+                                ['status', 'status'],
+                                ['addresses', 'addresses'],
+                                ['id', 'id'],
+                                ['flavor', 'flavor', 'id'],
+                                ['image', 'image', 'id'],
+                                ['user_id', 'cm_user_id'],
+                                ['metadata', 'metadata'],
+                                ['key_name', 'key_name'],
+                                ['created', 'created'],
+                                ['cloud', 'cm_cloud']
+                            ],
                         "ec2":
-                        [
-                            # ["name", "id"],
-                            ["status", "extra", "status"],
-                            ["addresses", "public_ips"],
-                            ['id', 'id'],
-                            ["flavor", "extra", "instance_type"],
-                            ['image', 'extra', 'imageId'],
-                            ["user_id", 'user_id'],
-                            ["metadata", "metadata"],
-                            ["key_name", "extra", "key_name"],
-                            ["created", "extra", "launch_time"]
-                        ],
+                            [
+                                # ["name", "id"],
+                                ["status", "extra", "status"],
+                                ["addresses", "public_ips"],
+                                ['id', 'id'],
+                                ["flavor", "extra", "instance_type"],
+                                ['image', 'extra', 'imageId'],
+                                ["user_id", 'user_id'],
+                                ["metadata", "metadata"],
+                                ["key_name", "extra", "key_name"],
+                                ["created", "extra", "launch_time"]
+                            ],
                         "aws":
-                        [
-                            # ["name", "name"],
-                            ["status", "extra", "status"],
-                            ["addresses", "public_ips"],
-                            ["flavor", "extra", "instance_type"],
-                            ['id', 'id'],
-                            ['image', 'extra', 'image_id'],
-                            ["user_id", "user_id"],
-                            ["metadata", "metadata"],
-                            ["key_name", "extra", "key_name"],
-                            ["created", "extra", "launch_time"]
-                        ],
+                            [
+                                # ["name", "name"],
+                                ["status", "extra", "status"],
+                                ["addresses", "public_ips"],
+                                ["flavor", "extra", "instance_type"],
+                                ['id', 'id'],
+                                ['image', 'extra', 'image_id'],
+                                ["user_id", "user_id"],
+                                ["metadata", "metadata"],
+                                ["key_name", "extra", "key_name"],
+                                ["created", "extra", "launch_time"]
+                            ],
                         "azure":
-                        [
-                            # ['name', 'name'],
-                            ['status', 'status'],
-                            ['addresses', 'vip'],
-                            ['flavor', 'flavor', 'id'],
-                            ['id', 'id'],
-                            ['image', 'image', 'id'],
-                            ['user_id', 'user_id'],
-                            ['metadata', 'metadata'],
-                            ['key_name', 'key_name'],
-                            ['created', 'created'],
-                        ]
+                            [
+                                # ['name', 'name'],
+                                ['status', 'status'],
+                                ['addresses', 'vip'],
+                                ['flavor', 'flavor', 'id'],
+                                ['id', 'id'],
+                                ['image', 'image', 'id'],
+                                ['user_id', 'user_id'],
+                                ['metadata', 'metadata'],
+                                ['key_name', 'key_name'],
+                                ['created', 'created'],
+                            ]
                         }
         else:
             itemkeys = {"openstack":
-                        [
-                            # ['name', 'name'],
-                            ['status', 'status'],
-                            ['addresses', 'addresses'],
-                            ['flavor', 'flavor', 'id'],
-                            ['image', 'image', 'id']
-                        ],
+                            [
+                                # ['name', 'name'],
+                                ['status', 'status'],
+                                ['addresses', 'addresses'],
+                                ['flavor', 'flavor', 'id'],
+                                ['image', 'image', 'id']
+                            ],
                         "ec2":
-                        [
-                            # ["name", "id"],
-                            ["status", "extra", "status"],
-                            ["addresses", "public_ips"],
-                            ["flavor", "extra", "instance_type"],
-                            ['image', 'extra', 'imageId']
-                        ],
+                            [
+                                # ["name", "id"],
+                                ["status", "extra", "status"],
+                                ["addresses", "public_ips"],
+                                ["flavor", "extra", "instance_type"],
+                                ['image', 'extra', 'imageId']
+                            ],
                         "aws":
-                        [
-                            # ["name", "name"],
-                            ["status", "extra", "status"],
-                            ["addresses", "public_ips"],
-                            ["flavor", "extra", "instance_type"],
-                            ['image', 'extra', 'image_id']
-                        ],
+                            [
+                                # ["name", "name"],
+                                ["status", "extra", "status"],
+                                ["addresses", "public_ips"],
+                                ["flavor", "extra", "instance_type"],
+                                ['image', 'extra', 'image_id']
+                            ],
                         "azure":
-                        [
-                            # ['name', 'name'],
-                            ['status', 'status'],
-                            ['addresses', 'vip'],
-                            ['flavor', 'flavor', 'id'],
-                            ['image', 'image', 'id']
-                        ]
+                            [
+                                # ['name', 'name'],
+                                ['status', 'status'],
+                                ['addresses', 'vip'],
+                                ['flavor', 'flavor', 'id'],
+                                ['image', 'image', 'id']
+                            ]
                         }
         if cm_type in itemkeys:
             return itemkeys[cm_type]

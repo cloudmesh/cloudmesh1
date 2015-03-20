@@ -104,7 +104,7 @@ class vm_interface:
         else:
             print "The default cloud does not have images!"
             return None
-        if imgId == None:
+        if imgId is None:
             print "\nImage not found for this cloud. Please use one of the following available images!\n"
             for key, value in images[self.defCloud].items():
                 print value['name']
@@ -172,9 +172,9 @@ class vm_interface:
         try:
             for i in range(numberOfVMs):
 
-                if imgId == None: #implies default image to be used.
+                if imgId is None: #implies default image to be used.
                     imgId = defDict['image']
-                if flavorId == None: #implies default flavor to be used.
+                if flavorId is None: #implies default flavor to be used.
                     flavorId = 1
 
                 result = self.mongoClass.vm_create(self.defCloud, defDict['prefix'], dbIndex, flavorId, imgId, defDict['keyname'], None, self.user)

@@ -8,7 +8,6 @@ from pprint import pprint
 
 
 class ClusterExistsError(Exception):
-
     def __init__(self, value):
         self.value = value
 
@@ -17,7 +16,6 @@ class ClusterExistsError(Exception):
 
 
 class Clusters(object):
-
     def __init__(self):
         self.config = cm_config()
         self.mongodb = cm_mongo()
@@ -74,7 +72,7 @@ class Clusters(object):
         TODO:: group show name vm --format=json
         """
         return None
-    
+
     def vms(self, name, refresh=True):
         """
         returns in json the information about the vms of the named cluster
@@ -111,6 +109,7 @@ class Clusters(object):
                            VMs will be preserved
         """
         from cloudmesh.experiment.group_usage import remove_vm_from_group_while_deleting
+
         vms = self.vms(name)[name]
         if not grouponly:
             clouds = []
@@ -130,12 +129,11 @@ class Clusters(object):
         banner("Deleting group->{0}".format(name))
         self.GroupManage.delete_group(name)
 
-
     def info(self, name):
         """returns a simplified information about the cluster in json format"""
         """each vm contains the ips and the name, as well as the status of the vm"""
         return None
-    
+
     def create_with_existence_check(self, name, n):
         """
         creates a cluster with the given name and the number of vms.

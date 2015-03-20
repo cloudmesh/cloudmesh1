@@ -15,7 +15,6 @@ log = LOGGER(__file__)
 
 
 class RainCobblerWrapper:
-
     """
     provide API for CM rain command or Web Interface.
     """
@@ -273,7 +272,7 @@ class RainCobblerWrapper:
         for host in hosts_status:
             if hosts_status[host] == "deployed":
                 result[host] = True
-                #self.rest_api.power_cobbler_system(host, flag_on)
+                # self.rest_api.power_cobbler_system(host, flag_on)
                 power_system.apply_async([host, flag_on], queue='cobbler')
         return result
 
@@ -348,19 +347,19 @@ class RainCobblerWrapper:
 # test
 if __name__ == "__main__":
     rcb = RainCobblerWrapper()
-    #result_data = rcb.baremetal_computer_host_on("i003")
-    #result_data = rcb.baremetal_computer_host_on("i0[06-10]")
-    #result_data = rcb.baremetal_computer_host_off("i003,i189")
-    #result_data = rcb.list_all_user_group_hosts()
-    #result_data = rcb.list_all_user_group_hosts(False)
-    #result_data = rcb.list_user_hosts("chen")
-    #result_data = rcb.list_project_hosts("fg1")
-    #result_data = rcb.add_user_policy("chen", "i008")
-    #result_data = rcb.add_project_policy("fg1", "i008")
-    #result_data = rcb.get_status_short()
-    #result_data = rcb.get_status_summary()
-    #result_data = rcb.list_system_based_distro_kickstart()
-    #result_data = rcb.provision_host_with_profile("centos6-x86_64", "i072")
-    #result_data = rcb.rest_api.monitor_deploy_power_status("i072", "deploy")
+    # result_data = rcb.baremetal_computer_host_on("i003")
+    # result_data = rcb.baremetal_computer_host_on("i0[06-10]")
+    # result_data = rcb.baremetal_computer_host_off("i003,i189")
+    # result_data = rcb.list_all_user_group_hosts()
+    # result_data = rcb.list_all_user_group_hosts(False)
+    # result_data = rcb.list_user_hosts("chen")
+    # result_data = rcb.list_project_hosts("fg1")
+    # result_data = rcb.add_user_policy("chen", "i008")
+    # result_data = rcb.add_project_policy("fg1", "i008")
+    # result_data = rcb.get_status_short()
+    # result_data = rcb.get_status_summary()
+    # result_data = rcb.list_system_based_distro_kickstart()
+    # result_data = rcb.provision_host_with_profile("centos6-x86_64", "i072")
+    # result_data = rcb.rest_api.monitor_deploy_power_status("i072", "deploy")
     result_data = rcb.baremetal_computer_host_list()
     print(result_data)

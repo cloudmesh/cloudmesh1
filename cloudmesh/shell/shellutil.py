@@ -33,7 +33,7 @@ def get_default_print_format(username):
         userdata = user_obj.info(username)
         format_type = userdata['defaults']['shell_print_format']
     return format_type
-    
+
 
 def shell_commands_dict_output(username,
                                d,
@@ -109,9 +109,9 @@ def shell_commands_dict_output(username,
 
     if format_type not in ALLOWED_PRINT_FORMAT:
         Console.error("wrong print format: {0}. (allowed print format: {1})".format(format_type,
-                                ", ".join(ALLOWED_PRINT_FORMAT)))
+                                                                                    ", ".join(ALLOWED_PRINT_FORMAT)))
         return False
-    
+
     headers = None
     order = None
     if header:
@@ -131,7 +131,7 @@ def shell_commands_dict_output(username,
             else:
                 print("ERROR: header info is not correct")
                 return False
-    
+
     # --------------------------------------------------------------------------       
     # filter the input dict
     # -------------------------------------------------------------------------- 
@@ -149,23 +149,23 @@ def shell_commands_dict_output(username,
                         new_d[i][item] = d[i][item]
         d = new_d
     # -------------------------------------------------------------------------- 
- 
+
     if format_type == "json":
         if title:
             banner(title)
         print(json.dumps(d, indent=4))
-        
+
     elif format_type == "csv":
         with open(".temp.csv", "wb") as f:
             w = csv.DictWriter(f, d.keys())
             w.writeheader()
             w.writerow(d)
-        
+
     elif format_type == "table":
         if table_format == "key_list":
-            print (dict_key_list_table_printer(d, indexed=indexed))
+            print(dict_key_list_table_printer(d, indexed=indexed))
             return
-        
+
         if title:
             print("+" + "-" * (len(title) - 2) + "+")
             print(title)
@@ -181,10 +181,10 @@ def shell_commands_dict_output(username,
                 if firstheader:
                     headers = [firstheader] + headers
                 order = [' '] + order
-        
+
         if vertical_table:
-            print(array_dict_table_printer(print_data, 
-                                           order=order, 
+            print(array_dict_table_printer(print_data,
+                                           order=order,
                                            header=headers,
                                            vertical=True))
         else:
@@ -197,8 +197,6 @@ def shell_commands_dict_output(username,
             print("+" + "-" * (len(sentence) - 2) + "+")
 
 
-
-
 def get_command_list_refresh_default_setting(username):
     '''
     value to define the default behaviour of command list, if True, then refresh
@@ -208,18 +206,18 @@ def get_command_list_refresh_default_setting(username):
         user_obj = cm_user()
     except:
         Console.error("There is a problem with "
-                              "cm_user object initialization")
+                      "cm_user object initialization")
         return False
     defaults_data = user_obj.info(username)['defaults']
-    if "shell_command_list_refresh_default_setting" not in defaults_data or\
-    defaults_data["shell_command_list_refresh_default_setting"] in [None, 'none']:
+    if "shell_command_list_refresh_default_setting" not in defaults_data or \
+                    defaults_data["shell_command_list_refresh_default_setting"] in [None, 'none']:
         defaults_data["shell_command_list_refresh_default_setting"] = True
         user_obj.set_defaults(username, defaults_data)
         return defaults_data["shell_command_list_refresh_default_setting"]
     else:
         return defaults_data["shell_command_list_refresh_default_setting"]
-    
-    
+
+
 def get_vms_look_for(username,
                      cloudname,
                      servername=None,
@@ -228,7 +226,7 @@ def get_vms_look_for(username,
                      prefix=None,
                      hostls=None,
                      getAll=False,
-                     refresh=False): 
+                     refresh=False):
     '''
     work as a filter to find the VMs you are looking for. Input the seaching conditions,
     and returns a list of server ids that meet the condition
@@ -259,20 +257,20 @@ def get_vms_look_for(username,
         except:
             Console.error("please check your hostlist input, right format e.g. sample[1-9,18]")
             return False
-    
+
     # get server data
     try:
         mongo = cm_mongo()
     except:
         Console.error("There is a problem with the mongo server")
         return False
-    
+
     if refresh:
         mongo.activate(cm_user_id=username, names=[cloudname])
         mongo.refresh(cm_user_id=username,
                       names=[cloudname],
                       types=['servers'])
-        
+
     if groupname:
         vms_in_group_list = []
         GroupManage = GroupManagement(username)
@@ -281,10 +279,10 @@ def get_vms_look_for(username,
             return []
         else:
             vms_in_group_list = GroupManage.list_items_of_group(groupname, _type="VM")["VM"]
-        
+
     servers_dict = mongo.servers(
-                clouds=[cloudname], cm_user_id=username)[cloudname]
-                
+        clouds=[cloudname], cm_user_id=username)[cloudname]
+
     # search for qualified vms for each critera
     res_d = {}
     if servername:
@@ -299,7 +297,7 @@ def get_vms_look_for(username,
         res_d['hostls'] = []
     if getAll:
         res_d['getAll'] = []
-    
+
     for k, v in servers_dict.iteritems():
         if servername and servername == v['name']:
             res_d['servername'].append(k)
@@ -330,6 +328,6 @@ def get_vms_look_for(username,
         for i in ls:
             res = set(res) & set(i)
         res = list(res)
-    
+
     return res
     
