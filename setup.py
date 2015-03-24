@@ -1,16 +1,8 @@
 #!/usr/bin/env python
 requirements = """
-    # ######################################################################
-    # Basic environment
-    # ######################################################################
-    #
+    cloudmesh_base
+    pytz
     future
-    pip
-    #
-    # ######################################################################
-    # Sphinx
-    # ######################################################################
-    #
     sphinx
     sphinx_bootstrap_theme
     sphinxcontrib-autorun
@@ -26,47 +18,22 @@ requirements = """
     nwdiag
     seqdiag
     sphinxcontrib-httpdomain 
-    #
-    # ######################################################################
-    # Packages which must be installed first
-    # ######################################################################
-    #
     paramiko
     pycrypto
     fabric
-    #
-    # ######################################################################
-    # Console and commandline Related
-    # ######################################################################
-    #
     blessings
     progress
     sh
     console
     python-hostlist
     docopt
-    cmd3>=1.1.0
-    #
-    # ######################################################################
-    # Databases and directories
-    # ######################################################################
-    #
+    cmd3
     python-ldap
     pyaml
     pyyaml
     pymongo
     mongoengine
-    #
-    # ######################################################################
-    # Rabbitmq
-    # ######################################################################
-    #
     librabbitmq
-    #
-    # ######################################################################
-    # Flask
-    # ######################################################################
-    #
     WTForms
     Flask>=0.10.1
     Flask-WTF>=0.9.3
@@ -78,63 +45,40 @@ requirements = """
     Flask-RSTPages
     flask-restful
     flask-restful-swagger
-    #
-    # ######################################################################
-    # Testing and formatting
-    # ######################################################################
-    #
     nose
     autopep8
-    #
-    # ######################################################################
-    # OpenStack and cloud
-    # ######################################################################
-    #
     apache-libcloud==0.14.1
     python-novaclient
     python-keystoneclient
     azure
-    #
-    # ######################################################################
-    # Parallel tools
-    # ######################################################################
-    #
     celery
     flower
     psutil
-    #
-    # ######################################################################
-    # General Libraries
-    # ######################################################################
-    #
     simple-json
     pytimeparse
     timestring
     prettytable
     tabulate
     passlib
-    # ######################################################################
-    # ipython
-    # ######################################################################
-    #
     ipython
     pyzmq
     tornado
-    # ######################################################################
-    # General Libraries
-    # ######################################################################
-    #
     fake-factory
     ecdsa
-    # ######################################################################
-    # Cloudmesh Base
-    # ######################################################################
-    #
-    cloudmesh_base
-    #
 """
 
-def auto_install_requirements_from_string(requirements):
+
+try:
+    from cloudmesh_base.util import banner
+except:
+    os.system("pip install cloudmesh_base")
+
+# from cloudmesh_base.util import banner
+# from cloudmesh_base.util import auto_create_version
+from cloudmesh_base.util import auto_create_requirements
+
+
+def get_requirements_from_string(requirements):
     lines = requirements.split("\n")
 
     r = []
@@ -144,7 +88,8 @@ def auto_install_requirements_from_string(requirements):
             r.append(line)
     return r
 
-requirements = auto_install_requirements_from_string(requirements)
+requirements = get_requirements_from_string(requirements)
+auto_create_requirements(requirements)
 
 #from distutils.core import setup
 
