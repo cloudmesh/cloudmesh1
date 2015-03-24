@@ -1,6 +1,6 @@
 import requests
 from pprint import pprint
-from cloudmesh_common.util import dotdict
+from cloudmesh_base.dotdict import dotdict
 
 
 class youtube:
