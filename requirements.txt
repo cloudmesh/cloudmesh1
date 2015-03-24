@@ -54,7 +54,7 @@ flower
 psutil
 simple-json
 pytimeparse
-timestring==1.6.2.1
+git+https://github.com/cloudmesh/timestring.git#egg=timestring-1.6.2.1
 prettytable
 tabulate
 passlib
