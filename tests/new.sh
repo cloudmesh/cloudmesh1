@@ -23,6 +23,7 @@ PACKAGE=cloudmesh
 
 git clone git@github.com:cloudmesh/$PACKAGE.git
 cd $PACKAGE
+git checkout dev2.0
 
 pip install -r requirements.txt
 python setup.py install
