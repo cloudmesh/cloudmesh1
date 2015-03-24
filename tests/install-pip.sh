@@ -21,6 +21,7 @@ PACKAGE=cloudmesh
 
 pip install $PACKAGE
 
+cm help
 
 # nosetests --nocapture -v database.py
 #nosetests --nocapture -v tests/submit.py
