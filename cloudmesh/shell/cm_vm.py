@@ -671,9 +671,9 @@ def start_vm(username,
         metadata['cm_group'] = groupname
 
     tmpnamefl = cloudobj.get_flavors(
-        cloudname=cloudname, getone=True, id=vm_flavor_id)['name']
+        cloudname=cloudname, getone=True, _id=vm_flavor_id)['name']
     tmpnameim = cloudobj.get_images(
-        cloudname=cloudname, getone=True, id=vm_image_id)['name']
+        cloudname=cloudname, getone=True, _id=vm_image_id)['name']
 
     while count > 0:
         userinfo = userobj.info(username)
