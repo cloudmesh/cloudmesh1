@@ -82,18 +82,26 @@ def main():
         else:
             upgrade = ""
         try:
-            f = open('requirements.txt', 'rU')
-            for line in f:
-                line = line.rstrip()
-                if line.startswith("#"):
-                    print line
-                else:
-                    banner(line, c="-")
-                    try:
-                        os.system("pip install '{0}' {1}".format(line, upgrade))
-                    except Exception, e:
-                        print e
-                        sys.exit(1)
+
+            try:
+                os.system("pip install -r requirements.txt")
+            except Exception, e:
+                print e
+                sys.exit(1)
+
+            # f = open('requirements.txt', 'rU')
+            # for line in f:
+            #     line = line.rstrip()
+            #    if line.startswith("#"):
+            #        print line
+            #    else:
+            #        banner(line, c="-")
+            #        try:
+            #            os.system("pip install '{0}' {1}".format(line, upgrade))
+            #        except Exception, e:
+            #            print e
+            #            sys.exit(1)
+
         except Exception, e:
             print "ERROR: There is a problem"
             print e

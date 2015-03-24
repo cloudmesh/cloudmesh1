@@ -1,5 +1,4 @@
 cloudmesh_base
-pytz
 future
 sphinx
 sphinx_bootstrap_theme
