@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-version = "2.1.2"
+version = "2.2.1"
 
 
 import os
@@ -15,7 +15,7 @@ from cloudmesh_base.util import auto_create_version
 
 banner ("Generate and Install Version")
 
-auto_create_version("cloudmesh", version,"version.py")
+auto_create_version("cloudmesh", version, "version.py")
 
 from setuptools import setup, find_packages
 from setuptools.command.install import install
@@ -40,8 +40,7 @@ class InstallTest(install):
 class UploadToPypi(install):
     """Upload the package to pypi."""
     def run(self):
-        auto_create_version("cloudmesh", version)
-        os.system("Make clean Install")
+        auto_create_version("cloudmesh", version, "version.py")
         os.system("python setup.py install")
         banner("Build Distribution")
         os.system("python setup.py sdist --format=bztar,zip upload")
