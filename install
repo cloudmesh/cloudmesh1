@@ -29,6 +29,12 @@ from pprint import pprint
 import os
 import getopt
 import sys
+
+try:
+    from cloudmesh_base.util import banner
+except:
+    os.system("pip install cloudmesh_base")
+
 from cloudmesh_base.util import banner
 from cloudmesh_install.util import get_system
 from cloudmesh_base.locations import config_file_prefix, config_file

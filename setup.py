@@ -1,4 +1,7 @@
 #!/usr/bin/env python
+
+version = "2.1.0"
+
 requirements = """
     cloudmesh_base
     pytz
@@ -74,8 +77,8 @@ try:
 except:
     os.system("pip install cloudmesh_base")
 
-# from cloudmesh_base.util import banner
-# from cloudmesh_base.util import auto_create_version
+from cloudmesh_base.util import banner
+from cloudmesh_base.util import auto_create_version
 from cloudmesh_base.util import auto_create_requirements
 
 
@@ -89,16 +92,17 @@ def get_requirements_from_string(requirements):
             r.append(line)
     return r
 
+banner ("Generate and Install requirements")
 requirements = get_requirements_from_string(requirements)
 auto_create_requirements(requirements)
+banner ("Generate and Install Version")
 
-#from distutils.core import setup
-
+auto_create_version("cloudmesh", version,"version.py")
 
 from setuptools import setup, find_packages
 from setuptools.command.install import install
 import glob
-import os
+
 
 # try:
 #     from fabric.api import local
@@ -117,7 +121,7 @@ class InstallTest(install):
 
 setup(
     name='cloudmesh',
-    version=__import__('cloudmesh').version(),
+    version=version,
     description='A tool to enable federated management of multiple clouds including Azure, AWS, Eucalyptus, OpenStack',
     # description-file =
     #    README.rst

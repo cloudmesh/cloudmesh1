@@ -6,7 +6,9 @@ A package to manage virtual machines on various clouds infrastructures and bare 
 # __version_full__  = pkg_resources.get_distribution("cloudmesh").version
 from __future__ import print_function
 
-__version__ = '1.3'
+from .version import version as version_string
+
+__version__ = version_string
 
 
 def version():
