@@ -6,8 +6,8 @@ from cloudmesh_base.logger import LOGGER
 from cloudmesh.shell.cm_cloud import CloudManage
 from cloudmesh.config.cm_config import cm_config
 from cloudmesh.util.ssh import ssh_execute
-from cloudmesh import banner
-from cloudmesh import yn_choice
+from cloudmesh_base.util import banner
+from cloudmesh_base.util import yn_choice
 from cmd3.console import Console
 from sh import ssh
 from subprocess import call

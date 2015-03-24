@@ -1,7 +1,7 @@
 from __future__ import print_function
 from cloudmesh.pbs.pbs import PBS
 from pprint import pprint
-from cloudmesh import banner
+from cloudmesh_base.util import banner
 from cloudmesh.config.cm_config import get_mongo_db
 from datetime import datetime
 

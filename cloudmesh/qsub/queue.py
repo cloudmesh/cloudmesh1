@@ -5,7 +5,7 @@ from cloudmesh_base.logger import LOGGER
 from pprint import pprint
 import json
 from cloudmesh.pbs.pbs import PBS
-from cloudmesh import banner
+from cloudmesh_base.util import banner
 
 log = LOGGER(__file__)
 

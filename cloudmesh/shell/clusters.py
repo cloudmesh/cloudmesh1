@@ -1,7 +1,7 @@
 from cloudmesh.experiment.group import GroupManagement
 from cloudmesh.config.cm_config import cm_config
 from cloudmesh.cm_mongo import cm_mongo
-from cloudmesh import banner
+from cloudmesh_base.util import banner
 import time
 
 from pprint import pprint

@@ -3,7 +3,7 @@ from __future__ import print_function
 from cloudmesh.user.cm_user import cm_user
 import json
 from cloudmesh_common.tables import array_dict_table_printer, dict_key_list_table_printer
-from cloudmesh import banner
+from cloudmesh_base.util import banner
 import csv
 from cmd3.console import Console
 import hostlist

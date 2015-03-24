@@ -11,7 +11,7 @@ from cloudmesh_base.ConfigDict import ConfigDict
 import json
 from docopt import docopt
 from cloudmesh.config.cm_config import cm_config
-from cloudmesh import path_expand, yn_choice, banner
+from cloudmesh_base.util import path_expand, yn_choice, banner
 from cloudmesh.user.cm_template import cm_template
 from cloudmesh_base.util import backup_name
 from cloudmesh_common.tables import column_table
