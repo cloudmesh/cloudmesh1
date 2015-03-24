@@ -5,10 +5,12 @@ PACKAGES="
   curl
   emacs24
   git
+  libffi-dev
   libldap2-dev
   libsasl2-dev
   libssl-dev
   libpng-dev
+  libyaml-dev
   mercurial
   mongodb-server
   python-dev
