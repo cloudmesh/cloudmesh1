@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-version = "2.1.1"
+version = "2.1.2"
 
 
 import os
@@ -35,6 +35,23 @@ class InstallTest(install):
     def run(self):
         print "Install Test"
         #install.run(self)
+
+
+class UploadToPypi(install):
+    """Upload the package to pypi."""
+    def run(self):
+        auto_create_version("cloudmesh_base", version)
+        os.system("Make clean Install")
+        os.system("python setup.py install")
+        banner("Build Distribution")
+        os.system("python setup.py sdist --format=bztar,zip upload")
+
+
+class RegisterWithPypi(install):
+    """Upload the package to pypi."""
+    def run(self):
+        banner("Register with Pypi")
+        os.system("python setup.py register")
 
 
 setup(
@@ -97,6 +114,8 @@ setup(
     ]},
     cmdclass={
         'custom': InstallTest,
+        'pypi': UploadToPypi,
+        'pypiregister': RegisterWithPypi,
         },
     # install_requires=requirements,
     # dependency_links=[
