@@ -519,7 +519,7 @@ class CloudManage(object):
             pass
         return flavor_id
 
-    def update_default_flavor_id(self, username, cloudname, _id):
+    def update_default_flavor_id(self, username, cloudname, id):
         '''
         update the id of default flavor of a cloud
         
@@ -538,11 +538,11 @@ class CloudManage(object):
                 {'cm_user_id': username})['flavors']
         except:
             pass
-        flavors[cloudname] = _id
+        flavors[cloudname] = id
         self.mongo.db_defaults.update({'cm_user_id': username},
                                       {'$set': {'flavors': flavors}})
 
-    def get_flavors(self, getall=False, cloudname=None, getone=False, _id=None):
+    def get_flavors(self, getall=False, cloudname=None, getone=False, id=None):
         '''
         retrieve flavors information from db_clouds
         
@@ -563,7 +563,7 @@ class CloudManage(object):
         if getone:
             return self.mongo.db_clouds.find_one({'cm_kind': 'flavors',
                                                   'cm_cloud': cloudname,
-                                                  'id': _id})
+                                                  'id': id})
         elif getall:
             return self.mongo.db_clouds.find({'cm_kind': 'flavors'})
         else:
@@ -590,7 +590,7 @@ class CloudManage(object):
             pass
         return image_id
 
-    def update_default_image_id(self, username, cloudname, _id):
+    def update_default_image_id(self, username, cloudname, id):
         '''
         update the id of default image of a cloud
         
@@ -608,11 +608,11 @@ class CloudManage(object):
                 {'cm_user_id': username})['images']
         except:
             pass
-        images[cloudname] = _id
+        images[cloudname] = id
         self.mongo.db_defaults.update({'cm_user_id': username},
                                       {'$set': {'images': images}})
 
-    def get_images(self, getall=False, cloudname=None, getone=False, _id=None):
+    def get_images(self, getall=False, cloudname=None, getone=False, id=None):
         '''
         retrieve image information from db_clouds
         
@@ -633,7 +633,7 @@ class CloudManage(object):
         if getone:
             return self.mongo.db_clouds.find_one({'cm_kind': 'images',
                                                   'cm_cloud': cloudname,
-                                                  'id': _id})
+                                                  'id': id})
         elif getall:
             return self.mongo.db_clouds.find({'cm_kind': 'images'})
         else:
