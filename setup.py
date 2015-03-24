@@ -109,7 +109,7 @@ requirements = """
     #
     simple-json
     pytimeparse
-    timestring
+    -e git+https://github.com/stevepeak/timestring.git#egg=timestring
     prettytable
     tabulate
     passlib
