@@ -1,4 +1,6 @@
 cloudmesh_base
+cloudmesh_timestring
+cmd3
 future
 sphinx
 sphinx_bootstrap_theme
@@ -24,7 +26,6 @@ sh
 console
 python-hostlist
 docopt
-cmd3
 python-ldap
 pyaml
 pyyaml
@@ -53,7 +54,7 @@ flower
 psutil
 simple-json
 pytimeparse
-git+https://github.com/cloudmesh/timestring.git#egg=timestring-1.6.2.1
+#git+https://github.com/cloudmesh/timestring.git#egg=timestring-1.6.2.1
 prettytable
 tabulate
 passlib
