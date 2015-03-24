@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-version = "2.1.4"
+version = "2.1.5"
 
 
 import os
@@ -41,7 +41,6 @@ class UploadToPypi(install):
     """Upload the package to pypi."""
     def run(self):
         auto_create_version("cloudmesh", version)
-        os.system("Make clean Install")
         os.system("python setup.py install")
         banner("Build Distribution")
         os.system("python setup.py sdist --format=bztar,zip upload")

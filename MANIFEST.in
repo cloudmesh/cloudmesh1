@@ -7,3 +7,4 @@ global-exclude *.pyc
 include etc/*.yaml
 include etc/*.pem
 include etc/racks/*.diag
+include etc/*.py
