@@ -23,6 +23,8 @@ PACKAGE=cloudmesh
 
 git clone git@github.com:cloudmesh/$PACKAGE.git
 cd $PACKAGE
+
+pip install -r requirements.txt
 python setup.py install
 
 # nosetests --nocapture -v database.py
