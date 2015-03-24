@@ -2,73 +2,6 @@
 
 version = "2.1.0"
 
-requirements = """
-    cloudmesh_base
-    pytz
-    future
-    sphinx
-    sphinx_bootstrap_theme
-    sphinxcontrib-autorun
-    sphinxcontrib-blockdiag
-    sphinxcontrib-exceltable
-    sphinxcontrib-webmocks
-    actdiag
-    blockdiag
-    blockdiagcontrib-square
-    blockdiagcontrib-qb
-    blockdiagcontrib-class
-    blockdiagcontrib-cisco
-    nwdiag
-    seqdiag
-    sphinxcontrib-httpdomain 
-    paramiko
-    pycrypto
-    fabric
-    blessings
-    progress
-    sh
-    console
-    python-hostlist
-    docopt
-    cmd3
-    python-ldap
-    pyaml
-    pyyaml
-    pymongo
-    mongoengine
-    librabbitmq
-    WTForms
-    Flask>=0.10.1
-    Flask-WTF>=0.9.3
-    Flask-AutoIndex
-    Flask-Silk
-    flask_login
-    Flask-OpenID
-    flask-principal
-    Flask-RSTPages
-    flask-restful
-    flask-restful-swagger
-    nose
-    autopep8
-    apache-libcloud==0.14.1
-    python-novaclient
-    python-keystoneclient
-    azure
-    celery
-    flower
-    psutil
-    simple-json
-    pytimeparse
-    timestring==1.6.2.1
-    prettytable
-    tabulate
-    passlib
-    ipython
-    pyzmq
-    tornado
-    fake-factory
-    ecdsa
-"""
 
 import os
 
@@ -79,22 +12,7 @@ except:
 
 from cloudmesh_base.util import banner
 from cloudmesh_base.util import auto_create_version
-from cloudmesh_base.util import auto_create_requirements
 
-
-def get_requirements_from_string(requirements):
-    lines = requirements.split("\n")
-
-    r = []
-    for line in lines:
-        line = line.strip()
-        if not line.startswith("#") and line != '':
-            r.append(line)
-    return r
-
-banner ("Generate and Install requirements")
-requirements = get_requirements_from_string(requirements)
-auto_create_requirements(requirements)
 banner ("Generate and Install Version")
 
 auto_create_version("cloudmesh", version,"version.py")
@@ -180,8 +98,8 @@ setup(
     cmdclass={
         'custom': InstallTest,
         },
-    install_requires=requirements,
-    dependency_links=[
-      'git+https://github.com/cloudmesh/timestring.git#egg=timestring-1.6.2.1',
-  ]
+    # install_requires=requirements,
+    # dependency_links=[
+    #   'git+https://github.com/cloudmesh/timestring.git#egg=timestring-1.6.2.1',
+    # ]
 )
