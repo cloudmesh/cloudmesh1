@@ -20,6 +20,10 @@ auto_create_version("cloudmesh", version, "version.py")
 from setuptools import setup, find_packages
 from setuptools.command.install import install
 import glob
+from pip.req import parse_requirements
+
+install_reqs = parse_requirements('requirements.txt')
+reqs = [str(ir.req) for ir in install_reqs]
 
 
 # try:
@@ -116,7 +120,7 @@ setup(
         'pypi': UploadToPypi,
         'pypiregister': RegisterWithPypi,
         },
-    # install_requires=requirements,
+    install_requires=reqs,
     # dependency_links=[
     #   'git+https://github.com/cloudmesh/timestring.git#egg=timestring-1.6.2.1',
     # ]
