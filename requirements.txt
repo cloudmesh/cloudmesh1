@@ -54,7 +54,7 @@ flower
 psutil
 simple-json
 pytimeparse
-timestring
+timestring==1.6.2.1
 prettytable
 tabulate
 passlib

@@ -56,7 +56,7 @@ requirements = """
     psutil
     simple-json
     pytimeparse
-    -e git+https://github.com/stevepeak/timestring.git#egg=timestring
+    timestring==1.6.2.1
     prettytable
     tabulate
     passlib
@@ -67,6 +67,7 @@ requirements = """
     ecdsa
 """
 
+import os
 
 try:
     from cloudmesh_base.util import banner
@@ -176,4 +177,7 @@ setup(
         'custom': InstallTest,
         },
     install_requires=requirements,
+    dependency_links=[
+      'git+https://github.com/cloudmesh/timestring.git#egg=timestring-1.6.2.1',
+  ]
 )
