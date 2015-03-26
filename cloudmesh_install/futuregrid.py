@@ -14,11 +14,17 @@ from ConfigParser import SafeConfigParser
 from pprint import pprint
 
 rc_file_locations = {
-    'india': {
+    'india-havana': {
         'hostname': 'india.futuregrid.org',
         'source': '.futuregrid/openstack_havana/novarc',
+        'dest': "~/.cloudmesh/clouds/india-havana",
+    },
+    'india': {
+        'hostname': 'india.futuresystems.org',
+        'source': '.cloudmesh/clouds/india/juno/openrc.sh',
         'dest': "~/.cloudmesh/clouds/india",
     }
+
 
     # NEW ICEHOUSE
     # ,
