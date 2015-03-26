@@ -180,7 +180,7 @@ def apply_credentials_to_yaml_file():
     # rcfile location
     rcfile_path = dir + "/clouds/"
     new_values = {}
-    for filepath in glob.glob(rcfile_path + "/*/*rc"):
+    for filepath in glob.glob(rcfile_path + "/*/*rc*"):
         filename = os.path.basename(filepath)
         cloud_name = os.path.basename(
             os.path.normpath(filepath.replace(filename, "")))
