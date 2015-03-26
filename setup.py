@@ -98,6 +98,7 @@ setup(
         (home + '/.cloudmesh', [
             'etc/FGLdapCacert.pem',
             'etc/india-havana-cacert.pem',
+            'etc/india-juno-cacert.pem',
             'etc/cloudmesh_flavor.yaml']),
         (home + '/.cloudmesh/etc', [
             'etc/cloudmesh.yaml',
