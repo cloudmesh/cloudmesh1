@@ -9,7 +9,7 @@ install:
   - ./install system
   - ./install requirements
   - ./install cloudmesh
-  - ./install new
+  - ./install new --force
 #  - fab doc.html
   - fab build.install
 # command to run tests
