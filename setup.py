@@ -6,7 +6,7 @@ import os
 
 try:
     from cloudmesh_base.util import banner
-except:
+except ImportError:
     os.system("pip install cloudmesh_base")
 
 from cloudmesh_base.util import banner
