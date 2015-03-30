@@ -8,7 +8,7 @@ Command - EOF::
     Usage:
         EOF
     
-    Action to be performed at the` end of a file. If true it terminates reating the file.
+    Command to the shell to terminate reading a script.
     
 
 admin
@@ -16,12 +16,30 @@ admin
 
 Command - admin::
 
+    
     Usage:
-        admin password reset
+      admin password reset
+      admin server start
+      admin server stop
+      admin server status
+      admin mongo start
+      admin mongo stop
+      admin mongo status
+      admin mongo password
+      admin celery start
+      admin celery stop
+      admin celery status
+      admin rabbitmq status
+      admin rabbitmq start
+      admin rabbitmq stop
+      admin version
+    
+    Options:
+    
     
     Description:
         admin password reset
-            reset portal password
+           reset portal password
     
 
 banner
@@ -182,24 +200,28 @@ cluster
 Command - cluster::
 
     Usage:
-        cluster start CLUSTER_NAME
-        cluster list
-        cluster login CLUSTER_NAME
-        cluster stop STACK_NAME
-        cluster create --count=<count>
-                       --group=<group>
+        cluster list [--format=FORMAT]
+        cluster create <name>
+                       [--count=<count>]
                        [--ln=<LoginName>]
                        [--cloud=<CloudName>]
                        [--image=<imgName>|--imageid=<imgId>]
                        [--flavor=<flavorName>|--flavorid=<flavorId>]
                        [--force]
+        cluster show <name> 
+                     [--format=FORMAT] 
+                     [--column=COLUMN]
+                     [--detail]
+        cluster remove <name> 
+                       [--grouponly]
     
     Description:
         Cluster Management
     
-        cluster create --count=<count> --group=<group> --ln=<LoginName> [options...]
-        <count>            specify amount of VMs in the cluster
-        <group>            specify a group name of the cluster, make sure it's unique
+        cluster list
+            list the clusters
+    
+        cluster create <name> --count=<count> --ln=<LoginName> [options...]
             Start a cluster of VMs, and each of them can log into all others.
             CAUTION: you sould do some default setting before using this command:
             1. select cloud to work on, e.g. cloud select india
@@ -208,9 +230,20 @@ Command - cluster::
             4. set the start name of VMs, which is prefix and index, e.g. label --prefix=test --id=1
             5. set image of VMs, e.g. default image
             6. set flavor of VMs, e.g. default flavor
-            Also, please make sure the group name of the cluster is unique
+            Also, it is better to choose a unused group name
+    
+        cluster show <name>
+            show the detailed information about the cluster VMs
+    
+        cluster remove <name> [--grouponly]
+            remove the cluster and its VMs, if you want to remove the cluster(group name)
+            without removing the VMs, use --grouponly flag
+    
+    Arguments:
+        <name>        cluster name or group name
     
     Options:
+        --count=<count>            give the number of VMs to add into the cluster
         --ln=<LoginName>           give a login name for the VMs, e.g. ubuntu
         --cloud=<CloudName>        give a cloud to work on
         --flavor=<flavorName>      give the name of the flavor
@@ -221,7 +254,15 @@ Command - cluster::
                                    ask user to proceed or not, use this flag to respond yes as 
                                    default(if there are VMs in the group before creating this 
                                    cluster, the program will include the exist VMs into the cluster)
-    
+        --grouponly                remove the group only without removing the VMs, otherwise 
+                                   cluster remove command will remove all the VMs of this cluster
+        FORMAT                     output format: table, json, csv
+        COLUMN                     customize what information to display, for example:
+                                   --column=status,addresses prints the columns status
+                                   and addresses
+        --detail                   for table print format, a brief version 
+                                   is used as default, use this flag to print
+                                   detailed table
     
     
 
@@ -256,10 +297,10 @@ debug
 Command - debug::
 
     Usage:
-        debug on
-        debug off
+          debug on
+          debug off
     
-        Turns the debug log level on and off.
+          Turns the debug log level on and off.
     
 
 default
@@ -331,62 +372,6 @@ Command - default::
         default list refresh [--on|--off]
             set the default behaviour of the list commands, if the default
             value is on, then the program will always refresh before listing
-    
-    
-
-deploy
-----------------------------------------------------------------------
-
-Command - deploy::
-
-    Usage:
-        deploy hadoop NAMES
-        deploy cloudera NAMES
-        deploy mongodb NAMES
-    
-    Manages the deployment of 
-    
-    Arguments:
-    
-      NAMES    The names of the labels of the VMs gvonlasz_[0-10]
-    
-    Options:
-    
-       -v       verbose mode
-    
-    
-
-docker
-----------------------------------------------------------------------
-
-Command - docker::
-
-    Usage:
-        docker service start CLOUD
-        docker service cloud list
-        docker service cloud delete
-        docker container create NAME IMAGE
-        docker container start NAME
-        docker container stop NAME
-        docker container list
-        docker container delete NAME
-        docker container attach NAME
-        docker container pause NAME
-        docker container unpause NAME
-        docker images list
-    
-    Manages a virtual docker on a cloud
-    
-    Arguments:
-    
-      NAME     The name of the docker
-      WORKERS  The number of workers in the virtual docker
-      CLOUD    The name of the cloud on which the virtual docker
-               is to be deployed
-    
-    Options:
-    
-       -v       verbose mode
     
     
 
@@ -549,88 +534,6 @@ Command - group::
         group show sample vm --format=json
             list all VMs of group sample in json format
     
-    Example:
-    
-       group create experiment_1
-       vm start
-       last = vm label
-       group add experiment_1 vm last
-    
-       group create experiment_2
-       vm start
-       last = vm info label  # prints the vm label /prefix + number
-       ipno = vm info ip # prints the ip of the last vm
-       ipno = vm info ip gvonlasz_1  # get ip of vm with label gvonlasz_1
-    
-       group add expermiment_2 ip ipno
-    
-       groups are just tuples
-    
-       i can have multiple Kinds in the tuple
-    
-    mongoengine
-    
-    class groupObject
-    
-        def add (... name, kind, attribute ...)
-        def printer ( ... kind, printfunction, name...)
-        def getter ( .... kind, name)
-    
-    def getter ( .... kind, name ...)
-    
-       if kind == "vm":
-          vm = get vm from mongo
-          return vm
-       elif kind = "image"
-          iamge = get image from mongo
-          return iamge
-       ....
-    
-    def vmPrinter ( .... vm ...)
-    
-       print vm.ip
-       print vm.name
-       ....
-    
-    def imagePrinter ( .... image ...)
-    
-       print image.size
-       print image.name
-       ....
-    
-    
-    
-    g = groupObject()
-    g.printer("vm", cmPrinter)
-    g.printer("image", imagePrinter)
-    
-    
-    
-    
-    
-
-hadoop
-----------------------------------------------------------------------
-
-Command - hadoop::
-
-    Usage:
-        hadoop create NAME DATANODES
-        hadoop info [NAME]
-    
-    Manages a hadoop cluster on a cloud
-    
-    Arguments:
-    
-      NAME       The name of the hadoop cluster
-      DATANODES  The number of datanodes in the hadoop cluster
-    
-    
-    Options:
-    
-       -v       verbose mode
-    
-    
 
 help
 ----------------------------------------------------------------------
@@ -777,63 +680,64 @@ key
 Command - key::
 
     Usage:
-           key -h|--help
-           key list [--source=SOURCE] [--dir=DIR] [--format=FORMAT]
-           key add [--keyname=KEYNAME] FILENAME
-           key default [KEYNAME]
-           key delete KEYNAME
+             key -h|--help
+             key list [--source=SOURCE] [--dir=DIR] [--format=FORMAT]
+             key add [--keyname=KEYNAME] FILENAME
+             key default [KEYNAME]
+             key delete KEYNAME
     
-    Manages the keys
+      Manages the keys
     
-    Arguments:
+      Arguments:
     
-      SOURCE         mongo, yaml, ssh
-      KEYNAME        The name of a key
-      FORMAT         The format of the output (table, json, yaml)
-      FILENAME       The filename with full path in which the key is located
+        SOURCE         mongo, yaml, ssh
+        KEYNAME        The name of a key
+        FORMAT         The format of the output (table, json, yaml)
+        FILENAME       The filename with full path in which the key
+                       is located
     
-    Options:
+      Options:
     
-       --dir=DIR            the directory with keys [default: ~/.ssh]
-       --format=FORMAT      the format of the output [default: table]
-       --source=SOURCE      the source for the keys [default: mongo]
-       --keyname=KEYNAME    the name of the keys
+         --dir=DIR            the directory with keys [default: ~/.ssh]
+         --format=FORMAT      the format of the output [default: table]
+         --source=SOURCE      the source for the keys [default: mongo]
+         --keyname=KEYNAME    the name of the keys
     
-    Description:
-    
-    
-    key list --source=ssh  [--dir=DIR] [--format=FORMAT]
-    
-       lists all keys in the directory. If the directory is not
-       specified the default will be ~/.ssh
-    
-    key list --source=yaml  [--dir=DIR] [--format=FORMAT]
-    
-       lists all keys in cloudmesh.yaml file in the specified directory.
-        dir is by default ~/.cloudmesh
-    
-    key list [--format=FORMAT]
-    
-        list the keys in mongo
-    
-    key add [--keyname=keyname] FILENAME
-    
-        adds the key specifid by the filename to mongodb
+      Description:
     
     
-    key list
+      key list --source=ssh  [--dir=DIR] [--format=FORMAT]
     
-         Prints list of keys. NAME of the key can be specified
+         lists all keys in the directory. If the directory is not
+         specified the default will be ~/.ssh
     
-    key default [NAME]
+      key list --source=yaml  [--dir=DIR] [--format=FORMAT]
     
-         Used to set a key from the key-list as the default key if NAME
-         is given. Otherwise print the current default key
+         lists all keys in cloudmesh.yaml file in the specified directory.
+          dir is by default ~/.cloudmesh
     
-    key delete NAME
+      key list [--format=FORMAT]
     
-         deletes a key. In yaml mode it can delete only key that
-         are not saved in mongo
+          list the keys in mongo
+    
+      key add [--keyname=keyname] FILENAME
+    
+          adds the key specifid by the filename to mongodb
+    
+    
+      key list
+    
+           Prints list of keys. NAME of the key can be specified
+    
+      key default [NAME]
+    
+           Used to set a key from the key-list as the default key if NAME
+           is given. Otherwise print the current default key
+    
+      key delete NAME
+    
+           deletes a key. In yaml mode it can delete only key that
+           are not saved in mongo
     
     
 
@@ -864,29 +768,29 @@ launcher
 Command - launcher::
 
     Usage:
-        launcher start MENU
-        launcher stop STACK_NAME
-        launcher list
-        launcher show STACK_NAME
-        launcher menu [--column=COLUMN] [--format=FORMAT]
-        launcher import [FILEPATH] [--force]
-        launcher export FILEPATH
-        launcher help | -h
+          launcher start MENU
+          launcher stop STACK_NAME
+          launcher list
+          launcher show STACK_NAME
+          launcher menu [--column=COLUMN] [--format=FORMAT]
+          launcher import [FILEPATH] [--force]
+          launcher export FILEPATH
+          launcher help | -h
     
-    An orchestration tool with Chef Cookbooks
+      An orchestration tool with Chef Cookbooks
     
-    Arguments:
+      Arguments:
     
-      MENU           Name of a cookbook
-      STACK_NAME     Name of a launcher
-      FILEPATH       Filepath
-      COLUMN         column name to display
-      FORMAT         display format (json, table)
-      help           Prints this message
+        MENU           Name of a cookbook
+        STACK_NAME     Name of a launcher
+        FILEPATH       Filepath
+        COLUMN         column name to display
+        FORMAT         display format (json, table)
+        help           Prints this message
     
-    Options:
+      Options:
     
-       -v       verbose mode
+         -v       verbose mode
     
     
 
@@ -916,58 +820,70 @@ list
 ----------------------------------------------------------------------
 
 Command - list::
-List available flavors, images, vms, projects and clouds
+
+    List available flavors, images, vms, projects and clouds
     
-        Usage:
-            list flavor [CLOUD|--all] [--refresh] [--format=FORMAT]
-            [--column=COLUMN]
-            list image [CLOUD|--all] [--refresh] [--format=FORMAT] [--column=COLUMN]
-            list vm [CLOUD|--all] [--refresh] [--format=FORMAT] [--column=COLUMN] [--group=<group>]
-            list project
-            list cloud [--column=COLUMN]
+    Usage:
+        list flavor [CLOUD|--all] 
+                    [--refresh] 
+                    [--format=FORMAT]
+                    [--column=COLUMN]
+        list image [CLOUD|--all] 
+                   [--refresh] 
+                   [--format=FORMAT] 
+                   [--column=COLUMN]
+        list vm [CLOUD|--all] 
+                [--group=<group>]
+                [--refresh] 
+                [--format=FORMAT] 
+                [--column=COLUMN] 
+                [--detail]
+        list project
+        list cloud [--column=COLUMN]
     
-        Arguments:
+    Arguments:
     
-            CLOUD    the name of the cloud e.g. india
+        CLOUD    the name of the cloud e.g. india
     
-        Options:
+    Options:
     
-            -v         verbose mode
-            --all      list information of all active clouds
-            --refresh  refresh data before list
+        --all                  list information of all active clouds
+        --refresh              refresh data before list
+        --group=<group>        give the group name in list vm
+        --detail               for table print format, a brief version 
+                               is used as default, use this flag to print
+                               detailed table
+        --column=COLUMN        specify what information to display in
+                               the columns of the list command. For
+                               example, --column=active,label prints
+                               the columns active and label. Available
+                               columns are active, label, host,
+                               type/version, type, heading, user,
+                               credentials, defaults (all to display
+                               all, email to display all except
+                               credentials and defaults)
+        --format=FORMAT        output format: table, json, csv
     
-            --column=COLUMN        specify what information to display in
-                                   the columns of the list command. For
-                                   example, --column=active,label prints
-                                   the columns active and label. Available
-                                   columns are active, label, host,
-                                   type/version, type, heading, user,
-                                   credentials, defaults (all to display
-                                   all, email to display all except
-                                   credentials and defaults)
+    Description:
     
-            --format=FORMAT         output format: table, json, csv
+        List clouds and projects information, if the CLOUD argument is not specified, the
+        selected default cloud will be used. You can interactively set the default cloud with the command
+        'cloud select'.
     
-        Description:
+        list flavor
+        : list the flavors
+        list image
+        : list the images
+        list vm
+        : list the vms
+        list project
+        : list the projects
+        list cloud
+        : same as cloud list
     
-            List clouds and projects information, if the CLOUD argument is not specified, the
-            selected default cloud will be used. You can interactively set the default cloud with the command
-            'cloud select'.
+    See Also:
     
-            list flavor
-            : list the flavors
-            list image
-            : list the images
-            list vm
-            : list the vms
-            list project
-            : list the projects
-            list cloud
-            : same as cloud list
-    
-        See Also:
-    
-            man cloud
+        man cloud
     
     
 
@@ -1181,23 +1097,33 @@ project
 Command - project::
 
     Usage:
-           project
-           project info [--format=FORMAT]
-           project default NAME
-           project active NAME
-           project delete NAME
-           project completed NAME
-    
-    Manages the project
+        project
+        project info [--format=FORMAT]
+        project default NAME
+        project active NAME
+        project delete NAME
+        project completed NAME
     
     Arguments:
     
-      NAME           The project id
-      FORMAT         The display format. (json, table)
+        NAME           The project id
+        FORMAT         The display format. (json, table)
     
-    Options:
+    Description:
+        Manages the user's projects
     
-       -v       verbose mode
+        project info
+            show project information
+        project default
+            set the default project
+        project active
+            set/add an active project, 
+        project delete
+            delete the project
+        project completed
+            set a completed project, this will remove the project
+            from active projects list and defalut project if it is
+    
     
     
 
@@ -1215,7 +1141,7 @@ Command - py::
     
     Description:
     
-        The command without a parameter will be extecuted and the
+        The command without a parameter will be executed and the
         interactive python mode is entered. The python mode can be
         ended with ``Ctrl-D`` (Unix) / ``Ctrl-Z`` (Windows),
         ``quit()``,'`exit()``. Non-python commands can be issued with
@@ -1223,7 +1149,7 @@ Command - py::
         external file it can be run with ``run("filename.py")``.
     
         In case a COMMAND is provided it will be executed and the
-        python interpreter will return to the commandshell.
+        python interpreter will return to the command shell.
     
         This code is copied from Cmd2.
     
@@ -1343,15 +1269,16 @@ register
 
 Command - register::
 
-    Usage:
-      register [options] NAME
+    ::
+        Usage:
+          register [options] NAME
     
-    Arguments:
-      NAME      Name of the cloud to be registered
+        Arguments:
+          NAME      Name of the cloud to be registered
     
-    Options:
-      -a --act      Activate the cloud to be registered
-      -d --deact    Deactivate the cloud
+        Options:
+          -a --act      Activate the cloud to be registered
+          -d --deact    Deactivate the cloud
     
 
 script
@@ -1371,7 +1298,7 @@ Command - script::
            load       indicates that we try to do actions toload files.
                       Without parameters, loads scripts from default locations
             NAME      specifies a label for a script
-            LABEL     a conveninet LABEL, it must be unique
+            LABEL     an identification name, it must be unique
             FILENAME  the filename in which the script is located
             REGEXP    Not supported yet.
                       If specified looks for files identified by the REGEXP.
@@ -1414,6 +1341,34 @@ Command - security_group::
     
     
 
+ssh
+----------------------------------------------------------------------
+
+Command - ssh::
+
+    Usage:
+        ssh list [--format=json|yaml]
+        ssh register NAME COMMANDS
+        ssh NAME
+    
+    
+    conducts a ssh login into a machine while using a set of
+    registered commands under the name of the machine.
+    
+    Arguments:
+    
+      NAME      Name of the machine to log in
+      list      Lists the machines that are registered and
+                the commands to login to them
+      register  Register the commands to a name
+      COMMANDS  The list of commands executed when issuing a name
+    
+    Options:
+    
+       -v       verbose mode
+    
+    
+
 stack
 ----------------------------------------------------------------------
 
@@ -1451,7 +1406,7 @@ Command - status::
         status celery stats
         status rabbitmq
     
-        Shows system status
+      Shows system status
     
 
 storm
@@ -1528,6 +1483,26 @@ Command - timer::
                              that we could copy into cmd3
     
 
+uebercool
+----------------------------------------------------------------------
+
+Command - uebercool::
+
+    Usage:
+        uebercool NAME
+    
+    tests via ping if the host ith the give NAME is reachable
+    
+    Arguments:
+    
+      NAME      Name of the machine to test
+    
+    Options:
+    
+       -v       verbose mode
+    
+    
+
 usage
 ----------------------------------------------------------------------
 
@@ -1569,9 +1544,9 @@ Command - use::
                            interactive selection
     
     DESCRIPTION
-       often we have to type in a command multiple times. To save
-       us typng the name of the commonad, we have defined a simple
-       scope thatcan be activated with the use command
+       Often we have to type in a command multiple times. To save
+       us typng the name of the command, we have defined a simple
+       scope that can be activated with the use command
     
     ARGUMENTS:
         list         list the available scopes
@@ -1617,7 +1592,7 @@ Command - var::
     
     Arguments:
         NAME    Name of the variable
-        NAMES   Names of the variable seperated by spaces
+        NAMES   Names of the variable separated by spaces
         VALUE   VALUE to be assigned
     
     special vars date and time are defined
@@ -1632,9 +1607,9 @@ Command - verbose::
         verbose (True | False)
         verbose
     
-    If set to True prints the command befor execution.
-    In interactive mode you may want to set it to False.
-    When using scripts we recommend to set it to True.
+    If it sets to True, a command will be printed before execution.
+    In the interactive mode, you may want to set it to False.
+    When you use scripts, we recommend to set it to True.
     
     The default is set to False
     
@@ -1687,11 +1662,12 @@ Command - vm::
                  [--cloud=<CloudName>]
                  [--key=<key>]
                  [--] [<command>...]
-        vm list [CLOUD|--all]
-                [--refresh]
-                [--format=FORMAT]
-                [--column=COLUMN]
+        vm list [CLOUD|--all] 
                 [--group=<group>]
+                [--refresh] 
+                [--format=FORMAT] 
+                [--column=COLUMN] 
+                [--detail]
     
     Arguments:
         <command>              positional arguments, the commands you want to
@@ -1706,6 +1682,9 @@ Command - vm::
         --cloud=<CloudName>    give a cloud to work on, if not given, selected
                                or default cloud will be used
         --count=<count>        give the number of servers to start
+        --detail               for table print format, a brief version 
+                               is used as default, use this flag to print
+                               detailed table
         --flavor=<flavorName>  give the name of the flavor
         --flavorid=<flavorId>  give the id of the flavor
         --group=<group>        give the group name of server
@@ -1889,5 +1868,5 @@ Command - yaml::
     
     Description:
     
-         Sets and gets values from a yaml configuration file
+       Sets and gets values from a yaml configuration file
     
