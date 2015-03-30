@@ -1,3 +1,7 @@
+.vagrant
+.userid
+id_rsa
+id_rsa.pub
 doc/source/man/man.rst
 doc/source/api
 doc/source/modules/
