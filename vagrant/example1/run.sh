@@ -25,17 +25,17 @@ images=("Ubuntu-Server-14.04-64bit" "Ubuntu-Server-14.04-32bit")
 debug=0
 
 # copy private key to synced folders
-if [ -f ~/.ssh/id_rsa ]; then
-	cp ~/.ssh/id_rsa `pwd`
-else
-	echo "=================================="
-	echo "SSH Key file (id_rsa) is missing."
-	echo "You can generate by ssh-keygen."
-	echo "=================================="
-	exit
-fi
+#if [ -f ~/.ssh/id_rsa ]; then
+#	cp ~/.ssh/id_rsa `pwd`
+#else
+#	echo "=================================="
+#	echo "SSH Key file (id_rsa) is missing."
+#	echo "You can generate by ssh-keygen."
+#	echo "=================================="
+#	exit
+#fi
 
-if [ -f ~/.ssh/id_rsa ]; then
+if [ -f ~/.ssh/id_rsa.pub ]; then
 	cp ~/.ssh/id_rsa.pub `pwd`
 else
 	echo "=================================="
