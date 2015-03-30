@@ -14,11 +14,17 @@ from ConfigParser import SafeConfigParser
 from pprint import pprint
 
 rc_file_locations = {
+#    'india-havana': {
+#        'hostname': 'india.futuregrid.org',
+#        'source': '.futuregrid/openstack_havana/novarc',
+#        'dest': "~/.cloudmesh/clouds/india-havana",
+#    },
     'india': {
-        'hostname': 'india.futuregrid.org',
-        'source': '.futuregrid/openstack_havana/novarc',
+        'hostname': 'india.futuresystems.org',
+        'source': '.cloudmesh/clouds/india/juno/openrc.sh',
         'dest': "~/.cloudmesh/clouds/india",
     }
+
 
     # NEW ICEHOUSE
     # ,
@@ -174,7 +180,7 @@ def apply_credentials_to_yaml_file():
     # rcfile location
     rcfile_path = dir + "/clouds/"
     new_values = {}
-    for filepath in glob.glob(rcfile_path + "/*/*rc"):
+    for filepath in glob.glob(rcfile_path + "/*/*rc*"):
         filename = os.path.basename(filepath)
         cloud_name = os.path.basename(
             os.path.normpath(filepath.replace(filename, "")))

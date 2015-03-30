@@ -23,16 +23,15 @@ resources:
         FromPort: "22"
         ToPort : "22"
         CidrIp : "0.0.0.0/0"
-  floating_ip:
-    type: AWS::EC2::EIP
+  floatingip:
+    type: OS::Nova::FloatingIP
     properties:
-       InstanceId: { get_resource: 'hadoop1' }
-
+      pool: ext-net
   hadoop1:
     type: OS::Nova::Server
     properties:
       key_name: { get_param: KeyName }
-      image: "futuregrid/ubuntu-14.04"
+      image: "futuresystems/ubuntu-14.04"
       flavor: "m1.small"
       name: hadoop1
       security_groups:
@@ -128,11 +127,16 @@ resources:
           params:
             $publickey: { get_param: PublicKeyString }
             $privatekey: { get_param: PrivateKeyString }
+  association:
+    type: OS::Nova::FloatingIPAssociation
+    properties:
+    floating_ip: { get_resource: floatingip }
+    server_id: { get_resource: 'hadoop1' }
   hadoop2:
     type: OS::Nova::Server
     properties:
       key_name: { get_param: KeyName }
-      image: "futuregrid/ubuntu-14.04"
+      image: "futuresystems/ubuntu-14.04"
       flavor: "m1.small"
       name: hadoop2
       security_groups:
@@ -229,7 +233,7 @@ resources:
     type: OS::Nova::Server
     properties:
       key_name: { get_param: KeyName }
-      image: "futuregrid/ubuntu-14.04"
+      image: "futuresystems/ubuntu-14.04"
       flavor: "m1.small"
       name: hadoop3
       security_groups:
@@ -326,7 +330,7 @@ resources:
     type: OS::Nova::Server
     properties:
       key_name: { get_param: KeyName }
-      image: "futuregrid/ubuntu-14.04"
+      image: "futuresystems/ubuntu-14.04"
       flavor: "m1.small"
       name: hadoop4
       security_groups:
@@ -423,7 +427,7 @@ resources:
     type: OS::Nova::Server
     properties:
       key_name: { get_param: KeyName }
-      image: "futuregrid/ubuntu-14.04"
+      image: "futuresystems/ubuntu-14.04"
       flavor: "m1.small"
       name: hadoop5
       security_groups:
