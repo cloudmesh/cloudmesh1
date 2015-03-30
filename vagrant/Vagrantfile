@@ -1,9 +1,11 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
+PORTALNAME = ENV['PORTALNAME']
+PROJECTID = ENV['PROJECTID']
+
 $script = <<SCRIPT
-export PORTALNAME=CHANGEME
-curl -sSL https://cloudmesh.github.io/get/ubuntu/ | username=$PORTALNAME sh
+curl -sSL https://cloudmesh.github.io/get/ubuntu/ | projectid=#{PROJECTID} username=#{PORTALNAME} sh
 SCRIPT
 
 VAGRANTFILE_API_VERSION = "2"

@@ -234,10 +234,10 @@ def apply_credentials_to_yaml_file():
                     credentials[k] = v
 
     # replacing default project and username
-    data['cloudmesh']['hpc']['username'] = new_values[
-        cloud_name]['OS_USERNAME']
-    data['cloudmesh']['profile']['username'] = new_values[
-        cloud_name]['OS_USERNAME']
+    data['cloudmesh']['hpc']['username'] = \
+      new_values[cloud_name]['OS_USERNAME']
+    data['cloudmesh']['profile']['username'] = \
+      new_values[cloud_name]['OS_USERNAME']
     data['cloudmesh']['projects']['default'] = \
         new_values[cloud_name]['OS_TENANT_NAME']
     # active projects can be multiple values
