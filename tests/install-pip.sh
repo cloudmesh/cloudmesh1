@@ -3,7 +3,8 @@
 cd ~
 deactivate
 rm -rf TEST
-virtualenv TEST -p /usr/local/bin/python
+PYTHON_BINARY=$(which python)
+virtualenv TEST -p "$PYTHON_BINARY"
 source ~/TEST/bin/activate
 which python
 # pip install cmd3
