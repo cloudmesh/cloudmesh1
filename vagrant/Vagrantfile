@@ -30,10 +30,10 @@ set -o errexit # stop if something fails
 # parameters for install, configure, start scripts
 export portalname=#{PORTALNAME}
 export projectid=#{PROJECTID}
-venv=$HOME/ENV
+export venv=$HOME/ENV
 
 # install system deps and cloudmesh
-# curl https://raw.githubusercontent.com/cloudmesh/get/master/cloudmesh/ubuntu/14.04.sh | bash
+curl https://raw.githubusercontent.com/cloudmesh/get/master/cloudmesh/ubuntu/14.04.sh | bash
 
 # make sure to activate virtualenv
 source $venv/bin/activate
