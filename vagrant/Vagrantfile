@@ -44,6 +44,10 @@ curl https://raw.githubusercontent.com/cloudmesh/get/master/cloudmesh/configure.
 # start
 curl https://raw.githubusercontent.com/cloudmesh/get/master/cloudmesh/start.sh | bash
 
+# update bashrc
+echo "" >>~/.bashrc
+echo "source $venv/bin/activate" >>~/.bashrc
+
 SCRIPT
 
 VAGRANTFILE_API_VERSION = "2"
