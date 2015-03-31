@@ -1,11 +1,49 @@
-# -*- mode: ruby -*-
-# vi: set ft=ruby :
+# IMPORTANT
+#
+# In order for this configuration to properly work you need to set
+# environmental variables:
+#
+# - PORTALNAME: your username on FutureSystems
+# - PROJECTID: the project you are associated with
+##
+# Make sure that ssh-agent is running properly in order to access
+# futuresystems.
+# $ eval `ssh-agent`
+# $ ssh-add ~/.ssh/id_rsa
+# $ echo $SSH_AGENT_PID # check that this is set
+#
+# Example usage:
+# $ export PORTALNAME=albert
+# $ export PROJECTID=fg101
+# $ eval `ssh-agent`
+# $ ssh-add ~/.ssh/id_rsa
+# $ vagrant up
 
 PORTALNAME = ENV['PORTALNAME']
-PROJECTID = ENV['PROJECTID']
+PROJECTID  = ENV['PROJECTID']
 
 $script = <<SCRIPT
-curl -sSL https://cloudmesh.github.io/get/ubuntu/ | projectid=#{PROJECTID} username=#{PORTALNAME} sh
+
+set -o xtrace  # trace commands
+set -o errexit # stop if something fails
+
+# parameters for install, configure, start scripts
+export portalname=#{PORTALNAME}
+export projectid=#{PROJECTID}
+venv=$HOME/ENV
+
+# install system deps and cloudmesh
+# curl https://raw.githubusercontent.com/cloudmesh/get/master/cloudmesh/ubuntu/14.04.sh | bash
+
+# make sure to activate virtualenv
+source $venv/bin/activate
+
+# configure
+curl https://raw.githubusercontent.com/cloudmesh/get/master/cloudmesh/configure.sh | bash
+
+# start
+curl https://raw.githubusercontent.com/cloudmesh/get/master/cloudmesh/start.sh | bash
+
 SCRIPT
 
 VAGRANTFILE_API_VERSION = "2"
@@ -15,4 +53,12 @@ Vagrant.configure(2) do |config|
   config.vm.box_check_update = true
   config.vm.network "private_network", ip: "192.168.33.10"
   config.vm.provision "shell", privileged: false, inline: $script
+
+  # Forward ssh-agent so that `cm-iu fetch` will work without needing
+  # to copy the ssh keypair onto the VM
+  # In order for this to work you need to:
+  # $ eval `ssh-agent`
+  # $ ssh-add ~/.ssh_id
+  config.ssh.forward_agent = true;
+
 end
