@@ -1,54 +1,58 @@
 Install Virtualbox
 ===================
-Checkout Google
+
+`VirtualBox`_ is a virtualization technology available on multiple platforms, such as Windows, Mac OS X, and Linux.
+
+.. _VirtualBox: https://www.virtualbox.org/
 
 Setup Vagrant on Ubuntu
 ==========================
 
-::
+`Vagrant`_ provides an means of reproducibly creating, provisioning,
+and configuring virtual machines.
 
-  wget https://dl.bintray.com/mitchellh/vagrant/vagrant_1.6.2_x86_64.deb
+.. _Vagrant: https://www.vagrantup.com/
 
-  sudo dpkg -i vagrant_1.6.2_x86_64.deb
-
-Setup veewee
-===================
-
-::
- 
-   sudo gem install veewee
 
 Setup
 ======================================================================
 
-you must have the ubuntu 14.04 in vagrant. There is a images/veewee directory that can help you do this. 
-
-::
- 
-  cd images/veewee; veewee
-
-After you got your box into vagrant you can say
-
 :: 
   
-  mkdir vagrant
-  cd vagrant
-  git clone https://github.com/cloudmesh/cloudmesh.git
+  $ git clone https://github.com/cloudmesh/cloudmesh.git
 
-  cp -r cloudmesh/vagrant/Vagrantfile .
+  cd cloudmesh/vagrant
 
 Use
 ======================================================================
 
-vagrant up
-vagrant ssh
+In order to correctly set up a virtual machine with cloudmesh, set the
+PORTALNAME and PROJECTID variables. For example::
 
-This will install a new virtualbox, that contains the source code of
-clodmesh in::
+  $ export PORTALNAME=albert
+  $ export PROJECTID=fg101
 
-  /vagrant/cloudmesh
+In order for the VM to authenticate and access ``india``, make sure
+that ``ssh-agent`` is running and knows about the appropriate key::
 
-It will also install a virtual env in ~/ENV and isntall cloudmesh into
-that virtual env.
+  $ eval `ssh-agent`
+  $ ssh-add ~/.ssh/id_rsa
+
+You can now bring up the virtual machine::
+
+   $ vagrant up --provider virtualbox
+
+Now that the machine is up, you can log in::
+
+   $ vagrant ssh
+
+and use cloudmesh immediately::
+
+  $ cm list flavor india
 
 
+Further details
+======================================================================
+
+Please see the contents of ``Vagrantfile`` for details on how this
+works.
