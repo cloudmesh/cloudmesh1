@@ -87,4 +87,4 @@ echo
 echo "=================================="
 echo "Vagrant is up"
 echo "=================================="
-vagrant up
+vagrant up --provider virtualbox
