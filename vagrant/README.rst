@@ -20,8 +20,7 @@ Setup
 :: 
   
   $ git clone https://github.com/cloudmesh/cloudmesh.git
-
-  cd cloudmesh/vagrant
+  $ cd cloudmesh/vagrant
 
 Use
 ======================================================================
