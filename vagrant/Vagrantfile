@@ -33,16 +33,16 @@ export projectid=#{PROJECTID}
 export venv=$HOME/ENV
 
 # install system deps and cloudmesh
-curl https://raw.githubusercontent.com/cloudmesh/get/master/cloudmesh/ubuntu/14.04.sh | bash
+curl -s https://raw.githubusercontent.com/cloudmesh/get/master/cloudmesh/ubuntu/14.04.sh | bash
 
 # make sure to activate virtualenv
 source $venv/bin/activate
 
 # configure
-curl https://raw.githubusercontent.com/cloudmesh/get/master/cloudmesh/configure.sh | bash
+curl -s https://raw.githubusercontent.com/cloudmesh/get/master/cloudmesh/configure.sh | bash
 
 # start
-curl https://raw.githubusercontent.com/cloudmesh/get/master/cloudmesh/start.sh | bash
+curl -s https://raw.githubusercontent.com/cloudmesh/get/master/cloudmesh/start.sh | bash
 
 # update bashrc
 echo "" >>~/.bashrc
