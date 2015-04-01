@@ -142,4 +142,4 @@ outputs:
       str_replace:
         template: http://host/wordpress
         params:
-          host: { get_attr: [ floatingip, floating_ip_address ] }
+          host: { get_attr: [ floatingip, ip ] }
