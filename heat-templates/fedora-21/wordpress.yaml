@@ -1,9 +1,10 @@
 heat_template_version: 2013-05-23
 
 description: >
-  Heat WordPress template to support F20, using only Heat OpenStack-native
-  resource types, and without the requirement for heat-cfntools in the image.
-  WordPress is web software you can use to create a beautiful website or blog.
+  Heat WordPress template on Fedora 21, using only Heat OpenStack-native
+  resource types (adapted from  HOT examples), and without the requirement for
+  heat-cfntools in the image.  WordPress is web software you can use to create
+  a beautiful website or blog.
   This template installs a single-instance WordPress deployment using a local
   MySQL database to store the data.
 
@@ -25,7 +26,8 @@ parameters:
       Name or ID of the image to use for the WordPress server.
       Recommended values are fedora-20.i386 or fedora-20.x86_64;
       get them from http://cloud.fedoraproject.org/fedora-20.i386.qcow2
-      or http://cloud.fedoraproject.org/fedora-20.x86_64.qcow2 .
+      or http://cloud.fedoraproject.org/fedora-20.x86_64.qcow2.
+      Futuresystems has fedora-21.
     default: futuresystems/fedora-21
 
   db_name:
@@ -76,7 +78,7 @@ resources:
   security_group:
     type: AWS::EC2::SecurityGroup
     properties:
-      GroupDescription: "SSH (22)"
+      GroupDescription: "SSH (22), HTTP (80)"
       SecurityGroupIngress:
       - IpProtocol: "tcp"
         FromPort: "22"
