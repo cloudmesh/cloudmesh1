@@ -130,8 +130,8 @@ resources:
   association:
     type: OS::Nova::FloatingIPAssociation
     properties:
-    floating_ip: { get_resource: floatingip }
-    server_id: { get_resource: 'hadoop1' }
+      floating_ip: { get_resource: floatingip }
+      server_id: { get_resource: 'hadoop1' }
   hadoop2:
     type: OS::Nova::Server
     properties:
