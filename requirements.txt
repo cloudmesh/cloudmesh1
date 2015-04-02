@@ -35,13 +35,13 @@ librabbitmq
 WTForms
 Flask>=0.10.1
 Flask-WTF>=0.9.3
+flask-restful
 Flask-AutoIndex
 Flask-Silk
 flask_login
 Flask-OpenID
 flask-principal
 Flask-RSTPages
-flask-restful
 flask-restful-swagger
 nose
 autopep8
