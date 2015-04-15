@@ -76,7 +76,7 @@ class CMUserProviderBaseType(object):
 
         :param id: the unique id of the user
         '''
-        self.db_clouds.remove({"cm_user_id": id}, safe=True)
+        self.db_clouds.remove({"cm_user_id": id})
 
     def clear(self):
         '''
