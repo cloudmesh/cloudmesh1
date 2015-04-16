@@ -505,3 +505,10 @@ def pbs(host, kind):
     for e in d:
         print "PBS -->"
         pprint(e)
+
+# Temporary cure for missing a shell prompt
+if (PROGRESS):
+    try:
+        PROGRESS.finish()
+    except:
+        pass
