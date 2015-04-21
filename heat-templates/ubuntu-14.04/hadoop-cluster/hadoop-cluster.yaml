@@ -59,14 +59,20 @@ resources:
             knife cookbook site download apt
             knife cookbook site download yum
             knife cookbook site download hadoop
+            knife cookbook site download ohai 
+            knife cookbook site download sysctl 
             tar -zxf java* -C /home/ubuntu/chef-repo/cookbooks
             tar -zxf apt* -C /home/ubuntu/chef-repo/cookbooks
             tar -zxf yum* -C /home/ubuntu/chef-repo/cookbooks
             tar -zxf hadoop* -C /home/ubuntu/chef-repo/cookbooks
+            tar -zxf ohai* -C /home/ubuntu/chef-repo/cookbooks
+            tar -zxf sysctl* -C /home/ubuntu/chef-repo/cookbooks
             rm -rf java*.tar.gz
             rm -rf apt*.tar.gz
             rm -rf yum*.tar.gz
             rm -rf hadoop*.tar.gz
+            rm -rf ohai*.tar.gz
+            rm -rf sysctl*.tar.gz
 
             cat << EOL > /home/ubuntu/chef-repo/roles/java.rb
             name "java"
@@ -164,14 +170,20 @@ resources:
             knife cookbook site download apt
             knife cookbook site download yum
             knife cookbook site download hadoop
+            knife cookbook site download ohai
+            knife cookbook site download sysctl 
             tar -zxf java* -C /home/ubuntu/chef-repo/cookbooks
             tar -zxf apt* -C /home/ubuntu/chef-repo/cookbooks
             tar -zxf yum* -C /home/ubuntu/chef-repo/cookbooks
             tar -zxf hadoop* -C /home/ubuntu/chef-repo/cookbooks
+            tar -zxf ohai* -C /home/ubuntu/chef-repo/cookbooks
+            tar -zxf sysctl* -C /home/ubuntu/chef-repo/cookbooks
             rm -rf java*.tar.gz
             rm -rf apt*.tar.gz
             rm -rf yum*.tar.gz
             rm -rf hadoop*.tar.gz
+            rm -rf ohai*.tar.gz
+            rm -rf sysctl*.tar.gz
 
             cat << EOL > /home/ubuntu/chef-repo/roles/java.rb
             name "java"
@@ -224,6 +236,7 @@ resources:
             EOL
 
             chef-solo -j /home/ubuntu/chef-repo/solo.json -c /home/ubuntu/chef-repo/solo.rb
+            service hadoop-hdfs-datanode start
 
           params:
             $publickey: { get_param: PublicKeyString }
@@ -261,14 +274,20 @@ resources:
             knife cookbook site download apt
             knife cookbook site download yum
             knife cookbook site download hadoop
+            knife cookbook site download ohai
+            knife cookbook site download sysctl 
             tar -zxf java* -C /home/ubuntu/chef-repo/cookbooks
             tar -zxf apt* -C /home/ubuntu/chef-repo/cookbooks
             tar -zxf yum* -C /home/ubuntu/chef-repo/cookbooks
             tar -zxf hadoop* -C /home/ubuntu/chef-repo/cookbooks
+            tar -zxf ohai* -C /home/ubuntu/chef-repo/cookbooks
+            tar -zxf sysctl* -C /home/ubuntu/chef-repo/cookbooks
             rm -rf java*.tar.gz
             rm -rf apt*.tar.gz
             rm -rf yum*.tar.gz
             rm -rf hadoop*.tar.gz
+            rm -rf ohai*.tar.gz
+            rm -rf sysctl*.tar.gz
 
             cat << EOL > /home/ubuntu/chef-repo/roles/java.rb
             name "java"
@@ -321,6 +340,7 @@ resources:
             EOL
 
             chef-solo -j /home/ubuntu/chef-repo/solo.json -c /home/ubuntu/chef-repo/solo.rb
+            service hadoop-hdfs-datanode start
 
           params:
             $publickey: { get_param: PublicKeyString }
@@ -358,14 +378,20 @@ resources:
             knife cookbook site download apt
             knife cookbook site download yum
             knife cookbook site download hadoop
+            knife cookbook site download ohai
+            knife cookbook site download sysctl 
             tar -zxf java* -C /home/ubuntu/chef-repo/cookbooks
             tar -zxf apt* -C /home/ubuntu/chef-repo/cookbooks
             tar -zxf yum* -C /home/ubuntu/chef-repo/cookbooks
             tar -zxf hadoop* -C /home/ubuntu/chef-repo/cookbooks
+            tar -zxf ohai* -C /home/ubuntu/chef-repo/cookbooks
+            tar -zxf sysctl* -C /home/ubuntu/chef-repo/cookbooks
             rm -rf java*.tar.gz
             rm -rf apt*.tar.gz
             rm -rf yum*.tar.gz
             rm -rf hadoop*.tar.gz
+            rm -rf ohai*.tar.gz
+            rm -rf sysctl*.tar.gz
 
             cat << EOL > /home/ubuntu/chef-repo/roles/java.rb
             name "java"
@@ -418,6 +444,7 @@ resources:
             EOL
 
             chef-solo -j /home/ubuntu/chef-repo/solo.json -c /home/ubuntu/chef-repo/solo.rb
+            service hadoop-hdfs-datanode start
 
           params:
             $publickey: { get_param: PublicKeyString }
@@ -455,14 +482,20 @@ resources:
             knife cookbook site download apt
             knife cookbook site download yum
             knife cookbook site download hadoop
+            knife cookbook site download ohai
+            knife cookbook site download sysctl 
             tar -zxf java* -C /home/ubuntu/chef-repo/cookbooks
             tar -zxf apt* -C /home/ubuntu/chef-repo/cookbooks
             tar -zxf yum* -C /home/ubuntu/chef-repo/cookbooks
             tar -zxf hadoop* -C /home/ubuntu/chef-repo/cookbooks
+            tar -zxf ohai* -C /home/ubuntu/chef-repo/cookbooks
+            tar -zxf sysctl* -C /home/ubuntu/chef-repo/cookbooks
             rm -rf java*.tar.gz
             rm -rf apt*.tar.gz
             rm -rf yum*.tar.gz
             rm -rf hadoop*.tar.gz
+            rm -rf ohai*.tar.gz
+            rm -rf sysctl*.tar.gz
 
             cat << EOL > /home/ubuntu/chef-repo/roles/java.rb
             name "java"
@@ -537,6 +570,7 @@ resources:
             ssh -q -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no $hadoop4 "cat /etc/hosts.hadoop >> /etc/hosts"
 
             chef-solo -j /home/ubuntu/chef-repo/solo.json -c /home/ubuntu/chef-repo/solo.rb
+            service hadoop-hdfs-datanode start
 
           params:
             $hadoop1: { get_attr: [ hadoop1, first_address ] }
