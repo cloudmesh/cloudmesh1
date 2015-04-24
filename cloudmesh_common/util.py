@@ -63,6 +63,9 @@ class PROGRESS(object):
     def finish(cls):
         cls.bar.finish()
 
+    @classmethod
+    def __del__(cls):
+        cls.bar.finish()
 
 def cat(filename):
     """prints the contents of a file with the given name.

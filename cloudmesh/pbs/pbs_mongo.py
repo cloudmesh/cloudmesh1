@@ -51,7 +51,7 @@ class pbs_mongo:
 
     def _update_qinfo(self, host, data):
         time_now = datetime.now()
-        self.db_qinfo.remove({"cm_host": host, "cm_kind": "qinfo"}, safe=True)
+        self.db_qinfo.remove({"cm_host": host, "cm_kind": "qinfo"})
 
         for name in data:
             id = "{0}-{1}-qinfo".format(host, name).replace(".", "-")
@@ -70,7 +70,7 @@ class pbs_mongo:
         time_now = datetime.now()
         data = dict(self.hosts[host].qstat(refresh=True))
 
-        self.db_qstat.remove({"cm_host": host, "cm_kind": "qstat"}, safe=True)
+        self.db_qstat.remove({"cm_host": host, "cm_kind": "qstat"})
         for name in data:
             banner(name)
             for job in data[name]:
@@ -146,7 +146,7 @@ class pbs_mongo:
             data[name]["cm_id"] = id
             data[name]["cm_kind"] = "pbsnodes"
             data[name]["cm_refresh"] = time_now
-            self.db_pbsnodes.remove({"cm_id": id}, safe=True)
+            self.db_pbsnodes.remove({"cm_id": id})
             self.db_pbsnodes.insert(data[name])
 
     def delete_qstat(self, host):
@@ -154,7 +154,7 @@ class pbs_mongo:
         Deletes the qstat information from mongodb
         :param host:
         '''
-        self.db_qstat.remove({"cm_host": host, "cm_kind": "qstat"}, safe=True)
+        self.db_qstat.remove({"cm_host": host, "cm_kind": "qstat"})
 
     def delete_pbsnodes(self, host):
         '''
@@ -162,7 +162,7 @@ class pbs_mongo:
         :param host:
         '''
         self.db_qstat.remove(
-            {"cm_host": host, "cm_kind": "qbsnodes"}, safe=True)
+            {"cm_host": host, "cm_kind": "qbsnodes"})
 
     def clear(self):
         '''

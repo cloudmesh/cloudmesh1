@@ -6,6 +6,7 @@ python:
 # command to install dependencies
 install:
 #  - pip install progress
+  - pip install --upgrade pip
   - ./install system
   - ./install requirements
   - ./install cloudmesh
