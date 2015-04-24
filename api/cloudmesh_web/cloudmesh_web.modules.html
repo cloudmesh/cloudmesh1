@@ -31,6 +31,7 @@
     <script type="text/javascript" src="../../_static/js/jquery-fix.js"></script>
     <script type="text/javascript" src="../../_static/bootstrap-3.2.0/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="../../_static/bootstrap-sphinx.js"></script>
+    <link rel="shortcut icon" href="../../_static/cm-logo.ico"/>
     <link rel="author" title="About these documents" href="../../about.html" />
     <link rel="top" title="my Cloudmesh Core documentation" href="../../index.html" />
 <meta charset='utf-8'>
@@ -56,7 +57,7 @@
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand" href="../../index.html"><img src="../../_static/fg-logo-white-24x36.png">
+        <a class="navbar-brand" href="../../index.html"><img src="../../_static/cm-color-logo-24.png">
           Cloudmesh</a>
         <span class="navbar-text navbar-version pull-left"><b>Core</b></span>
       </div>
@@ -193,58 +194,23 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../../configure.html">2. Configuration with Yaml Files</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../configure.html#initialization">2.1. Initialization</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../configure.html#cloud-activation-india-openstack">2.2. Cloud Activation - India Openstack</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../configure.html#format-of-the-cloudmesh-yaml-file">2.3. Format of the cloudmesh.yaml file</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../configure.html#configuration-file-rc-file">2.4. Configuration file (rc file)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../configure.html#adding-devstack-to-cloudmesh-yaml-tbd">2.5. Adding devstack to <code class="docutils literal"><span class="pre">cloudmesh.yaml</span></code> (TBD)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../configure.html#adding-dreamhost-to-cloudmesh-yaml">2.6. Adding dreamhost to <code class="docutils literal"><span class="pre">cloudmesh.yaml</span></code></a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../configure.html#hp-cloud">2.6.1. HP Cloud</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../configure.html#azure">2.6.2. Azure</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../configure.html#azure-quickstart">2.6.2.1. Azure Quickstart</a><ul>
-<li class="toctree-l5"><a class="reference internal" href="../../configure.html#azure-account">2.6.2.1.1. Azure account</a></li>
-<li class="toctree-l5"><a class="reference internal" href="../../configure.html#download-credentials">2.6.2.1.2. Download credentials</a></li>
-<li class="toctree-l5"><a class="reference internal" href="../../configure.html#install-azure-cli">2.6.2.1.3. Install Azure CLI</a></li>
-<li class="toctree-l5"><a class="reference internal" href="../../configure.html#import-credentials-via-azure-cli">2.6.2.1.4. Import Credentials via Azure CLI</a></li>
-<li class="toctree-l5"><a class="reference internal" href="../../configure.html#download-subscription-file-publishsettings">2.6.2.1.5. Download Subscription File (.publishsettings)</a></li>
-<li class="toctree-l5"><a class="reference internal" href="../../configure.html#place-x-509-certificate-on-cloudmesh">2.6.2.1.6. Place X.509 certificate on Cloudmesh</a></li>
-<li class="toctree-l5"><a class="reference internal" href="../../configure.html#replace-subscription-id">2.6.2.1.7. Replace Subscription ID</a></li>
-<li class="toctree-l5"><a class="reference internal" href="../../configure.html#test-azure-virtual-machine">2.6.2.1.8. Test Azure Virtual Machine</a></li>
-<li class="toctree-l5"><a class="reference internal" href="../../configure.html#example-azure-cloudmesh-configuration">2.6.2.1.9. Example Azure cloudmesh configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../configure.html">2. Configuration</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../configure.html#cloudmesh-yaml">2.1. cloudmesh.yaml</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../configure.html#configuration-file-rc-file">2.2. Configuration file (rc file)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../configure.html#retrieval-of-rc-file-by-command">2.2.1. Retrieval of rc file by command</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../configure.html#retrieval-of-rc-files-by-hand">2.2.2. Retrieval of rc files by Hand</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../configure.html#location-of-rc-files">2.2.3. Location of rc files</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../configure.html#hp-cloud">2.2.3.1. HP Cloud</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../configure.html#azure">2.2.3.2. Azure</a></li>
 </ul>
 </li>
 </ul>
 </li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="../../configure.html#amazon-web-services">2.7. Amazon Web Services</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../configure.html#india">2.7.1. India</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../configure.html#alamo">2.7.2. Alamo</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../configure.html#a-complete-example">2.7.3. A complete example</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="../../configure.html#cloudmesh-server-yaml">2.8. cloudmesh-server.yaml</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../configure.html#debugging">2.8.1. Debugging</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../configure.html#web-ui">2.8.2. Web UI</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../configure.html#ldap-integration">2.8.3. LDAP Integration</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../configure.html#clusters">2.8.4. Clusters</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../configure.html#roles">2.8.5. Roles</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../configure.html#keystone-server">2.8.6. Keystone server</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../configure.html#mongo">2.8.7. Mongo</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../configure.html#complete-example">2.8.8. Complete Example</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="../../configure.html#cloudmesh-cluster-yaml">2.9. cloudmesh_cluster.yaml</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../configure.html#metadata">2.9.1. Metadata</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../configure.html#id1">2.9.2. Clusters</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../configure.html#a-cluster">2.9.3. A Cluster</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../configure.html#network">2.9.4. Network:</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="../../configure.html#other-yaml-files">2.10. Other Yaml files</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../configure.html#me-sample">2.11. Me Sample</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../configure.html#ec2-credentials-this-secition-is-outdated">2.12. EC2 Credentials (THIS SECITION IS OUTDATED)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../configure.html#amazon-web-services">2.3. Amazon Web Services</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../configure.html#cloudmesh-server-yaml">2.4. cloudmesh-server.yaml</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../configure.html#cloudmesh-cluster-yaml">2.5. cloudmesh_cluster.yaml</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../configure.html#other-yaml-files">2.6. Other Yaml files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../configure.html#me-sample">2.7. Me Sample</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../doc.html">3. Documentation</a><ul>
@@ -577,7 +543,7 @@
   <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../introduction.html">Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../installation.html">1. Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../configure.html">2. Configuration with Yaml Files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../configure.html">2. Configuration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../doc.html">3. Documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../shell.html">4. Cloudmesh Shell</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../metric.html">5. Cloudmesh Metric</a></li>
@@ -1102,7 +1068,7 @@ the enclosed checkbox fields.</p>
 
 <dl class="attribute">
 <dt id="cloudmesh_web.modules.management.ProjectRegistrationForm.loc_country">
-<code class="descname">loc_country</code><em class="property"> = &lt;UnboundField(RadioSelectField, ('Country', [&lt;wtforms.validators.DataRequired object at 0x10d2f0bd0&gt;]), {})&gt;</em><a class="headerlink" href="#cloudmesh_web.modules.management.ProjectRegistrationForm.loc_country" title="Permalink to this definition">¶</a></dt>
+<code class="descname">loc_country</code><em class="property"> = &lt;UnboundField(RadioSelectField, ('Country', [&lt;wtforms.validators.DataRequired object at 0x111f57290&gt;]), {})&gt;</em><a class="headerlink" href="#cloudmesh_web.modules.management.ProjectRegistrationForm.loc_country" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -1117,7 +1083,7 @@ the enclosed checkbox fields.</p>
 
 <dl class="attribute">
 <dt id="cloudmesh_web.modules.management.ProjectRegistrationForm.loc_state">
-<code class="descname">loc_state</code><em class="property"> = &lt;UnboundField(RadioSelectField, ('State', [&lt;wtforms.validators.DataRequired object at 0x10d2f0a50&gt;]), {})&gt;</em><a class="headerlink" href="#cloudmesh_web.modules.management.ProjectRegistrationForm.loc_state" title="Permalink to this definition">¶</a></dt>
+<code class="descname">loc_state</code><em class="property"> = &lt;UnboundField(RadioSelectField, ('State', [&lt;wtforms.validators.DataRequired object at 0x111f57410&gt;]), {})&gt;</em><a class="headerlink" href="#cloudmesh_web.modules.management.ProjectRegistrationForm.loc_state" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -1212,7 +1178,7 @@ the enclosed checkbox fields.</p>
 
 <dl class="attribute">
 <dt id="cloudmesh_web.modules.management.ProjectRegistrationForm.url">
-<code class="descname">url</code><em class="property"> = &lt;UnboundField(StringField, ('URL', [&lt;wtforms.validators.Length object at 0x112383c50&gt;, &lt;function validate_url_in_form at 0x111f78a28&gt;]), {})&gt;</em><a class="headerlink" href="#cloudmesh_web.modules.management.ProjectRegistrationForm.url" title="Permalink to this definition">¶</a></dt>
+<code class="descname">url</code><em class="property"> = &lt;UnboundField(StringField, ('URL', [&lt;wtforms.validators.Length object at 0x111f57090&gt;, &lt;function validate_url_in_form at 0x111fc1500&gt;]), {})&gt;</em><a class="headerlink" href="#cloudmesh_web.modules.management.ProjectRegistrationForm.url" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -1263,7 +1229,7 @@ csrf_time_limit = timedelta(minutes=20)</dd>
 <p># put this in the html form:  {{ form.csrf_token }}</p>
 <dl class="attribute">
 <dt id="cloudmesh_web.modules.management.UserRegistrationForm.address">
-<code class="descname">address</code><em class="property"> = &lt;UnboundField(TextAreaField, ('Address', [&lt;wtforms.validators.DataRequired object at 0x11249bb50&gt;]), {})&gt;</em><a class="headerlink" href="#cloudmesh_web.modules.management.UserRegistrationForm.address" title="Permalink to this definition">¶</a></dt>
+<code class="descname">address</code><em class="property"> = &lt;UnboundField(TextAreaField, ('Address', [&lt;wtforms.validators.DataRequired object at 0x111f6e350&gt;]), {})&gt;</em><a class="headerlink" href="#cloudmesh_web.modules.management.UserRegistrationForm.address" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -1273,7 +1239,7 @@ csrf_time_limit = timedelta(minutes=20)</dd>
 
 <dl class="attribute">
 <dt id="cloudmesh_web.modules.management.UserRegistrationForm.bio">
-<code class="descname">bio</code><em class="property"> = &lt;UnboundField(TextAreaField, ('Bio', [&lt;wtforms.validators.DataRequired object at 0x110e8e7d0&gt;]), {})&gt;</em><a class="headerlink" href="#cloudmesh_web.modules.management.UserRegistrationForm.bio" title="Permalink to this definition">¶</a></dt>
+<code class="descname">bio</code><em class="property"> = &lt;UnboundField(TextAreaField, ('Bio', [&lt;wtforms.validators.DataRequired object at 0x111f6e850&gt;]), {})&gt;</em><a class="headerlink" href="#cloudmesh_web.modules.management.UserRegistrationForm.bio" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -1283,7 +1249,7 @@ csrf_time_limit = timedelta(minutes=20)</dd>
 
 <dl class="attribute">
 <dt id="cloudmesh_web.modules.management.UserRegistrationForm.citizenship">
-<code class="descname">citizenship</code><em class="property"> = &lt;UnboundField(RadioSelectField, ('Citizenship', [&lt;wtforms.validators.DataRequired object at 0x11249b5d0&gt;]), {})&gt;</em><a class="headerlink" href="#cloudmesh_web.modules.management.UserRegistrationForm.citizenship" title="Permalink to this definition">¶</a></dt>
+<code class="descname">citizenship</code><em class="property"> = &lt;UnboundField(RadioSelectField, ('Citizenship', [&lt;wtforms.validators.DataRequired object at 0x111f6ee90&gt;]), {})&gt;</em><a class="headerlink" href="#cloudmesh_web.modules.management.UserRegistrationForm.citizenship" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -1293,7 +1259,7 @@ csrf_time_limit = timedelta(minutes=20)</dd>
 
 <dl class="attribute">
 <dt id="cloudmesh_web.modules.management.UserRegistrationForm.country">
-<code class="descname">country</code><em class="property"> = &lt;UnboundField(RadioSelectField, ('Country', [&lt;wtforms.validators.DataRequired object at 0x11249b410&gt;]), {})&gt;</em><a class="headerlink" href="#cloudmesh_web.modules.management.UserRegistrationForm.country" title="Permalink to this definition">¶</a></dt>
+<code class="descname">country</code><em class="property"> = &lt;UnboundField(RadioSelectField, ('Country', [&lt;wtforms.validators.DataRequired object at 0x111f6eb50&gt;]), {})&gt;</em><a class="headerlink" href="#cloudmesh_web.modules.management.UserRegistrationForm.country" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -1303,12 +1269,12 @@ csrf_time_limit = timedelta(minutes=20)</dd>
 
 <dl class="attribute">
 <dt id="cloudmesh_web.modules.management.UserRegistrationForm.email">
-<code class="descname">email</code><em class="property"> = &lt;UnboundField(StringField, ('Email', [&lt;wtforms.validators.Length object at 0x1121151d0&gt;, &lt;function validate_email_in_form at 0x111f78aa0&gt;]), {})&gt;</em><a class="headerlink" href="#cloudmesh_web.modules.management.UserRegistrationForm.email" title="Permalink to this definition">¶</a></dt>
+<code class="descname">email</code><em class="property"> = &lt;UnboundField(StringField, ('Email', [&lt;wtforms.validators.Length object at 0x111f6ecd0&gt;, &lt;function validate_email_in_form at 0x111e4e320&gt;]), {})&gt;</em><a class="headerlink" href="#cloudmesh_web.modules.management.UserRegistrationForm.email" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
 <dt id="cloudmesh_web.modules.management.UserRegistrationForm.firstname">
-<code class="descname">firstname</code><em class="property"> = &lt;UnboundField(StringField, ('Firstname', [&lt;wtforms.validators.Length object at 0x112115190&gt;]), {})&gt;</em><a class="headerlink" href="#cloudmesh_web.modules.management.UserRegistrationForm.firstname" title="Permalink to this definition">¶</a></dt>
+<code class="descname">firstname</code><em class="property"> = &lt;UnboundField(StringField, ('Firstname', [&lt;wtforms.validators.Length object at 0x111f6e150&gt;]), {})&gt;</em><a class="headerlink" href="#cloudmesh_web.modules.management.UserRegistrationForm.firstname" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -1318,7 +1284,7 @@ csrf_time_limit = timedelta(minutes=20)</dd>
 
 <dl class="attribute">
 <dt id="cloudmesh_web.modules.management.UserRegistrationForm.institutionrole">
-<code class="descname">institutionrole</code><em class="property"> = &lt;UnboundField(RadioSelectField, ('Institution Role', [&lt;wtforms.validators.DataRequired object at 0x11249b6d0&gt;]), {'choices': [('Undergraduate', 'Undergraduate'), ('Graduate Masters', 'Graduate Masters'), ('Graduate PhD', 'Graduate PhD'), ('Student Other', 'Student Other'), ('Faculty', 'Faculty'), ('Staff', 'Staff'), ('Other', 'Other')]})&gt;</em><a class="headerlink" href="#cloudmesh_web.modules.management.UserRegistrationForm.institutionrole" title="Permalink to this definition">¶</a></dt>
+<code class="descname">institutionrole</code><em class="property"> = &lt;UnboundField(RadioSelectField, ('Institution Role', [&lt;wtforms.validators.DataRequired object at 0x111f6ed10&gt;]), {'choices': [('Undergraduate', 'Undergraduate'), ('Graduate Masters', 'Graduate Masters'), ('Graduate PhD', 'Graduate PhD'), ('Student Other', 'Student Other'), ('Faculty', 'Faculty'), ('Staff', 'Staff'), ('Other', 'Other')]})&gt;</em><a class="headerlink" href="#cloudmesh_web.modules.management.UserRegistrationForm.institutionrole" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -1328,7 +1294,7 @@ csrf_time_limit = timedelta(minutes=20)</dd>
 
 <dl class="attribute">
 <dt id="cloudmesh_web.modules.management.UserRegistrationForm.lastname">
-<code class="descname">lastname</code><em class="property"> = &lt;UnboundField(StringField, ('Lastname', [&lt;wtforms.validators.Length object at 0x112115090&gt;]), {})&gt;</em><a class="headerlink" href="#cloudmesh_web.modules.management.UserRegistrationForm.lastname" title="Permalink to this definition">¶</a></dt>
+<code class="descname">lastname</code><em class="property"> = &lt;UnboundField(StringField, ('Lastname', [&lt;wtforms.validators.Length object at 0x111f6e450&gt;]), {})&gt;</em><a class="headerlink" href="#cloudmesh_web.modules.management.UserRegistrationForm.lastname" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -1338,12 +1304,12 @@ csrf_time_limit = timedelta(minutes=20)</dd>
 
 <dl class="attribute">
 <dt id="cloudmesh_web.modules.management.UserRegistrationForm.password">
-<code class="descname">password</code><em class="property"> = &lt;UnboundField(PasswordField, ('New Password', [&lt;wtforms.validators.DataRequired object at 0x112300050&gt;, &lt;wtforms.validators.EqualTo object at 0x112300150&gt;]), {})&gt;</em><a class="headerlink" href="#cloudmesh_web.modules.management.UserRegistrationForm.password" title="Permalink to this definition">¶</a></dt>
+<code class="descname">password</code><em class="property"> = &lt;UnboundField(PasswordField, ('New Password', [&lt;wtforms.validators.DataRequired object at 0x111f6e690&gt;, &lt;wtforms.validators.EqualTo object at 0x111f6e410&gt;]), {})&gt;</em><a class="headerlink" href="#cloudmesh_web.modules.management.UserRegistrationForm.password" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
 <dt id="cloudmesh_web.modules.management.UserRegistrationForm.phone">
-<code class="descname">phone</code><em class="property"> = &lt;UnboundField(StringField, ('Phone', [&lt;wtforms.validators.Length object at 0x11249b810&gt;]), {})&gt;</em><a class="headerlink" href="#cloudmesh_web.modules.management.UserRegistrationForm.phone" title="Permalink to this definition">¶</a></dt>
+<code class="descname">phone</code><em class="property"> = &lt;UnboundField(StringField, ('Phone', [&lt;wtforms.validators.Length object at 0x111f6e6d0&gt;]), {})&gt;</em><a class="headerlink" href="#cloudmesh_web.modules.management.UserRegistrationForm.phone" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -1353,7 +1319,7 @@ csrf_time_limit = timedelta(minutes=20)</dd>
 
 <dl class="attribute">
 <dt id="cloudmesh_web.modules.management.UserRegistrationForm.title">
-<code class="descname">title</code><em class="property"> = &lt;UnboundField(StringField, ('Title', [&lt;wtforms.validators.Length object at 0x112115050&gt;]), {})&gt;</em><a class="headerlink" href="#cloudmesh_web.modules.management.UserRegistrationForm.title" title="Permalink to this definition">¶</a></dt>
+<code class="descname">title</code><em class="property"> = &lt;UnboundField(StringField, ('Title', [&lt;wtforms.validators.Length object at 0x111f6e290&gt;]), {})&gt;</em><a class="headerlink" href="#cloudmesh_web.modules.management.UserRegistrationForm.title" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -1363,7 +1329,7 @@ csrf_time_limit = timedelta(minutes=20)</dd>
 
 <dl class="attribute">
 <dt id="cloudmesh_web.modules.management.UserRegistrationForm.username">
-<code class="descname">username</code><em class="property"> = &lt;UnboundField(StringField, ('Username', [&lt;wtforms.validators.Length object at 0x11215dd50&gt;, &lt;function validate_username_in_form at 0x111f78b18&gt;]), {})&gt;</em><a class="headerlink" href="#cloudmesh_web.modules.management.UserRegistrationForm.username" title="Permalink to this definition">¶</a></dt>
+<code class="descname">username</code><em class="property"> = &lt;UnboundField(StringField, ('Username', [&lt;wtforms.validators.Length object at 0x111f6e310&gt;, &lt;function validate_username_in_form at 0x111e4e230&gt;]), {})&gt;</em><a class="headerlink" href="#cloudmesh_web.modules.management.UserRegistrationForm.username" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -1672,7 +1638,7 @@ the enclosed checkbox fields.</p>
 
 <dl class="attribute">
 <dt id="cloudmesh_web.modules.management__.ProjectRegistrationForm.url">
-<code class="descname">url</code><em class="property"> = &lt;UnboundField(StringField, ('URL', [&lt;wtforms.validators.Length object at 0x11259ad90&gt;, &lt;function validate_url_in_form at 0x1125b6938&gt;]), {})&gt;</em><a class="headerlink" href="#cloudmesh_web.modules.management__.ProjectRegistrationForm.url" title="Permalink to this definition">¶</a></dt>
+<code class="descname">url</code><em class="property"> = &lt;UnboundField(StringField, ('URL', [&lt;wtforms.validators.Length object at 0x10f270290&gt;, &lt;function validate_url_in_form at 0x111c28230&gt;]), {})&gt;</em><a class="headerlink" href="#cloudmesh_web.modules.management__.ProjectRegistrationForm.url" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -1718,7 +1684,7 @@ csrf_time_limit = timedelta(minutes=20)</dd>
 <p># put this in the html form:  {{ form.csrf_token }}</p>
 <dl class="attribute">
 <dt id="cloudmesh_web.modules.management__.UserRegistrationForm.address">
-<code class="descname">address</code><em class="property"> = &lt;UnboundField(TextAreaField, ('Address', [&lt;wtforms.validators.DataRequired object at 0x1125b2f10&gt;]), {})&gt;</em><a class="headerlink" href="#cloudmesh_web.modules.management__.UserRegistrationForm.address" title="Permalink to this definition">¶</a></dt>
+<code class="descname">address</code><em class="property"> = &lt;UnboundField(TextAreaField, ('Address', [&lt;wtforms.validators.DataRequired object at 0x111c08090&gt;]), {})&gt;</em><a class="headerlink" href="#cloudmesh_web.modules.management__.UserRegistrationForm.address" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -1728,12 +1694,12 @@ csrf_time_limit = timedelta(minutes=20)</dd>
 
 <dl class="attribute">
 <dt id="cloudmesh_web.modules.management__.UserRegistrationForm.bio">
-<code class="descname">bio</code><em class="property"> = &lt;UnboundField(TextAreaField, ('Bio', [&lt;wtforms.validators.DataRequired object at 0x1125bc1d0&gt;]), {})&gt;</em><a class="headerlink" href="#cloudmesh_web.modules.management__.UserRegistrationForm.bio" title="Permalink to this definition">¶</a></dt>
+<code class="descname">bio</code><em class="property"> = &lt;UnboundField(TextAreaField, ('Bio', [&lt;wtforms.validators.DataRequired object at 0x111c08690&gt;]), {})&gt;</em><a class="headerlink" href="#cloudmesh_web.modules.management__.UserRegistrationForm.bio" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
 <dt id="cloudmesh_web.modules.management__.UserRegistrationForm.citizenship">
-<code class="descname">citizenship</code><em class="property"> = &lt;UnboundField(RadioSelectField, ('Citizenship', [&lt;wtforms.validators.DataRequired object at 0x1125b2d10&gt;]), {'choices': [('GB', 'United Kingdom'), ('US', 'United States'), ('DE', 'Germany'), ('AF', 'Afghanistan'), ('AL', 'Albania'), ('DZ', 'Algeria'), ('AS', 'American Samoa'), ('AD', 'Andorra'), ('AO', 'Angola'), ('AI', 'Anguilla'), ('AQ', 'Antarctica'), ('AG', 'Antigua and Barbuda'), ('AR', 'Argentina'), ('AM', 'Armenia'), ('AW', 'Aruba'), ('AU', 'Australia'), ('AT', 'Austria'), ('AZ', 'Azerbaijan'), ('BS', 'Bahamas'), ('BH', 'Bahrain'), ('BD', 'Bangladesh'), ('BB', 'Barbados'), ('BY', 'Belarus'), ('BE', 'Belgium'), ('BZ', 'Belize'), ('BJ', 'Benin'), ('BM', 'Bermuda'), ('BT', 'Bhutan'), ('BO', 'Bolivia'), ('BA', 'Bosnia and Herzegovina'), ('BW', 'Botswana'), ('BV', 'Bouvet Island'), ('BR', 'Brazil'), ('BQ', 'British Antarctic Territory'), ('IO', 'British Indian Ocean Territory'), ('VG', 'British Virgin Islands'), ('BN', 'Brunei'), ('BG', 'Bulgaria'), ('BF', 'Burkina Faso'), ('BI', 'Burundi'), ('KH', 'Cambodia'), ('CM', 'Cameroon'), ('CA', 'Canada'), ('CT', 'Canton and Enderbury Islands'), ('CV', 'Cape Verde'), ('KY', 'Cayman Islands'), ('CF', 'Central African Republic'), ('TD', 'Chad'), ('CL', 'Chile'), ('CN', 'China'), ('CX', 'Christmas Island'), ('CC', 'Cocos [Keeling] Islands'), ('CO', 'Colombia'), ('KM', 'Comoros'), ('CG', 'Congo - Brazzaville'), ('CD', 'Congo - Kinshasa'), ('CK', 'Cook Islands'), ('CR', 'Costa Rica'), ('HR', 'Croatia'), ('CU', 'Cuba'), ('CY', 'Cyprus'), ('CZ', 'Czech Republic'), ('CI', 'C\\u00f4te d\\u2019Ivoire'), ('DK', 'Denmark'), ('DJ', 'Djibouti'), ('DM', 'Dominica'), ('DO', 'Dominican Republic'), ('NQ', 'Dronning Maud Land'), ('DD', 'East Germany'), ('EC', 'Ecuador'), ('EG', 'Egypt'), ('SV', 'El Salvador'), ('GQ', 'Equatorial Guinea'), ('ER', 'Eritrea'), ('EE', 'Estonia'), ('ET', 'Ethiopia'), ('FK', 'Falkland Islands'), ('FO', 'Faroe Islands'), ('FJ', 'Fiji'), ('FI', 'Finland'), ('FR', 'France'), ('GF', 'French Guiana'), ('PF', 'French Polynesia'), ('TF', 'French Southern Territories'), ('FQ', 'French Southern and Antarctic Territories'), ('GA', 'Gabon'), ('GM', 'Gambia'), ('GE', 'Georgia'), ('DE', 'Germany'), ('GH', 'Ghana'), ('GI', 'Gibraltar'), ('GR', 'Greece'), ('GL', 'Greenland'), ('GD', 'Grenada'), ('GP', 'Guadeloupe'), ('GU', 'Guam'), ('GT', 'Guatemala'), ('GG', 'Guernsey'), ('GN', 'Guinea'), ('GW', 'Guinea-Bissau'), ('GY', 'Guyana'), ('HT', 'Haiti'), ('HM', 'Heard Island and McDonald Islands'), ('HN', 'Honduras'), ('HK', 'Hong Kong SAR China'), ('HU', 'Hungary'), ('IS', 'Iceland'), ('IN', 'India'), ('ID', 'Indonesia'), ('IR', 'Iran'), ('IQ', 'Iraq'), ('IE', 'Ireland'), ('IM', 'Isle of Man'), ('IL', 'Israel'), ('IT', 'Italy'), ('JM', 'Jamaica'), ('JP', 'Japan'), ('JE', 'Jersey'), ('JT', 'Johnston Island'), ('JO', 'Jordan'), ('KZ', 'Kazakhstan'), ('KE', 'Kenya'), ('KI', 'Kiribati'), ('KW', 'Kuwait'), ('KG', 'Kyrgyzstan'), ('LA', 'Laos'), ('LV', 'Latvia'), ('LB', 'Lebanon'), ('LS', 'Lesotho'), ('LR', 'Liberia'), ('LY', 'Libya'), ('LI', 'Liechtenstein'), ('LT', 'Lithuania'), ('LU', 'Luxembourg'), ('MO', 'Macau SAR China'), ('MK', 'Macedonia'), ('MG', 'Madagascar'), ('MW', 'Malawi'), ('MY', 'Malaysia'), ('MV', 'Maldives'), ('ML', 'Mali'), ('MT', 'Malta'), ('MH', 'Marshall Islands'), ('MQ', 'Martinique'), ('MR', 'Mauritania'), ('MU', 'Mauritius'), ('YT', 'Mayotte'), ('FX', 'Metropolitan France'), ('MX', 'Mexico'), ('FM', 'Micronesia'), ('MI', 'Midway Islands'), ('MD', 'Moldova'), ('MC', 'Monaco'), ('MN', 'Mongolia'), ('ME', 'Montenegro'), ('MS', 'Montserrat'), ('MA', 'Morocco'), ('MZ', 'Mozambique'), ('MM', 'Myanmar [Burma]'), ('NA', 'Namibia'), ('NR', 'Nauru'), ('NP', 'Nepal'), ('NL', 'Netherlands'), ('AN', 'Netherlands Antilles'), ('NT', 'Neutral Zone'), ('NC', 'New Caledonia'), ('NZ', 'New Zealand'), ('NI', 'Nicaragua'), ('NE', 'Niger'), ('NG', 'Nigeria'), ('NU', 'Niue'), ('NF', 'Norfolk Island'), ('KP', 'North Korea'), ('VD', 'North Vietnam'), ('MP', 'Northern Mariana Islands'), ('NO', 'Norway'), ('OM', 'Oman'), ('PC', 'Pacific Islands Trust Territory'), ('PK', 'Pakistan'), ('PW', 'Palau'), ('PS', 'Palestinian Territories'), ('PA', 'Panama'), ('PZ', 'Panama Canal Zone'), ('PG', 'Papua New Guinea'), ('PY', 'Paraguay'), ('YD', &quot;People's Democratic Republic of Yemen&quot;), ('PE', 'Peru'), ('PH', 'Philippines'), ('PN', 'Pitcairn Islands'), ('PL', 'Poland'), ('PT', 'Portugal'), ('PR', 'Puerto Rico'), ('QA', 'Qatar'), ('RO', 'Romania'), ('RU', 'Russia'), ('RW', 'Rwanda'), ('RE', 'R\\u00e9union'), ('BL', 'Saint Barth\\u00e9lemy'), ('SH', 'Saint Helena'), ('KN', 'Saint Kitts and Nevis'), ('LC', 'Saint Lucia'), ('MF', 'Saint Martin'), ('PM', 'Saint Pierre and Miquelon'), ('VC', 'Saint Vincent and the Grenadines'), ('WS', 'Samoa'), ('SM', 'San Marino'), ('SA', 'Saudi Arabia'), ('SN', 'Senegal'), ('RS', 'Serbia'), ('CS', 'Serbia and Montenegro'), ('SC', 'Seychelles'), ('SL', 'Sierra Leone'), ('SG', 'Singapore'), ('SK', 'Slovakia'), ('SI', 'Slovenia'), ('SB', 'Solomon Islands'), ('SO', 'Somalia'), ('ZA', 'South Africa'), ('GS', 'South Georgia and the South Sandwich Islands'), ('KR', 'South Korea'), ('ES', 'Spain'), ('LK', 'Sri Lanka'), ('SD', 'Sudan'), ('SR', 'Suriname'), ('SJ', 'Svalbard and Jan Mayen'), ('SZ', 'Swaziland'), ('SE', 'Sweden'), ('CH', 'Switzerland'), ('SY', 'Syria'), ('ST', 'Sao Tom and Principe'), ('TW', 'Taiwan'), ('TJ', 'Tajikistan'), ('TZ', 'Tanzania'), ('TH', 'Thailand'), ('TL', 'Timor-Leste'), ('TG', 'Togo'), ('TK', 'Tokelau'), ('TO', 'Tonga'), ('TT', 'Trinidad and Tobago'), ('TN', 'Tunisia'), ('TR', 'Turkey'), ('TM', 'Turkmenistan'), ('TC', 'Turks and Caicos Islands'), ('TV', 'Tuvalu'), ('UM', 'U.S. Minor Outlying Islands'), ('PU', 'U.S. Miscellaneous Pacific Islands'), ('VI', 'U.S. Virgin Islands'), ('UG', 'Uganda'), ('UA', 'Ukraine'), ('SU', 'Union of Soviet Socialist Republics'), ('AE', 'United Arab Emirates'), ('GB', 'United Kingdom'), ('US', 'United States'), ('ZZ', 'Unknown or Invalid Region'), ('UY', 'Uruguay'), ('UZ', 'Uzbekistan'), ('VU', 'Vanuatu'), ('VA', 'Vatican City'), ('VE', 'Venezuela'), ('VN', 'Vietnam'), ('WK', 'Wake Island'), ('WF', 'Wallis and Futuna'), ('EH', 'Western Sahara'), ('YE', 'Yemen'), ('ZM', 'Zambia'), ('ZW', 'Zimbabwe'), ('AX', 'Aland Islands')]})&gt;</em><a class="headerlink" href="#cloudmesh_web.modules.management__.UserRegistrationForm.citizenship" title="Permalink to this definition">¶</a></dt>
+<code class="descname">citizenship</code><em class="property"> = &lt;UnboundField(RadioSelectField, ('Citizenship', [&lt;wtforms.validators.DataRequired object at 0x111c08e50&gt;]), {'choices': [('GB', 'United Kingdom'), ('US', 'United States'), ('DE', 'Germany'), ('AF', 'Afghanistan'), ('AL', 'Albania'), ('DZ', 'Algeria'), ('AS', 'American Samoa'), ('AD', 'Andorra'), ('AO', 'Angola'), ('AI', 'Anguilla'), ('AQ', 'Antarctica'), ('AG', 'Antigua and Barbuda'), ('AR', 'Argentina'), ('AM', 'Armenia'), ('AW', 'Aruba'), ('AU', 'Australia'), ('AT', 'Austria'), ('AZ', 'Azerbaijan'), ('BS', 'Bahamas'), ('BH', 'Bahrain'), ('BD', 'Bangladesh'), ('BB', 'Barbados'), ('BY', 'Belarus'), ('BE', 'Belgium'), ('BZ', 'Belize'), ('BJ', 'Benin'), ('BM', 'Bermuda'), ('BT', 'Bhutan'), ('BO', 'Bolivia'), ('BA', 'Bosnia and Herzegovina'), ('BW', 'Botswana'), ('BV', 'Bouvet Island'), ('BR', 'Brazil'), ('BQ', 'British Antarctic Territory'), ('IO', 'British Indian Ocean Territory'), ('VG', 'British Virgin Islands'), ('BN', 'Brunei'), ('BG', 'Bulgaria'), ('BF', 'Burkina Faso'), ('BI', 'Burundi'), ('KH', 'Cambodia'), ('CM', 'Cameroon'), ('CA', 'Canada'), ('CT', 'Canton and Enderbury Islands'), ('CV', 'Cape Verde'), ('KY', 'Cayman Islands'), ('CF', 'Central African Republic'), ('TD', 'Chad'), ('CL', 'Chile'), ('CN', 'China'), ('CX', 'Christmas Island'), ('CC', 'Cocos [Keeling] Islands'), ('CO', 'Colombia'), ('KM', 'Comoros'), ('CG', 'Congo - Brazzaville'), ('CD', 'Congo - Kinshasa'), ('CK', 'Cook Islands'), ('CR', 'Costa Rica'), ('HR', 'Croatia'), ('CU', 'Cuba'), ('CY', 'Cyprus'), ('CZ', 'Czech Republic'), ('CI', 'C\\u00f4te d\\u2019Ivoire'), ('DK', 'Denmark'), ('DJ', 'Djibouti'), ('DM', 'Dominica'), ('DO', 'Dominican Republic'), ('NQ', 'Dronning Maud Land'), ('DD', 'East Germany'), ('EC', 'Ecuador'), ('EG', 'Egypt'), ('SV', 'El Salvador'), ('GQ', 'Equatorial Guinea'), ('ER', 'Eritrea'), ('EE', 'Estonia'), ('ET', 'Ethiopia'), ('FK', 'Falkland Islands'), ('FO', 'Faroe Islands'), ('FJ', 'Fiji'), ('FI', 'Finland'), ('FR', 'France'), ('GF', 'French Guiana'), ('PF', 'French Polynesia'), ('TF', 'French Southern Territories'), ('FQ', 'French Southern and Antarctic Territories'), ('GA', 'Gabon'), ('GM', 'Gambia'), ('GE', 'Georgia'), ('DE', 'Germany'), ('GH', 'Ghana'), ('GI', 'Gibraltar'), ('GR', 'Greece'), ('GL', 'Greenland'), ('GD', 'Grenada'), ('GP', 'Guadeloupe'), ('GU', 'Guam'), ('GT', 'Guatemala'), ('GG', 'Guernsey'), ('GN', 'Guinea'), ('GW', 'Guinea-Bissau'), ('GY', 'Guyana'), ('HT', 'Haiti'), ('HM', 'Heard Island and McDonald Islands'), ('HN', 'Honduras'), ('HK', 'Hong Kong SAR China'), ('HU', 'Hungary'), ('IS', 'Iceland'), ('IN', 'India'), ('ID', 'Indonesia'), ('IR', 'Iran'), ('IQ', 'Iraq'), ('IE', 'Ireland'), ('IM', 'Isle of Man'), ('IL', 'Israel'), ('IT', 'Italy'), ('JM', 'Jamaica'), ('JP', 'Japan'), ('JE', 'Jersey'), ('JT', 'Johnston Island'), ('JO', 'Jordan'), ('KZ', 'Kazakhstan'), ('KE', 'Kenya'), ('KI', 'Kiribati'), ('KW', 'Kuwait'), ('KG', 'Kyrgyzstan'), ('LA', 'Laos'), ('LV', 'Latvia'), ('LB', 'Lebanon'), ('LS', 'Lesotho'), ('LR', 'Liberia'), ('LY', 'Libya'), ('LI', 'Liechtenstein'), ('LT', 'Lithuania'), ('LU', 'Luxembourg'), ('MO', 'Macau SAR China'), ('MK', 'Macedonia'), ('MG', 'Madagascar'), ('MW', 'Malawi'), ('MY', 'Malaysia'), ('MV', 'Maldives'), ('ML', 'Mali'), ('MT', 'Malta'), ('MH', 'Marshall Islands'), ('MQ', 'Martinique'), ('MR', 'Mauritania'), ('MU', 'Mauritius'), ('YT', 'Mayotte'), ('FX', 'Metropolitan France'), ('MX', 'Mexico'), ('FM', 'Micronesia'), ('MI', 'Midway Islands'), ('MD', 'Moldova'), ('MC', 'Monaco'), ('MN', 'Mongolia'), ('ME', 'Montenegro'), ('MS', 'Montserrat'), ('MA', 'Morocco'), ('MZ', 'Mozambique'), ('MM', 'Myanmar [Burma]'), ('NA', 'Namibia'), ('NR', 'Nauru'), ('NP', 'Nepal'), ('NL', 'Netherlands'), ('AN', 'Netherlands Antilles'), ('NT', 'Neutral Zone'), ('NC', 'New Caledonia'), ('NZ', 'New Zealand'), ('NI', 'Nicaragua'), ('NE', 'Niger'), ('NG', 'Nigeria'), ('NU', 'Niue'), ('NF', 'Norfolk Island'), ('KP', 'North Korea'), ('VD', 'North Vietnam'), ('MP', 'Northern Mariana Islands'), ('NO', 'Norway'), ('OM', 'Oman'), ('PC', 'Pacific Islands Trust Territory'), ('PK', 'Pakistan'), ('PW', 'Palau'), ('PS', 'Palestinian Territories'), ('PA', 'Panama'), ('PZ', 'Panama Canal Zone'), ('PG', 'Papua New Guinea'), ('PY', 'Paraguay'), ('YD', &quot;People's Democratic Republic of Yemen&quot;), ('PE', 'Peru'), ('PH', 'Philippines'), ('PN', 'Pitcairn Islands'), ('PL', 'Poland'), ('PT', 'Portugal'), ('PR', 'Puerto Rico'), ('QA', 'Qatar'), ('RO', 'Romania'), ('RU', 'Russia'), ('RW', 'Rwanda'), ('RE', 'R\\u00e9union'), ('BL', 'Saint Barth\\u00e9lemy'), ('SH', 'Saint Helena'), ('KN', 'Saint Kitts and Nevis'), ('LC', 'Saint Lucia'), ('MF', 'Saint Martin'), ('PM', 'Saint Pierre and Miquelon'), ('VC', 'Saint Vincent and the Grenadines'), ('WS', 'Samoa'), ('SM', 'San Marino'), ('SA', 'Saudi Arabia'), ('SN', 'Senegal'), ('RS', 'Serbia'), ('CS', 'Serbia and Montenegro'), ('SC', 'Seychelles'), ('SL', 'Sierra Leone'), ('SG', 'Singapore'), ('SK', 'Slovakia'), ('SI', 'Slovenia'), ('SB', 'Solomon Islands'), ('SO', 'Somalia'), ('ZA', 'South Africa'), ('GS', 'South Georgia and the South Sandwich Islands'), ('KR', 'South Korea'), ('ES', 'Spain'), ('LK', 'Sri Lanka'), ('SD', 'Sudan'), ('SR', 'Suriname'), ('SJ', 'Svalbard and Jan Mayen'), ('SZ', 'Swaziland'), ('SE', 'Sweden'), ('CH', 'Switzerland'), ('SY', 'Syria'), ('ST', 'Sao Tom and Principe'), ('TW', 'Taiwan'), ('TJ', 'Tajikistan'), ('TZ', 'Tanzania'), ('TH', 'Thailand'), ('TL', 'Timor-Leste'), ('TG', 'Togo'), ('TK', 'Tokelau'), ('TO', 'Tonga'), ('TT', 'Trinidad and Tobago'), ('TN', 'Tunisia'), ('TR', 'Turkey'), ('TM', 'Turkmenistan'), ('TC', 'Turks and Caicos Islands'), ('TV', 'Tuvalu'), ('UM', 'U.S. Minor Outlying Islands'), ('PU', 'U.S. Miscellaneous Pacific Islands'), ('VI', 'U.S. Virgin Islands'), ('UG', 'Uganda'), ('UA', 'Ukraine'), ('SU', 'Union of Soviet Socialist Republics'), ('AE', 'United Arab Emirates'), ('GB', 'United Kingdom'), ('US', 'United States'), ('ZZ', 'Unknown or Invalid Region'), ('UY', 'Uruguay'), ('UZ', 'Uzbekistan'), ('VU', 'Vanuatu'), ('VA', 'Vatican City'), ('VE', 'Venezuela'), ('VN', 'Vietnam'), ('WK', 'Wake Island'), ('WF', 'Wallis and Futuna'), ('EH', 'Western Sahara'), ('YE', 'Yemen'), ('ZM', 'Zambia'), ('ZW', 'Zimbabwe'), ('AX', 'Aland Islands')]})&gt;</em><a class="headerlink" href="#cloudmesh_web.modules.management__.UserRegistrationForm.citizenship" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -1743,7 +1709,7 @@ csrf_time_limit = timedelta(minutes=20)</dd>
 
 <dl class="attribute">
 <dt id="cloudmesh_web.modules.management__.UserRegistrationForm.country">
-<code class="descname">country</code><em class="property"> = &lt;UnboundField(RadioSelectField, ('Country', [&lt;wtforms.validators.DataRequired object at 0x1125b2f90&gt;]), {'choices': [('GB', 'United Kingdom'), ('US', 'United States'), ('DE', 'Germany'), ('AF', 'Afghanistan'), ('AL', 'Albania'), ('DZ', 'Algeria'), ('AS', 'American Samoa'), ('AD', 'Andorra'), ('AO', 'Angola'), ('AI', 'Anguilla'), ('AQ', 'Antarctica'), ('AG', 'Antigua and Barbuda'), ('AR', 'Argentina'), ('AM', 'Armenia'), ('AW', 'Aruba'), ('AU', 'Australia'), ('AT', 'Austria'), ('AZ', 'Azerbaijan'), ('BS', 'Bahamas'), ('BH', 'Bahrain'), ('BD', 'Bangladesh'), ('BB', 'Barbados'), ('BY', 'Belarus'), ('BE', 'Belgium'), ('BZ', 'Belize'), ('BJ', 'Benin'), ('BM', 'Bermuda'), ('BT', 'Bhutan'), ('BO', 'Bolivia'), ('BA', 'Bosnia and Herzegovina'), ('BW', 'Botswana'), ('BV', 'Bouvet Island'), ('BR', 'Brazil'), ('BQ', 'British Antarctic Territory'), ('IO', 'British Indian Ocean Territory'), ('VG', 'British Virgin Islands'), ('BN', 'Brunei'), ('BG', 'Bulgaria'), ('BF', 'Burkina Faso'), ('BI', 'Burundi'), ('KH', 'Cambodia'), ('CM', 'Cameroon'), ('CA', 'Canada'), ('CT', 'Canton and Enderbury Islands'), ('CV', 'Cape Verde'), ('KY', 'Cayman Islands'), ('CF', 'Central African Republic'), ('TD', 'Chad'), ('CL', 'Chile'), ('CN', 'China'), ('CX', 'Christmas Island'), ('CC', 'Cocos [Keeling] Islands'), ('CO', 'Colombia'), ('KM', 'Comoros'), ('CG', 'Congo - Brazzaville'), ('CD', 'Congo - Kinshasa'), ('CK', 'Cook Islands'), ('CR', 'Costa Rica'), ('HR', 'Croatia'), ('CU', 'Cuba'), ('CY', 'Cyprus'), ('CZ', 'Czech Republic'), ('CI', 'C\\u00f4te d\\u2019Ivoire'), ('DK', 'Denmark'), ('DJ', 'Djibouti'), ('DM', 'Dominica'), ('DO', 'Dominican Republic'), ('NQ', 'Dronning Maud Land'), ('DD', 'East Germany'), ('EC', 'Ecuador'), ('EG', 'Egypt'), ('SV', 'El Salvador'), ('GQ', 'Equatorial Guinea'), ('ER', 'Eritrea'), ('EE', 'Estonia'), ('ET', 'Ethiopia'), ('FK', 'Falkland Islands'), ('FO', 'Faroe Islands'), ('FJ', 'Fiji'), ('FI', 'Finland'), ('FR', 'France'), ('GF', 'French Guiana'), ('PF', 'French Polynesia'), ('TF', 'French Southern Territories'), ('FQ', 'French Southern and Antarctic Territories'), ('GA', 'Gabon'), ('GM', 'Gambia'), ('GE', 'Georgia'), ('DE', 'Germany'), ('GH', 'Ghana'), ('GI', 'Gibraltar'), ('GR', 'Greece'), ('GL', 'Greenland'), ('GD', 'Grenada'), ('GP', 'Guadeloupe'), ('GU', 'Guam'), ('GT', 'Guatemala'), ('GG', 'Guernsey'), ('GN', 'Guinea'), ('GW', 'Guinea-Bissau'), ('GY', 'Guyana'), ('HT', 'Haiti'), ('HM', 'Heard Island and McDonald Islands'), ('HN', 'Honduras'), ('HK', 'Hong Kong SAR China'), ('HU', 'Hungary'), ('IS', 'Iceland'), ('IN', 'India'), ('ID', 'Indonesia'), ('IR', 'Iran'), ('IQ', 'Iraq'), ('IE', 'Ireland'), ('IM', 'Isle of Man'), ('IL', 'Israel'), ('IT', 'Italy'), ('JM', 'Jamaica'), ('JP', 'Japan'), ('JE', 'Jersey'), ('JT', 'Johnston Island'), ('JO', 'Jordan'), ('KZ', 'Kazakhstan'), ('KE', 'Kenya'), ('KI', 'Kiribati'), ('KW', 'Kuwait'), ('KG', 'Kyrgyzstan'), ('LA', 'Laos'), ('LV', 'Latvia'), ('LB', 'Lebanon'), ('LS', 'Lesotho'), ('LR', 'Liberia'), ('LY', 'Libya'), ('LI', 'Liechtenstein'), ('LT', 'Lithuania'), ('LU', 'Luxembourg'), ('MO', 'Macau SAR China'), ('MK', 'Macedonia'), ('MG', 'Madagascar'), ('MW', 'Malawi'), ('MY', 'Malaysia'), ('MV', 'Maldives'), ('ML', 'Mali'), ('MT', 'Malta'), ('MH', 'Marshall Islands'), ('MQ', 'Martinique'), ('MR', 'Mauritania'), ('MU', 'Mauritius'), ('YT', 'Mayotte'), ('FX', 'Metropolitan France'), ('MX', 'Mexico'), ('FM', 'Micronesia'), ('MI', 'Midway Islands'), ('MD', 'Moldova'), ('MC', 'Monaco'), ('MN', 'Mongolia'), ('ME', 'Montenegro'), ('MS', 'Montserrat'), ('MA', 'Morocco'), ('MZ', 'Mozambique'), ('MM', 'Myanmar [Burma]'), ('NA', 'Namibia'), ('NR', 'Nauru'), ('NP', 'Nepal'), ('NL', 'Netherlands'), ('AN', 'Netherlands Antilles'), ('NT', 'Neutral Zone'), ('NC', 'New Caledonia'), ('NZ', 'New Zealand'), ('NI', 'Nicaragua'), ('NE', 'Niger'), ('NG', 'Nigeria'), ('NU', 'Niue'), ('NF', 'Norfolk Island'), ('KP', 'North Korea'), ('VD', 'North Vietnam'), ('MP', 'Northern Mariana Islands'), ('NO', 'Norway'), ('OM', 'Oman'), ('PC', 'Pacific Islands Trust Territory'), ('PK', 'Pakistan'), ('PW', 'Palau'), ('PS', 'Palestinian Territories'), ('PA', 'Panama'), ('PZ', 'Panama Canal Zone'), ('PG', 'Papua New Guinea'), ('PY', 'Paraguay'), ('YD', &quot;People's Democratic Republic of Yemen&quot;), ('PE', 'Peru'), ('PH', 'Philippines'), ('PN', 'Pitcairn Islands'), ('PL', 'Poland'), ('PT', 'Portugal'), ('PR', 'Puerto Rico'), ('QA', 'Qatar'), ('RO', 'Romania'), ('RU', 'Russia'), ('RW', 'Rwanda'), ('RE', 'R\\u00e9union'), ('BL', 'Saint Barth\\u00e9lemy'), ('SH', 'Saint Helena'), ('KN', 'Saint Kitts and Nevis'), ('LC', 'Saint Lucia'), ('MF', 'Saint Martin'), ('PM', 'Saint Pierre and Miquelon'), ('VC', 'Saint Vincent and the Grenadines'), ('WS', 'Samoa'), ('SM', 'San Marino'), ('SA', 'Saudi Arabia'), ('SN', 'Senegal'), ('RS', 'Serbia'), ('CS', 'Serbia and Montenegro'), ('SC', 'Seychelles'), ('SL', 'Sierra Leone'), ('SG', 'Singapore'), ('SK', 'Slovakia'), ('SI', 'Slovenia'), ('SB', 'Solomon Islands'), ('SO', 'Somalia'), ('ZA', 'South Africa'), ('GS', 'South Georgia and the South Sandwich Islands'), ('KR', 'South Korea'), ('ES', 'Spain'), ('LK', 'Sri Lanka'), ('SD', 'Sudan'), ('SR', 'Suriname'), ('SJ', 'Svalbard and Jan Mayen'), ('SZ', 'Swaziland'), ('SE', 'Sweden'), ('CH', 'Switzerland'), ('SY', 'Syria'), ('ST', 'Sao Tom and Principe'), ('TW', 'Taiwan'), ('TJ', 'Tajikistan'), ('TZ', 'Tanzania'), ('TH', 'Thailand'), ('TL', 'Timor-Leste'), ('TG', 'Togo'), ('TK', 'Tokelau'), ('TO', 'Tonga'), ('TT', 'Trinidad and Tobago'), ('TN', 'Tunisia'), ('TR', 'Turkey'), ('TM', 'Turkmenistan'), ('TC', 'Turks and Caicos Islands'), ('TV', 'Tuvalu'), ('UM', 'U.S. Minor Outlying Islands'), ('PU', 'U.S. Miscellaneous Pacific Islands'), ('VI', 'U.S. Virgin Islands'), ('UG', 'Uganda'), ('UA', 'Ukraine'), ('SU', 'Union of Soviet Socialist Republics'), ('AE', 'United Arab Emirates'), ('GB', 'United Kingdom'), ('US', 'United States'), ('ZZ', 'Unknown or Invalid Region'), ('UY', 'Uruguay'), ('UZ', 'Uzbekistan'), ('VU', 'Vanuatu'), ('VA', 'Vatican City'), ('VE', 'Venezuela'), ('VN', 'Vietnam'), ('WK', 'Wake Island'), ('WF', 'Wallis and Futuna'), ('EH', 'Western Sahara'), ('YE', 'Yemen'), ('ZM', 'Zambia'), ('ZW', 'Zimbabwe'), ('AX', 'Aland Islands')]})&gt;</em><a class="headerlink" href="#cloudmesh_web.modules.management__.UserRegistrationForm.country" title="Permalink to this definition">¶</a></dt>
+<code class="descname">country</code><em class="property"> = &lt;UnboundField(RadioSelectField, ('Country', [&lt;wtforms.validators.DataRequired object at 0x111c08790&gt;]), {'choices': [('GB', 'United Kingdom'), ('US', 'United States'), ('DE', 'Germany'), ('AF', 'Afghanistan'), ('AL', 'Albania'), ('DZ', 'Algeria'), ('AS', 'American Samoa'), ('AD', 'Andorra'), ('AO', 'Angola'), ('AI', 'Anguilla'), ('AQ', 'Antarctica'), ('AG', 'Antigua and Barbuda'), ('AR', 'Argentina'), ('AM', 'Armenia'), ('AW', 'Aruba'), ('AU', 'Australia'), ('AT', 'Austria'), ('AZ', 'Azerbaijan'), ('BS', 'Bahamas'), ('BH', 'Bahrain'), ('BD', 'Bangladesh'), ('BB', 'Barbados'), ('BY', 'Belarus'), ('BE', 'Belgium'), ('BZ', 'Belize'), ('BJ', 'Benin'), ('BM', 'Bermuda'), ('BT', 'Bhutan'), ('BO', 'Bolivia'), ('BA', 'Bosnia and Herzegovina'), ('BW', 'Botswana'), ('BV', 'Bouvet Island'), ('BR', 'Brazil'), ('BQ', 'British Antarctic Territory'), ('IO', 'British Indian Ocean Territory'), ('VG', 'British Virgin Islands'), ('BN', 'Brunei'), ('BG', 'Bulgaria'), ('BF', 'Burkina Faso'), ('BI', 'Burundi'), ('KH', 'Cambodia'), ('CM', 'Cameroon'), ('CA', 'Canada'), ('CT', 'Canton and Enderbury Islands'), ('CV', 'Cape Verde'), ('KY', 'Cayman Islands'), ('CF', 'Central African Republic'), ('TD', 'Chad'), ('CL', 'Chile'), ('CN', 'China'), ('CX', 'Christmas Island'), ('CC', 'Cocos [Keeling] Islands'), ('CO', 'Colombia'), ('KM', 'Comoros'), ('CG', 'Congo - Brazzaville'), ('CD', 'Congo - Kinshasa'), ('CK', 'Cook Islands'), ('CR', 'Costa Rica'), ('HR', 'Croatia'), ('CU', 'Cuba'), ('CY', 'Cyprus'), ('CZ', 'Czech Republic'), ('CI', 'C\\u00f4te d\\u2019Ivoire'), ('DK', 'Denmark'), ('DJ', 'Djibouti'), ('DM', 'Dominica'), ('DO', 'Dominican Republic'), ('NQ', 'Dronning Maud Land'), ('DD', 'East Germany'), ('EC', 'Ecuador'), ('EG', 'Egypt'), ('SV', 'El Salvador'), ('GQ', 'Equatorial Guinea'), ('ER', 'Eritrea'), ('EE', 'Estonia'), ('ET', 'Ethiopia'), ('FK', 'Falkland Islands'), ('FO', 'Faroe Islands'), ('FJ', 'Fiji'), ('FI', 'Finland'), ('FR', 'France'), ('GF', 'French Guiana'), ('PF', 'French Polynesia'), ('TF', 'French Southern Territories'), ('FQ', 'French Southern and Antarctic Territories'), ('GA', 'Gabon'), ('GM', 'Gambia'), ('GE', 'Georgia'), ('DE', 'Germany'), ('GH', 'Ghana'), ('GI', 'Gibraltar'), ('GR', 'Greece'), ('GL', 'Greenland'), ('GD', 'Grenada'), ('GP', 'Guadeloupe'), ('GU', 'Guam'), ('GT', 'Guatemala'), ('GG', 'Guernsey'), ('GN', 'Guinea'), ('GW', 'Guinea-Bissau'), ('GY', 'Guyana'), ('HT', 'Haiti'), ('HM', 'Heard Island and McDonald Islands'), ('HN', 'Honduras'), ('HK', 'Hong Kong SAR China'), ('HU', 'Hungary'), ('IS', 'Iceland'), ('IN', 'India'), ('ID', 'Indonesia'), ('IR', 'Iran'), ('IQ', 'Iraq'), ('IE', 'Ireland'), ('IM', 'Isle of Man'), ('IL', 'Israel'), ('IT', 'Italy'), ('JM', 'Jamaica'), ('JP', 'Japan'), ('JE', 'Jersey'), ('JT', 'Johnston Island'), ('JO', 'Jordan'), ('KZ', 'Kazakhstan'), ('KE', 'Kenya'), ('KI', 'Kiribati'), ('KW', 'Kuwait'), ('KG', 'Kyrgyzstan'), ('LA', 'Laos'), ('LV', 'Latvia'), ('LB', 'Lebanon'), ('LS', 'Lesotho'), ('LR', 'Liberia'), ('LY', 'Libya'), ('LI', 'Liechtenstein'), ('LT', 'Lithuania'), ('LU', 'Luxembourg'), ('MO', 'Macau SAR China'), ('MK', 'Macedonia'), ('MG', 'Madagascar'), ('MW', 'Malawi'), ('MY', 'Malaysia'), ('MV', 'Maldives'), ('ML', 'Mali'), ('MT', 'Malta'), ('MH', 'Marshall Islands'), ('MQ', 'Martinique'), ('MR', 'Mauritania'), ('MU', 'Mauritius'), ('YT', 'Mayotte'), ('FX', 'Metropolitan France'), ('MX', 'Mexico'), ('FM', 'Micronesia'), ('MI', 'Midway Islands'), ('MD', 'Moldova'), ('MC', 'Monaco'), ('MN', 'Mongolia'), ('ME', 'Montenegro'), ('MS', 'Montserrat'), ('MA', 'Morocco'), ('MZ', 'Mozambique'), ('MM', 'Myanmar [Burma]'), ('NA', 'Namibia'), ('NR', 'Nauru'), ('NP', 'Nepal'), ('NL', 'Netherlands'), ('AN', 'Netherlands Antilles'), ('NT', 'Neutral Zone'), ('NC', 'New Caledonia'), ('NZ', 'New Zealand'), ('NI', 'Nicaragua'), ('NE', 'Niger'), ('NG', 'Nigeria'), ('NU', 'Niue'), ('NF', 'Norfolk Island'), ('KP', 'North Korea'), ('VD', 'North Vietnam'), ('MP', 'Northern Mariana Islands'), ('NO', 'Norway'), ('OM', 'Oman'), ('PC', 'Pacific Islands Trust Territory'), ('PK', 'Pakistan'), ('PW', 'Palau'), ('PS', 'Palestinian Territories'), ('PA', 'Panama'), ('PZ', 'Panama Canal Zone'), ('PG', 'Papua New Guinea'), ('PY', 'Paraguay'), ('YD', &quot;People's Democratic Republic of Yemen&quot;), ('PE', 'Peru'), ('PH', 'Philippines'), ('PN', 'Pitcairn Islands'), ('PL', 'Poland'), ('PT', 'Portugal'), ('PR', 'Puerto Rico'), ('QA', 'Qatar'), ('RO', 'Romania'), ('RU', 'Russia'), ('RW', 'Rwanda'), ('RE', 'R\\u00e9union'), ('BL', 'Saint Barth\\u00e9lemy'), ('SH', 'Saint Helena'), ('KN', 'Saint Kitts and Nevis'), ('LC', 'Saint Lucia'), ('MF', 'Saint Martin'), ('PM', 'Saint Pierre and Miquelon'), ('VC', 'Saint Vincent and the Grenadines'), ('WS', 'Samoa'), ('SM', 'San Marino'), ('SA', 'Saudi Arabia'), ('SN', 'Senegal'), ('RS', 'Serbia'), ('CS', 'Serbia and Montenegro'), ('SC', 'Seychelles'), ('SL', 'Sierra Leone'), ('SG', 'Singapore'), ('SK', 'Slovakia'), ('SI', 'Slovenia'), ('SB', 'Solomon Islands'), ('SO', 'Somalia'), ('ZA', 'South Africa'), ('GS', 'South Georgia and the South Sandwich Islands'), ('KR', 'South Korea'), ('ES', 'Spain'), ('LK', 'Sri Lanka'), ('SD', 'Sudan'), ('SR', 'Suriname'), ('SJ', 'Svalbard and Jan Mayen'), ('SZ', 'Swaziland'), ('SE', 'Sweden'), ('CH', 'Switzerland'), ('SY', 'Syria'), ('ST', 'Sao Tom and Principe'), ('TW', 'Taiwan'), ('TJ', 'Tajikistan'), ('TZ', 'Tanzania'), ('TH', 'Thailand'), ('TL', 'Timor-Leste'), ('TG', 'Togo'), ('TK', 'Tokelau'), ('TO', 'Tonga'), ('TT', 'Trinidad and Tobago'), ('TN', 'Tunisia'), ('TR', 'Turkey'), ('TM', 'Turkmenistan'), ('TC', 'Turks and Caicos Islands'), ('TV', 'Tuvalu'), ('UM', 'U.S. Minor Outlying Islands'), ('PU', 'U.S. Miscellaneous Pacific Islands'), ('VI', 'U.S. Virgin Islands'), ('UG', 'Uganda'), ('UA', 'Ukraine'), ('SU', 'Union of Soviet Socialist Republics'), ('AE', 'United Arab Emirates'), ('GB', 'United Kingdom'), ('US', 'United States'), ('ZZ', 'Unknown or Invalid Region'), ('UY', 'Uruguay'), ('UZ', 'Uzbekistan'), ('VU', 'Vanuatu'), ('VA', 'Vatican City'), ('VE', 'Venezuela'), ('VN', 'Vietnam'), ('WK', 'Wake Island'), ('WF', 'Wallis and Futuna'), ('EH', 'Western Sahara'), ('YE', 'Yemen'), ('ZM', 'Zambia'), ('ZW', 'Zimbabwe'), ('AX', 'Aland Islands')]})&gt;</em><a class="headerlink" href="#cloudmesh_web.modules.management__.UserRegistrationForm.country" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -1753,12 +1719,12 @@ csrf_time_limit = timedelta(minutes=20)</dd>
 
 <dl class="attribute">
 <dt id="cloudmesh_web.modules.management__.UserRegistrationForm.email">
-<code class="descname">email</code><em class="property"> = &lt;UnboundField(StringField, ('Email', [&lt;wtforms.validators.Length object at 0x1125b2b50&gt;, &lt;function validate_email_in_form at 0x1125b69b0&gt;]), {})&gt;</em><a class="headerlink" href="#cloudmesh_web.modules.management__.UserRegistrationForm.email" title="Permalink to this definition">¶</a></dt>
+<code class="descname">email</code><em class="property"> = &lt;UnboundField(StringField, ('Email', [&lt;wtforms.validators.Length object at 0x1119136d0&gt;, &lt;function validate_email_in_form at 0x111c282a8&gt;]), {})&gt;</em><a class="headerlink" href="#cloudmesh_web.modules.management__.UserRegistrationForm.email" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
 <dt id="cloudmesh_web.modules.management__.UserRegistrationForm.firstname">
-<code class="descname">firstname</code><em class="property"> = &lt;UnboundField(StringField, ('Firstname', [&lt;wtforms.validators.Length object at 0x1125b2a50&gt;]), {})&gt;</em><a class="headerlink" href="#cloudmesh_web.modules.management__.UserRegistrationForm.firstname" title="Permalink to this definition">¶</a></dt>
+<code class="descname">firstname</code><em class="property"> = &lt;UnboundField(StringField, ('Firstname', [&lt;wtforms.validators.Length object at 0x1119bce50&gt;]), {})&gt;</em><a class="headerlink" href="#cloudmesh_web.modules.management__.UserRegistrationForm.firstname" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -1768,7 +1734,7 @@ csrf_time_limit = timedelta(minutes=20)</dd>
 
 <dl class="attribute">
 <dt id="cloudmesh_web.modules.management__.UserRegistrationForm.institutionrole">
-<code class="descname">institutionrole</code><em class="property"> = &lt;UnboundField(RadioSelectField, ('Institution Role', [&lt;wtforms.validators.DataRequired object at 0x1125b2e10&gt;]), {'choices': [('Undergraduate', 'Undergraduate'), ('Graduate Masters', 'Graduate Masters'), ('Graduate PhD', 'Graduate PhD'), ('Student Other', 'Student Other'), ('Faculty', 'Faculty'), ('Staff', 'Staff'), ('Other', 'Other')]})&gt;</em><a class="headerlink" href="#cloudmesh_web.modules.management__.UserRegistrationForm.institutionrole" title="Permalink to this definition">¶</a></dt>
+<code class="descname">institutionrole</code><em class="property"> = &lt;UnboundField(RadioSelectField, ('Institution Role', [&lt;wtforms.validators.DataRequired object at 0x111c08210&gt;]), {'choices': [('Undergraduate', 'Undergraduate'), ('Graduate Masters', 'Graduate Masters'), ('Graduate PhD', 'Graduate PhD'), ('Student Other', 'Student Other'), ('Faculty', 'Faculty'), ('Staff', 'Staff'), ('Other', 'Other')]})&gt;</em><a class="headerlink" href="#cloudmesh_web.modules.management__.UserRegistrationForm.institutionrole" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -1778,7 +1744,7 @@ csrf_time_limit = timedelta(minutes=20)</dd>
 
 <dl class="attribute">
 <dt id="cloudmesh_web.modules.management__.UserRegistrationForm.lastname">
-<code class="descname">lastname</code><em class="property"> = &lt;UnboundField(StringField, ('Lastname', [&lt;wtforms.validators.Length object at 0x1125b2ad0&gt;]), {})&gt;</em><a class="headerlink" href="#cloudmesh_web.modules.management__.UserRegistrationForm.lastname" title="Permalink to this definition">¶</a></dt>
+<code class="descname">lastname</code><em class="property"> = &lt;UnboundField(StringField, ('Lastname', [&lt;wtforms.validators.Length object at 0x1119bcdd0&gt;]), {})&gt;</em><a class="headerlink" href="#cloudmesh_web.modules.management__.UserRegistrationForm.lastname" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -1788,12 +1754,12 @@ csrf_time_limit = timedelta(minutes=20)</dd>
 
 <dl class="attribute">
 <dt id="cloudmesh_web.modules.management__.UserRegistrationForm.password">
-<code class="descname">password</code><em class="property"> = &lt;UnboundField(PasswordField, ('New Password', [&lt;wtforms.validators.DataRequired object at 0x1125bc0d0&gt;, &lt;wtforms.validators.EqualTo object at 0x1125bc110&gt;]), {})&gt;</em><a class="headerlink" href="#cloudmesh_web.modules.management__.UserRegistrationForm.password" title="Permalink to this definition">¶</a></dt>
+<code class="descname">password</code><em class="property"> = &lt;UnboundField(PasswordField, ('New Password', [&lt;wtforms.validators.DataRequired object at 0x111c08f90&gt;, &lt;wtforms.validators.EqualTo object at 0x111c08350&gt;]), {})&gt;</em><a class="headerlink" href="#cloudmesh_web.modules.management__.UserRegistrationForm.password" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
 <dt id="cloudmesh_web.modules.management__.UserRegistrationForm.phone">
-<code class="descname">phone</code><em class="property"> = &lt;UnboundField(StringField, ('Phone', [&lt;wtforms.validators.Length object at 0x1125b2bd0&gt;]), {})&gt;</em><a class="headerlink" href="#cloudmesh_web.modules.management__.UserRegistrationForm.phone" title="Permalink to this definition">¶</a></dt>
+<code class="descname">phone</code><em class="property"> = &lt;UnboundField(StringField, ('Phone', [&lt;wtforms.validators.Length object at 0x111913050&gt;]), {})&gt;</em><a class="headerlink" href="#cloudmesh_web.modules.management__.UserRegistrationForm.phone" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -1803,7 +1769,7 @@ csrf_time_limit = timedelta(minutes=20)</dd>
 
 <dl class="attribute">
 <dt id="cloudmesh_web.modules.management__.UserRegistrationForm.title">
-<code class="descname">title</code><em class="property"> = &lt;UnboundField(StringField, ('Title', [&lt;wtforms.validators.Length object at 0x1125b29d0&gt;]), {})&gt;</em><a class="headerlink" href="#cloudmesh_web.modules.management__.UserRegistrationForm.title" title="Permalink to this definition">¶</a></dt>
+<code class="descname">title</code><em class="property"> = &lt;UnboundField(StringField, ('Title', [&lt;wtforms.validators.Length object at 0x1119bcf90&gt;]), {})&gt;</em><a class="headerlink" href="#cloudmesh_web.modules.management__.UserRegistrationForm.title" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -1813,7 +1779,7 @@ csrf_time_limit = timedelta(minutes=20)</dd>
 
 <dl class="attribute">
 <dt id="cloudmesh_web.modules.management__.UserRegistrationForm.username">
-<code class="descname">username</code><em class="property"> = &lt;UnboundField(StringField, ('Username', [&lt;wtforms.validators.Length object at 0x1120b7550&gt;, &lt;function validate_username_in_form at 0x1125b6a28&gt;]), {})&gt;</em><a class="headerlink" href="#cloudmesh_web.modules.management__.UserRegistrationForm.username" title="Permalink to this definition">¶</a></dt>
+<code class="descname">username</code><em class="property"> = &lt;UnboundField(StringField, ('Username', [&lt;wtforms.validators.Length object at 0x111978d90&gt;, &lt;function validate_username_in_form at 0x111c28320&gt;]), {})&gt;</em><a class="headerlink" href="#cloudmesh_web.modules.management__.UserRegistrationForm.username" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -2205,7 +2171,7 @@ csrf_time_limit = timedelta(minutes=20)</dd>
       
     </p>
     <p>
-        &copy; Copyright 2014, 2013, Gregor von Laszewski for  FutureGrid.<br/>
+        &copy; Copyright 2015, 2014, 2013, Gregor von Laszewski.<br/>
     </p>
   </div>
 </footer>

@@ -31,6 +31,7 @@
     <script type="text/javascript" src="../../../_static/js/jquery-fix.js"></script>
     <script type="text/javascript" src="../../../_static/bootstrap-3.2.0/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="../../../_static/bootstrap-sphinx.js"></script>
+    <link rel="shortcut icon" href="../../../_static/cm-logo.ico"/>
     <link rel="author" title="About these documents" href="../../../about.html" />
     <link rel="top" title="my Cloudmesh Core documentation" href="../../../index.html" />
     <link rel="up" title="Module code" href="../../index.html" />
@@ -57,7 +58,7 @@
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand" href="../../../index.html"><img src="../../../_static/fg-logo-white-24x36.png">
+        <a class="navbar-brand" href="../../../index.html"><img src="../../../_static/cm-color-logo-24.png">
           Cloudmesh</a>
         <span class="navbar-text navbar-version pull-left"><b>Core</b></span>
       </div>
@@ -194,58 +195,23 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../../../configure.html">2. Configuration with Yaml Files</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../../configure.html#initialization">2.1. Initialization</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../configure.html#cloud-activation-india-openstack">2.2. Cloud Activation - India Openstack</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../configure.html#format-of-the-cloudmesh-yaml-file">2.3. Format of the cloudmesh.yaml file</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../configure.html#configuration-file-rc-file">2.4. Configuration file (rc file)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../configure.html#adding-devstack-to-cloudmesh-yaml-tbd">2.5. Adding devstack to <code class="docutils literal"><span class="pre">cloudmesh.yaml</span></code> (TBD)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../configure.html#adding-dreamhost-to-cloudmesh-yaml">2.6. Adding dreamhost to <code class="docutils literal"><span class="pre">cloudmesh.yaml</span></code></a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../../configure.html#hp-cloud">2.6.1. HP Cloud</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../configure.html#azure">2.6.2. Azure</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../../configure.html#azure-quickstart">2.6.2.1. Azure Quickstart</a><ul>
-<li class="toctree-l5"><a class="reference internal" href="../../../configure.html#azure-account">2.6.2.1.1. Azure account</a></li>
-<li class="toctree-l5"><a class="reference internal" href="../../../configure.html#download-credentials">2.6.2.1.2. Download credentials</a></li>
-<li class="toctree-l5"><a class="reference internal" href="../../../configure.html#install-azure-cli">2.6.2.1.3. Install Azure CLI</a></li>
-<li class="toctree-l5"><a class="reference internal" href="../../../configure.html#import-credentials-via-azure-cli">2.6.2.1.4. Import Credentials via Azure CLI</a></li>
-<li class="toctree-l5"><a class="reference internal" href="../../../configure.html#download-subscription-file-publishsettings">2.6.2.1.5. Download Subscription File (.publishsettings)</a></li>
-<li class="toctree-l5"><a class="reference internal" href="../../../configure.html#place-x-509-certificate-on-cloudmesh">2.6.2.1.6. Place X.509 certificate on Cloudmesh</a></li>
-<li class="toctree-l5"><a class="reference internal" href="../../../configure.html#replace-subscription-id">2.6.2.1.7. Replace Subscription ID</a></li>
-<li class="toctree-l5"><a class="reference internal" href="../../../configure.html#test-azure-virtual-machine">2.6.2.1.8. Test Azure Virtual Machine</a></li>
-<li class="toctree-l5"><a class="reference internal" href="../../../configure.html#example-azure-cloudmesh-configuration">2.6.2.1.9. Example Azure cloudmesh configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../configure.html">2. Configuration</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../configure.html#cloudmesh-yaml">2.1. cloudmesh.yaml</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../configure.html#configuration-file-rc-file">2.2. Configuration file (rc file)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../configure.html#retrieval-of-rc-file-by-command">2.2.1. Retrieval of rc file by command</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../configure.html#retrieval-of-rc-files-by-hand">2.2.2. Retrieval of rc files by Hand</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../configure.html#location-of-rc-files">2.2.3. Location of rc files</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../configure.html#hp-cloud">2.2.3.1. HP Cloud</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../configure.html#azure">2.2.3.2. Azure</a></li>
 </ul>
 </li>
 </ul>
 </li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="../../../configure.html#amazon-web-services">2.7. Amazon Web Services</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../../configure.html#india">2.7.1. India</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../configure.html#alamo">2.7.2. Alamo</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../configure.html#a-complete-example">2.7.3. A complete example</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="../../../configure.html#cloudmesh-server-yaml">2.8. cloudmesh-server.yaml</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../../configure.html#debugging">2.8.1. Debugging</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../configure.html#web-ui">2.8.2. Web UI</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../configure.html#ldap-integration">2.8.3. LDAP Integration</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../configure.html#clusters">2.8.4. Clusters</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../configure.html#roles">2.8.5. Roles</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../configure.html#keystone-server">2.8.6. Keystone server</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../configure.html#mongo">2.8.7. Mongo</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../configure.html#complete-example">2.8.8. Complete Example</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="../../../configure.html#cloudmesh-cluster-yaml">2.9. cloudmesh_cluster.yaml</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../../configure.html#metadata">2.9.1. Metadata</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../configure.html#id1">2.9.2. Clusters</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../configure.html#a-cluster">2.9.3. A Cluster</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../configure.html#network">2.9.4. Network:</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="../../../configure.html#other-yaml-files">2.10. Other Yaml files</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../configure.html#me-sample">2.11. Me Sample</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../configure.html#ec2-credentials-this-secition-is-outdated">2.12. EC2 Credentials (THIS SECITION IS OUTDATED)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../configure.html#amazon-web-services">2.3. Amazon Web Services</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../configure.html#cloudmesh-server-yaml">2.4. cloudmesh-server.yaml</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../configure.html#cloudmesh-cluster-yaml">2.5. cloudmesh_cluster.yaml</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../configure.html#other-yaml-files">2.6. Other Yaml files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../configure.html#me-sample">2.7. Me Sample</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../doc.html">3. Documentation</a><ul>
@@ -546,7 +512,7 @@
   <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../introduction.html">Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../installation.html">1. Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../configure.html">2. Configuration with Yaml Files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../configure.html">2. Configuration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../doc.html">3. Documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../shell.html">4. Cloudmesh Shell</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../metric.html">5. Cloudmesh Metric</a></li>
@@ -756,7 +722,7 @@
 
 <span class="nd">@cobbler_module.route</span><span class="p">(</span><span class="s">&#39;/cobbler/&lt;objects&gt;&#39;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;GET&#39;</span><span class="p">])</span>
 <span class="nd">@login_required</span>
-<div class="viewcode-block" id="display_cobbler"><a class="viewcode-back" href="../../../modules/cloudmesh_web.modules.html#cloudmesh_web.modules.cobbler.display_cobbler">[docs]</a><span class="k">def</span> <span class="nf">display_cobbler</span><span class="p">(</span><span class="n">objects</span><span class="p">):</span>
+<div class="viewcode-block" id="display_cobbler"><a class="viewcode-back" href="../../../api/cloudmesh_web/cloudmesh_web.modules.html#cloudmesh_web.modules.cobbler.display_cobbler">[docs]</a><span class="k">def</span> <span class="nf">display_cobbler</span><span class="p">(</span><span class="n">objects</span><span class="p">):</span>
     <span class="n">predefined</span> <span class="o">=</span> <span class="n">cobbler_default_data</span><span class="p">[</span><span class="n">objects</span><span class="p">]</span>
     <span class="n">result</span> <span class="o">=</span> <span class="n">request_rest_api</span><span class="p">(</span><span class="s">&quot;get&quot;</span><span class="p">,</span> <span class="n">predefined</span><span class="p">[</span><span class="s">&quot;get&quot;</span><span class="p">])</span>
     <span class="n">result</span><span class="p">[</span><span class="s">&quot;data&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="s">&quot;data&quot;</span><span class="p">][</span><span class="s">&quot;name&quot;</span><span class="p">])</span>
@@ -779,7 +745,7 @@
 </div>
 <span class="nd">@cobbler_module.route</span><span class="p">(</span><span class="s">&#39;/cobbler/&lt;objects&gt;/&lt;item_name&gt;&#39;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;GET&#39;</span><span class="p">,</span> <span class="s">&#39;PUT&#39;</span><span class="p">,</span> <span class="s">&#39;POST&#39;</span><span class="p">,</span> <span class="s">&#39;DELETE&#39;</span><span class="p">])</span>
 <span class="nd">@login_required</span>
-<div class="viewcode-block" id="process_cobbler_object"><a class="viewcode-back" href="../../../modules/cloudmesh_web.modules.html#cloudmesh_web.modules.cobbler.process_cobbler_object">[docs]</a><span class="k">def</span> <span class="nf">process_cobbler_object</span><span class="p">(</span><span class="n">objects</span><span class="p">,</span> <span class="n">item_name</span><span class="p">):</span>
+<div class="viewcode-block" id="process_cobbler_object"><a class="viewcode-back" href="../../../api/cloudmesh_web/cloudmesh_web.modules.html#cloudmesh_web.modules.cobbler.process_cobbler_object">[docs]</a><span class="k">def</span> <span class="nf">process_cobbler_object</span><span class="p">(</span><span class="n">objects</span><span class="p">,</span> <span class="n">item_name</span><span class="p">):</span>
     <span class="k">if</span> <span class="n">objects</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s">&quot;distros&quot;</span><span class="p">,</span> <span class="s">&quot;profiles&quot;</span><span class="p">,</span> <span class="s">&quot;systems&quot;</span><span class="p">,</span> <span class="s">&quot;kickstarts&quot;</span><span class="p">]:</span>
         <span class="k">return</span>
     <span class="n">predefined</span> <span class="o">=</span> <span class="n">cobbler_default_data</span><span class="p">[</span><span class="n">objects</span><span class="p">]</span>
@@ -824,7 +790,7 @@
 </div>
 <span class="nd">@cobbler_module.route</span><span class="p">(</span><span class="s">&#39;/cobbler/&lt;objects&gt;/&lt;item_name&gt;/&lt;if_name&gt;&#39;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;PUT&#39;</span><span class="p">,</span> <span class="s">&#39;POST&#39;</span><span class="p">,</span> <span class="s">&#39;DELETE&#39;</span><span class="p">])</span>
 <span class="nd">@login_required</span>
-<div class="viewcode-block" id="process_cobbler_object_collection"><a class="viewcode-back" href="../../../modules/cloudmesh_web.modules.html#cloudmesh_web.modules.cobbler.process_cobbler_object_collection">[docs]</a><span class="k">def</span> <span class="nf">process_cobbler_object_collection</span><span class="p">(</span><span class="n">objects</span><span class="p">,</span> <span class="n">item_name</span><span class="p">,</span> <span class="n">if_name</span><span class="p">):</span>
+<div class="viewcode-block" id="process_cobbler_object_collection"><a class="viewcode-back" href="../../../api/cloudmesh_web/cloudmesh_web.modules.html#cloudmesh_web.modules.cobbler.process_cobbler_object_collection">[docs]</a><span class="k">def</span> <span class="nf">process_cobbler_object_collection</span><span class="p">(</span><span class="n">objects</span><span class="p">,</span> <span class="n">item_name</span><span class="p">,</span> <span class="n">if_name</span><span class="p">):</span>
     <span class="k">if</span> <span class="n">objects</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s">&quot;systems&quot;</span><span class="p">,</span> <span class="p">]:</span>
         <span class="k">return</span>
     <span class="n">predefined</span> <span class="o">=</span> <span class="n">cobbler_default_data</span><span class="p">[</span><span class="n">objects</span><span class="p">]</span>
@@ -842,7 +808,7 @@
     <span class="k">return</span> <span class="n">Response</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">result</span><span class="p">),</span> <span class="n">status</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">mimetype</span><span class="o">=</span><span class="s">&quot;application/json&quot;</span><span class="p">)</span>
 
 </div>
-<div class="viewcode-block" id="get_all_baremetal_request_users"><a class="viewcode-back" href="../../../modules/cloudmesh_web.modules.html#cloudmesh_web.modules.cobbler.get_all_baremetal_request_users">[docs]</a><span class="k">def</span> <span class="nf">get_all_baremetal_request_users</span><span class="p">():</span>
+<div class="viewcode-block" id="get_all_baremetal_request_users"><a class="viewcode-back" href="../../../api/cloudmesh_web/cloudmesh_web.modules.html#cloudmesh_web.modules.cobbler.get_all_baremetal_request_users">[docs]</a><span class="k">def</span> <span class="nf">get_all_baremetal_request_users</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">      ONLY for test</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -851,7 +817,7 @@
 </div>
 <span class="nd">@cobbler_module.route</span><span class="p">(</span><span class="s">&#39;/provision/baremetal/users&#39;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;GET&#39;</span><span class="p">,</span> <span class="s">&#39;PUT&#39;</span><span class="p">])</span>
 <span class="nd">@login_required</span>
-<div class="viewcode-block" id="provision_baremetal_allocation"><a class="viewcode-back" href="../../../modules/cloudmesh_web.modules.html#cloudmesh_web.modules.cobbler.provision_baremetal_allocation">[docs]</a><span class="k">def</span> <span class="nf">provision_baremetal_allocation</span><span class="p">():</span>
+<div class="viewcode-block" id="provision_baremetal_allocation"><a class="viewcode-back" href="../../../api/cloudmesh_web/cloudmesh_web.modules.html#cloudmesh_web.modules.cobbler.provision_baremetal_allocation">[docs]</a><span class="k">def</span> <span class="nf">provision_baremetal_allocation</span><span class="p">():</span>
     <span class="n">bmdb</span> <span class="o">=</span> <span class="n">BaremetalDB</span><span class="p">()</span>
     <span class="n">method</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
     <span class="k">if</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s">&#39;get&#39;</span><span class="p">]:</span>
@@ -871,7 +837,7 @@
 </div>
 <span class="nd">@cobbler_module.route</span><span class="p">(</span><span class="s">&#39;/provision/baremetal/computers&#39;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;GET&#39;</span><span class="p">,</span> <span class="s">&#39;PUT&#39;</span><span class="p">])</span>
 <span class="nd">@login_required</span>
-<div class="viewcode-block" id="provision_baremetal_withdraw"><a class="viewcode-back" href="../../../modules/cloudmesh_web.modules.html#cloudmesh_web.modules.cobbler.provision_baremetal_withdraw">[docs]</a><span class="k">def</span> <span class="nf">provision_baremetal_withdraw</span><span class="p">():</span>
+<div class="viewcode-block" id="provision_baremetal_withdraw"><a class="viewcode-back" href="../../../api/cloudmesh_web/cloudmesh_web.modules.html#cloudmesh_web.modules.cobbler.provision_baremetal_withdraw">[docs]</a><span class="k">def</span> <span class="nf">provision_baremetal_withdraw</span><span class="p">():</span>
     <span class="n">bmdb</span> <span class="o">=</span> <span class="n">BaremetalDB</span><span class="p">()</span>
     <span class="n">method</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
     <span class="k">if</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s">&#39;get&#39;</span><span class="p">]:</span>
@@ -896,7 +862,7 @@
 </div>
 <span class="nd">@cobbler_module.route</span><span class="p">(</span><span class="s">&#39;/baremetal/user/request&#39;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;GET&#39;</span><span class="p">,</span> <span class="s">&#39;PUT&#39;</span><span class="p">])</span>
 <span class="nd">@login_required</span>
-<div class="viewcode-block" id="baremetal_user_requests"><a class="viewcode-back" href="../../../modules/cloudmesh_web.modules.html#cloudmesh_web.modules.cobbler.baremetal_user_requests">[docs]</a><span class="k">def</span> <span class="nf">baremetal_user_requests</span><span class="p">():</span>
+<div class="viewcode-block" id="baremetal_user_requests"><a class="viewcode-back" href="../../../api/cloudmesh_web/cloudmesh_web.modules.html#cloudmesh_web.modules.cobbler.baremetal_user_requests">[docs]</a><span class="k">def</span> <span class="nf">baremetal_user_requests</span><span class="p">():</span>
     <span class="n">bmdb</span> <span class="o">=</span> <span class="n">BaremetalDB</span><span class="p">()</span>
     <span class="n">method</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
     <span class="k">if</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s">&#39;get&#39;</span><span class="p">]:</span>
@@ -919,7 +885,7 @@
         <span class="k">return</span> <span class="n">Response</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">({</span><span class="s">&quot;result&quot;</span><span class="p">:</span> <span class="n">result</span><span class="p">}),</span> <span class="n">status</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">mimetype</span><span class="o">=</span><span class="s">&quot;application/json&quot;</span><span class="p">)</span>
 
 </div>
-<div class="viewcode-block" id="append_select_data"><a class="viewcode-back" href="../../../modules/cloudmesh_web.modules.html#cloudmesh_web.modules.cobbler.append_select_data">[docs]</a><span class="k">def</span> <span class="nf">append_select_data</span><span class="p">(</span><span class="n">objects</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+<div class="viewcode-block" id="append_select_data"><a class="viewcode-back" href="../../../api/cloudmesh_web/cloudmesh_web.modules.html#cloudmesh_web.modules.cobbler.append_select_data">[docs]</a><span class="k">def</span> <span class="nf">append_select_data</span><span class="p">(</span><span class="n">objects</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
     <span class="n">predefined</span> <span class="o">=</span> <span class="n">cobbler_default_data</span><span class="p">[</span><span class="n">objects</span><span class="p">]</span>
     <span class="n">select_data</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">predefined</span><span class="p">[</span><span class="s">&quot;select_data&quot;</span><span class="p">]:</span>
@@ -929,7 +895,7 @@
         <span class="n">one_data</span><span class="p">[</span><span class="s">&quot;data&quot;</span><span class="p">][</span><span class="s">&quot;select&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">select_data</span>
 
 </div>
-<div class="viewcode-block" id="get_add_data_dict"><a class="viewcode-back" href="../../../modules/cloudmesh_web.modules.html#cloudmesh_web.modules.cobbler.get_add_data_dict">[docs]</a><span class="k">def</span> <span class="nf">get_add_data_dict</span><span class="p">(</span><span class="n">objects</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+<div class="viewcode-block" id="get_add_data_dict"><a class="viewcode-back" href="../../../api/cloudmesh_web/cloudmesh_web.modules.html#cloudmesh_web.modules.cobbler.get_add_data_dict">[docs]</a><span class="k">def</span> <span class="nf">get_add_data_dict</span><span class="p">(</span><span class="n">objects</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
     <span class="n">predefined</span> <span class="o">=</span> <span class="n">cobbler_default_data</span><span class="p">[</span><span class="n">objects</span><span class="p">]</span>
     <span class="n">add_data</span> <span class="o">=</span> <span class="p">{</span><span class="s">&quot;data&quot;</span><span class="p">:</span> <span class="p">{}}</span>
     <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">predefined</span><span class="p">[</span><span class="s">&quot;process_vars&quot;</span><span class="p">][</span><span class="s">&quot;add&quot;</span><span class="p">]:</span>
@@ -946,7 +912,7 @@
     <span class="k">return</span> <span class="n">add_data</span>
 
 </div>
-<div class="viewcode-block" id="get_server_url"><a class="viewcode-back" href="../../../modules/cloudmesh_web.modules.html#cloudmesh_web.modules.cobbler.get_server_url">[docs]</a><span class="k">def</span> <span class="nf">get_server_url</span><span class="p">():</span>
+<div class="viewcode-block" id="get_server_url"><a class="viewcode-back" href="../../../api/cloudmesh_web/cloudmesh_web.modules.html#cloudmesh_web.modules.cobbler.get_server_url">[docs]</a><span class="k">def</span> <span class="nf">get_server_url</span><span class="p">():</span>
     <span class="c"># ONLY for test</span>
     <span class="c"># MUST changed to read info from yml file before commit</span>
     <span class="n">server_config</span> <span class="o">=</span> <span class="n">cm_config_server</span><span class="p">()</span>
@@ -956,7 +922,7 @@
     <span class="k">return</span> <span class="s">&quot;{0}://{1}:{2}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">prot</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">port</span><span class="p">)</span>
 
 </div>
-<div class="viewcode-block" id="request_rest_api"><a class="viewcode-back" href="../../../modules/cloudmesh_web.modules.html#cloudmesh_web.modules.cobbler.request_rest_api">[docs]</a><span class="k">def</span> <span class="nf">request_rest_api</span><span class="p">(</span><span class="n">method</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<div class="viewcode-block" id="request_rest_api"><a class="viewcode-back" href="../../../api/cloudmesh_web/cloudmesh_web.modules.html#cloudmesh_web.modules.cobbler.request_rest_api">[docs]</a><span class="k">def</span> <span class="nf">request_rest_api</span><span class="p">(</span><span class="n">method</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">      method = [get, post, put, delete]</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -987,7 +953,7 @@
       
     </p>
     <p>
-        &copy; Copyright 2014, 2013, Gregor von Laszewski for  FutureGrid.<br/>
+        &copy; Copyright 2015, 2014, 2013, Gregor von Laszewski.<br/>
     </p>
   </div>
 </footer>

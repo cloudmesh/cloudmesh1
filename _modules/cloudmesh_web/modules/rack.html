@@ -31,6 +31,7 @@
     <script type="text/javascript" src="../../../_static/js/jquery-fix.js"></script>
     <script type="text/javascript" src="../../../_static/bootstrap-3.2.0/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="../../../_static/bootstrap-sphinx.js"></script>
+    <link rel="shortcut icon" href="../../../_static/cm-logo.ico"/>
     <link rel="author" title="About these documents" href="../../../about.html" />
     <link rel="top" title="my Cloudmesh Core documentation" href="../../../index.html" />
     <link rel="up" title="Module code" href="../../index.html" />
@@ -57,7 +58,7 @@
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand" href="../../../index.html"><img src="../../../_static/fg-logo-white-24x36.png">
+        <a class="navbar-brand" href="../../../index.html"><img src="../../../_static/cm-color-logo-24.png">
           Cloudmesh</a>
         <span class="navbar-text navbar-version pull-left"><b>Core</b></span>
       </div>
@@ -194,58 +195,23 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../../../configure.html">2. Configuration with Yaml Files</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../../configure.html#initialization">2.1. Initialization</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../configure.html#cloud-activation-india-openstack">2.2. Cloud Activation - India Openstack</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../configure.html#format-of-the-cloudmesh-yaml-file">2.3. Format of the cloudmesh.yaml file</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../configure.html#configuration-file-rc-file">2.4. Configuration file (rc file)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../configure.html#adding-devstack-to-cloudmesh-yaml-tbd">2.5. Adding devstack to <code class="docutils literal"><span class="pre">cloudmesh.yaml</span></code> (TBD)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../configure.html#adding-dreamhost-to-cloudmesh-yaml">2.6. Adding dreamhost to <code class="docutils literal"><span class="pre">cloudmesh.yaml</span></code></a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../../configure.html#hp-cloud">2.6.1. HP Cloud</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../configure.html#azure">2.6.2. Azure</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../../configure.html#azure-quickstart">2.6.2.1. Azure Quickstart</a><ul>
-<li class="toctree-l5"><a class="reference internal" href="../../../configure.html#azure-account">2.6.2.1.1. Azure account</a></li>
-<li class="toctree-l5"><a class="reference internal" href="../../../configure.html#download-credentials">2.6.2.1.2. Download credentials</a></li>
-<li class="toctree-l5"><a class="reference internal" href="../../../configure.html#install-azure-cli">2.6.2.1.3. Install Azure CLI</a></li>
-<li class="toctree-l5"><a class="reference internal" href="../../../configure.html#import-credentials-via-azure-cli">2.6.2.1.4. Import Credentials via Azure CLI</a></li>
-<li class="toctree-l5"><a class="reference internal" href="../../../configure.html#download-subscription-file-publishsettings">2.6.2.1.5. Download Subscription File (.publishsettings)</a></li>
-<li class="toctree-l5"><a class="reference internal" href="../../../configure.html#place-x-509-certificate-on-cloudmesh">2.6.2.1.6. Place X.509 certificate on Cloudmesh</a></li>
-<li class="toctree-l5"><a class="reference internal" href="../../../configure.html#replace-subscription-id">2.6.2.1.7. Replace Subscription ID</a></li>
-<li class="toctree-l5"><a class="reference internal" href="../../../configure.html#test-azure-virtual-machine">2.6.2.1.8. Test Azure Virtual Machine</a></li>
-<li class="toctree-l5"><a class="reference internal" href="../../../configure.html#example-azure-cloudmesh-configuration">2.6.2.1.9. Example Azure cloudmesh configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../configure.html">2. Configuration</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../configure.html#cloudmesh-yaml">2.1. cloudmesh.yaml</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../configure.html#configuration-file-rc-file">2.2. Configuration file (rc file)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../configure.html#retrieval-of-rc-file-by-command">2.2.1. Retrieval of rc file by command</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../configure.html#retrieval-of-rc-files-by-hand">2.2.2. Retrieval of rc files by Hand</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../configure.html#location-of-rc-files">2.2.3. Location of rc files</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../configure.html#hp-cloud">2.2.3.1. HP Cloud</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../configure.html#azure">2.2.3.2. Azure</a></li>
 </ul>
 </li>
 </ul>
 </li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="../../../configure.html#amazon-web-services">2.7. Amazon Web Services</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../../configure.html#india">2.7.1. India</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../configure.html#alamo">2.7.2. Alamo</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../configure.html#a-complete-example">2.7.3. A complete example</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="../../../configure.html#cloudmesh-server-yaml">2.8. cloudmesh-server.yaml</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../../configure.html#debugging">2.8.1. Debugging</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../configure.html#web-ui">2.8.2. Web UI</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../configure.html#ldap-integration">2.8.3. LDAP Integration</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../configure.html#clusters">2.8.4. Clusters</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../configure.html#roles">2.8.5. Roles</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../configure.html#keystone-server">2.8.6. Keystone server</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../configure.html#mongo">2.8.7. Mongo</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../configure.html#complete-example">2.8.8. Complete Example</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="../../../configure.html#cloudmesh-cluster-yaml">2.9. cloudmesh_cluster.yaml</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../../configure.html#metadata">2.9.1. Metadata</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../configure.html#id1">2.9.2. Clusters</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../configure.html#a-cluster">2.9.3. A Cluster</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../configure.html#network">2.9.4. Network:</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="../../../configure.html#other-yaml-files">2.10. Other Yaml files</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../configure.html#me-sample">2.11. Me Sample</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../configure.html#ec2-credentials-this-secition-is-outdated">2.12. EC2 Credentials (THIS SECITION IS OUTDATED)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../configure.html#amazon-web-services">2.3. Amazon Web Services</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../configure.html#cloudmesh-server-yaml">2.4. cloudmesh-server.yaml</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../configure.html#cloudmesh-cluster-yaml">2.5. cloudmesh_cluster.yaml</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../configure.html#other-yaml-files">2.6. Other Yaml files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../configure.html#me-sample">2.7. Me Sample</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../doc.html">3. Documentation</a><ul>
@@ -546,7 +512,7 @@
   <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../introduction.html">Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../installation.html">1. Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../configure.html">2. Configuration with Yaml Files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../configure.html">2. Configuration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../doc.html">3. Documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../shell.html">4. Cloudmesh Shell</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../metric.html">5. Cloudmesh Metric</a></li>
@@ -601,7 +567,7 @@
 <span class="c">#</span>
 
 
-<div class="viewcode-block" id="RackForm"><a class="viewcode-back" href="../../../modules/cloudmesh_web.modules.html#cloudmesh_web.modules.rack.RackForm">[docs]</a><span class="k">class</span> <span class="nc">RackForm</span><span class="p">(</span><span class="n">Form</span><span class="p">):</span>
+<div class="viewcode-block" id="RackForm"><a class="viewcode-back" href="../../../api/cloudmesh_web/cloudmesh_web.modules.html#cloudmesh_web.modules.rack.RackForm">[docs]</a><span class="k">class</span> <span class="nc">RackForm</span><span class="p">(</span><span class="n">Form</span><span class="p">):</span>
     <span class="c"># MUST create an unique selector for each different service</span>
     <span class="n">service_rack</span> <span class="o">=</span> <span class="n">SelectField</span><span class="p">()</span>
     <span class="n">temperature_rack</span> <span class="o">=</span> <span class="n">SelectField</span><span class="p">()</span>
@@ -635,7 +601,7 @@
     <span class="c"># a dict that holds all selector</span>
     <span class="n">selector_dict</span> <span class="o">=</span> <span class="p">{}</span>
 
-<div class="viewcode-block" id="RackForm.initForm"><a class="viewcode-back" href="../../../modules/cloudmesh_web.modules.html#cloudmesh_web.modules.rack.RackForm.initForm">[docs]</a>    <span class="k">def</span> <span class="nf">initForm</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="RackForm.initForm"><a class="viewcode-back" href="../../../api/cloudmesh_web/cloudmesh_web.modules.html#cloudmesh_web.modules.rack.RackForm.initForm">[docs]</a>    <span class="k">def</span> <span class="nf">initForm</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">for</span> <span class="n">service</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">all_services_list</span><span class="p">:</span>
             <span class="n">service_dict</span> <span class="o">=</span> <span class="p">{}</span>
             <span class="n">service_dict</span><span class="p">[</span><span class="s">&quot;name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">service</span>
@@ -649,13 +615,13 @@
             <span class="n">service_dict</span><span class="p">[</span><span class="s">&quot;select&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">choices</span> <span class="o">=</span> <span class="n">rack_list</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">selector_dict</span><span class="p">[</span><span class="n">service</span><span class="p">]</span> <span class="o">=</span> <span class="n">service_dict</span>
 </div>
-<div class="viewcode-block" id="RackForm.validate_on_submit"><a class="viewcode-back" href="../../../modules/cloudmesh_web.modules.html#cloudmesh_web.modules.rack.RackForm.validate_on_submit">[docs]</a>    <span class="k">def</span> <span class="nf">validate_on_submit</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="RackForm.validate_on_submit"><a class="viewcode-back" href="../../../api/cloudmesh_web/cloudmesh_web.modules.html#cloudmesh_web.modules.rack.RackForm.validate_on_submit">[docs]</a>    <span class="k">def</span> <span class="nf">validate_on_submit</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">True</span>
 
 </div></div>
 <span class="nd">@rack_module.route</span><span class="p">(</span><span class="s">&#39;/inventory/rack&#39;</span><span class="p">)</span>
 <span class="nd">@login_required</span>
-<div class="viewcode-block" id="display_rack_home"><a class="viewcode-back" href="../../../modules/cloudmesh_web.modules.html#cloudmesh_web.modules.rack.display_rack_home">[docs]</a><span class="k">def</span> <span class="nf">display_rack_home</span><span class="p">():</span>
+<div class="viewcode-block" id="display_rack_home"><a class="viewcode-back" href="../../../api/cloudmesh_web/cloudmesh_web.modules.html#cloudmesh_web.modules.rack.display_rack_home">[docs]</a><span class="k">def</span> <span class="nf">display_rack_home</span><span class="p">():</span>
     <span class="n">rack_form</span> <span class="o">=</span> <span class="n">RackForm</span><span class="p">()</span>
     <span class="k">if</span> <span class="n">rack_form</span><span class="o">.</span><span class="n">validate_on_submit</span><span class="p">():</span>
         <span class="n">rack_form</span><span class="o">.</span><span class="n">initForm</span><span class="p">()</span>
@@ -664,7 +630,7 @@
 </div>
 <span class="nd">@rack_module.route</span><span class="p">(</span><span class="s">&#39;/inventory/rack/mapcontainer&#39;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;POST&#39;</span><span class="p">])</span>
 <span class="nd">@login_required</span>
-<div class="viewcode-block" id="display_rack_map_container"><a class="viewcode-back" href="../../../modules/cloudmesh_web.modules.html#cloudmesh_web.modules.rack.display_rack_map_container">[docs]</a><span class="k">def</span> <span class="nf">display_rack_map_container</span><span class="p">():</span>
+<div class="viewcode-block" id="display_rack_map_container"><a class="viewcode-back" href="../../../api/cloudmesh_web/cloudmesh_web.modules.html#cloudmesh_web.modules.rack.display_rack_map_container">[docs]</a><span class="k">def</span> <span class="nf">display_rack_map_container</span><span class="p">():</span>
     <span class="c"># rack denote the rack that user selected</span>
     <span class="c"># service denote the service user selected on the specific rack</span>
     <span class="n">rack</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s">&#39;select_rack&#39;</span><span class="p">]</span>
@@ -686,7 +652,7 @@
 </div>
 <span class="nd">@rack_module.route</span><span class="p">(</span><span class="s">&#39;/inventory/rack/genmap&#39;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;GET&#39;</span><span class="p">,</span> <span class="s">&#39;POST&#39;</span><span class="p">])</span>
 <span class="nd">@login_required</span>
-<div class="viewcode-block" id="gen_rack_map"><a class="viewcode-back" href="../../../modules/cloudmesh_web.modules.html#cloudmesh_web.modules.rack.gen_rack_map">[docs]</a><span class="k">def</span> <span class="nf">gen_rack_map</span><span class="p">():</span>
+<div class="viewcode-block" id="gen_rack_map"><a class="viewcode-back" href="../../../api/cloudmesh_web/cloudmesh_web.modules.html#cloudmesh_web.modules.rack.gen_rack_map">[docs]</a><span class="k">def</span> <span class="nf">gen_rack_map</span><span class="p">():</span>
     <span class="n">service</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&quot;service&quot;</span><span class="p">)</span>
     <span class="n">rack</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&quot;rack&quot;</span><span class="p">)</span>
     <span class="c"># double check to make sure rack can provide the specific service</span>
@@ -709,7 +675,7 @@
 </div>
 <span class="nd">@rack_module.route</span><span class="p">(</span><span class="s">&#39;/inventory/rack/refreshmap&#39;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;GET&#39;</span><span class="p">,</span> <span class="s">&#39;POST&#39;</span><span class="p">])</span>
 <span class="nd">@login_required</span>
-<div class="viewcode-block" id="refresh_rack_map"><a class="viewcode-back" href="../../../modules/cloudmesh_web.modules.html#cloudmesh_web.modules.rack.refresh_rack_map">[docs]</a><span class="k">def</span> <span class="nf">refresh_rack_map</span><span class="p">():</span>
+<div class="viewcode-block" id="refresh_rack_map"><a class="viewcode-back" href="../../../api/cloudmesh_web/cloudmesh_web.modules.html#cloudmesh_web.modules.rack.refresh_rack_map">[docs]</a><span class="k">def</span> <span class="nf">refresh_rack_map</span><span class="p">():</span>
     <span class="n">service</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&quot;service&quot;</span><span class="p">)</span>
     <span class="n">rack</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&quot;rack&quot;</span><span class="p">)</span>
     <span class="c"># double check to make sure rack can provide the specific service</span>
@@ -737,7 +703,7 @@
 </div>
 <span class="nd">@rack_module.route</span><span class="p">(</span><span class="s">&#39;/inventory/rack/mapprogress&#39;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;GET&#39;</span><span class="p">,</span> <span class="s">&#39;POST&#39;</span><span class="p">])</span>
 <span class="nd">@login_required</span>
-<div class="viewcode-block" id="rack_map_progress_status"><a class="viewcode-back" href="../../../modules/cloudmesh_web.modules.html#cloudmesh_web.modules.rack.rack_map_progress_status">[docs]</a><span class="k">def</span> <span class="nf">rack_map_progress_status</span><span class="p">():</span>
+<div class="viewcode-block" id="rack_map_progress_status"><a class="viewcode-back" href="../../../api/cloudmesh_web/cloudmesh_web.modules.html#cloudmesh_web.modules.rack.rack_map_progress_status">[docs]</a><span class="k">def</span> <span class="nf">rack_map_progress_status</span><span class="p">():</span>
     <span class="n">service</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&quot;service&quot;</span><span class="p">)</span>
     <span class="n">result</span> <span class="o">=</span> <span class="p">{</span><span class="s">&quot;text&quot;</span><span class="p">:</span> <span class="s">&quot;&quot;</span><span class="p">,</span> <span class="s">&quot;value&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s">&quot;next&quot;</span><span class="p">:</span> <span class="s">&quot;&quot;</span><span class="p">}</span>
 
@@ -754,7 +720,7 @@
 </div>
 <span class="nd">@rack_module.route</span><span class="p">(</span><span class="s">&#39;/inventory/rack/map&#39;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;POST&#39;</span><span class="p">])</span>
 <span class="nd">@login_required</span>
-<div class="viewcode-block" id="display_rack_map"><a class="viewcode-back" href="../../../modules/cloudmesh_web.modules.html#cloudmesh_web.modules.rack.display_rack_map">[docs]</a><span class="k">def</span> <span class="nf">display_rack_map</span><span class="p">():</span>
+<div class="viewcode-block" id="display_rack_map"><a class="viewcode-back" href="../../../api/cloudmesh_web/cloudmesh_web.modules.html#cloudmesh_web.modules.rack.display_rack_map">[docs]</a><span class="k">def</span> <span class="nf">display_rack_map</span><span class="p">():</span>
 
     <span class="c">####</span>
     <span class="c">#</span>
@@ -865,7 +831,7 @@
       
     </p>
     <p>
-        &copy; Copyright 2014, 2013, Gregor von Laszewski for  FutureGrid.<br/>
+        &copy; Copyright 2015, 2014, 2013, Gregor von Laszewski.<br/>
     </p>
   </div>
 </footer>

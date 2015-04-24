@@ -1,113 +1,44 @@
-.. _ref-cloudmesh-yaml:
-
-.. highlight:: bash
-
-Configuration with Yaml Files
+Configuration
 ======================================================================
 
-Cloudmesh comes with a set of convenient configuration files in the
-yaml format.  As the files are in yaml format, it is important that
-you make sure that prior to saving the file the indentation is
-correct and that all tabs are replaced with spaces.
-
-All cloudmesh configuration files are placed in the directory::
-
-  ~/.cloudmesh
-
-Users will only to worry about the file
-
-  ~/.cloudmesh/cloudmesh.yaml
-
-Other yaml files interact with the backend system. In general it is
-sufficient to have just a cloudmesh.yaml file so you run cloudmesh in
-user mode.
-
-Initialization
----------------
-
-If you do not have a yaml file or a .cloudmesh directory, the best way
-to create it is by downloading the source code from cloudmesh and
-install it as discussed in the instalation section.
-
-The cloudmesh configuration files can than be created with the
-command::
-
-   $ ./install new
+cloudmesh comes with a set of convenient configuration files in the
+yaml format. Important is that you make sure that prior to saving the
+file, that the indentation is correct and that all tabs are replaced
+with spaces.  Cloudmesh comes with two configuration files. One
+dedicated to interact as regular user. The other one allows you to
+interact with the backend system. In general it is sufficient to have
+just a cloudmesh.yaml file so you run cloudmesh in user mode.
 
 
-This will create a `~/.cloudmesh` directory with some basic yaml files
-that you will need to modify.
-
-
-Cloud Activation - India Openstack 
--------------------------------------------------------------------------------
-
-For FutureSystems we have additionally provided a script that automatically
-creates some yaml files from the installation. In future FutureSystems will
-provide directly a yaml for cloudmesh so that this step is unnecessary. Before
-you can execute this command you must make sure that you can log into india via
-ssh. Once you have verified this for example with::
-
-  $ ssh $PORTALNAME@india.futuregrid.org hostname
-
-Now create the yaml file while fetching some information from the
-remote machines::
-
-  $ cm-iu user fetch
-
-First it will ask you which username you have on FutureSystems. The name
-may be different from your current local machine name. Please enter
-your name when you see::
-
-
-  Please enter your portal user id [default: albert]: 
-
-After this you can update the yaml files with the data fetched from
-the india and sierra with the command::
-
-  $ cm-iu user create
-
-The reason why we have separated the commands and not just created one
-command is to provide you with the ability to double check overwriting
-possibly an existing rc file.
-
-This will create for you in your $HOME/.cloudmesh directory::
-   
-   .cloudmesh/clouds/india/juno
-
-This command only works if you have access to the login node for the
-machine called india.
-
-
-Format of the cloudmesh.yaml file
+cloudmesh.yaml
 ----------------------------------------------------------------------
 
-Next we will present selected details of the yaml format of the::
+Next we will present the outline of the::
 
    cloudmesh.yaml 
 
-file. It includes like::
+file which looks like::
 
   cloudmesh:
     active: 
-    - india
+    - sierra_openstack_grizzly
     clouds:
-        india:
-            cm_heading: India OpenStack, Juno
-            cm_host: india.futuregrid.org
-            cm_label: ios_juno
-            cm_service_url_type: publicURL
-            cm_type: openstack
-            cm_type_version: juno
-            credentials:
-                OS_AUTH_URL: https://i5r.idp.iu.futuregrid.org:5000/v2.0
-                OS_CACERT: $HOME/.cloudmesh/india-juno-cacert.pem
-                OS_PASSWORD: PUT_YOUR OPENSTCK_PASSWORD_HERE look it
-                OS_TENANT_NAME: PUT_YOUR_PROJECTID_HERE
-                OS_USERNAME: PUT_YOUR_PROTALNAME_HERE
-                OS_VERSION: juno
-            default:
-                flavor: None
+      sierra_openstack_grizzly:
+        cm_heading: Sierra OpenStack, Grizzly
+        cm_host: sierra.futuregrid.org
+        cm_label: sos
+        cm_type: openstack
+        cm_type_version: grizzly
+        credentials:
+          OS_AUTH_URL: https://s77r.idp.sdsc.futuregrid.org:5000/v2.0
+          OS_CACERT: $HOME/.cloudmesh/sierra-cacert.pem
+          OS_PASSWORD: jhdjaTYWUIYBY
+          OS_TENANT_NAME: fg1000
+          OS_USERNAME: albert
+          OS_VERSION: grizzly
+        default:
+          flavor: m1.tiny
+          image: 4199d988-0833-4497-a473-96fc456fac2f
 
 The file begins with the keyword cloudmesh and has all further
 information indented under it. An active: attribute allows you to
@@ -121,8 +52,7 @@ called. Hence you see under active: ::
   - india
 
 If there are more than one cloud you would simply add the label of
-that cloud in the array. As we only have one cloud and activate in
-this examle only this cloud we only have::
+that cloud to the lit of active clouds such as ::
 
   active:
   - india
@@ -182,64 +112,150 @@ In most IaaS platforms, configuration files (in the form of an "rc
 file") are provided as credentials. These credentials should be
 imported in cloudmesh.yaml.
 
-Adding devstack to ``cloudmesh.yaml`` (TBD)
-----------------------------------------------------------------------
 
-DevStack offers an easy method to try out Openstack on your machine or
-in a virtual machine (VM). `DevStack <http://devstack.org>`_ provides
-a setup guide and configuration here: `Configuration
-<http://devstack.org/configuration.html>`_.
+Retrieval of rc file by command
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Adding dreamhost to ``cloudmesh.yaml``
-----------------------------------------------------------------------
+::
 
-Dreamhost provides an Openstack cloud that can be accessed through the
-dreamhost panel at:
+   cm-iu user fetch
+   cm-iu user create
 
-* https://panel.dreamhost.com/index.cgi
+This will create for you in your $HOME/.cloudmesh directory a tree of the
+following format::
+   
+   .cloudmesh/clouds
+        india
 
-The Horizon interface is located at
 
-* https://dashboard.dreamcompute.com
 
-If you are a customer of dreamhost, use your username and password
-that was send to you.
+Retrieval of rc files by Hand
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ 
 
-To use cloudmesh, please add this username and password in the
-placeholder for dreamhost.
+Location of rc files
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+========= ================================== ====================================================
+Host      OpenStack (novarc)                 Eucalyptus (eucarc)
+--------- ---------------------------------- ----------------------------------------------------
+india     $HOME/.cloudmesh/openstack/novarc $HOME/.cloudmesh/eucalyptus/$fgprojectnumber/eucarc*
+hotel     Download EC2 Credentials**         n/a
+alamo     Download EC2 Credentials**         n/a
+========= ================================== ====================================================
+
+:\*\*: 
+   For Eucalyptus, compressed file is provided in the directory. Unzip
+   it and load credentials are required like as follows::
+
+         unzip ineuca3-{username}-{cluster}-fgprojectnumber.zip
+         source eucarc
+
+:\*:
+   With OpenStack Horizon, EC2 credentials can be downloaded.
+
+   - login `OpenStack Havana on Hotel
+     <https://openstack.uc.futuregrid.org/dashboard/>`_ or `OpenStack
+     Folsom on Alamo
+     <https://openstack.futuregrid.tacc.utexas.edu/horizon>`_
+
+   - Click 'Access & Security'
+
+   - Select 'API Access' tab
+   
+   - Click 'Download EC2 Credentials' (which is a direct link here for
+     `Hotel
+     <http://openstack.uc.futuregrid.org/horizon/project/access_and_security/api_access/ec2/>`_
+     or `Alamo
+     <http://openstack.futuregrid.tacc.utexas.edu/horizon/project/access_and_security/api_access/ec2/>`_)
+
+Next we specify the credentials of the cloud. We can obtain them
+typically from the cloud provider. The mechnism to obtain them may
+vary and you will need to look it up. Often you will have an rc file
+or a GUI that allows you to export the needed information. We have
+strived to keep the same attributes that are provided by the supported
+cloud providors. Hence typically no change is needed and you can just
+paste and copy the values. However, if your cloud needs certificates,
+they may have to be specially dealt with and placed in special
+directories. For cloudmesn we provide them as part of the install and
+ainclude them in the::
+
+  $HOME/.cloudmesh/ 
+
+directory. Naturally the attributes in credentials depend on the cloud
+type and are different between the different clouds. In our case we
+define the cloud on sierra which has the following credentials::
+
+        credentials:
+          OS_AUTH_URL: https://s77r.idp.sdsc.futuregrid.org:5000/v2.0
+          OS_CACERT: $HOME/.cloudmesh/sierra-cacert.pem
+          OS_PASSWORD: jhdjaTYWUIYBY
+          OS_TENANT_NAME: fg1000
+          OS_USERNAME: albert
+          OS_VERSION: grizzly
+
+Only the last field OS_VERSION is not provided by the openstack rc
+file. We simply specify the version and must make sure it is the same
+as provided in cm_type_version. In future versions of cloudmesh we may
+remove this attribute and only work with cm_type_version, but it is
+very convenient to have the value also in credentials, so we left it
+there for now also. The rest of the attributes are regular attributes
+you find in the rc file. For Futuregrid Openstack clouds they will
+have the following meaning:
+
+:OS_AUTH_URL:
+  The endpount that is used to manage virtual machines   
+
+  Example: https://s77r.idp.sdsc.futuregrid.org:5000/v2.0
+
+:OS_CACERT:
+  The location in which the certificate for the cloud is placed to
+  interact with https in case your cloud is properly protected. In
+  case it does not use https please inform yourself about the security
+  consequences.
+
+  Example: $HOME/.cloudmesh/sierra-cacert.pem
+
+:OS_PASSWORD:
+  The password you use for this cloud
+
+  Example: jhdjaTYWUIYBY
+
+:OS_TENANT_NAME:
+  The fg project number. In case you have multiple projects, you need to define multiple clouds 
+  with multiple credentials that are distinguished by different tennant names.
+
+  Example: fg1000
+
+:OS_USERNAME:
+  Your futuregrid portal name.
+
+  Example: albert
+
+:OS_VERSION:
+  The version of openstack you use as described also by cm_type_version
+
+  Example: grizzly
+
+As it is often the case that users have a default image or flavor and
+try to avoid remembering the values for them, such values can also be
+specified in the cloudmesh.yaml file. This comes especially handy in
+case of classes in which a teacher may provide the class with a custom
+image and give students hints for which flavor to use. Also users that
+deal with the instantiation of many VMs clearly benefit from this
+feature::
+
+  default:
+    flavor: m1.tiny
+    image: 4199d988-0833-4497-a473-96fc456fac2f
+
+In our example above we have set the default to m1.tine for the falvor
+and one of our default images available on the cloud.
+
+The next sections show examples for several clouds with ficticious
+account information. Please replace it with your own.
 
 HP Cloud
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-The cloud offered from HP is an Openstack cloud and contains the
-ability to conduct project and user based billing. As this cloud is
-Openstack it behaves much the same as the once defined on India and
-Sierra. There may be differences based on the version. 
-
-HP provides an interface to their cloud through horizon. The
-documentation for it can be found at:
-
-* http://docs.hpcloud.com/hpcloudconsole
-
-To use the cloud you have to first create an account with HP, which
-will charge you real money for using their cloud. Make sure you
-understand what costs will be charged before you request thousands of
-virtual machines. Naturally this is valid for any other commercial
-cloud also. The console for the HP cloud is available at:
-
-* http://www.hpcloud.com/console
-
-Which will bring you to their horizon interface:
-
-* https://horizon.hpcloud.com
-
-You can add your username and password into the cloudmesh.yaml in the
-.cloudmesh directory. It is that simple. However, presently the data
-is stored in cleartext which we will change in future. Thus if your
-would like to run cloudmesh we currently recommend running it on your
-own local machine. Make sure that the access to the yaml file is
-properly secured.
 
 HP provides multiple regions and they can be easily configured in
 cloudmesh. We provide examples for two regions::
@@ -278,132 +294,6 @@ cloudmesh. We provide examples for two regions::
 
 Azure
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Microsoft Windows Azure offers security credentials per a valid
-subscription on a user account. Based on the subscription id,
-chargeable usage is going to be applied to your bill. To authenticate
-requests to Azure, you need to configure your credentials for
-Cloudmesh. The following step-by-step tutorial explains the
-configuration of Azure credentials on Cloudmesh.
-
-To connect Azure Virtual Machines to Cloudmesh, you need to provide
-Azure credentials to authenticate requrests in the yaml file. You can
-find the credentials in the 
-
-* `Azure Management Portal <https://manage.windowsazure.com>`_ 
-
-which is a web interface to manage your account and Azure Virtual
-Machines.  Also, you can find credentials by downloading the
-subscription file (.publishsettings) here:
-
-* `http://go.microsoft.com/fwlink/?LinkId=254432 <http://go.microsoft.com/fwlink/?LinkId=254432>`_.
-
-Once you download the file, you may need to import your subscription
-Id and valid X.509 certificate from the file with the help of the  Azure cross-platform
-command line interface. More information about the Azure CLI can be
-found in the Manual/article about the
-
-* `Azure Cross-Platform Command-Line Interface <http://azure.microsoft.com/en-us/documentation/articles/xplat-cli>`_. 
-
-The Azure credentials require that the X.509 certificate is placed in
-the `.cloudmesh` directory. The *subscriptionid* field should be filled
-with your Azure subscription id. The valid X.509 certificate file
-(.pem) must also be stored in the `.cloudmesh` directory. We store it
-under the name::
-
-  $HOME/.cloudmesh/azure_managementCertificate.pem
-
-Cloudmesh yaml file has an example invalid entry that you can change
-with your settings. It can be easily identified while looking for the
-keyword azure in the `cloudmesh.yaml` file.
-As Azure is a commercial service it is important that you properly
-secure the .cloudmesh directory and its yaml files. 
-
-.. note:: Recommended files and directory permissions for Secured Cloudmesh
-   To protect the yaml files against any access from other users, we recommend
-   to use `chmod` command. Try `chmod -R o+rwx,go-rwx ~/.cloudmesh` to make
-   any file in the *.cloudmesh* directory a private file to your user account.
-   This way allows you have a full access to the files and the directory but
-   not others.
-
-Azure Quickstart
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-Azure account
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-If you do not have an Azure account you can obtain one from Microsoft.
-Microsoft provides a free-trial for new account applicants. The
-Windows Azure site is located at 
-
-* `https://manage.windowsazure.com <https://manage.windowsazure.com>`_
-
-Download credentials
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-Form ther you can download the::
-
-  .publishsettings
-
-
-Install Azure CLI
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-Next you will need to install the Azure CLI. This is documented at 
-
-* http://azure.microsoft.com/en-us/documentation/articles/xplat-cli/
-
-Here you find install instructions fror Linux but also a link to an
-OSX installer.
-
-Once the client is installed you can download the credentials
-
-Import Credentials via Azure CLI
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-::
-
-   $ azure account download
-   $ azure account import <.publishsettings file path>
-
-Download Subscription File (.publishsettings)
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
- 
-* http://go.microsoft.com/fwlink/?LinkId=254432
-
-Place X.509 certificate on Cloudmesh
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-::
-
-  $ cp -p ~/.azure/managementCertificate.pem ~/.cloudmesh/azure_managementCertificate.pem
-
- Only the owner with read and write permission e.g. -rw-------
-
-.. note:: Recommended files and directory permissions for Secured Cloudmesh
-   To protect the yaml files against any access from other users, we recommend
-   to use `chmod` command. Try 
-   `chmod o+rwx,go-rwx ~/azure_managementCertificate.pem` to make the file a 
-   private file to your user account. This way allows you have a full access to
-   the file but not others.
-
-Replace Subscription ID
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-::
-
-  $ azure service cert list
-
-provides your subscription id that just imported from the .publishsettings file.
-
-Now, you are ready to use Azure Virtual Machines on Cloudmesh.
-
-Test Azure Virtual Machine
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-TBD
-
-Example Azure cloudmesh configuration
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 ::
 
@@ -425,21 +315,6 @@ Example Azure cloudmesh configuration
 
 Amazon Web Services
 ----------------------
-
-Amazon EC2 Cloud requires Secret Access Keys to use Amazon Web Services (AWS).
-To configure Amazon EC2 on Cloudmesh, you need to provide the Secret Access
-Keys of your account. Amazon allows only to download the credentials via their
-web page, you need to go to the `Security Credentials
-<http://console.aws.amazon.com/iam/home?#security_credential>`_ page to get the
-credentials. You may use your existing AWS account or create a new AWS account.
-The Access Key is a pair of Access Key ID and Secret Access Key and these
-values should be replaced with *EC2_ACCESS_KEY* and *EC2_SECRET_KEY* fields in
-the yaml file. Cloudmesh identifies *cm_type: aws* as Amazon Web Services in
-the yaml file, you update the *aws* section with your security credentials.
-Note that Amazon offers commercial services, the access key identification and
-the secret key should be kept in a safe place to avoid any unexpected usage
-from someone who you didn't authorize. 
-
 
 ::
 
@@ -463,35 +338,55 @@ from someone who you didn't authorize.
 India
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+Note the endpoint is wrong.
+
 ::
 
-    clouds:
-        india:
-            cm_heading: India OpenStack, Juno
-            cm_host: india.futuregrid.org
-            cm_label: ios_juno
-            cm_service_url_type: publicURL
-            cm_type: openstack
-            cm_type_version: juno
-            credentials:
-                OS_AUTH_URL: https://i5r.idp.iu.futuregrid.org:5000/v2.0
-                OS_CACERT: $HOME/.cloudmesh/india-juno-cacert.pem
-                OS_PASSWORD: PUT_YOUR OPENSTCK_PASSWORD_HERE look it
-                OS_TENANT_NAME: PUT_YOUR_PROJECTID_HERE
-                OS_USERNAME: PUT_YOUR_PROTALNAME_HERE
-                OS_VERSION: juno
-            default:
-                flavor: None
+    india:
+      cm_heading: Sierra OpenStack, Grizzly
+      cm_host: india.futuregrid.org
+      cm_label: iosh
+      cm_type: openstack
+      cm_type_version: havana
+      credentials:
+        OS_AUTH_URL: https://i57r.idp.iu.futuregrid.org:5000/v2.0
+        OS_CACERT: $HOME/.cloudmesh/india_cacert.pem
+        OS_PASSWORD: uetruieiuf
+        OS_TENANT_NAME: fg1000
+        OS_USERNAME: albert
+        OS_VERSION: havana
+      default:
+        flavor: m1.tiny
+        image: 4199d988-0833-4497-a473-96fc456fac2f
+
+
+
+
+Sierra
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+::
+
+    sierra_openstack_grizzly:
+      cm_heading: Sierra OpenStack, Grizzly
+      cm_host: sierra.futuregrid.org
+      cm_label: sos
+      cm_type: openstack
+      cm_type_version: grizzly
+      credentials:
+        OS_AUTH_URL: https://s77r.idp.sdsc.futuregrid.org:5000/v2.0
+        OS_CACERT: $HOME/.cloudmesh/sierra-cacert.pem
+        OS_PASSWORD: 63763876827
+        OS_TENANT_NAME: fg1000
+        OS_USERNAME: albert
+        OS_VERSION: grizzly
+      default:
+        flavor: m1.tiny
+        image: 4199d988-0833-4497-a473-96fc456fac2f
 
 
 Alamo
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-.. warning::
-
-   Alamos is no longer supported, it has been moved to chameleon cloud
-
-   
 Although Alamo on FG is an openstack grizzly cloud, it is not as
 sophisticated configured as the clouds on india and sierra. Instead is
 uses for horizon the username and password from the openstack portal,
@@ -964,122 +859,3 @@ Me Sample
 
 * https://github.com/cloudmesh/cloudmesh/blob/master/etc/me-sample.yaml
 * https://github.com/cloudmesh/cloudmesh/blob/master/etc/me.yaml
-
-
-EC2 Credentials (THIS SECITION IS OUTDATED)
--------------------------------------------------
-
-.. warning::
-   
-   Hotel and Alamo are no longer supported
-
-   
-:\*:
-   With OpenStack Horizon, EC2 credentials can be downloaded.
-
-   - login `OpenStack Havana on Hotel
-     <https://openstack.uc.futuregrid.org/dashboard/>`_ or `OpenStack
-     Folsom on Alamo
-     <https://openstack.futuregrid.tacc.utexas.edu/horizon>`_
-
-   - Click 'Access & Security'
-
-   - Select 'API Access' tab
-   
-   - Click 'Download EC2 Credentials' (which is a direct link here for
-     `Hotel
-     <http://openstack.uc.futuregrid.org/horizon/project/access_and_security/api_access/ec2/>`_
-     or `Alamo
-     <http://openstack.futuregrid.tacc.utexas.edu/horizon/project/access_and_security/api_access/ec2/>`_)
-
-Next we specify the credentials of the cloud. We can obtain them
-typically from the cloud provider. The mechnism to obtain them may
-vary and you will need to look it up. Often you will have an rc file
-or a GUI that allows you to export the needed information. We have
-strived to keep the same attributes that are provided by the supported
-cloud providors. Hence typically no change is needed and you can just
-paste and copy the values. However, if your cloud needs certificates,
-they may have to be specially dealt with and placed in special
-directories. For cloudmesn we provide them as part of the install and
-ainclude them in the::
-
-  $HOME/.cloudmesh/ 
-
-directory. Naturally the attributes in credentials depend on the cloud
-type and are different between the different clouds. In our case we
-define the cloud on sierra which has the following credentials::
-
-        credentials:
-          OS_AUTH_URL: https://s77r.idp.sdsc.futuregrid.org:5000/v2.0
-          OS_CACERT: $HOME/.cloudmesh/sierra-cacert.pem
-          OS_PASSWORD: YOURPASSWORDHERE
-          OS_TENANT_NAME: YOURPROJECTIDHERE
-          OS_USERNAME: albert
-          OS_VERSION: grizzly
-
-Only the last field OS_VERSION is not provided by the openstack rc
-file. We simply specify the version and must make sure it is the same
-as provided in cm_type_version. In future versions of cloudmesh we may
-remove this attribute and only work with cm_type_version, but it is
-very convenient to have the value also in credentials, so we left it
-there for now also. The rest of the attributes are regular attributes
-you find in the rc file. For Futuregrid Openstack clouds they will
-have the following meaning:
-
-:OS_AUTH_URL:
-  The endpount that is used to manage virtual machines   
-
-  Example: https://s77r.idp.sdsc.futuregrid.org:5000/v2.0
-
-:OS_CACERT:
-  The location in which the certificate for the cloud is placed to
-  interact with https in case your cloud is properly protected. In
-  case it does not use https please inform yourself about the security
-  consequences.
-
-  Example: $HOME/.cloudmesh/sierra-cacert.pem
-
-:OS_PASSWORD:
-  The password you use for this cloud
-
-  Example: jhdjaTYWUIYBY
-
-:OS_TENANT_NAME:
-  The fg project number. In case you have multiple projects, you need to define multiple clouds 
-  with multiple credentials that are distinguished by different tennant names.
-
-  Example: fg1000
-
-:OS_USERNAME:
-  Your futuregrid portal name.
-
-  Example: albert
-
-:OS_VERSION:
-  The version of openstack you use as described also by cm_type_version
-
-  Example: grizzly
-
-As it is often the case that users have a default image or flavor and
-try to avoid remembering the values for them, such values can also be
-specified in the cloudmesh.yaml file. This comes especially handy in
-case of classes in which a teacher may provide the class with a custom
-image and give students hints for which flavor to use. Also users that
-deal with the instantiation of many VMs clearly benefit from this
-feature::
-
-  default:
-    flavor: m1.tiny
-    image: 4199d988-0833-4497-a473-96fc456fac2f
-
-In our example above we have set the default to m1.tine for the falvor
-and one of our default images available on the cloud.
-
-The next sections show examples for several clouds with ficticious
-account information. Please replace it with your own.
-
-
-
-
-
-
