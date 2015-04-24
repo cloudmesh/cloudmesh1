@@ -580,7 +580,7 @@
 <span class="kn">from</span> <span class="nn">pprint</span> <span class="kn">import</span> <span class="n">pprint</span>
 
 
-<div class="viewcode-block" id="ClusterExistsError"><a class="viewcode-back" href="../../../modules/cloudmesh.shell.html#cloudmesh.shell.clusters.ClusterExistsError">[docs]</a><span class="k">class</span> <span class="nc">ClusterExistsError</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+<div class="viewcode-block" id="ClusterExistsError"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.shell.html#cloudmesh.shell.clusters.ClusterExistsError">[docs]</a><span class="k">class</span> <span class="nc">ClusterExistsError</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">value</span>
 
@@ -588,7 +588,7 @@
         <span class="k">return</span> <span class="nb">repr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
 
 </div>
-<div class="viewcode-block" id="Clusters"><a class="viewcode-back" href="../../../modules/cloudmesh.shell.html#cloudmesh.shell.clusters.Clusters">[docs]</a><span class="k">class</span> <span class="nc">Clusters</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<div class="viewcode-block" id="Clusters"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.shell.html#cloudmesh.shell.clusters.Clusters">[docs]</a><span class="k">class</span> <span class="nc">Clusters</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">config</span> <span class="o">=</span> <span class="n">cm_config</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">mongodb</span> <span class="o">=</span> <span class="n">cm_mongo</span><span class="p">()</span>
@@ -596,7 +596,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">GroupManage</span> <span class="o">=</span> <span class="n">GroupManagement</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">username</span><span class="p">)</span>
         <span class="k">pass</span>
 
-<div class="viewcode-block" id="Clusters.defaults"><a class="viewcode-back" href="../../../modules/cloudmesh.shell.html#cloudmesh.shell.clusters.Clusters.defaults">[docs]</a>    <span class="k">def</span> <span class="nf">defaults</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">default_dict</span><span class="p">):</span>
+<div class="viewcode-block" id="Clusters.defaults"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.shell.html#cloudmesh.shell.clusters.Clusters.defaults">[docs]</a>    <span class="k">def</span> <span class="nf">defaults</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">default_dict</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;setes image, cloud, flavor, key, username, ...</span>
 <span class="sd">        </span>
 <span class="sd">        TODO:: cloud select</span>
@@ -608,7 +608,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">pass</span>
 </div>
-<div class="viewcode-block" id="Clusters.list_clusters"><a class="viewcode-back" href="../../../modules/cloudmesh.shell.html#cloudmesh.shell.clusters.Clusters.list_clusters">[docs]</a>    <span class="k">def</span> <span class="nf">list_clusters</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Clusters.list_clusters"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.shell.html#cloudmesh.shell.clusters.Clusters.list_clusters">[docs]</a>    <span class="k">def</span> <span class="nf">list_clusters</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; returns the list of the clusters in json format. This includes the status&quot;&quot;&quot;</span>
         <span class="n">groups</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">GroupManage</span><span class="o">.</span><span class="n">get_groups</span><span class="p">()</span>
         <span class="n">res</span> <span class="o">=</span> <span class="p">{}</span>
@@ -625,20 +625,20 @@
 
         <span class="k">return</span> <span class="n">res</span>
 </div>
-<div class="viewcode-block" id="Clusters.group"><a class="viewcode-back" href="../../../modules/cloudmesh.shell.html#cloudmesh.shell.clusters.Clusters.group">[docs]</a>    <span class="k">def</span> <span class="nf">group</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+<div class="viewcode-block" id="Clusters.group"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.shell.html#cloudmesh.shell.clusters.Clusters.group">[docs]</a>    <span class="k">def</span> <span class="nf">group</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        returns the group belonging to the cluster according to cluster name</span>
 <span class="sd">        TODO:: this is similar as function vms</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">None</span>
 </div>
-<div class="viewcode-block" id="Clusters.ips"><a class="viewcode-back" href="../../../modules/cloudmesh.shell.html#cloudmesh.shell.clusters.Clusters.ips">[docs]</a>    <span class="k">def</span> <span class="nf">ips</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+<div class="viewcode-block" id="Clusters.ips"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.shell.html#cloudmesh.shell.clusters.Clusters.ips">[docs]</a>    <span class="k">def</span> <span class="nf">ips</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        returns a list of ips belonging to the named cluster</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">None</span>
 </div>
-<div class="viewcode-block" id="Clusters.names"><a class="viewcode-back" href="../../../modules/cloudmesh.shell.html#cloudmesh.shell.clusters.Clusters.names">[docs]</a>    <span class="k">def</span> <span class="nf">names</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+<div class="viewcode-block" id="Clusters.names"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.shell.html#cloudmesh.shell.clusters.Clusters.names">[docs]</a>    <span class="k">def</span> <span class="nf">names</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        returns a lsit of names of the vms belonging to the cluster</span>
 <span class="sd">        </span>
@@ -646,7 +646,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">None</span>
 </div>
-<div class="viewcode-block" id="Clusters.vms"><a class="viewcode-back" href="../../../modules/cloudmesh.shell.html#cloudmesh.shell.clusters.Clusters.vms">[docs]</a>    <span class="k">def</span> <span class="nf">vms</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">refresh</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+<div class="viewcode-block" id="Clusters.vms"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.shell.html#cloudmesh.shell.clusters.Clusters.vms">[docs]</a>    <span class="k">def</span> <span class="nf">vms</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">refresh</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        returns in json the information about the vms of the named cluster</span>
 <span class="sd">        this includes cluster name and its detailed VMs information</span>
@@ -673,7 +673,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s">&quot;group &#39;{0}&#39; is not a cluster group&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">))</span>
 </div>
-<div class="viewcode-block" id="Clusters.delete"><a class="viewcode-back" href="../../../modules/cloudmesh.shell.html#cloudmesh.shell.clusters.Clusters.delete">[docs]</a>    <span class="k">def</span> <span class="nf">delete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">grouponly</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+<div class="viewcode-block" id="Clusters.delete"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.shell.html#cloudmesh.shell.clusters.Clusters.delete">[docs]</a>    <span class="k">def</span> <span class="nf">delete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">grouponly</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        deletes the named cluster</span>
 <span class="sd">        </span>
@@ -702,12 +702,12 @@
         <span class="n">banner</span><span class="p">(</span><span class="s">&quot;Deleting group-&gt;{0}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">GroupManage</span><span class="o">.</span><span class="n">delete_group</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="Clusters.info"><a class="viewcode-back" href="../../../modules/cloudmesh.shell.html#cloudmesh.shell.clusters.Clusters.info">[docs]</a>    <span class="k">def</span> <span class="nf">info</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+<div class="viewcode-block" id="Clusters.info"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.shell.html#cloudmesh.shell.clusters.Clusters.info">[docs]</a>    <span class="k">def</span> <span class="nf">info</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;returns a simplified information about the cluster in json format&quot;&quot;&quot;</span>
         <span class="sd">&quot;&quot;&quot;each vm contains the ips and the name, as well as the status of the vm&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">None</span>
 </div>
-<div class="viewcode-block" id="Clusters.create_with_existence_check"><a class="viewcode-back" href="../../../modules/cloudmesh.shell.html#cloudmesh.shell.clusters.Clusters.create_with_existence_check">[docs]</a>    <span class="k">def</span> <span class="nf">create_with_existence_check</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
+<div class="viewcode-block" id="Clusters.create_with_existence_check"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.shell.html#cloudmesh.shell.clusters.Clusters.create_with_existence_check">[docs]</a>    <span class="k">def</span> <span class="nf">create_with_existence_check</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        creates a cluster with the given name and the number of vms.</span>
 <span class="sd">        If the cluster exists an exception is thrown. Returns the json of the cluster.</span>
@@ -715,7 +715,7 @@
         <span class="k">pass</span>
         <span class="c"># raise ClusterExistsError(&#39;Cluster &#39; + name + &#39; exists&#39;)</span>
 </div>
-<div class="viewcode-block" id="Clusters.create"><a class="viewcode-back" href="../../../modules/cloudmesh.shell.html#cloudmesh.shell.clusters.Clusters.create">[docs]</a>    <span class="k">def</span> <span class="nf">create</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
+<div class="viewcode-block" id="Clusters.create"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.shell.html#cloudmesh.shell.clusters.Clusters.create">[docs]</a>    <span class="k">def</span> <span class="nf">create</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        creates a cluster with the given name and the number of vms.</span>
 <span class="sd">        </span>
@@ -726,7 +726,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">pass</span>
 </div>
-<div class="viewcode-block" id="Clusters.check_group_is_a_cluster"><a class="viewcode-back" href="../../../modules/cloudmesh.shell.html#cloudmesh.shell.clusters.Clusters.check_group_is_a_cluster">[docs]</a>    <span class="k">def</span> <span class="nf">check_group_is_a_cluster</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">groupobj</span><span class="p">):</span>
+<div class="viewcode-block" id="Clusters.check_group_is_a_cluster"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.shell.html#cloudmesh.shell.clusters.Clusters.check_group_is_a_cluster">[docs]</a>    <span class="k">def</span> <span class="nf">check_group_is_a_cluster</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">groupobj</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        a cluster group object shoud have a &#39;cluster&#39; tag in its tags</span>
 <span class="sd">        </span>

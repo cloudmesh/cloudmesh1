@@ -592,7 +592,7 @@
 <span class="kn">import</span> <span class="nn">tempfile</span>
 
 
-<div class="viewcode-block" id="ec2"><a class="viewcode-back" href="../../../../modules/cloudmesh.iaas.ec2.html#cloudmesh.iaas.ec2.cm_compute.ec2">[docs]</a><span class="k">class</span> <span class="nc">ec2</span><span class="p">(</span><span class="n">ComputeBaseType</span><span class="p">):</span>
+<div class="viewcode-block" id="ec2"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.iaas.ec2.html#cloudmesh.iaas.ec2.cm_compute.ec2">[docs]</a><span class="k">class</span> <span class="nc">ec2</span><span class="p">(</span><span class="n">ComputeBaseType</span><span class="p">):</span>
 
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    ec2 service with the libcloud interface</span>
@@ -609,7 +609,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">set_credential</span><span class="p">(</span><span class="n">credential</span><span class="p">,</span> <span class="n">admin_credential</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
 
-<div class="viewcode-block" id="ec2.set_credential"><a class="viewcode-back" href="../../../../modules/cloudmesh.iaas.ec2.html#cloudmesh.iaas.ec2.cm_compute.ec2.set_credential">[docs]</a>    <span class="k">def</span> <span class="nf">set_credential</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cred</span><span class="p">,</span> <span class="n">admin_cred</span><span class="p">):</span>
+<div class="viewcode-block" id="ec2.set_credential"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.iaas.ec2.html#cloudmesh.iaas.ec2.cm_compute.ec2.set_credential">[docs]</a>    <span class="k">def</span> <span class="nf">set_credential</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cred</span><span class="p">,</span> <span class="n">admin_cred</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">cred</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">user_credential</span> <span class="o">=</span> <span class="n">cred</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">access_key_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">user_credential</span><span class="p">[</span><span class="s">&#39;EC2_ACCESS_KEY&#39;</span><span class="p">]</span>
@@ -618,7 +618,7 @@
         <span class="k">if</span> <span class="n">admin_cred</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">admin_credential</span> <span class="o">=</span> <span class="n">admin_cred</span>
 </div>
-<div class="viewcode-block" id="ec2.load_default"><a class="viewcode-back" href="../../../../modules/cloudmesh.iaas.ec2.html#cloudmesh.iaas.ec2.cm_compute.ec2.load_default">[docs]</a>    <span class="k">def</span> <span class="nf">load_default</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">label</span><span class="p">):</span>
+<div class="viewcode-block" id="ec2.load_default"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.iaas.ec2.html#cloudmesh.iaas.ec2.cm_compute.ec2.load_default">[docs]</a>    <span class="k">def</span> <span class="nf">load_default</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">label</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Load default values and set them to the object</span>
 
 <span class="sd">        :param label: the section name to load from yaml</span>
@@ -668,10 +668,10 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">label</span> <span class="o">=</span> <span class="n">label</span>
 </div>
-<div class="viewcode-block" id="ec2.auth"><a class="viewcode-back" href="../../../../modules/cloudmesh.iaas.ec2.html#cloudmesh.iaas.ec2.cm_compute.ec2.auth">[docs]</a>    <span class="k">def</span> <span class="nf">auth</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="ec2.auth"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.iaas.ec2.html#cloudmesh.iaas.ec2.cm_compute.ec2.auth">[docs]</a>    <span class="k">def</span> <span class="nf">auth</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">conn</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span>
 </div>
-<div class="viewcode-block" id="ec2.connect"><a class="viewcode-back" href="../../../../modules/cloudmesh.iaas.ec2.html#cloudmesh.iaas.ec2.cm_compute.ec2.connect">[docs]</a>    <span class="k">def</span> <span class="nf">connect</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="ec2.connect"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.iaas.ec2.html#cloudmesh.iaas.ec2.cm_compute.ec2.connect">[docs]</a>    <span class="k">def</span> <span class="nf">connect</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">Driver</span> <span class="o">=</span> <span class="n">get_driver</span><span class="p">(</span><span class="n">Provider</span><span class="o">.</span><span class="n">EUCALYPTUS</span><span class="p">)</span>
         <span class="n">conn</span> <span class="o">=</span> <span class="bp">None</span>
 
@@ -692,7 +692,7 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">conn</span> <span class="o">=</span> <span class="n">conn</span>
 </div>
-<div class="viewcode-block" id="ec2.vm_create"><a class="viewcode-back" href="../../../../modules/cloudmesh.iaas.ec2.html#cloudmesh.iaas.ec2.cm_compute.ec2.vm_create">[docs]</a>    <span class="k">def</span> <span class="nf">vm_create</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span>
+<div class="viewcode-block" id="ec2.vm_create"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.iaas.ec2.html#cloudmesh.iaas.ec2.cm_compute.ec2.vm_create">[docs]</a>    <span class="k">def</span> <span class="nf">vm_create</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span>
                   <span class="n">flavor_name</span><span class="p">,</span>
                   <span class="n">image_id</span><span class="p">,</span>
                   <span class="n">security_groups</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
@@ -702,7 +702,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">create_vm</span><span class="p">(</span><span class="n">flavor_name</span><span class="p">,</span> <span class="n">image_id</span><span class="p">,</span> <span class="n">key_name</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="ec2.create_vm"><a class="viewcode-back" href="../../../../modules/cloudmesh.iaas.ec2.html#cloudmesh.iaas.ec2.cm_compute.ec2.create_vm">[docs]</a>    <span class="k">def</span> <span class="nf">create_vm</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">flavor_name</span><span class="p">,</span> <span class="n">image_id</span><span class="p">,</span> <span class="n">key_name</span><span class="p">):</span>
+<div class="viewcode-block" id="ec2.create_vm"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.iaas.ec2.html#cloudmesh.iaas.ec2.cm_compute.ec2.create_vm">[docs]</a>    <span class="k">def</span> <span class="nf">create_vm</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">flavor_name</span><span class="p">,</span> <span class="n">image_id</span><span class="p">,</span> <span class="n">key_name</span><span class="p">):</span>
         <span class="n">image</span> <span class="o">=</span> <span class="n">NodeImage</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">image_id</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">&quot;&quot;</span><span class="p">,</span> <span class="n">driver</span><span class="o">=</span><span class="s">&quot;&quot;</span><span class="p">)</span>
         <span class="n">size</span> <span class="o">=</span> <span class="n">NodeSize</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">flavor_name</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">&quot;&quot;</span><span class="p">,</span> <span class="n">ram</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">disk</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
                         <span class="n">bandwidth</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">price</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">driver</span><span class="o">=</span><span class="s">&quot;&quot;</span><span class="p">)</span>
@@ -710,7 +710,7 @@
                               <span class="n">ex_keyname</span><span class="o">=</span><span class="n">key_name</span><span class="p">)</span>
         <span class="k">return</span>
 </div>
-<div class="viewcode-block" id="ec2.list_vm"><a class="viewcode-back" href="../../../../modules/cloudmesh.iaas.ec2.html#cloudmesh.iaas.ec2.cm_compute.ec2.list_vm">[docs]</a>    <span class="k">def</span> <span class="nf">list_vm</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="ec2.list_vm"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.iaas.ec2.html#cloudmesh.iaas.ec2.cm_compute.ec2.list_vm">[docs]</a>    <span class="k">def</span> <span class="nf">list_vm</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">nodes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">list_nodes</span><span class="p">()</span>
         <span class="n">vm_dict</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="k">for</span> <span class="n">vm_obj</span> <span class="ow">in</span> <span class="n">nodes</span><span class="p">:</span>
@@ -721,39 +721,39 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">servers</span> <span class="o">=</span> <span class="n">vm_dict</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">servers</span>
 </div>
-<div class="viewcode-block" id="ec2.vm_delete"><a class="viewcode-back" href="../../../../modules/cloudmesh.iaas.ec2.html#cloudmesh.iaas.ec2.cm_compute.ec2.vm_delete">[docs]</a>    <span class="k">def</span> <span class="nf">vm_delete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+<div class="viewcode-block" id="ec2.vm_delete"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.iaas.ec2.html#cloudmesh.iaas.ec2.cm_compute.ec2.vm_delete">[docs]</a>    <span class="k">def</span> <span class="nf">vm_delete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">delete_vm</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="ec2.delete_vm"><a class="viewcode-back" href="../../../../modules/cloudmesh.iaas.ec2.html#cloudmesh.iaas.ec2.cm_compute.ec2.delete_vm">[docs]</a>    <span class="k">def</span> <span class="nf">delete_vm</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+<div class="viewcode-block" id="ec2.delete_vm"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.iaas.ec2.html#cloudmesh.iaas.ec2.cm_compute.ec2.delete_vm">[docs]</a>    <span class="k">def</span> <span class="nf">delete_vm</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
         <span class="n">node</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_node_from_id</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">destroy_node</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
         <span class="k">return</span>
 </div>
-<div class="viewcode-block" id="ec2.get_node_from_id"><a class="viewcode-back" href="../../../../modules/cloudmesh.iaas.ec2.html#cloudmesh.iaas.ec2.cm_compute.ec2.get_node_from_id">[docs]</a>    <span class="k">def</span> <span class="nf">get_node_from_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">id</span><span class="p">):</span>
+<div class="viewcode-block" id="ec2.get_node_from_id"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.iaas.ec2.html#cloudmesh.iaas.ec2.cm_compute.ec2.get_node_from_id">[docs]</a>    <span class="k">def</span> <span class="nf">get_node_from_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">id</span><span class="p">):</span>
         <span class="n">nodelist</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">list_nodes</span><span class="p">()</span>
         <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">nodelist</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">node</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="nb">id</span><span class="p">:</span>
                 <span class="k">return</span> <span class="n">node</span>
 </div>
-<div class="viewcode-block" id="ec2.set_location"><a class="viewcode-back" href="../../../../modules/cloudmesh.iaas.ec2.html#cloudmesh.iaas.ec2.cm_compute.ec2.set_location">[docs]</a>    <span class="k">def</span> <span class="nf">set_location</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+<div class="viewcode-block" id="ec2.set_location"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.iaas.ec2.html#cloudmesh.iaas.ec2.cm_compute.ec2.set_location">[docs]</a>    <span class="k">def</span> <span class="nf">set_location</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">location</span> <span class="o">=</span> <span class="n">name</span>
 </div>
-<div class="viewcode-block" id="ec2.set_image_name"><a class="viewcode-back" href="../../../../modules/cloudmesh.iaas.ec2.html#cloudmesh.iaas.ec2.cm_compute.ec2.set_image_name">[docs]</a>    <span class="k">def</span> <span class="nf">set_image_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+<div class="viewcode-block" id="ec2.set_image_name"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.iaas.ec2.html#cloudmesh.iaas.ec2.cm_compute.ec2.set_image_name">[docs]</a>    <span class="k">def</span> <span class="nf">set_image_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">image_name</span> <span class="o">=</span> <span class="n">name</span>
 </div>
-<div class="viewcode-block" id="ec2.set_flavor"><a class="viewcode-back" href="../../../../modules/cloudmesh.iaas.ec2.html#cloudmesh.iaas.ec2.cm_compute.ec2.set_flavor">[docs]</a>    <span class="k">def</span> <span class="nf">set_flavor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+<div class="viewcode-block" id="ec2.set_flavor"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.iaas.ec2.html#cloudmesh.iaas.ec2.cm_compute.ec2.set_flavor">[docs]</a>    <span class="k">def</span> <span class="nf">set_flavor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">flavor</span> <span class="o">=</span> <span class="n">name</span>
 </div>
-<div class="viewcode-block" id="ec2.get_name"><a class="viewcode-back" href="../../../../modules/cloudmesh.iaas.ec2.html#cloudmesh.iaas.ec2.cm_compute.ec2.get_name">[docs]</a>    <span class="k">def</span> <span class="nf">get_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="ec2.get_name"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.iaas.ec2.html#cloudmesh.iaas.ec2.cm_compute.ec2.get_name">[docs]</a>    <span class="k">def</span> <span class="nf">get_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span>
 </div>
-<div class="viewcode-block" id="ec2.get_flavor"><a class="viewcode-back" href="../../../../modules/cloudmesh.iaas.ec2.html#cloudmesh.iaas.ec2.cm_compute.ec2.get_flavor">[docs]</a>    <span class="k">def</span> <span class="nf">get_flavor</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="ec2.get_flavor"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.iaas.ec2.html#cloudmesh.iaas.ec2.cm_compute.ec2.get_flavor">[docs]</a>    <span class="k">def</span> <span class="nf">get_flavor</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">flavor</span>
 </div>
-<div class="viewcode-block" id="ec2.get_keyname"><a class="viewcode-back" href="../../../../modules/cloudmesh.iaas.ec2.html#cloudmesh.iaas.ec2.cm_compute.ec2.get_keyname">[docs]</a>    <span class="k">def</span> <span class="nf">get_keyname</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="ec2.get_keyname"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.iaas.ec2.html#cloudmesh.iaas.ec2.cm_compute.ec2.get_keyname">[docs]</a>    <span class="k">def</span> <span class="nf">get_keyname</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">ssh_keyname</span>
 </div>
-<div class="viewcode-block" id="ec2.get_image_name"><a class="viewcode-back" href="../../../../modules/cloudmesh.iaas.ec2.html#cloudmesh.iaas.ec2.cm_compute.ec2.get_image_name">[docs]</a>    <span class="k">def</span> <span class="nf">get_image_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="ec2.get_image_name"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.iaas.ec2.html#cloudmesh.iaas.ec2.cm_compute.ec2.get_image_name">[docs]</a>    <span class="k">def</span> <span class="nf">get_image_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">image_name</span>
 </div>
     <span class="k">def</span> <span class="nf">_get_servers_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -761,7 +761,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">encode_output</span><span class="p">(</span><span class="n">vm_list</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">vm_list</span>
 
-<div class="viewcode-block" id="ec2.encode_output"><a class="viewcode-back" href="../../../../modules/cloudmesh.iaas.ec2.html#cloudmesh.iaas.ec2.cm_compute.ec2.encode_output">[docs]</a>    <span class="k">def</span> <span class="nf">encode_output</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vmlist</span><span class="p">):</span>
+<div class="viewcode-block" id="ec2.encode_output"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.iaas.ec2.html#cloudmesh.iaas.ec2.cm_compute.ec2.encode_output">[docs]</a>    <span class="k">def</span> <span class="nf">encode_output</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vmlist</span><span class="p">):</span>
         <span class="k">for</span> <span class="n">vmid</span> <span class="ow">in</span> <span class="n">vmlist</span><span class="p">:</span>
             <span class="n">vm</span> <span class="o">=</span> <span class="n">vmlist</span><span class="p">[</span><span class="n">vmid</span><span class="p">]</span>
             <span class="n">vm</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s">&quot;name&quot;</span><span class="p">:</span> <span class="nb">unicode</span><span class="p">(</span><span class="n">vm</span><span class="p">[</span><span class="s">&#39;id&#39;</span><span class="p">]),</span>
@@ -781,7 +781,7 @@
             <span class="k">except</span><span class="p">:</span>
                 <span class="k">pass</span>
 </div>
-<div class="viewcode-block" id="ec2.convert_states"><a class="viewcode-back" href="../../../../modules/cloudmesh.iaas.ec2.html#cloudmesh.iaas.ec2.cm_compute.ec2.convert_states">[docs]</a>    <span class="k">def</span> <span class="nf">convert_states</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">status</span><span class="p">):</span>
+<div class="viewcode-block" id="ec2.convert_states"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.iaas.ec2.html#cloudmesh.iaas.ec2.cm_compute.ec2.convert_states">[docs]</a>    <span class="k">def</span> <span class="nf">convert_states</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">status</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">status</span> <span class="o">==</span> <span class="s">&quot;running&quot;</span><span class="p">:</span>
             <span class="k">return</span> <span class="s">&quot;ACTIVE&quot;</span>
         <span class="k">elif</span> <span class="n">status</span> <span class="o">==</span> <span class="s">&quot;terminated&quot;</span><span class="p">:</span>
@@ -789,7 +789,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">status</span>
 </div>
-<div class="viewcode-block" id="ec2.convert_ips"><a class="viewcode-back" href="../../../../modules/cloudmesh.iaas.ec2.html#cloudmesh.iaas.ec2.cm_compute.ec2.convert_ips">[docs]</a>    <span class="k">def</span> <span class="nf">convert_ips</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ip</span><span class="p">):</span>
+<div class="viewcode-block" id="ec2.convert_ips"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.iaas.ec2.html#cloudmesh.iaas.ec2.cm_compute.ec2.convert_ips">[docs]</a>    <span class="k">def</span> <span class="nf">convert_ips</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ip</span><span class="p">):</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">ip_address</span> <span class="o">=</span> <span class="n">ip</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="k">except</span> <span class="ne">IndexError</span><span class="p">:</span>
@@ -804,7 +804,7 @@
         <span class="p">}</span>
         <span class="k">return</span> <span class="n">res</span>
 </div>
-<div class="viewcode-block" id="ec2.convert_flavors"><a class="viewcode-back" href="../../../../modules/cloudmesh.iaas.ec2.html#cloudmesh.iaas.ec2.cm_compute.ec2.convert_flavors">[docs]</a>    <span class="k">def</span> <span class="nf">convert_flavors</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">flavor</span><span class="p">):</span>
+<div class="viewcode-block" id="ec2.convert_flavors"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.iaas.ec2.html#cloudmesh.iaas.ec2.cm_compute.ec2.convert_flavors">[docs]</a>    <span class="k">def</span> <span class="nf">convert_flavors</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">flavor</span><span class="p">):</span>
         <span class="n">res</span> <span class="o">=</span> <span class="p">{</span><span class="s">u&#39;id&#39;</span><span class="p">:</span> <span class="nb">unicode</span><span class="p">(</span><span class="n">flavor</span><span class="p">),</span>
                <span class="s">u&#39;links&#39;</span><span class="p">:</span> <span class="p">[</span>
             <span class="p">{</span><span class="s">u&#39;href&#39;</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span>
@@ -813,7 +813,7 @@
         <span class="p">}</span>
         <span class="k">return</span> <span class="n">res</span>
 </div>
-<div class="viewcode-block" id="ec2.release_unused_public_ips"><a class="viewcode-back" href="../../../../modules/cloudmesh.iaas.ec2.html#cloudmesh.iaas.ec2.cm_compute.ec2.release_unused_public_ips">[docs]</a>    <span class="k">def</span> <span class="nf">release_unused_public_ips</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="ec2.release_unused_public_ips"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.iaas.ec2.html#cloudmesh.iaas.ec2.cm_compute.ec2.release_unused_public_ips">[docs]</a>    <span class="k">def</span> <span class="nf">release_unused_public_ips</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span>
 </div>
     <span class="k">def</span> <span class="nf">_urlparse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ec2_url</span><span class="p">):</span>
@@ -846,12 +846,12 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">flavors</span> <span class="o">=</span> <span class="n">result</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">flavors</span>
 
-<div class="viewcode-block" id="ec2.get_flavors_from_yaml"><a class="viewcode-back" href="../../../../modules/cloudmesh.iaas.ec2.html#cloudmesh.iaas.ec2.cm_compute.ec2.get_flavors_from_yaml">[docs]</a>    <span class="k">def</span> <span class="nf">get_flavors_from_yaml</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="ec2.get_flavors_from_yaml"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.iaas.ec2.html#cloudmesh.iaas.ec2.cm_compute.ec2.get_flavors_from_yaml">[docs]</a>    <span class="k">def</span> <span class="nf">get_flavors_from_yaml</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">obj</span> <span class="o">=</span> <span class="n">cm_config_flavor</span><span class="p">()</span>
         <span class="n">flavors</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;cloudmesh.flavor&#39;</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">flavors</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">label</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="ec2.convert_to_dict"><a class="viewcode-back" href="../../../../modules/cloudmesh.iaas.ec2.html#cloudmesh.iaas.ec2.cm_compute.ec2.convert_to_dict">[docs]</a>    <span class="k">def</span> <span class="nf">convert_to_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_list</span><span class="p">):</span>
+<div class="viewcode-block" id="ec2.convert_to_dict"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.iaas.ec2.html#cloudmesh.iaas.ec2.cm_compute.ec2.convert_to_dict">[docs]</a>    <span class="k">def</span> <span class="nf">convert_to_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_list</span><span class="p">):</span>
         <span class="n">res_dict</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">_list</span><span class="p">:</span>
             <span class="c"># row looks like</span>
@@ -863,7 +863,7 @@
             <span class="k">del</span><span class="p">(</span><span class="n">row</span><span class="o">.</span><span class="n">driver</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">res_dict</span>
 </div>
-<div class="viewcode-block" id="ec2.list_flavors"><a class="viewcode-back" href="../../../../modules/cloudmesh.iaas.ec2.html#cloudmesh.iaas.ec2.cm_compute.ec2.list_flavors">[docs]</a>    <span class="k">def</span> <span class="nf">list_flavors</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="ec2.list_flavors"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.iaas.ec2.html#cloudmesh.iaas.ec2.cm_compute.ec2.list_flavors">[docs]</a>    <span class="k">def</span> <span class="nf">list_flavors</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">list_sizes</span><span class="p">()</span>
 </div>
     <span class="k">def</span> <span class="nf">_get_images_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -872,10 +872,10 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">images</span> <span class="o">=</span> <span class="n">res_dict</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">images</span>
 
-<div class="viewcode-block" id="ec2.list_images"><a class="viewcode-back" href="../../../../modules/cloudmesh.iaas.ec2.html#cloudmesh.iaas.ec2.cm_compute.ec2.list_images">[docs]</a>    <span class="k">def</span> <span class="nf">list_images</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="ec2.list_images"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.iaas.ec2.html#cloudmesh.iaas.ec2.cm_compute.ec2.list_images">[docs]</a>    <span class="k">def</span> <span class="nf">list_images</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">list_images</span><span class="p">()</span>
 </div>
-<div class="viewcode-block" id="ec2.keypair_list"><a class="viewcode-back" href="../../../../modules/cloudmesh.iaas.ec2.html#cloudmesh.iaas.ec2.cm_compute.ec2.keypair_list">[docs]</a>    <span class="k">def</span> <span class="nf">keypair_list</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="ec2.keypair_list"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.iaas.ec2.html#cloudmesh.iaas.ec2.cm_compute.ec2.keypair_list">[docs]</a>    <span class="k">def</span> <span class="nf">keypair_list</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Return a keypair list. keypair_list() function name is fixed</span>
 
 <span class="sd">        :returns: dict</span>
@@ -888,7 +888,7 @@
             <span class="n">res</span><span class="p">[</span><span class="s">&#39;keypairs&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tmp</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">res</span>
 </div>
-<div class="viewcode-block" id="ec2.keypair_add"><a class="viewcode-back" href="../../../../modules/cloudmesh.iaas.ec2.html#cloudmesh.iaas.ec2.cm_compute.ec2.keypair_add">[docs]</a>    <span class="k">def</span> <span class="nf">keypair_add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">content</span><span class="p">):</span>
+<div class="viewcode-block" id="ec2.keypair_add"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.iaas.ec2.html#cloudmesh.iaas.ec2.cm_compute.ec2.keypair_add">[docs]</a>    <span class="k">def</span> <span class="nf">keypair_add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">content</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Add a keypair&quot;&quot;&quot;</span>
 
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">ex_import_keypair_from_string</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">content</span><span class="p">)</span>
@@ -902,7 +902,7 @@
 <span class="sd">        return self.conn.ex_import_keypair(name, keyfile_name)</span>
 <span class="sd">        &#39;&#39;&#39;</span>
 </div>
-<div class="viewcode-block" id="ec2.keypair_remove"><a class="viewcode-back" href="../../../../modules/cloudmesh.iaas.ec2.html#cloudmesh.iaas.ec2.cm_compute.ec2.keypair_remove">[docs]</a>    <span class="k">def</span> <span class="nf">keypair_remove</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+<div class="viewcode-block" id="ec2.keypair_remove"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.iaas.ec2.html#cloudmesh.iaas.ec2.cm_compute.ec2.keypair_remove">[docs]</a>    <span class="k">def</span> <span class="nf">keypair_remove</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Delete a keypair&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">ex_delete_keypair</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
             <span class="k">return</span> <span class="p">{</span><span class="s">&quot;msg&quot;</span><span class="p">:</span> <span class="s">&quot;success&quot;</span><span class="p">}</span></div></div>

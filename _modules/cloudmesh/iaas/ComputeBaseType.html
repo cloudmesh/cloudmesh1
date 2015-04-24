@@ -577,11 +577,11 @@
 <span class="kn">import</span> <span class="nn">json</span>
 
 
-<div class="viewcode-block" id="donotchange"><a class="viewcode-back" href="../../../modules/cloudmesh.iaas.html#cloudmesh.iaas.ComputeBaseType.donotchange">[docs]</a><span class="k">def</span> <span class="nf">donotchange</span><span class="p">(</span><span class="n">fn</span><span class="p">):</span>
+<div class="viewcode-block" id="donotchange"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.iaas.html#cloudmesh.iaas.ComputeBaseType.donotchange">[docs]</a><span class="k">def</span> <span class="nf">donotchange</span><span class="p">(</span><span class="n">fn</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">fn</span>
 
 </div>
-<div class="viewcode-block" id="ComputeBaseType"><a class="viewcode-back" href="../../../modules/cloudmesh.iaas.html#cloudmesh.iaas.ComputeBaseType.ComputeBaseType">[docs]</a><span class="k">class</span> <span class="nc">ComputeBaseType</span><span class="p">:</span>
+<div class="viewcode-block" id="ComputeBaseType"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.iaas.html#cloudmesh.iaas.ComputeBaseType.ComputeBaseType">[docs]</a><span class="k">class</span> <span class="nc">ComputeBaseType</span><span class="p">:</span>
 
     <span class="c"># users = {}</span>
     <span class="c"># tenants = {}</span>
@@ -629,7 +629,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">user_id</span> <span class="o">=</span> <span class="bp">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">auth_token</span> <span class="o">=</span> <span class="bp">None</span>
 
-<div class="viewcode-block" id="ComputeBaseType.info"><a class="viewcode-back" href="../../../modules/cloudmesh.iaas.html#cloudmesh.iaas.ComputeBaseType.ComputeBaseType.info">[docs]</a>    <span class="k">def</span> <span class="nf">info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="ComputeBaseType.info"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.iaas.html#cloudmesh.iaas.ComputeBaseType.ComputeBaseType.info">[docs]</a>    <span class="k">def</span> <span class="nf">info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;obtain some basic information about the cloud&quot;&quot;&quot;</span>
         <span class="k">print</span><span class="p">(</span><span class="s">&quot;Label:&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">label</span><span class="p">)</span>
         <span class="k">print</span><span class="p">(</span><span class="s">&quot;Type:&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">type</span><span class="p">)</span>
@@ -642,22 +642,22 @@
         <span class="c"># print &quot;Users:&quot;, len(self.users)</span>
         <span class="c"># print &quot;Tenants:&quot;, len(self.tenants)</span>
 </div>
-<div class="viewcode-block" id="ComputeBaseType.connect"><a class="viewcode-back" href="../../../modules/cloudmesh.iaas.html#cloudmesh.iaas.ComputeBaseType.ComputeBaseType.connect">[docs]</a>    <span class="k">def</span> <span class="nf">connect</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="ComputeBaseType.connect"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.iaas.html#cloudmesh.iaas.ComputeBaseType.ComputeBaseType.connect">[docs]</a>    <span class="k">def</span> <span class="nf">connect</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;connect to the cloud&quot;&quot;&quot;</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span>
 </div>
-<div class="viewcode-block" id="ComputeBaseType.config"><a class="viewcode-back" href="../../../modules/cloudmesh.iaas.html#cloudmesh.iaas.ComputeBaseType.ComputeBaseType.config">[docs]</a>    <span class="k">def</span> <span class="nf">config</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+<div class="viewcode-block" id="ComputeBaseType.config"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.iaas.html#cloudmesh.iaas.ComputeBaseType.ComputeBaseType.config">[docs]</a>    <span class="k">def</span> <span class="nf">config</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;uses the dict to conduct some configuration with the parameters passed&quot;&quot;&quot;</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span>
 </div>
-<div class="viewcode-block" id="ComputeBaseType.find_user_id"><a class="viewcode-back" href="../../../modules/cloudmesh.iaas.html#cloudmesh.iaas.ComputeBaseType.ComputeBaseType.find_user_id">[docs]</a>    <span class="k">def</span> <span class="nf">find_user_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">force</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+<div class="viewcode-block" id="ComputeBaseType.find_user_id"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.iaas.html#cloudmesh.iaas.ComputeBaseType.ComputeBaseType.find_user_id">[docs]</a>    <span class="k">def</span> <span class="nf">find_user_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">force</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;finds the user id of a user and caches it. If a chaced</span>
 <span class="sd">        value is ther it will use that. If you specify force, it will</span>
 <span class="sd">        regenerate it&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">user_id</span> <span class="o">=</span> <span class="s">&quot;unkown&quot;</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span>
 </div>
-<div class="viewcode-block" id="ComputeBaseType.dump"><a class="viewcode-back" href="../../../modules/cloudmesh.iaas.html#cloudmesh.iaas.ComputeBaseType.ComputeBaseType.dump">[docs]</a>    <span class="k">def</span> <span class="nf">dump</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s">&quot;server&quot;</span><span class="p">,</span> <span class="n">with_manager</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+<div class="viewcode-block" id="ComputeBaseType.dump"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.iaas.html#cloudmesh.iaas.ComputeBaseType.ComputeBaseType.dump">[docs]</a>    <span class="k">def</span> <span class="nf">dump</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s">&quot;server&quot;</span><span class="p">,</span> <span class="n">with_manager</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;returns a string that contains information about the cloud. One can ste the type to &#39;images&#39;,&#39;flavors&#39;,&#39;servers&#39;&quot;&quot;&quot;</span>
         <span class="n">selection</span> <span class="o">=</span> <span class="nb">type</span><span class="o">.</span><span class="n">lower</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
         <span class="k">if</span> <span class="n">selection</span> <span class="o">==</span> <span class="s">&#39;i&#39;</span><span class="p">:</span>
@@ -686,7 +686,7 @@
                     <span class="k">pass</span>
         <span class="k">return</span> <span class="n">d</span>
 </div>
-<div class="viewcode-block" id="ComputeBaseType.get"><a class="viewcode-back" href="../../../modules/cloudmesh.iaas.html#cloudmesh.iaas.ComputeBaseType.ComputeBaseType.get">[docs]</a>    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s">&quot;server&quot;</span><span class="p">):</span>
+<div class="viewcode-block" id="ComputeBaseType.get"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.iaas.html#cloudmesh.iaas.ComputeBaseType.ComputeBaseType.get">[docs]</a>    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s">&quot;server&quot;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;returns information in a dict for &#39;servers&#39;,&#39;flavours&#39;,&#39;images&#39;&quot;&quot;&quot;</span>
         <span class="n">selection</span> <span class="o">=</span> <span class="nb">type</span><span class="o">.</span><span class="n">lower</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
         <span class="n">d</span> <span class="o">=</span> <span class="p">{}</span>
@@ -732,7 +732,7 @@
     <span class="k">def</span> <span class="nf">_get_security_groups_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span>
 
-<div class="viewcode-block" id="ComputeBaseType.vm_create"><a class="viewcode-back" href="../../../modules/cloudmesh.iaas.html#cloudmesh.iaas.ComputeBaseType.ComputeBaseType.vm_create">[docs]</a>    <span class="k">def</span> <span class="nf">vm_create</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+<div class="viewcode-block" id="ComputeBaseType.vm_create"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.iaas.html#cloudmesh.iaas.ComputeBaseType.ComputeBaseType.vm_create">[docs]</a>    <span class="k">def</span> <span class="nf">vm_create</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
                   <span class="n">flavor_name</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
                   <span class="n">image_id</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
                   <span class="n">security_groups</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
@@ -741,46 +741,46 @@
         <span class="sd">&quot;&quot;&quot;create a virtual machine with the given parameters&quot;&quot;&quot;</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span>
 </div>
-<div class="viewcode-block" id="ComputeBaseType.vm_delete"><a class="viewcode-back" href="../../../modules/cloudmesh.iaas.html#cloudmesh.iaas.ComputeBaseType.ComputeBaseType.vm_delete">[docs]</a>    <span class="k">def</span> <span class="nf">vm_delete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">id</span><span class="p">):</span>
+<div class="viewcode-block" id="ComputeBaseType.vm_delete"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.iaas.html#cloudmesh.iaas.ComputeBaseType.ComputeBaseType.vm_delete">[docs]</a>    <span class="k">def</span> <span class="nf">vm_delete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">id</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;delete the virtual machine with the id&quot;&quot;&quot;</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span>
 </div>
-<div class="viewcode-block" id="ComputeBaseType.vms_project"><a class="viewcode-back" href="../../../modules/cloudmesh.iaas.html#cloudmesh.iaas.ComputeBaseType.ComputeBaseType.vms_project">[docs]</a>    <span class="k">def</span> <span class="nf">vms_project</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">refresh</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+<div class="viewcode-block" id="ComputeBaseType.vms_project"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.iaas.html#cloudmesh.iaas.ComputeBaseType.ComputeBaseType.vms_project">[docs]</a>    <span class="k">def</span> <span class="nf">vms_project</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">refresh</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span>
 </div>
-<div class="viewcode-block" id="ComputeBaseType.rename"><a class="viewcode-back" href="../../../modules/cloudmesh.iaas.html#cloudmesh.iaas.ComputeBaseType.ComputeBaseType.rename">[docs]</a>    <span class="k">def</span> <span class="nf">rename</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">old</span><span class="p">,</span> <span class="n">new</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<div class="viewcode-block" id="ComputeBaseType.rename"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.iaas.html#cloudmesh.iaas.ComputeBaseType.ComputeBaseType.rename">[docs]</a>    <span class="k">def</span> <span class="nf">rename</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">old</span><span class="p">,</span> <span class="n">new</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;rename the firtual machine with the name old to the name new&quot;&quot;&quot;</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span>
 </div>
-<div class="viewcode-block" id="ComputeBaseType.usage"><a class="viewcode-back" href="../../../modules/cloudmesh.iaas.html#cloudmesh.iaas.ComputeBaseType.ComputeBaseType.usage">[docs]</a>    <span class="k">def</span> <span class="nf">usage</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">,</span> <span class="n">format</span><span class="o">=</span><span class="s">&#39;dict&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="ComputeBaseType.usage"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.iaas.html#cloudmesh.iaas.ComputeBaseType.ComputeBaseType.usage">[docs]</a>    <span class="k">def</span> <span class="nf">usage</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">,</span> <span class="n">format</span><span class="o">=</span><span class="s">&#39;dict&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;returns the usage data between start and end date&quot;&quot;&quot;</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span>
 </div>
-<div class="viewcode-block" id="ComputeBaseType.limits"><a class="viewcode-back" href="../../../modules/cloudmesh.iaas.html#cloudmesh.iaas.ComputeBaseType.ComputeBaseType.limits">[docs]</a>    <span class="k">def</span> <span class="nf">limits</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="ComputeBaseType.limits"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.iaas.html#cloudmesh.iaas.ComputeBaseType.ComputeBaseType.limits">[docs]</a>    <span class="k">def</span> <span class="nf">limits</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;returns a dict of limits that the cloud will maintain for a user and/or the project&quot;&quot;&quot;</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span>
 </div>
-<div class="viewcode-block" id="ComputeBaseType.get_limits"><a class="viewcode-back" href="../../../modules/cloudmesh.iaas.html#cloudmesh.iaas.ComputeBaseType.ComputeBaseType.get_limits">[docs]</a>    <span class="k">def</span> <span class="nf">get_limits</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="ComputeBaseType.get_limits"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.iaas.html#cloudmesh.iaas.ComputeBaseType.ComputeBaseType.get_limits">[docs]</a>    <span class="k">def</span> <span class="nf">get_limits</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;returns a dict of limits that the cloud will maintain for a user and/or the project&quot;&quot;&quot;</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span>
 </div>
-<div class="viewcode-block" id="ComputeBaseType.get_absolute_limits"><a class="viewcode-back" href="../../../modules/cloudmesh.iaas.html#cloudmesh.iaas.ComputeBaseType.ComputeBaseType.get_absolute_limits">[docs]</a>    <span class="k">def</span> <span class="nf">get_absolute_limits</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="ComputeBaseType.get_absolute_limits"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.iaas.html#cloudmesh.iaas.ComputeBaseType.ComputeBaseType.get_absolute_limits">[docs]</a>    <span class="k">def</span> <span class="nf">get_absolute_limits</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;returns a dict of absolute limits with current usage information&quot;&quot;&quot;</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span>
 </div>
-<div class="viewcode-block" id="ComputeBaseType.get_usage"><a class="viewcode-back" href="../../../modules/cloudmesh.iaas.html#cloudmesh.iaas.ComputeBaseType.ComputeBaseType.get_usage">[docs]</a>    <span class="k">def</span> <span class="nf">get_usage</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="ComputeBaseType.get_usage"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.iaas.html#cloudmesh.iaas.ComputeBaseType.ComputeBaseType.get_usage">[docs]</a>    <span class="k">def</span> <span class="nf">get_usage</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span>
 </div>
-<div class="viewcode-block" id="ComputeBaseType.get_quota"><a class="viewcode-back" href="../../../modules/cloudmesh.iaas.html#cloudmesh.iaas.ComputeBaseType.ComputeBaseType.get_quota">[docs]</a>    <span class="k">def</span> <span class="nf">get_quota</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="ComputeBaseType.get_quota"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.iaas.html#cloudmesh.iaas.ComputeBaseType.ComputeBaseType.get_quota">[docs]</a>    <span class="k">def</span> <span class="nf">get_quota</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span>
 </div>
-<div class="viewcode-block" id="ComputeBaseType.stack_create"><a class="viewcode-back" href="../../../modules/cloudmesh.iaas.html#cloudmesh.iaas.ComputeBaseType.ComputeBaseType.stack_create">[docs]</a>    <span class="k">def</span> <span class="nf">stack_create</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="ComputeBaseType.stack_create"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.iaas.html#cloudmesh.iaas.ComputeBaseType.ComputeBaseType.stack_create">[docs]</a>    <span class="k">def</span> <span class="nf">stack_create</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span>
 </div>
-<div class="viewcode-block" id="ComputeBaseType.stack_delete"><a class="viewcode-back" href="../../../modules/cloudmesh.iaas.html#cloudmesh.iaas.ComputeBaseType.ComputeBaseType.stack_delete">[docs]</a>    <span class="k">def</span> <span class="nf">stack_delete</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="ComputeBaseType.stack_delete"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.iaas.html#cloudmesh.iaas.ComputeBaseType.ComputeBaseType.stack_delete">[docs]</a>    <span class="k">def</span> <span class="nf">stack_delete</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span>
 </div>
-<div class="viewcode-block" id="ComputeBaseType.wait"><a class="viewcode-back" href="../../../modules/cloudmesh.iaas.html#cloudmesh.iaas.ComputeBaseType.ComputeBaseType.wait">[docs]</a>    <span class="k">def</span> <span class="nf">wait</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vm_id</span><span class="p">,</span> <span class="n">vm_status</span><span class="p">,</span> <span class="n">seconds</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
+<div class="viewcode-block" id="ComputeBaseType.wait"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.iaas.html#cloudmesh.iaas.ComputeBaseType.ComputeBaseType.wait">[docs]</a>    <span class="k">def</span> <span class="nf">wait</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vm_id</span><span class="p">,</span> <span class="n">vm_status</span><span class="p">,</span> <span class="n">seconds</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;waits a number of seconds and than refreshes information form the cloud&quot;&quot;&quot;</span>
         <span class="k">print</span><span class="p">(</span><span class="s">&#39;refersh&#39;</span><span class="p">,</span> <span class="n">vm_id</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">refresh</span><span class="p">()</span>
@@ -822,19 +822,19 @@
     <span class="c"># def type():</span>
     <span class="c">#    return self.type</span>
 
-<div class="viewcode-block" id="ComputeBaseType.vms"><a class="viewcode-back" href="../../../modules/cloudmesh.iaas.html#cloudmesh.iaas.ComputeBaseType.ComputeBaseType.vms">[docs]</a>    <span class="k">def</span> <span class="nf">vms</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="ComputeBaseType.vms"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.iaas.html#cloudmesh.iaas.ComputeBaseType.ComputeBaseType.vms">[docs]</a>    <span class="k">def</span> <span class="nf">vms</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;returns the dict of the servers. deprecated.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">servers</span>
 </div>
-<div class="viewcode-block" id="ComputeBaseType.status"><a class="viewcode-back" href="../../../modules/cloudmesh.iaas.html#cloudmesh.iaas.ComputeBaseType.ComputeBaseType.status">[docs]</a>    <span class="k">def</span> <span class="nf">status</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vm_id</span><span class="p">):</span>
+<div class="viewcode-block" id="ComputeBaseType.status"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.iaas.html#cloudmesh.iaas.ComputeBaseType.ComputeBaseType.status">[docs]</a>    <span class="k">def</span> <span class="nf">status</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vm_id</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;returns that status of a given virtual machine&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">servers</span><span class="p">[</span><span class="n">vm_id</span><span class="p">][</span><span class="s">&#39;status&#39;</span><span class="p">]</span>
 </div>
-<div class="viewcode-block" id="ComputeBaseType.set_credentials"><a class="viewcode-back" href="../../../modules/cloudmesh.iaas.html#cloudmesh.iaas.ComputeBaseType.ComputeBaseType.set_credentials">[docs]</a>    <span class="k">def</span> <span class="nf">set_credentials</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cred</span><span class="p">):</span>
+<div class="viewcode-block" id="ComputeBaseType.set_credentials"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.iaas.html#cloudmesh.iaas.ComputeBaseType.ComputeBaseType.set_credentials">[docs]</a>    <span class="k">def</span> <span class="nf">set_credentials</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cred</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;sets the set_credentials to the dict cred&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">credential</span> <span class="o">=</span> <span class="n">cred</span>
 </div>
-<div class="viewcode-block" id="ComputeBaseType.refresh"><a class="viewcode-back" href="../../../modules/cloudmesh.iaas.html#cloudmesh.iaas.ComputeBaseType.ComputeBaseType.refresh">[docs]</a>    <span class="k">def</span> <span class="nf">refresh</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<div class="viewcode-block" id="ComputeBaseType.refresh"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.iaas.html#cloudmesh.iaas.ComputeBaseType.ComputeBaseType.refresh">[docs]</a>    <span class="k">def</span> <span class="nf">refresh</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;refreshes the information of the cache for a given type &#39;images&#39;, &#39;flavors&#39;, &#39;servers&#39;, or &#39;all&#39; for all of them&quot;&quot;&quot;</span>
         <span class="n">time_stamp</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s">&#39;%Y-%m-</span><span class="si">%d</span><span class="s">T%H-%M-%SZ&#39;</span><span class="p">)</span>
         <span class="n">selection</span> <span class="o">=</span> <span class="s">&quot;&quot;</span>
@@ -912,13 +912,13 @@
                 <span class="n">data_updated</span><span class="p">[</span><span class="nb">id</span><span class="p">][</span><span class="s">&#39;cm_refresh&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">time_stamp</span>
             <span class="n">data</span> <span class="o">=</span> <span class="n">data_updated</span>
 </div>
-<div class="viewcode-block" id="ComputeBaseType.keypair_list"><a class="viewcode-back" href="../../../modules/cloudmesh.iaas.html#cloudmesh.iaas.ComputeBaseType.ComputeBaseType.keypair_list">[docs]</a>    <span class="k">def</span> <span class="nf">keypair_list</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="ComputeBaseType.keypair_list"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.iaas.html#cloudmesh.iaas.ComputeBaseType.ComputeBaseType.keypair_list">[docs]</a>    <span class="k">def</span> <span class="nf">keypair_list</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span>
 </div>
-<div class="viewcode-block" id="ComputeBaseType.keypair_add"><a class="viewcode-back" href="../../../modules/cloudmesh.iaas.html#cloudmesh.iaas.ComputeBaseType.ComputeBaseType.keypair_add">[docs]</a>    <span class="k">def</span> <span class="nf">keypair_add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">keyname</span><span class="p">,</span> <span class="n">keycontent</span><span class="p">):</span>
+<div class="viewcode-block" id="ComputeBaseType.keypair_add"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.iaas.html#cloudmesh.iaas.ComputeBaseType.ComputeBaseType.keypair_add">[docs]</a>    <span class="k">def</span> <span class="nf">keypair_add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">keyname</span><span class="p">,</span> <span class="n">keycontent</span><span class="p">):</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span>
 </div>
-<div class="viewcode-block" id="ComputeBaseType.keypair_remove"><a class="viewcode-back" href="../../../modules/cloudmesh.iaas.html#cloudmesh.iaas.ComputeBaseType.ComputeBaseType.keypair_remove">[docs]</a>    <span class="k">def</span> <span class="nf">keypair_remove</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">keyname</span><span class="p">):</span>
+<div class="viewcode-block" id="ComputeBaseType.keypair_remove"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.iaas.html#cloudmesh.iaas.ComputeBaseType.ComputeBaseType.keypair_remove">[docs]</a>    <span class="k">def</span> <span class="nf">keypair_remove</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">keyname</span><span class="p">):</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span></div></div>
 </pre></div>
 

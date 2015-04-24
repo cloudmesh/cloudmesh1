@@ -582,7 +582,7 @@
 <span class="kn">import</span> <span class="nn">time</span>
 
 
-<div class="viewcode-block" id="StopWatch"><a class="viewcode-back" href="../../../modules/cloudmesh.util.html#cloudmesh.util.stopwatch.StopWatch">[docs]</a><span class="k">class</span> <span class="nc">StopWatch</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<div class="viewcode-block" id="StopWatch"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.util.html#cloudmesh.util.stopwatch.StopWatch">[docs]</a><span class="k">class</span> <span class="nc">StopWatch</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
 
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    A class to measure times between events.</span>
@@ -599,11 +599,11 @@
 <span class="sd">        &#39;&#39;&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
 
-<div class="viewcode-block" id="StopWatch.keys"><a class="viewcode-back" href="../../../modules/cloudmesh.util.html#cloudmesh.util.stopwatch.StopWatch.keys">[docs]</a>    <span class="k">def</span> <span class="nf">keys</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="StopWatch.keys"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.util.html#cloudmesh.util.stopwatch.StopWatch.keys">[docs]</a>    <span class="k">def</span> <span class="nf">keys</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;returns the names of the timers&#39;&#39;&#39;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">timer_end</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
 </div>
-<div class="viewcode-block" id="StopWatch.start"><a class="viewcode-back" href="../../../modules/cloudmesh.util.html#cloudmesh.util.stopwatch.StopWatch.start">[docs]</a>    <span class="k">def</span> <span class="nf">start</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+<div class="viewcode-block" id="StopWatch.start"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.util.html#cloudmesh.util.stopwatch.StopWatch.start">[docs]</a>    <span class="k">def</span> <span class="nf">start</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        starts a timer with the given name.</span>
 
@@ -612,7 +612,7 @@
 <span class="sd">        &#39;&#39;&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">timer_start</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
 </div>
-<div class="viewcode-block" id="StopWatch.stop"><a class="viewcode-back" href="../../../modules/cloudmesh.util.html#cloudmesh.util.stopwatch.StopWatch.stop">[docs]</a>    <span class="k">def</span> <span class="nf">stop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+<div class="viewcode-block" id="StopWatch.stop"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.util.html#cloudmesh.util.stopwatch.StopWatch.stop">[docs]</a>    <span class="k">def</span> <span class="nf">stop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        stops the timer with a given name.</span>
 
@@ -621,7 +621,7 @@
 <span class="sd">        &#39;&#39;&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">timer_end</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
 </div>
-<div class="viewcode-block" id="StopWatch.get"><a class="viewcode-back" href="../../../modules/cloudmesh.util.html#cloudmesh.util.stopwatch.StopWatch.get">[docs]</a>    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+<div class="viewcode-block" id="StopWatch.get"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.util.html#cloudmesh.util.stopwatch.StopWatch.get">[docs]</a>    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        returns the time of the timer.</span>
 
@@ -633,7 +633,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">timer_start</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
         <span class="k">return</span> <span class="n">time_elapsed</span>
 </div>
-<div class="viewcode-block" id="StopWatch.clear"><a class="viewcode-back" href="../../../modules/cloudmesh.util.html#cloudmesh.util.stopwatch.StopWatch.clear">[docs]</a>    <span class="k">def</span> <span class="nf">clear</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="StopWatch.clear"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.util.html#cloudmesh.util.stopwatch.StopWatch.clear">[docs]</a>    <span class="k">def</span> <span class="nf">clear</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        clear start and end timer_start</span>
 <span class="sd">        &#39;&#39;&#39;</span>

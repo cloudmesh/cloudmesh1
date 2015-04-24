@@ -584,7 +584,7 @@
 <span class="n">log</span> <span class="o">=</span> <span class="n">LOGGER</span><span class="p">(</span><span class="n">__file__</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="BaremetalStatus"><a class="viewcode-back" href="../../../modules/cloudmesh.provisioner.html#cloudmesh.provisioner.baremetal_status.BaremetalStatus">[docs]</a><span class="k">class</span> <span class="nc">BaremetalStatus</span><span class="p">:</span>
+<div class="viewcode-block" id="BaremetalStatus"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.provisioner.html#cloudmesh.provisioner.baremetal_status.BaremetalStatus">[docs]</a><span class="k">class</span> <span class="nc">BaremetalStatus</span><span class="p">:</span>
 
     <span class="sd">&quot;&quot;&quot;Baremetal computer Status.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -594,28 +594,28 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">db_client</span> <span class="o">=</span> <span class="n">DBHelper</span><span class="p">()</span>
 
-<div class="viewcode-block" id="BaremetalStatus.get_default_query"><a class="viewcode-back" href="../../../modules/cloudmesh.provisioner.html#cloudmesh.provisioner.baremetal_status.BaremetalStatus.get_default_query">[docs]</a>    <span class="k">def</span> <span class="nf">get_default_query</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="BaremetalStatus.get_default_query"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.provisioner.html#cloudmesh.provisioner.baremetal_status.BaremetalStatus.get_default_query">[docs]</a>    <span class="k">def</span> <span class="nf">get_default_query</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="p">{</span><span class="s">&quot;cm_kind&quot;</span><span class="p">:</span> <span class="s">&quot;baremetal&quot;</span><span class="p">,</span> <span class="s">&quot;cm_type&quot;</span><span class="p">:</span> <span class="s">&quot;status_inventory&quot;</span><span class="p">}</span>
 </div>
-<div class="viewcode-block" id="BaremetalStatus.get_full_query"><a class="viewcode-back" href="../../../modules/cloudmesh.provisioner.html#cloudmesh.provisioner.baremetal_status.BaremetalStatus.get_full_query">[docs]</a>    <span class="k">def</span> <span class="nf">get_full_query</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query_elem</span><span class="p">):</span>
+<div class="viewcode-block" id="BaremetalStatus.get_full_query"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.provisioner.html#cloudmesh.provisioner.baremetal_status.BaremetalStatus.get_full_query">[docs]</a>    <span class="k">def</span> <span class="nf">get_full_query</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query_elem</span><span class="p">):</span>
         <span class="n">elem</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_default_query</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">query_elem</span><span class="p">:</span>
             <span class="n">elem</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">query_elem</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">elem</span>
 </div>
-<div class="viewcode-block" id="BaremetalStatus.init_deploy_status"><a class="viewcode-back" href="../../../modules/cloudmesh.provisioner.html#cloudmesh.provisioner.baremetal_status.BaremetalStatus.init_deploy_status">[docs]</a>    <span class="k">def</span> <span class="nf">init_deploy_status</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">):</span>
+<div class="viewcode-block" id="BaremetalStatus.init_deploy_status"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.provisioner.html#cloudmesh.provisioner.baremetal_status.BaremetalStatus.init_deploy_status">[docs]</a>    <span class="k">def</span> <span class="nf">init_deploy_status</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Init the deploy status of host</span>
 <span class="sd">        :param string host: the host name of baremetal computer</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">init_status</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="s">&quot;deploy&quot;</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="BaremetalStatus.init_power_status"><a class="viewcode-back" href="../../../modules/cloudmesh.provisioner.html#cloudmesh.provisioner.baremetal_status.BaremetalStatus.init_power_status">[docs]</a>    <span class="k">def</span> <span class="nf">init_power_status</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">flag_on</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+<div class="viewcode-block" id="BaremetalStatus.init_power_status"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.provisioner.html#cloudmesh.provisioner.baremetal_status.BaremetalStatus.init_power_status">[docs]</a>    <span class="k">def</span> <span class="nf">init_power_status</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">flag_on</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Init the Power ON/OFF status of the host</span>
 <span class="sd">        :param string host: the host name of baremetal computer</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">init_status</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="s">&quot;on&quot;</span> <span class="k">if</span> <span class="n">flag_on</span> <span class="k">else</span> <span class="s">&quot;off&quot;</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="BaremetalStatus.init_status"><a class="viewcode-back" href="../../../modules/cloudmesh.provisioner.html#cloudmesh.provisioner.baremetal_status.BaremetalStatus.init_status">[docs]</a>    <span class="k">def</span> <span class="nf">init_status</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">action</span><span class="p">):</span>
+<div class="viewcode-block" id="BaremetalStatus.init_status"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.provisioner.html#cloudmesh.provisioner.baremetal_status.BaremetalStatus.init_status">[docs]</a>    <span class="k">def</span> <span class="nf">init_status</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">action</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;init the status of baremetal computer</span>
 <span class="sd">        :param string action: one of values in [&quot;on&quot;, &quot;off&quot;, &quot;deploy&quot;]</span>
 <span class="sd">        :return: True means init status successfully, otherwise failed.</span>
@@ -636,7 +636,7 @@
         <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">db_client</span><span class="o">.</span><span class="n">atom_update</span><span class="p">(</span><span class="n">query_elem</span><span class="p">,</span> <span class="p">{</span><span class="s">&quot;$set&quot;</span><span class="p">:</span> <span class="n">update_elem</span><span class="p">})</span>
         <span class="k">return</span> <span class="n">result</span><span class="p">[</span><span class="s">&quot;result&quot;</span><span class="p">]</span>
 </div>
-<div class="viewcode-block" id="BaremetalStatus.update_deploy_command_result"><a class="viewcode-back" href="../../../modules/cloudmesh.provisioner.html#cloudmesh.provisioner.baremetal_status.BaremetalStatus.update_deploy_command_result">[docs]</a>    <span class="k">def</span> <span class="nf">update_deploy_command_result</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">result</span><span class="p">):</span>
+<div class="viewcode-block" id="BaremetalStatus.update_deploy_command_result"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.provisioner.html#cloudmesh.provisioner.baremetal_status.BaremetalStatus.update_deploy_command_result">[docs]</a>    <span class="k">def</span> <span class="nf">update_deploy_command_result</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">result</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;update the deploy result</span>
 <span class="sd">        :param string host: the unique name of host</span>
 <span class="sd">        :param boolean result: True means deploy command success, False means failed</span>
@@ -647,7 +647,7 @@
         <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">db_client</span><span class="o">.</span><span class="n">atom_update</span><span class="p">(</span><span class="n">query_elem</span><span class="p">,</span> <span class="p">{</span><span class="s">&quot;$set&quot;</span><span class="p">:</span> <span class="n">update_elem</span><span class="p">})</span>
         <span class="k">return</span> <span class="n">result</span><span class="p">[</span><span class="s">&quot;result&quot;</span><span class="p">]</span>
 </div>
-<div class="viewcode-block" id="BaremetalStatus.update_power_status"><a class="viewcode-back" href="../../../modules/cloudmesh.provisioner.html#cloudmesh.provisioner.baremetal_status.BaremetalStatus.update_power_status">[docs]</a>    <span class="k">def</span> <span class="nf">update_power_status</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">status</span><span class="p">,</span> <span class="n">flag_on</span><span class="p">):</span>
+<div class="viewcode-block" id="BaremetalStatus.update_power_status"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.provisioner.html#cloudmesh.provisioner.baremetal_status.BaremetalStatus.update_power_status">[docs]</a>    <span class="k">def</span> <span class="nf">update_power_status</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">status</span><span class="p">,</span> <span class="n">flag_on</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;update the status of power ON/OFF</span>
 <span class="sd">        :param string host: the unique name of host</span>
 <span class="sd">        :param string status: status of &quot;ON&quot; or &quot;OFF&quot;</span>
@@ -679,7 +679,7 @@
                 <span class="n">result</span> <span class="o">=</span> <span class="n">update_result</span><span class="p">[</span><span class="s">&quot;result&quot;</span><span class="p">]</span>
         <span class="k">return</span> <span class="n">result</span>
 </div>
-<div class="viewcode-block" id="BaremetalStatus.update_deploy_status"><a class="viewcode-back" href="../../../modules/cloudmesh.provisioner.html#cloudmesh.provisioner.baremetal_status.BaremetalStatus.update_deploy_status">[docs]</a>    <span class="k">def</span> <span class="nf">update_deploy_status</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">status</span><span class="p">):</span>
+<div class="viewcode-block" id="BaremetalStatus.update_deploy_status"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.provisioner.html#cloudmesh.provisioner.baremetal_status.BaremetalStatus.update_deploy_status">[docs]</a>    <span class="k">def</span> <span class="nf">update_deploy_status</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">status</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;update the status of deploy based on the cycle OFF --&gt; ON --&gt; OFF</span>
 <span class="sd">        :param string host: the unique name of host</span>
 <span class="sd">        :param string status: status of &quot;ON&quot; or &quot;OFF&quot;</span>
@@ -725,7 +725,7 @@
                     <span class="n">result</span> <span class="o">=</span> <span class="n">update_result</span><span class="p">[</span><span class="s">&quot;result&quot;</span><span class="p">]</span>
         <span class="k">return</span> <span class="n">result</span>
 </div>
-<div class="viewcode-block" id="BaremetalStatus.get_deploy_progress"><a class="viewcode-back" href="../../../modules/cloudmesh.provisioner.html#cloudmesh.provisioner.baremetal_status.BaremetalStatus.get_deploy_progress">[docs]</a>    <span class="k">def</span> <span class="nf">get_deploy_progress</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">host_status</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<div class="viewcode-block" id="BaremetalStatus.get_deploy_progress"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.provisioner.html#cloudmesh.provisioner.baremetal_status.BaremetalStatus.get_deploy_progress">[docs]</a>    <span class="k">def</span> <span class="nf">get_deploy_progress</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">host_status</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;get the progress of deploy of host baremetal computer.</span>
 <span class="sd">        :param string host: the unique ID of host</span>
 <span class="sd">        :param dict host_status: the status document of host in mongodb</span>
@@ -748,7 +748,7 @@
                 <span class="n">result</span> <span class="o">=</span> <span class="mi">100</span>
         <span class="k">return</span> <span class="n">result</span>
 </div>
-<div class="viewcode-block" id="BaremetalStatus.get_power_progress"><a class="viewcode-back" href="../../../modules/cloudmesh.provisioner.html#cloudmesh.provisioner.baremetal_status.BaremetalStatus.get_power_progress">[docs]</a>    <span class="k">def</span> <span class="nf">get_power_progress</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">flag_on</span><span class="p">,</span> <span class="n">host_status</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<div class="viewcode-block" id="BaremetalStatus.get_power_progress"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.provisioner.html#cloudmesh.provisioner.baremetal_status.BaremetalStatus.get_power_progress">[docs]</a>    <span class="k">def</span> <span class="nf">get_power_progress</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">flag_on</span><span class="p">,</span> <span class="n">host_status</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;get the progress of power ON/OFF of host baremetal computer.</span>
 <span class="sd">        :param string host: the unique ID of host</span>
 <span class="sd">        :param boolean flag_on: True means power ON, False means OFF</span>
@@ -768,7 +768,7 @@
                     <span class="n">result</span> <span class="o">=</span> <span class="mi">100</span>
         <span class="k">return</span> <span class="n">result</span>
 </div>
-<div class="viewcode-block" id="BaremetalStatus.get_host_progress"><a class="viewcode-back" href="../../../modules/cloudmesh.provisioner.html#cloudmesh.provisioner.baremetal_status.BaremetalStatus.get_host_progress">[docs]</a>    <span class="k">def</span> <span class="nf">get_host_progress</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">):</span>
+<div class="viewcode-block" id="BaremetalStatus.get_host_progress"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.provisioner.html#cloudmesh.provisioner.baremetal_status.BaremetalStatus.get_host_progress">[docs]</a>    <span class="k">def</span> <span class="nf">get_host_progress</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;get the progress of host baremetal computer.</span>
 <span class="sd">        :param string host: the unique ID of host</span>
 <span class="sd">        :return: a dict of {&quot;status&quot;: &quot;deploy&quot;, &quot;progress&quot;: 25, }, there are 5 status of host, namely deploy, poweron, poweroff, failed, unknown</span>
@@ -800,7 +800,7 @@
                 <span class="n">result</span><span class="p">[</span><span class="s">&quot;status&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&quot;failed&quot;</span>
         <span class="k">return</span> <span class="n">result</span>
 </div>
-<div class="viewcode-block" id="BaremetalStatus.get_status"><a class="viewcode-back" href="../../../modules/cloudmesh.provisioner.html#cloudmesh.provisioner.baremetal_status.BaremetalStatus.get_status">[docs]</a>    <span class="k">def</span> <span class="nf">get_status</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<div class="viewcode-block" id="BaremetalStatus.get_status"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.provisioner.html#cloudmesh.provisioner.baremetal_status.BaremetalStatus.get_status">[docs]</a>    <span class="k">def</span> <span class="nf">get_status</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;get the status of single or all baremetal computer(s)</span>
 <span class="sd">        :param string host: the unique ID of host, None means get status of all hosts</span>
 <span class="sd">        :return: a list of dict with the following formation [{&quot;cm_id&quot;: &quot;cm_id&quot;, &quot;status&quot;:&quot;status&quot;, &quot;transient&quot;:{&quot;action&quot;: &quot;action&quot;, &quot;status_1&quot;:&quot;status_1&quot;, &quot;status_2&quot;:&quot;status_2&quot;, &quot;status_3&quot;:&quot;status_3&quot;}}]</span>
@@ -810,7 +810,7 @@
         <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">db_client</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">query_elem</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">result</span><span class="p">[</span><span class="s">&quot;data&quot;</span><span class="p">]</span> <span class="k">if</span> <span class="n">result</span><span class="p">[</span><span class="s">&quot;result&quot;</span><span class="p">]</span> <span class="k">else</span> <span class="bp">None</span>
 </div>
-<div class="viewcode-block" id="BaremetalStatus.get_status_short"><a class="viewcode-back" href="../../../modules/cloudmesh.provisioner.html#cloudmesh.provisioner.baremetal_status.BaremetalStatus.get_status_short">[docs]</a>    <span class="k">def</span> <span class="nf">get_status_short</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">hosts</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<div class="viewcode-block" id="BaremetalStatus.get_status_short"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.provisioner.html#cloudmesh.provisioner.baremetal_status.BaremetalStatus.get_status_short">[docs]</a>    <span class="k">def</span> <span class="nf">get_status_short</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">hosts</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;get the short status of baremetal for hosts</span>
 <span class="sd">        :param list hosts: a list of host or None means all hosts</span>
 <span class="sd">        :return: a dict with the formation {&quot;host1&quot;:&quot;deployed&quot;, &quot;host2&quot;: &quot;deploying&quot;, &quot;host3&quot;: &quot;failed&quot;, &quot;host4&quot;: &quot;unknown&quot;, }</span>
@@ -823,7 +823,7 @@
             <span class="n">result</span><span class="p">[</span><span class="n">host</span><span class="p">[</span><span class="s">&quot;cm_id&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="n">host</span><span class="p">[</span><span class="s">&quot;status&quot;</span><span class="p">]</span>
         <span class="k">return</span> <span class="n">result</span>
 </div>
-<div class="viewcode-block" id="BaremetalStatus.get_status_summary"><a class="viewcode-back" href="../../../modules/cloudmesh.provisioner.html#cloudmesh.provisioner.baremetal_status.BaremetalStatus.get_status_summary">[docs]</a>    <span class="k">def</span> <span class="nf">get_status_summary</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">hosts</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<div class="viewcode-block" id="BaremetalStatus.get_status_summary"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.provisioner.html#cloudmesh.provisioner.baremetal_status.BaremetalStatus.get_status_summary">[docs]</a>    <span class="k">def</span> <span class="nf">get_status_summary</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">hosts</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;get the summary status of baremetal for hosts</span>
 <span class="sd">        :param list hosts: a list of host or None means all hosts</span>
 <span class="sd">        :return: a dict with the formation {&quot;deployed&quot;: 1, &quot;deploying&quot;:2, &quot;failed&quot;:2, &quot;total&quot;: 5}</span>

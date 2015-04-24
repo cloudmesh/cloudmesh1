@@ -619,19 +619,19 @@
 <span class="n">user</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&quot;cloudmesh.profile.username&quot;</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="versioned_url"><a class="viewcode-back" href="../../../modules/cloudmesh.pbs.html#cloudmesh.pbs.rest.versioned_url">[docs]</a><span class="k">def</span> <span class="nf">versioned_url</span><span class="p">(</span><span class="n">url</span><span class="p">):</span>
+<div class="viewcode-block" id="versioned_url"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.pbs.html#cloudmesh.pbs.rest.versioned_url">[docs]</a><span class="k">def</span> <span class="nf">versioned_url</span><span class="p">(</span><span class="n">url</span><span class="p">):</span>
     <span class="k">return</span> <span class="s">&quot;/&quot;</span> <span class="o">+</span> <span class="n">version</span> <span class="o">+</span> <span class="n">url</span>
 
 </div>
-<div class="viewcode-block" id="simple_error"><a class="viewcode-back" href="../../../modules/cloudmesh.pbs.html#cloudmesh.pbs.rest.simple_error">[docs]</a><span class="k">def</span> <span class="nf">simple_error</span><span class="p">(</span><span class="n">kind</span><span class="p">,</span> <span class="n">attribute</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s">&quot;does not exist&quot;</span><span class="p">):</span>
+<div class="viewcode-block" id="simple_error"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.pbs.html#cloudmesh.pbs.rest.simple_error">[docs]</a><span class="k">def</span> <span class="nf">simple_error</span><span class="p">(</span><span class="n">kind</span><span class="p">,</span> <span class="n">attribute</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s">&quot;does not exist&quot;</span><span class="p">):</span>
     <span class="n">msg</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="n">msg</span><span class="p">[</span><span class="s">&quot;error:&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&quot;{0} {1} {2}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">kind</span><span class="p">,</span> <span class="n">attribute</span><span class="p">,</span> <span class="n">help</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">msg</span>
 
 </div>
-<div class="viewcode-block" id="rest_queue_stat"><a class="viewcode-back" href="../../../modules/cloudmesh.pbs.html#cloudmesh.pbs.rest.rest_queue_stat">[docs]</a><span class="k">class</span> <span class="nc">rest_queue_stat</span><span class="p">(</span><span class="n">restful</span><span class="o">.</span><span class="n">Resource</span><span class="p">):</span>
+<div class="viewcode-block" id="rest_queue_stat"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.pbs.html#cloudmesh.pbs.rest.rest_queue_stat">[docs]</a><span class="k">class</span> <span class="nc">rest_queue_stat</span><span class="p">(</span><span class="n">restful</span><span class="o">.</span><span class="n">Resource</span><span class="p">):</span>
 
-<div class="viewcode-block" id="rest_queue_stat.get"><a class="viewcode-back" href="../../../modules/cloudmesh.pbs.html#cloudmesh.pbs.rest.rest_queue_stat.get">[docs]</a>    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="rest_queue_stat.get"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.pbs.html#cloudmesh.pbs.rest.rest_queue_stat.get">[docs]</a>    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">args</span> <span class="o">=</span> <span class="n">queue_stat_parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
         <span class="n">resource</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="s">&#39;resource&#39;</span><span class="p">]</span>
         <span class="nb">id</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="s">&#39;id&#39;</span><span class="p">]</span>
@@ -654,9 +654,9 @@
                 <span class="k">return</span> <span class="n">simple_error</span><span class="p">(</span><span class="s">&quot;id&quot;</span><span class="p">,</span> <span class="nb">id</span><span class="p">),</span> <span class="mi">200</span>    <span class="c"># 404</span>
 
 </div></div>
-<div class="viewcode-block" id="rest_queue_info"><a class="viewcode-back" href="../../../modules/cloudmesh.pbs.html#cloudmesh.pbs.rest.rest_queue_info">[docs]</a><span class="k">class</span> <span class="nc">rest_queue_info</span><span class="p">(</span><span class="n">restful</span><span class="o">.</span><span class="n">Resource</span><span class="p">):</span>
+<div class="viewcode-block" id="rest_queue_info"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.pbs.html#cloudmesh.pbs.rest.rest_queue_info">[docs]</a><span class="k">class</span> <span class="nc">rest_queue_info</span><span class="p">(</span><span class="n">restful</span><span class="o">.</span><span class="n">Resource</span><span class="p">):</span>
 
-<div class="viewcode-block" id="rest_queue_info.get"><a class="viewcode-back" href="../../../modules/cloudmesh.pbs.html#cloudmesh.pbs.rest.rest_queue_info.get">[docs]</a>    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="rest_queue_info.get"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.pbs.html#cloudmesh.pbs.rest.rest_queue_info.get">[docs]</a>    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">args</span> <span class="o">=</span> <span class="n">queue_info_parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
         <span class="n">resource</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="s">&#39;resource&#39;</span><span class="p">]</span>
         <span class="n">queue</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="s">&#39;queue&#39;</span><span class="p">]</span>

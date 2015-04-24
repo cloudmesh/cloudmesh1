@@ -578,7 +578,7 @@
 <span class="kn">from</span> <span class="nn">cloudmesh.config.cm_config</span> <span class="kn">import</span> <span class="n">cm_config_server</span>
 
 
-<div class="viewcode-block" id="metric_api"><a class="viewcode-back" href="../../../../modules/cloudmesh.metric.api.html#cloudmesh.metric.api.metric.metric_api">[docs]</a><span class="k">class</span> <span class="nc">metric_api</span><span class="p">:</span>
+<div class="viewcode-block" id="metric_api"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.metric.api.html#cloudmesh.metric.api.metric.metric_api">[docs]</a><span class="k">class</span> <span class="nc">metric_api</span><span class="p">:</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">from_date</span> <span class="o">=</span> <span class="bp">None</span>
@@ -607,11 +607,11 @@
         <span class="n">result</span> <span class="o">+=</span> <span class="s">&quot;projectid:   </span><span class="si">%s</span><span class="se">\n</span><span class="s">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">projectid</span>
         <span class="k">return</span> <span class="n">result</span>
 
-<div class="viewcode-block" id="metric_api.set_default"><a class="viewcode-back" href="../../../../modules/cloudmesh.metric.api.html#cloudmesh.metric.api.metric.metric_api.set_default">[docs]</a>    <span class="k">def</span> <span class="nf">set_default</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="metric_api.set_default"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.metric.api.html#cloudmesh.metric.api.metric.metric_api.set_default">[docs]</a>    <span class="k">def</span> <span class="nf">set_default</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">timetype</span> <span class="o">=</span> <span class="s">&quot;hour&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">metric</span> <span class="o">=</span> <span class="s">&quot;vmcount&quot;</span>
 </div>
-<div class="viewcode-block" id="metric_api.load_server_info"><a class="viewcode-back" href="../../../../modules/cloudmesh.metric.api.html#cloudmesh.metric.api.metric.metric_api.load_server_info">[docs]</a>    <span class="k">def</span> <span class="nf">load_server_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="metric_api.load_server_info"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.metric.api.html#cloudmesh.metric.api.metric.metric_api.load_server_info">[docs]</a>    <span class="k">def</span> <span class="nf">load_server_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="c"># cloudmesh_server.yaml contains the api server info</span>
         <span class="n">config_server</span> <span class="o">=</span> <span class="n">cm_config_server</span><span class="p">()</span>
         <span class="k">try</span><span class="p">:</span>
@@ -624,7 +624,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">port</span> <span class="o">=</span> <span class="mi">5001</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">doc_url</span> <span class="o">=</span> <span class="s">&quot;metric&quot;</span>
 </div>
-<div class="viewcode-block" id="metric_api.connect"><a class="viewcode-back" href="../../../../modules/cloudmesh.metric.api.html#cloudmesh.metric.api.metric.metric_api.connect">[docs]</a>    <span class="k">def</span> <span class="nf">connect</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="metric_api.connect"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.metric.api.html#cloudmesh.metric.api.metric.metric_api.connect">[docs]</a>    <span class="k">def</span> <span class="nf">connect</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_uri</span><span class="p">())</span>
             <span class="k">return</span> <span class="n">r</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
@@ -640,7 +640,7 @@
             <span class="k">print</span> <span class="s">&quot;Unexpected error:&quot;</span><span class="p">,</span> <span class="n">sys</span><span class="o">.</span><span class="n">exc_info</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
             <span class="k">raise</span>
 </div>
-<div class="viewcode-block" id="metric_api.get_uri"><a class="viewcode-back" href="../../../../modules/cloudmesh.metric.api.html#cloudmesh.metric.api.metric.metric_api.get_uri">[docs]</a>    <span class="k">def</span> <span class="nf">get_uri</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="metric_api.get_uri"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.metric.api.html#cloudmesh.metric.api.metric.metric_api.get_uri">[docs]</a>    <span class="k">def</span> <span class="nf">get_uri</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="c"># /metric/&lt;cloudname&gt;/&lt;hostname&gt;/&lt;username&gt;/&lt;metric&gt;/&lt;timestart&gt;/&lt;timeend&gt;/&lt;period&gt;</span>
         <span class="n">uri</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">uri</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">api_server</span> <span class="o">+</span> <span class="s">&quot;:&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">port</span><span class="p">))</span>
@@ -655,38 +655,38 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">uri</span> <span class="o">=</span> <span class="s">&quot;/&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">uri</span><span class="p">))</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">uri</span>
 </div>
-<div class="viewcode-block" id="metric_api.set_date"><a class="viewcode-back" href="../../../../modules/cloudmesh.metric.api.html#cloudmesh.metric.api.metric.metric_api.set_date">[docs]</a>    <span class="k">def</span> <span class="nf">set_date</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">from_date</span><span class="p">,</span> <span class="n">to_date</span><span class="p">):</span>
+<div class="viewcode-block" id="metric_api.set_date"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.metric.api.html#cloudmesh.metric.api.metric.metric_api.set_date">[docs]</a>    <span class="k">def</span> <span class="nf">set_date</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">from_date</span><span class="p">,</span> <span class="n">to_date</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">from_date</span> <span class="o">=</span> <span class="n">from_date</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">to_date</span> <span class="o">=</span> <span class="n">to_date</span>
 </div>
-<div class="viewcode-block" id="metric_api.set_period"><a class="viewcode-back" href="../../../../modules/cloudmesh.metric.api.html#cloudmesh.metric.api.metric.metric_api.set_period">[docs]</a>    <span class="k">def</span> <span class="nf">set_period</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">period</span><span class="p">):</span>
+<div class="viewcode-block" id="metric_api.set_period"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.metric.api.html#cloudmesh.metric.api.metric.metric_api.set_period">[docs]</a>    <span class="k">def</span> <span class="nf">set_period</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">period</span><span class="p">):</span>
         <span class="c"># NOT IMPLEMENTED MESSAGE</span>
         <span class="k">if</span> <span class="n">period</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">na_message</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">_getframe</span><span class="p">()</span><span class="o">.</span><span class="n">f_code</span><span class="o">.</span><span class="n">co_name</span><span class="p">,</span> <span class="n">period</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">period</span> <span class="o">=</span> <span class="n">period</span>
 </div>
-<div class="viewcode-block" id="metric_api.set_metric"><a class="viewcode-back" href="../../../../modules/cloudmesh.metric.api.html#cloudmesh.metric.api.metric.metric_api.set_metric">[docs]</a>    <span class="k">def</span> <span class="nf">set_metric</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">metric</span><span class="p">):</span>
+<div class="viewcode-block" id="metric_api.set_metric"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.metric.api.html#cloudmesh.metric.api.metric.metric_api.set_metric">[docs]</a>    <span class="k">def</span> <span class="nf">set_metric</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">metric</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">metric</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">metric</span> <span class="o">=</span> <span class="n">metric</span>
 </div>
-<div class="viewcode-block" id="metric_api.set_host"><a class="viewcode-back" href="../../../../modules/cloudmesh.metric.api.html#cloudmesh.metric.api.metric.metric_api.set_host">[docs]</a>    <span class="k">def</span> <span class="nf">set_host</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">):</span>
+<div class="viewcode-block" id="metric_api.set_host"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.metric.api.html#cloudmesh.metric.api.metric.metric_api.set_host">[docs]</a>    <span class="k">def</span> <span class="nf">set_host</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">host</span> <span class="o">=</span> <span class="n">host</span>
 </div>
-<div class="viewcode-block" id="metric_api.set_iaas"><a class="viewcode-back" href="../../../../modules/cloudmesh.metric.api.html#cloudmesh.metric.api.metric.metric_api.set_iaas">[docs]</a>    <span class="k">def</span> <span class="nf">set_iaas</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cloud</span><span class="p">):</span>
+<div class="viewcode-block" id="metric_api.set_iaas"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.metric.api.html#cloudmesh.metric.api.metric.metric_api.set_iaas">[docs]</a>    <span class="k">def</span> <span class="nf">set_iaas</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cloud</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">iaas</span> <span class="o">=</span> <span class="n">cloud</span>
 </div>
-<div class="viewcode-block" id="metric_api.set_cloud"><a class="viewcode-back" href="../../../../modules/cloudmesh.metric.api.html#cloudmesh.metric.api.metric.metric_api.set_cloud">[docs]</a>    <span class="k">def</span> <span class="nf">set_cloud</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cloud</span><span class="p">):</span>
+<div class="viewcode-block" id="metric_api.set_cloud"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.metric.api.html#cloudmesh.metric.api.metric.metric_api.set_cloud">[docs]</a>    <span class="k">def</span> <span class="nf">set_cloud</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cloud</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39; link to set_iaas &#39;&#39;&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">set_iaas</span><span class="p">(</span><span class="n">cloud</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="metric_api.set_user"><a class="viewcode-back" href="../../../../modules/cloudmesh.metric.api.html#cloudmesh.metric.api.metric.metric_api.set_user">[docs]</a>    <span class="k">def</span> <span class="nf">set_user</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">userid</span><span class="p">):</span>
+<div class="viewcode-block" id="metric_api.set_user"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.metric.api.html#cloudmesh.metric.api.metric.metric_api.set_user">[docs]</a>    <span class="k">def</span> <span class="nf">set_user</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">userid</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">userid</span> <span class="o">=</span> <span class="n">userid</span>
 </div>
-<div class="viewcode-block" id="metric_api.set_project"><a class="viewcode-back" href="../../../../modules/cloudmesh.metric.api.html#cloudmesh.metric.api.metric.metric_api.set_project">[docs]</a>    <span class="k">def</span> <span class="nf">set_project</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+<div class="viewcode-block" id="metric_api.set_project"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.metric.api.html#cloudmesh.metric.api.metric.metric_api.set_project">[docs]</a>    <span class="k">def</span> <span class="nf">set_project</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">projectid</span> <span class="o">=</span> <span class="n">name</span>
 </div>
-<div class="viewcode-block" id="metric_api.test_raw_data"><a class="viewcode-back" href="../../../../modules/cloudmesh.metric.api.html#cloudmesh.metric.api.metric.metric_api.test_raw_data">[docs]</a>    <span class="k">def</span> <span class="nf">test_raw_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="metric_api.test_raw_data"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.metric.api.html#cloudmesh.metric.api.metric.metric_api.test_raw_data">[docs]</a>    <span class="k">def</span> <span class="nf">test_raw_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="c"># for test, dummy data is returned</span>
         <span class="n">res</span> <span class="o">=</span> <span class="p">[[</span><span class="s">&quot;HOST&quot;</span><span class="p">,</span> <span class="s">&quot;PROJECT&quot;</span><span class="p">,</span> <span class="s">&quot;cpu&quot;</span><span class="p">,</span> <span class="s">&quot;memory_mb&quot;</span><span class="p">,</span> <span class="s">&quot;disk_gb&quot;</span><span class="p">],</span>
                <span class="p">[</span><span class="s">&quot;india&quot;</span><span class="p">,</span> <span class="s">&quot;(total)&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">4003</span><span class="p">,</span> <span class="mi">157</span><span class="p">],</span>
@@ -696,7 +696,7 @@
                <span class="p">[</span><span class="s">&quot;india&quot;</span><span class="p">,</span> <span class="s">&quot;66265572db174a7aa66eba661f58eb9e&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">4096</span><span class="p">,</span> <span class="mi">40</span><span class="p">]]</span>
         <span class="k">return</span> <span class="n">res</span>
 </div>
-<div class="viewcode-block" id="metric_api.get_raw_data"><a class="viewcode-back" href="../../../../modules/cloudmesh.metric.api.html#cloudmesh.metric.api.metric.metric_api.get_raw_data">[docs]</a>    <span class="k">def</span> <span class="nf">get_raw_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="metric_api.get_raw_data"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.metric.api.html#cloudmesh.metric.api.metric.metric_api.get_raw_data">[docs]</a>    <span class="k">def</span> <span class="nf">get_raw_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="c"># expect list variable</span>
         <span class="n">res</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
         <span class="c"># res is dict</span>
@@ -711,7 +711,7 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">comparison_table</span><span class="p">(</span><span class="n">res</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="metric_api.translate_naming"><a class="viewcode-back" href="../../../../modules/cloudmesh.metric.api.html#cloudmesh.metric.api.metric.metric_api.translate_naming">[docs]</a>    <span class="k">def</span> <span class="nf">translate_naming</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+<div class="viewcode-block" id="metric_api.translate_naming"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.metric.api.html#cloudmesh.metric.api.metric.metric_api.translate_naming">[docs]</a>    <span class="k">def</span> <span class="nf">translate_naming</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
         <span class="n">name</span> <span class="o">=</span> <span class="n">name</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
 
         <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="p">[</span><span class="s">&quot;WALLTIME&quot;</span><span class="p">,</span> <span class="s">&quot;WALLCLOCK&quot;</span><span class="p">,</span> <span class="s">&quot;RUNTIME&quot;</span><span class="p">]:</span>
@@ -722,7 +722,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">name</span>
 </div>
-<div class="viewcode-block" id="metric_api.comparison_table"><a class="viewcode-back" href="../../../../modules/cloudmesh.metric.api.html#cloudmesh.metric.api.metric.metric_api.comparison_table">[docs]</a>    <span class="k">def</span> <span class="nf">comparison_table</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">res</span><span class="p">):</span>
+<div class="viewcode-block" id="metric_api.comparison_table"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.metric.api.html#cloudmesh.metric.api.metric.metric_api.comparison_table">[docs]</a>    <span class="k">def</span> <span class="nf">comparison_table</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">res</span><span class="p">):</span>
         <span class="c"># Let&#39;s provide comparison table if there is no search option defined</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">iaas</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="p">:</span>
             <span class="k">return</span>
@@ -763,7 +763,7 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">raw_data</span> <span class="o">=</span> <span class="n">distlist_comparison</span>
 </div>
-<div class="viewcode-block" id="metric_api.display"><a class="viewcode-back" href="../../../../modules/cloudmesh.metric.api.html#cloudmesh.metric.api.metric.metric_api.display">[docs]</a>    <span class="k">def</span> <span class="nf">display</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">table_format</span><span class="o">=</span><span class="s">&quot;orgtbl&quot;</span><span class="p">):</span>
+<div class="viewcode-block" id="metric_api.display"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.metric.api.html#cloudmesh.metric.api.metric.metric_api.display">[docs]</a>    <span class="k">def</span> <span class="nf">display</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">table_format</span><span class="o">=</span><span class="s">&quot;orgtbl&quot;</span><span class="p">):</span>
 
         <span class="c"># display uri</span>
         <span class="k">print</span> <span class="s">&quot;uri: &quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">uri</span>
@@ -799,17 +799,17 @@
         <span class="k">except</span> <span class="ne">IndexError</span><span class="p">:</span>
             <span class="k">print</span> <span class="s">&quot;No results.&quot;</span>
 </div>
-<div class="viewcode-block" id="metric_api.get_stats"><a class="viewcode-back" href="../../../../modules/cloudmesh.metric.api.html#cloudmesh.metric.api.metric.metric_api.get_stats">[docs]</a>    <span class="k">def</span> <span class="nf">get_stats</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="metric_api.get_stats"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.metric.api.html#cloudmesh.metric.api.metric.metric_api.get_stats">[docs]</a>    <span class="k">def</span> <span class="nf">get_stats</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="c"># print vars(self)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">get_raw_data</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">display</span><span class="p">()</span>
         <span class="k">return</span>
 </div>
-<div class="viewcode-block" id="metric_api.stats"><a class="viewcode-back" href="../../../../modules/cloudmesh.metric.api.html#cloudmesh.metric.api.metric.metric_api.stats">[docs]</a>    <span class="k">def</span> <span class="nf">stats</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="metric_api.stats"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.metric.api.html#cloudmesh.metric.api.metric.metric_api.stats">[docs]</a>    <span class="k">def</span> <span class="nf">stats</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39; link to get_stats &#39;&#39;&#39;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_stats</span><span class="p">()</span>
 </div>
-<div class="viewcode-block" id="metric_api.na_message"><a class="viewcode-back" href="../../../../modules/cloudmesh.metric.api.html#cloudmesh.metric.api.metric.metric_api.na_message">[docs]</a>    <span class="k">def</span> <span class="nf">na_message</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">func_name</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+<div class="viewcode-block" id="metric_api.na_message"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.metric.api.html#cloudmesh.metric.api.metric.metric_api.na_message">[docs]</a>    <span class="k">def</span> <span class="nf">na_message</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">func_name</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
         <span class="n">args</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">args</span><span class="p">)</span>
         <span class="n">msg</span> <span class="o">=</span> <span class="s">&quot;</span><span class="si">%s</span><span class="s"> is not implemented, &#39;</span><span class="si">%s</span><span class="s">&#39; ignored.&quot;</span> <span class="o">%</span> \
             <span class="p">(</span><span class="n">func_name</span><span class="p">,</span> <span class="s">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">args</span><span class="p">))</span>

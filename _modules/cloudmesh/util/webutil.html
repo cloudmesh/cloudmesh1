@@ -585,7 +585,7 @@
 
 
 <span class="c"># for supporting base64.js</span>
-<div class="viewcode-block" id="base64_decode"><a class="viewcode-back" href="../../../modules/cloudmesh.util.html#cloudmesh.util.webutil.base64_decode">[docs]</a><span class="k">def</span> <span class="nf">base64_decode</span><span class="p">(</span><span class="n">the_string</span><span class="p">):</span>
+<div class="viewcode-block" id="base64_decode"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.util.html#cloudmesh.util.webutil.base64_decode">[docs]</a><span class="k">def</span> <span class="nf">base64_decode</span><span class="p">(</span><span class="n">the_string</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;decode the string with base 64.</span>
 
 <span class="sd">    :param the_string: the string</span>
@@ -603,7 +603,7 @@
     <span class="k">return</span> <span class="n">base64</span><span class="o">.</span><span class="n">b64decode</span><span class="p">(</span><span class="n">the_string</span><span class="p">)</span>
 
 </div>
-<div class="viewcode-block" id="decode_source"><a class="viewcode-back" href="../../../modules/cloudmesh.util.html#cloudmesh.util.webutil.decode_source">[docs]</a><span class="k">def</span> <span class="nf">decode_source</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">encoding</span><span class="p">,</span> <span class="n">compression</span><span class="p">):</span>
+<div class="viewcode-block" id="decode_source"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.util.html#cloudmesh.util.webutil.decode_source">[docs]</a><span class="k">def</span> <span class="nf">decode_source</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">encoding</span><span class="p">,</span> <span class="n">compression</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;decoude a source with given encoding and compression.</span>
 
 <span class="sd">    :param source: the string</span>
@@ -625,7 +625,7 @@
     <span class="k">return</span> <span class="n">source</span>
 
 </div>
-<div class="viewcode-block" id="get_hostname"><a class="viewcode-back" href="../../../modules/cloudmesh.util.html#cloudmesh.util.webutil.get_hostname">[docs]</a><span class="k">def</span> <span class="nf">get_hostname</span><span class="p">():</span>
+<div class="viewcode-block" id="get_hostname"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.util.html#cloudmesh.util.webutil.get_hostname">[docs]</a><span class="k">def</span> <span class="nf">get_hostname</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot;get the hostname form environment variables HTTP_HOST or SERVER_NAME.&quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;HTTP_HOST&#39;</span><span class="p">):</span>
         <span class="n">hostname</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s">&#39;HTTP_HOST&#39;</span><span class="p">]</span>

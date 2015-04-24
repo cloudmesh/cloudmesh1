@@ -577,13 +577,13 @@
 <span class="c"># EC2 compatible cloud in general, e.g. AWS, OpenStack, Eucalyptus</span>
 
 
-<div class="viewcode-block" id="Ec2SecurityGroup"><a class="viewcode-back" href="../../../modules/cloudmesh.iaas.html#cloudmesh.cm_mongo.Ec2SecurityGroup">[docs]</a><span class="k">class</span> <span class="nc">Ec2SecurityGroup</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<div class="viewcode-block" id="Ec2SecurityGroup"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.iaas.html#cloudmesh.cm_mongo.Ec2SecurityGroup">[docs]</a><span class="k">class</span> <span class="nc">Ec2SecurityGroup</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
 
     <span class="c"># Rules are defined based on protocol (TCP, UDP, ICMP), port range (from, to),</span>
     <span class="c"># source ip address in cidr format.</span>
     <span class="c"># A rule has to be part of a security group (parent_group_id)</span>
 
-<div class="viewcode-block" id="Ec2SecurityGroup.Rule"><a class="viewcode-back" href="../../../modules/cloudmesh.iaas.html#cloudmesh.cm_mongo.Ec2SecurityGroup.Rule">[docs]</a>    <span class="k">class</span> <span class="nc">Rule</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<div class="viewcode-block" id="Ec2SecurityGroup.Rule"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.iaas.html#cloudmesh.cm_mongo.Ec2SecurityGroup.Rule">[docs]</a>    <span class="k">class</span> <span class="nc">Rule</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
 
         <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">from_port</span><span class="p">,</span> <span class="n">to_port</span><span class="p">,</span> <span class="n">ip_protocol</span><span class="o">=</span><span class="s">&#39;tcp&#39;</span><span class="p">,</span> <span class="n">cidr</span><span class="o">=</span><span class="s">&#39;0.0.0.0/0&#39;</span><span class="p">,</span> <span class="n">parent_group_id</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">ip_protocol</span> <span class="o">=</span> <span class="n">ip_protocol</span>
@@ -613,7 +613,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">description</span> <span class="o">=</span> <span class="n">description</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">rules</span> <span class="o">=</span> <span class="p">[]</span>
 
-<div class="viewcode-block" id="Ec2SecurityGroup.set_rules"><a class="viewcode-back" href="../../../modules/cloudmesh.iaas.html#cloudmesh.cm_mongo.Ec2SecurityGroup.set_rules">[docs]</a>    <span class="k">def</span> <span class="nf">set_rules</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rules</span><span class="p">):</span>
+<div class="viewcode-block" id="Ec2SecurityGroup.set_rules"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.iaas.html#cloudmesh.cm_mongo.Ec2SecurityGroup.set_rules">[docs]</a>    <span class="k">def</span> <span class="nf">set_rules</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rules</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">rules</span> <span class="o">=</span> <span class="n">rules</span></div></div>
 </pre></div>
 

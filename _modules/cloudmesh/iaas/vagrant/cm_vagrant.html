@@ -588,7 +588,7 @@
 <span class="n">vm_destroy</span> <span class="o">=</span> <span class="n">vagrant</span><span class="o">.</span><span class="n">bake</span><span class="p">(</span><span class="s">&quot;destroy&quot;</span><span class="p">)</span>  <span class="c"># ?</span>
 
 
-<div class="viewcode-block" id="vagrant"><a class="viewcode-back" href="../../../../modules/cloudmesh.iaas.vagrant.html#cloudmesh.iaas.vagrant.cm_vagrant.vagrant">[docs]</a><span class="k">class</span> <span class="nc">vagrant</span><span class="p">:</span>
+<div class="viewcode-block" id="vagrant"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.iaas.vagrant.html#cloudmesh.iaas.vagrant.cm_vagrant.vagrant">[docs]</a><span class="k">class</span> <span class="nc">vagrant</span><span class="p">:</span>
 
     <span class="n">_provider</span> <span class="o">=</span> <span class="bp">None</span>
 
@@ -602,19 +602,19 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">label</span> <span class="o">=</span> <span class="n">label</span>
         <span class="c"># create dir/label</span>
 
-<div class="viewcode-block" id="vagrant.bootstrap"><a class="viewcode-back" href="../../../../modules/cloudmesh.iaas.vagrant.html#cloudmesh.iaas.vagrant.cm_vagrant.vagrant.bootstrap">[docs]</a>    <span class="k">def</span> <span class="nf">bootstrap</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">script</span><span class="p">):</span>
+<div class="viewcode-block" id="vagrant.bootstrap"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.iaas.vagrant.html#cloudmesh.iaas.vagrant.cm_vagrant.vagrant.bootstrap">[docs]</a>    <span class="k">def</span> <span class="nf">bootstrap</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">script</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;creates a bootsrap.sh file with the script contents&quot;&quot;&quot;</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span>
 </div>
-<div class="viewcode-block" id="vagrant.folder"><a class="viewcode-back" href="../../../../modules/cloudmesh.iaas.vagrant.html#cloudmesh.iaas.vagrant.cm_vagrant.vagrant.folder">[docs]</a>    <span class="k">def</span> <span class="nf">folder</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">source</span><span class="p">):</span>
+<div class="viewcode-block" id="vagrant.folder"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.iaas.vagrant.html#cloudmesh.iaas.vagrant.cm_vagrant.vagrant.folder">[docs]</a>    <span class="k">def</span> <span class="nf">folder</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">source</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;creates a foler with the name and rsyncs the condents from a source&quot;&quot;&quot;</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span>
 </div>
-<div class="viewcode-block" id="vagrant.forward"><a class="viewcode-back" href="../../../../modules/cloudmesh.iaas.vagrant.html#cloudmesh.iaas.vagrant.cm_vagrant.vagrant.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host_guest_array</span><span class="p">):</span>
+<div class="viewcode-block" id="vagrant.forward"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.iaas.vagrant.html#cloudmesh.iaas.vagrant.cm_vagrant.vagrant.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host_guest_array</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;(host portid, guest_portid)*&quot;&quot;&quot;</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span>
 </div>
-<div class="viewcode-block" id="vagrant.add_forward"><a class="viewcode-back" href="../../../../modules/cloudmesh.iaas.vagrant.html#cloudmesh.iaas.vagrant.cm_vagrant.vagrant.add_forward">[docs]</a>    <span class="k">def</span> <span class="nf">add_forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host_port</span><span class="p">,</span> <span class="n">guest_port</span><span class="p">):</span>
+<div class="viewcode-block" id="vagrant.add_forward"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.iaas.vagrant.html#cloudmesh.iaas.vagrant.cm_vagrant.vagrant.add_forward">[docs]</a>    <span class="k">def</span> <span class="nf">add_forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host_port</span><span class="p">,</span> <span class="n">guest_port</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;adds a singgle host giest port forward&quot;&quot;&quot;</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span>
 </div>
@@ -626,7 +626,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">vm_up</span> <span class="o">=</span> <span class="n">vagrant</span><span class="o">.</span><span class="n">bake</span><span class="p">(</span><span class="s">&quot;up&quot;</span><span class="p">)</span>
 
-<div class="viewcode-block" id="vagrant.image_list"><a class="viewcode-back" href="../../../../modules/cloudmesh.iaas.vagrant.html#cloudmesh.iaas.vagrant.cm_vagrant.vagrant.image_list">[docs]</a>    <span class="k">def</span> <span class="nf">image_list</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="vagrant.image_list"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.iaas.vagrant.html#cloudmesh.iaas.vagrant.cm_vagrant.vagrant.image_list">[docs]</a>    <span class="k">def</span> <span class="nf">image_list</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">images</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="n">lines</span> <span class="o">=</span> <span class="n">vagrant</span><span class="p">(</span><span class="s">&quot;box&quot;</span><span class="p">,</span> <span class="s">&quot;list&quot;</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">lines</span><span class="p">:</span>

@@ -586,11 +586,11 @@
 <span class="n">LOCAL_PASS_KEY</span> <span class="o">=</span> <span class="s">&quot;cm_password_local&quot;</span>
 
 
-<div class="viewcode-block" id="validate_password"><a class="viewcode-back" href="../../../modules/cloudmesh.server.html#cloudmesh.server.database.validate_password">[docs]</a><span class="k">def</span> <span class="nf">validate_password</span><span class="p">(</span><span class="n">password</span><span class="p">):</span>
+<div class="viewcode-block" id="validate_password"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.server.html#cloudmesh.server.database.validate_password">[docs]</a><span class="k">def</span> <span class="nf">validate_password</span><span class="p">(</span><span class="n">password</span><span class="p">):</span>
     <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="n">password</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="n">PASSWORD_LEN</span>
 
 </div>
-<div class="viewcode-block" id="getpassword"><a class="viewcode-back" href="../../../modules/cloudmesh.server.html#cloudmesh.server.database.getpassword">[docs]</a><span class="k">def</span> <span class="nf">getpassword</span><span class="p">(</span><span class="n">prompt</span><span class="p">):</span>
+<div class="viewcode-block" id="getpassword"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.server.html#cloudmesh.server.database.getpassword">[docs]</a><span class="k">def</span> <span class="nf">getpassword</span><span class="p">(</span><span class="n">prompt</span><span class="p">):</span>
     <span class="n">confirm_prompt</span> <span class="o">=</span> <span class="s">&quot;Enter again to confirm:&quot;</span>
     <span class="n">passwd1</span> <span class="o">=</span> <span class="n">getpass</span><span class="p">(</span><span class="n">prompt</span><span class="p">)</span>
     <span class="n">passwd2</span> <span class="o">=</span> <span class="n">getpass</span><span class="p">(</span><span class="n">confirm_prompt</span><span class="p">)</span>
@@ -601,7 +601,7 @@
         <span class="k">return</span> <span class="n">passwd1</span>
 
 </div>
-<div class="viewcode-block" id="Database"><a class="viewcode-back" href="../../../modules/cloudmesh.server.html#cloudmesh.server.database.Database">[docs]</a><span class="k">class</span> <span class="nc">Database</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<div class="viewcode-block" id="Database"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.server.html#cloudmesh.server.database.Database">[docs]</a><span class="k">class</span> <span class="nc">Database</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">filename</span> <span class="o">=</span> <span class="n">config_file</span><span class="p">(</span><span class="s">&quot;/cloudmesh.yaml&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">config</span> <span class="o">=</span> <span class="n">cm_config</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="p">)</span>
@@ -611,7 +611,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">profile</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">profile</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">mongo</span> <span class="o">=</span> <span class="n">cm_mongo</span><span class="p">()</span>
 
-<div class="viewcode-block" id="Database.set_password_local"><a class="viewcode-back" href="../../../modules/cloudmesh.server.html#cloudmesh.server.database.Database.set_password_local">[docs]</a>    <span class="k">def</span> <span class="nf">set_password_local</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">passwd</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<div class="viewcode-block" id="Database.set_password_local"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.server.html#cloudmesh.server.database.Database.set_password_local">[docs]</a>    <span class="k">def</span> <span class="nf">set_password_local</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">passwd</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">passwd</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
             <span class="n">prompt1st</span> <span class="o">=</span> <span class="s">&quot;Please set a password to login to the portal later.</span><span class="se">\n</span><span class="s">Password:&quot;</span>
             <span class="n">prompt_not_strong</span> <span class="o">=</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">Password not strong enough. Minimum length is 6. Please enter again.</span><span class="se">\n</span><span class="s">Password:&quot;</span>
@@ -631,7 +631,7 @@
         <span class="p">)</span>
         <span class="k">print</span><span class="p">(</span><span class="s">&quot;password set successfully!&quot;</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="Database.set_password_local_mongodb"><a class="viewcode-back" href="../../../modules/cloudmesh.server.html#cloudmesh.server.database.Database.set_password_local_mongodb">[docs]</a>    <span class="k">def</span> <span class="nf">set_password_local_mongodb</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">passwd</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<div class="viewcode-block" id="Database.set_password_local_mongodb"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.server.html#cloudmesh.server.database.Database.set_password_local_mongodb">[docs]</a>    <span class="k">def</span> <span class="nf">set_password_local_mongodb</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">passwd</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">passwd</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
             <span class="n">prompt1st</span> <span class="o">=</span> <span class="s">&quot;Please set a password to mongodb.</span><span class="se">\n</span><span class="s">Mongo Password:&quot;</span>
             <span class="n">prompt_not_strong</span> <span class="o">=</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">Password not strong enough. Minimum &quot;</span> <span class="o">+</span> \
@@ -648,14 +648,14 @@
         <span class="n">cm_config_server</span><span class="o">.</span><span class="n">_update</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
         <span class="n">cm_config_server</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="s">&quot;yaml&quot;</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="Database.set_credentials"><a class="viewcode-back" href="../../../modules/cloudmesh.server.html#cloudmesh.server.database.Database.set_credentials">[docs]</a>    <span class="k">def</span> <span class="nf">set_credentials</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Database.set_credentials"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.server.html#cloudmesh.server.database.Database.set_credentials">[docs]</a>    <span class="k">def</span> <span class="nf">set_credentials</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">for</span> <span class="n">cloudname</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">cloudnames</span><span class="p">():</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">user_obj</span><span class="o">.</span><span class="n">set_credential</span><span class="p">(</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">cm_user_id</span><span class="p">,</span>
                 <span class="n">cloudname</span><span class="p">,</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">clouds</span><span class="p">[</span><span class="n">cloudname</span><span class="p">][</span><span class="s">&#39;credentials&#39;</span><span class="p">])</span>
 </div>
-<div class="viewcode-block" id="Database.initialize_user"><a class="viewcode-back" href="../../../modules/cloudmesh.server.html#cloudmesh.server.database.Database.initialize_user">[docs]</a>    <span class="k">def</span> <span class="nf">initialize_user</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Database.initialize_user"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.server.html#cloudmesh.server.database.Database.initialize_user">[docs]</a>    <span class="k">def</span> <span class="nf">initialize_user</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">set_credentials</span><span class="p">()</span>
         <span class="n">element</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s">&quot;firstname&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">profile</span><span class="p">[</span><span class="s">&quot;firstname&quot;</span><span class="p">],</span>
@@ -735,7 +735,7 @@
             <span class="k">print</span><span class="p">(</span><span class="s">&quot;cloud &#39;{0}&#39; added.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">key</span><span class="p">))</span>
 </div>
     <span class="nd">@staticmethod</span>
-<div class="viewcode-block" id="Database.import_cloud_to_mongo"><a class="viewcode-back" href="../../../modules/cloudmesh.server.html#cloudmesh.server.database.Database.import_cloud_to_mongo">[docs]</a>    <span class="k">def</span> <span class="nf">import_cloud_to_mongo</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">cloudname</span><span class="p">,</span> <span class="n">username</span><span class="p">):</span>
+<div class="viewcode-block" id="Database.import_cloud_to_mongo"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.server.html#cloudmesh.server.database.Database.import_cloud_to_mongo">[docs]</a>    <span class="k">def</span> <span class="nf">import_cloud_to_mongo</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">cloudname</span><span class="p">,</span> <span class="n">username</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        insert a cloud to db_clouds</span>
 <span class="sd">        additionally, add values cm_cloud, cm_kind=cloud, cm_user_id</span>

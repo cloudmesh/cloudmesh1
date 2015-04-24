@@ -594,7 +594,7 @@
 <span class="n">log</span> <span class="o">=</span> <span class="n">LOGGER</span><span class="p">(</span><span class="n">__file__</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="Inventory"><a class="viewcode-back" href="../../modules/cloudmesh.html#cloudmesh.inventory.Inventory">[docs]</a><span class="k">class</span> <span class="nc">Inventory</span><span class="p">:</span>
+<div class="viewcode-block" id="Inventory"><a class="viewcode-back" href="../../api/cloudmesh/cloudmesh.html#cloudmesh.inventory.Inventory">[docs]</a><span class="k">class</span> <span class="nc">Inventory</span><span class="p">:</span>
 
     <span class="n">server_config</span> <span class="o">=</span> <span class="bp">None</span>
 
@@ -609,7 +609,7 @@
         <span class="n">collection</span> <span class="o">=</span> <span class="s">&quot;inventory&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">db_inventory</span> <span class="o">=</span> <span class="n">get_mongo_db</span><span class="p">(</span><span class="n">collection</span><span class="p">)</span>
 
-<div class="viewcode-block" id="Inventory.get_attribute"><a class="viewcode-back" href="../../modules/cloudmesh.html#cloudmesh.inventory.Inventory.get_attribute">[docs]</a>    <span class="k">def</span> <span class="nf">get_attribute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host_label</span><span class="p">,</span> <span class="n">attribute</span><span class="p">):</span>
+<div class="viewcode-block" id="Inventory.get_attribute"><a class="viewcode-back" href="../../api/cloudmesh/cloudmesh.html#cloudmesh.inventory.Inventory.get_attribute">[docs]</a>    <span class="k">def</span> <span class="nf">get_attribute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host_label</span><span class="p">,</span> <span class="n">attribute</span><span class="p">):</span>
 
         <span class="k">try</span><span class="p">:</span>
             <span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">find</span><span class="p">({</span><span class="s">&quot;cm_id&quot;</span><span class="p">:</span> <span class="n">host_label</span><span class="p">,</span>
@@ -619,7 +619,7 @@
             <span class="n">value</span> <span class="o">=</span> <span class="bp">None</span>
         <span class="k">return</span> <span class="n">value</span>
 </div>
-<div class="viewcode-block" id="Inventory.get"><a class="viewcode-back" href="../../modules/cloudmesh.html#cloudmesh.inventory.Inventory.get">[docs]</a>    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cm_kind</span><span class="p">,</span> <span class="n">id_kind</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+<div class="viewcode-block" id="Inventory.get"><a class="viewcode-back" href="../../api/cloudmesh/cloudmesh.html#cloudmesh.inventory.Inventory.get">[docs]</a>    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cm_kind</span><span class="p">,</span> <span class="n">id_kind</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
         <span class="n">host</span> <span class="o">=</span> <span class="bp">None</span>
         <span class="k">if</span> <span class="n">id_kind</span> <span class="o">==</span> <span class="s">&#39;cm_id&#39;</span><span class="p">:</span>
             <span class="n">host</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">find_one</span><span class="p">({</span><span class="s">&#39;cm_type&#39;</span><span class="p">:</span> <span class="s">&quot;inventory&quot;</span><span class="p">,</span>
@@ -645,7 +645,7 @@
     <span class="c"># find one host record information</span>
     <span class="c"># cm_id: i001; real label: i1</span>
     <span class="c"># BEGIN host info</span></div>
-<div class="viewcode-block" id="Inventory.get_host_info"><a class="viewcode-back" href="../../modules/cloudmesh.html#cloudmesh.inventory.Inventory.get_host_info">[docs]</a>    <span class="k">def</span> <span class="nf">get_host_info</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">id_label</span><span class="p">,</span> <span class="n">network_type</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<div class="viewcode-block" id="Inventory.get_host_info"><a class="viewcode-back" href="../../api/cloudmesh/cloudmesh.html#cloudmesh.inventory.Inventory.get_host_info">[docs]</a>    <span class="k">def</span> <span class="nf">get_host_info</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">id_label</span><span class="p">,</span> <span class="n">network_type</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="n">query</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s">&#39;$or&#39;</span><span class="p">:</span> <span class="p">[</span>
                 <span class="p">{</span><span class="s">&#39;cm_id&#39;</span><span class="p">:</span> <span class="n">id_label</span><span class="p">},</span>
@@ -673,7 +673,7 @@
     <span class="c"># label is the real name of host in the configuration, /etc/hosts</span>
     <span class="c"># for example, valid cm_id: i100, b010, d001</span>
     <span class="c">#              valid label: i100, b10,  d1</span></div>
-<div class="viewcode-block" id="Inventory.get_host_id_label"><a class="viewcode-back" href="../../modules/cloudmesh.html#cloudmesh.inventory.Inventory.get_host_id_label">[docs]</a>    <span class="k">def</span> <span class="nf">get_host_id_label</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">id_label</span><span class="p">,</span> <span class="n">network_type</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<div class="viewcode-block" id="Inventory.get_host_id_label"><a class="viewcode-back" href="../../api/cloudmesh/cloudmesh.html#cloudmesh.inventory.Inventory.get_host_id_label">[docs]</a>    <span class="k">def</span> <span class="nf">get_host_id_label</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">id_label</span><span class="p">,</span> <span class="n">network_type</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="n">sresult</span> <span class="o">=</span> <span class="bp">None</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">host</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_host_info</span><span class="p">(</span><span class="n">id_label</span><span class="p">,</span> <span class="n">network_type</span><span class="p">)</span>
@@ -685,7 +685,7 @@
 
     <span class="c"># END host info</span>
 </div>
-<div class="viewcode-block" id="Inventory.set_attribute"><a class="viewcode-back" href="../../modules/cloudmesh.html#cloudmesh.inventory.Inventory.set_attribute">[docs]</a>    <span class="k">def</span> <span class="nf">set_attribute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host_label</span><span class="p">,</span> <span class="n">attribute</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<div class="viewcode-block" id="Inventory.set_attribute"><a class="viewcode-back" href="../../api/cloudmesh/cloudmesh.html#cloudmesh.inventory.Inventory.set_attribute">[docs]</a>    <span class="k">def</span> <span class="nf">set_attribute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host_label</span><span class="p">,</span> <span class="n">attribute</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="k">print</span><span class="p">(</span><span class="s">&quot;SETTING&quot;</span><span class="p">,</span> <span class="n">host_label</span><span class="p">,</span> <span class="n">attribute</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">time</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
@@ -713,7 +713,7 @@
                                        <span class="p">}</span>
                               <span class="p">})</span>
 </div>
-<div class="viewcode-block" id="Inventory.update"><a class="viewcode-back" href="../../modules/cloudmesh.html#cloudmesh.inventory.Inventory.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query</span><span class="p">,</span> <span class="n">values</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<div class="viewcode-block" id="Inventory.update"><a class="viewcode-back" href="../../api/cloudmesh/cloudmesh.html#cloudmesh.inventory.Inventory.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query</span><span class="p">,</span> <span class="n">values</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        executes a query and updates the results from mongo db.</span>
 <span class="sd">        :param query:</span>
@@ -724,20 +724,20 @@
             <span class="c"># log.info(&quot;Query {0} {1}&quot;.format(query, values))</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">db_inventory</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">values</span><span class="p">,</span> <span class="n">upsert</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="Inventory.insert"><a class="viewcode-back" href="../../modules/cloudmesh.html#cloudmesh.inventory.Inventory.insert">[docs]</a>    <span class="k">def</span> <span class="nf">insert</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element</span><span class="p">):</span>
+<div class="viewcode-block" id="Inventory.insert"><a class="viewcode-back" href="../../api/cloudmesh/cloudmesh.html#cloudmesh.inventory.Inventory.insert">[docs]</a>    <span class="k">def</span> <span class="nf">insert</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">db_inventory</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">element</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="Inventory.clear"><a class="viewcode-back" href="../../modules/cloudmesh.html#cloudmesh.inventory.Inventory.clear">[docs]</a>    <span class="k">def</span> <span class="nf">clear</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Inventory.clear"><a class="viewcode-back" href="../../api/cloudmesh/cloudmesh.html#cloudmesh.inventory.Inventory.clear">[docs]</a>    <span class="k">def</span> <span class="nf">clear</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">db_inventory</span><span class="o">.</span><span class="n">remove</span><span class="p">({</span><span class="s">&quot;cm_type&quot;</span><span class="p">:</span> <span class="s">&quot;inventory&quot;</span><span class="p">})</span>
 </div>
-<div class="viewcode-block" id="Inventory.find"><a class="viewcode-back" href="../../modules/cloudmesh.html#cloudmesh.inventory.Inventory.find">[docs]</a>    <span class="k">def</span> <span class="nf">find</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query</span><span class="p">):</span>
+<div class="viewcode-block" id="Inventory.find"><a class="viewcode-back" href="../../api/cloudmesh/cloudmesh.html#cloudmesh.inventory.Inventory.find">[docs]</a>    <span class="k">def</span> <span class="nf">find</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        executes a query and returns the results from mongo db.</span>
 <span class="sd">        :param query:</span>
 <span class="sd">        &#39;&#39;&#39;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">db_inventory</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="Inventory.find_one"><a class="viewcode-back" href="../../modules/cloudmesh.html#cloudmesh.inventory.Inventory.find_one">[docs]</a>    <span class="k">def</span> <span class="nf">find_one</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query</span><span class="p">):</span>
+<div class="viewcode-block" id="Inventory.find_one"><a class="viewcode-back" href="../../api/cloudmesh/cloudmesh.html#cloudmesh.inventory.Inventory.find_one">[docs]</a>    <span class="k">def</span> <span class="nf">find_one</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        executes a query and returns the results from mongo db.</span>
 <span class="sd">        :param query:</span>
@@ -788,7 +788,7 @@
                                         <span class="p">})</span>
                         <span class="bp">self</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">element</span><span class="p">)</span>
 
-<div class="viewcode-block" id="Inventory.generate"><a class="viewcode-back" href="../../modules/cloudmesh.html#cloudmesh.inventory.Inventory.generate">[docs]</a>    <span class="k">def</span> <span class="nf">generate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Inventory.generate"><a class="viewcode-back" href="../../api/cloudmesh/cloudmesh.html#cloudmesh.inventory.Inventory.generate">[docs]</a>    <span class="k">def</span> <span class="nf">generate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_generate_globals</span><span class="p">()</span>
 
         <span class="n">clusters</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&quot;cloudmesh.inventory&quot;</span><span class="p">)</span>
@@ -833,12 +833,12 @@
         <span class="n">bmc</span> <span class="o">=</span> <span class="n">BaremetalComputer</span><span class="p">()</span>
         <span class="n">bmc</span><span class="o">.</span><span class="n">insert_mac_data_to_inventory</span><span class="p">()</span>
 </div>
-<div class="viewcode-block" id="Inventory.cluster"><a class="viewcode-back" href="../../modules/cloudmesh.html#cloudmesh.inventory.Inventory.cluster">[docs]</a>    <span class="k">def</span> <span class="nf">cluster</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+<div class="viewcode-block" id="Inventory.cluster"><a class="viewcode-back" href="../../api/cloudmesh/cloudmesh.html#cloudmesh.inventory.Inventory.cluster">[docs]</a>    <span class="k">def</span> <span class="nf">cluster</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;returns cluster data in dict&quot;&quot;&quot;</span>
         <span class="n">name</span> <span class="o">=</span> <span class="s">&quot;NOT IMPLEMENTED&quot;</span>
         <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s">&quot;Not Implemented&quot;</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="Inventory.info"><a class="viewcode-back" href="../../modules/cloudmesh.html#cloudmesh.inventory.Inventory.info">[docs]</a>    <span class="k">def</span> <span class="nf">info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Inventory.info"><a class="viewcode-back" href="../../api/cloudmesh/cloudmesh.html#cloudmesh.inventory.Inventory.info">[docs]</a>    <span class="k">def</span> <span class="nf">info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        print some elementary overview information</span>
 <span class="sd">        &#39;&#39;&#39;</span>
@@ -865,7 +865,7 @@
 
         <span class="k">print</span><span class="p">()</span>
 </div>
-<div class="viewcode-block" id="Inventory.hostlist"><a class="viewcode-back" href="../../modules/cloudmesh.html#cloudmesh.inventory.Inventory.hostlist">[docs]</a>    <span class="k">def</span> <span class="nf">hostlist</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+<div class="viewcode-block" id="Inventory.hostlist"><a class="viewcode-back" href="../../api/cloudmesh/cloudmesh.html#cloudmesh.inventory.Inventory.hostlist">[docs]</a>    <span class="k">def</span> <span class="nf">hostlist</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
         <span class="c"># print &quot;NAME&quot;, name</span>
         <span class="n">hosts</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">find</span><span class="p">({</span><span class="s">&quot;cm_cluster&quot;</span><span class="p">:</span> <span class="n">name</span><span class="p">,</span> <span class="s">&#39;cm_key&#39;</span><span class="p">:</span> <span class="s">&#39;range&#39;</span><span class="p">})[</span>
             <span class="mi">0</span><span class="p">][</span><span class="s">&#39;cm_value&#39;</span><span class="p">]</span>
@@ -873,7 +873,7 @@
         <span class="c"># &#39;cm_key&#39;: &#39;range&#39; })</span>
         <span class="k">return</span> <span class="n">hosts</span>
 </div>
-<div class="viewcode-block" id="Inventory.host"><a class="viewcode-back" href="../../modules/cloudmesh.html#cloudmesh.inventory.Inventory.host">[docs]</a>    <span class="k">def</span> <span class="nf">host</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">auth</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+<div class="viewcode-block" id="Inventory.host"><a class="viewcode-back" href="../../api/cloudmesh/cloudmesh.html#cloudmesh.inventory.Inventory.host">[docs]</a>    <span class="k">def</span> <span class="nf">host</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">auth</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
         <span class="n">cursor</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">find</span><span class="p">({</span><span class="s">&quot;cm_id&quot;</span><span class="p">:</span> <span class="n">index</span><span class="p">,</span>
                             <span class="s">&#39;cm_attribute&#39;</span><span class="p">:</span> <span class="s">&#39;network&#39;</span><span class="p">})</span>
 
@@ -933,11 +933,11 @@
 
         <span class="k">return</span> <span class="n">data</span>
 </div>
-<div class="viewcode-block" id="Inventory.ipadr"><a class="viewcode-back" href="../../modules/cloudmesh.html#cloudmesh.inventory.Inventory.ipadr">[docs]</a>    <span class="k">def</span> <span class="nf">ipadr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">iptype</span><span class="p">):</span>
+<div class="viewcode-block" id="Inventory.ipadr"><a class="viewcode-back" href="../../api/cloudmesh/cloudmesh.html#cloudmesh.inventory.Inventory.ipadr">[docs]</a>    <span class="k">def</span> <span class="nf">ipadr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">iptype</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">find</span><span class="p">({</span><span class="s">&quot;cm_id&quot;</span><span class="p">:</span> <span class="n">index</span><span class="p">,</span>
                           <span class="s">&quot;type&quot;</span><span class="p">:</span> <span class="n">iptype</span><span class="p">})[</span><span class="mi">0</span><span class="p">][</span><span class="s">&#39;ipaddr&#39;</span><span class="p">]</span>
 </div>
-<div class="viewcode-block" id="Inventory.ipadr_cluster"><a class="viewcode-back" href="../../modules/cloudmesh.html#cloudmesh.inventory.Inventory.ipadr_cluster">[docs]</a>    <span class="k">def</span> <span class="nf">ipadr_cluster</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">iptype</span><span class="p">):</span>
+<div class="viewcode-block" id="Inventory.ipadr_cluster"><a class="viewcode-back" href="../../api/cloudmesh/cloudmesh.html#cloudmesh.inventory.Inventory.ipadr_cluster">[docs]</a>    <span class="k">def</span> <span class="nf">ipadr_cluster</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">iptype</span><span class="p">):</span>
         <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">find</span><span class="p">({</span><span class="s">&quot;cm_id&quot;</span><span class="p">:</span> <span class="n">index</span><span class="p">,</span>
                           <span class="s">&quot;type&quot;</span><span class="p">:</span> <span class="n">iptype</span><span class="p">})[</span><span class="mi">0</span><span class="p">]</span>
         <span class="k">return</span> <span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s">&#39;ipaddr&#39;</span><span class="p">],</span> <span class="n">data</span><span class="p">)</span>
@@ -945,7 +945,7 @@
     <span class="c"># added by HC on Nov. 18</span>
     <span class="c"># Append the service type and temperature of racks into Inventory</span>
     <span class="c"># BEGIN rack inventory</span></div>
-<div class="viewcode-block" id="Inventory.get_clusters"><a class="viewcode-back" href="../../modules/cloudmesh.html#cloudmesh.inventory.Inventory.get_clusters">[docs]</a>    <span class="k">def</span> <span class="nf">get_clusters</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rack_name</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<div class="viewcode-block" id="Inventory.get_clusters"><a class="viewcode-back" href="../../api/cloudmesh/cloudmesh.html#cloudmesh.inventory.Inventory.get_clusters">[docs]</a>    <span class="k">def</span> <span class="nf">get_clusters</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rack_name</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="n">query</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s">&#39;cm_key&#39;</span><span class="p">:</span> <span class="s">&#39;range&#39;</span><span class="p">,</span>
             <span class="s">&#39;cm_type&#39;</span><span class="p">:</span> <span class="s">&#39;inventory&#39;</span><span class="p">,</span>
@@ -956,7 +956,7 @@
 
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="Inventory.generate_rack_status"><a class="viewcode-back" href="../../modules/cloudmesh.html#cloudmesh.inventory.Inventory.generate_rack_status">[docs]</a>    <span class="k">def</span> <span class="nf">generate_rack_status</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Inventory.generate_rack_status"><a class="viewcode-back" href="../../api/cloudmesh/cloudmesh.html#cloudmesh.inventory.Inventory.generate_rack_status">[docs]</a>    <span class="k">def</span> <span class="nf">generate_rack_status</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">service_list</span> <span class="o">=</span> <span class="p">[</span>
             <span class="s">&#39;temperature&#39;</span><span class="p">,</span>
             <span class="s">&#39;service&#39;</span><span class="p">,</span>
@@ -973,7 +973,7 @@
     <span class="c"># init a type of status of a rack</span>
     <span class="c"># two status: &#39;not_ready&#39; means the init of the record</span>
     <span class="c">#             &#39;ready&#39; means the record contains useful data</span></div>
-<div class="viewcode-block" id="Inventory.init_rack_status"><a class="viewcode-back" href="../../modules/cloudmesh.html#cloudmesh.inventory.Inventory.init_rack_status">[docs]</a>    <span class="k">def</span> <span class="nf">init_rack_status</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">service_type</span><span class="p">,</span> <span class="n">rack</span><span class="p">):</span>
+<div class="viewcode-block" id="Inventory.init_rack_status"><a class="viewcode-back" href="../../api/cloudmesh/cloudmesh.html#cloudmesh.inventory.Inventory.init_rack_status">[docs]</a>    <span class="k">def</span> <span class="nf">init_rack_status</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">service_type</span><span class="p">,</span> <span class="n">rack</span><span class="p">):</span>
         <span class="n">query</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s">&quot;cm_key&quot;</span><span class="p">:</span> <span class="s">&quot;rack_{0}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">service_type</span><span class="p">),</span>
             <span class="s">&quot;cm_type&quot;</span><span class="p">:</span> <span class="s">&quot;inventory&quot;</span><span class="p">,</span>
@@ -995,7 +995,7 @@
     <span class="c"># three status: &#39;not_ready&#39; means the init of the record</span>
     <span class="c">#               &#39;refresh&#39; mean the status data is updating</span>
     <span class="c">#               &#39;ready&#39; means the record contains useful data</span></div>
-<div class="viewcode-block" id="Inventory.init_rack_temp_status"><a class="viewcode-back" href="../../modules/cloudmesh.html#cloudmesh.inventory.Inventory.init_rack_temp_status">[docs]</a>    <span class="k">def</span> <span class="nf">init_rack_temp_status</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">service_type</span><span class="p">,</span> <span class="n">rack</span><span class="p">,</span> <span class="n">status</span><span class="o">=</span><span class="s">&#39;not_ready&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="Inventory.init_rack_temp_status"><a class="viewcode-back" href="../../api/cloudmesh/cloudmesh.html#cloudmesh.inventory.Inventory.init_rack_temp_status">[docs]</a>    <span class="k">def</span> <span class="nf">init_rack_temp_status</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">service_type</span><span class="p">,</span> <span class="n">rack</span><span class="p">,</span> <span class="n">status</span><span class="o">=</span><span class="s">&#39;not_ready&#39;</span><span class="p">):</span>
         <span class="n">query</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s">&quot;cm_key&quot;</span><span class="p">:</span> <span class="s">&quot;rack_temp_{0}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">service_type</span><span class="p">),</span>
             <span class="s">&quot;cm_type&quot;</span><span class="p">:</span> <span class="s">&quot;inventory&quot;</span><span class="p">,</span>
@@ -1020,7 +1020,7 @@
     <span class="c"># END rack inventory</span>
 
 </div></div>
-<div class="viewcode-block" id="main"><a class="viewcode-back" href="../../modules/cloudmesh.html#cloudmesh.inventory.main">[docs]</a><span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+<div class="viewcode-block" id="main"><a class="viewcode-back" href="../../api/cloudmesh/cloudmesh.html#cloudmesh.inventory.main">[docs]</a><span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
     <span class="n">inventory</span> <span class="o">=</span> <span class="n">Inventory</span><span class="p">()</span>
 
     <span class="n">r</span> <span class="o">=</span> <span class="n">inventory</span><span class="o">.</span><span class="n">find</span><span class="p">({})</span>

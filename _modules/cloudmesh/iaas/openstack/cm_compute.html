@@ -601,7 +601,7 @@
 <span class="c"># from novaclient.openstack.common import strutils</span>
 
 
-<div class="viewcode-block" id="lineno"><a class="viewcode-back" href="../../../../modules/cloudmesh.iaas.openstack.html#cloudmesh.iaas.openstack.cm_compute.lineno">[docs]</a><span class="k">def</span> <span class="nf">lineno</span><span class="p">():</span>
+<div class="viewcode-block" id="lineno"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.iaas.openstack.html#cloudmesh.iaas.openstack.cm_compute.lineno">[docs]</a><span class="k">def</span> <span class="nf">lineno</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot;Returns the current line number in our program.&quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">inspect</span><span class="o">.</span><span class="n">currentframe</span><span class="p">()</span><span class="o">.</span><span class="n">f_back</span><span class="o">.</span><span class="n">f_lineno</span>
 
@@ -609,11 +609,11 @@
 <span class="n">log</span> <span class="o">=</span> <span class="n">LOGGER</span><span class="p">(</span><span class="n">__file__</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="donotchange"><a class="viewcode-back" href="../../../../modules/cloudmesh.iaas.openstack.html#cloudmesh.iaas.openstack.cm_compute.donotchange">[docs]</a><span class="k">def</span> <span class="nf">donotchange</span><span class="p">(</span><span class="n">fn</span><span class="p">):</span>
+<div class="viewcode-block" id="donotchange"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.iaas.openstack.html#cloudmesh.iaas.openstack.cm_compute.donotchange">[docs]</a><span class="k">def</span> <span class="nf">donotchange</span><span class="p">(</span><span class="n">fn</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">fn</span>
 
 </div>
-<div class="viewcode-block" id="openstack"><a class="viewcode-back" href="../../../../modules/cloudmesh.iaas.openstack.html#cloudmesh.iaas.openstack.cm_compute.openstack">[docs]</a><span class="k">class</span> <span class="nc">openstack</span><span class="p">(</span><span class="n">ComputeBaseType</span><span class="p">):</span>
+<div class="viewcode-block" id="openstack"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.iaas.openstack.html#cloudmesh.iaas.openstack.cm_compute.openstack">[docs]</a><span class="k">class</span> <span class="nc">openstack</span><span class="p">(</span><span class="n">ComputeBaseType</span><span class="p">):</span>
     <span class="c"># : the type of the cloud. It is &quot;openstack&quot;</span>
     <span class="nb">type</span> <span class="o">=</span> <span class="s">&quot;openstack&quot;</span>  <span class="c"># global var</span>
 
@@ -712,7 +712,7 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
 
-<div class="viewcode-block" id="openstack.clear"><a class="viewcode-back" href="../../../../modules/cloudmesh.iaas.openstack.html#cloudmesh.iaas.openstack.cm_compute.openstack.clear">[docs]</a>    <span class="k">def</span> <span class="nf">clear</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="openstack.clear"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.iaas.openstack.html#cloudmesh.iaas.openstack.cm_compute.openstack.clear">[docs]</a>    <span class="k">def</span> <span class="nf">clear</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        clears the data of this openstack instance, a new connection</span>
 <span class="sd">        including reading the credentials and a refresh needs to be</span>
@@ -726,7 +726,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">admin_credentials</span> <span class="o">=</span> <span class="bp">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">type</span> <span class="o">=</span> <span class="s">&quot;openstack&quot;</span>
 </div>
-<div class="viewcode-block" id="openstack.connect"><a class="viewcode-back" href="../../../../modules/cloudmesh.iaas.openstack.html#cloudmesh.iaas.openstack.cm_compute.openstack.connect">[docs]</a>    <span class="k">def</span> <span class="nf">connect</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="openstack.connect"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.iaas.openstack.html#cloudmesh.iaas.openstack.cm_compute.openstack.connect">[docs]</a>    <span class="k">def</span> <span class="nf">connect</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        creates tokens for a connection</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -752,7 +752,7 @@
                 <span class="n">log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">lineno</span><span class="p">())</span> <span class="o">+</span> <span class="s">&quot;: error connecting to openstack &quot;</span>
                           <span class="o">+</span> <span class="s">&quot;keystone, credential or server name is invalid&quot;</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="openstack.DEBUG"><a class="viewcode-back" href="../../../../modules/cloudmesh.iaas.openstack.html#cloudmesh.iaas.openstack.cm_compute.openstack.DEBUG">[docs]</a>    <span class="k">def</span> <span class="nf">DEBUG</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="n">line_number</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<div class="viewcode-block" id="openstack.DEBUG"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.iaas.openstack.html#cloudmesh.iaas.openstack.cm_compute.openstack.DEBUG">[docs]</a>    <span class="k">def</span> <span class="nf">DEBUG</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="n">line_number</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">line_number</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
             <span class="n">line_number</span> <span class="o">=</span> <span class="s">&quot;&quot;</span>
         <span class="k">if</span> <span class="n">msg</span> <span class="o">==</span> <span class="s">&quot;credential&quot;</span><span class="p">:</span>
@@ -763,7 +763,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&quot;{0} - {1}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">line_number</span><span class="p">),</span> <span class="nb">str</span><span class="p">(</span><span class="n">msg</span><span class="p">)))</span>
 </div>
-<div class="viewcode-block" id="openstack.auth"><a class="viewcode-back" href="../../../../modules/cloudmesh.iaas.openstack.html#cloudmesh.iaas.openstack.cm_compute.openstack.auth">[docs]</a>    <span class="k">def</span> <span class="nf">auth</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="openstack.auth"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.iaas.openstack.html#cloudmesh.iaas.openstack.cm_compute.openstack.auth">[docs]</a>    <span class="k">def</span> <span class="nf">auth</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 
         <span class="c"># DEBUG</span>
         <span class="k">try</span><span class="p">:</span>
@@ -778,7 +778,7 @@
 
         <span class="k">return</span> <span class="s">&#39;access&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">user_token</span>
 </div>
-<div class="viewcode-block" id="openstack.get_token"><a class="viewcode-back" href="../../../../modules/cloudmesh.iaas.openstack.html#cloudmesh.iaas.openstack.cm_compute.openstack.get_token">[docs]</a>    <span class="k">def</span> <span class="nf">get_token</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">credential</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<div class="viewcode-block" id="openstack.get_token"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.iaas.openstack.html#cloudmesh.iaas.openstack.cm_compute.openstack.get_token">[docs]</a>    <span class="k">def</span> <span class="nf">get_token</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">credential</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
 
         <span class="c"># DEBUG</span>
         <span class="k">try</span><span class="p">:</span>
@@ -847,7 +847,7 @@
     <span class="c"># FIND USER ID</span>
     <span class="c">#</span>
 </div>
-<div class="viewcode-block" id="openstack.find_user_id"><a class="viewcode-back" href="../../../../modules/cloudmesh.iaas.openstack.html#cloudmesh.iaas.openstack.cm_compute.openstack.find_user_id">[docs]</a>    <span class="k">def</span> <span class="nf">find_user_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">force</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+<div class="viewcode-block" id="openstack.find_user_id"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.iaas.openstack.html#cloudmesh.iaas.openstack.cm_compute.openstack.find_user_id">[docs]</a>    <span class="k">def</span> <span class="nf">find_user_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">force</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        this method returns the user id and stores it for later use.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -868,7 +868,7 @@
     <span class="c"># not working yet</span>
     <span class="c"># user role is disalowed to execute this by policy setting</span>
     <span class="c"># admin role gives uninformative error</span></div>
-<div class="viewcode-block" id="openstack.get_server_usage"><a class="viewcode-back" href="../../../../modules/cloudmesh.iaas.openstack.html#cloudmesh.iaas.openstack.cm_compute.openstack.get_server_usage">[docs]</a>    <span class="k">def</span> <span class="nf">get_server_usage</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">serverid</span><span class="p">):</span>
+<div class="viewcode-block" id="openstack.get_server_usage"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.iaas.openstack.html#cloudmesh.iaas.openstack.cm_compute.openstack.get_server_usage">[docs]</a>    <span class="k">def</span> <span class="nf">get_server_usage</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">serverid</span><span class="p">):</span>
         <span class="n">apiurl</span> <span class="o">=</span> <span class="s">&quot;servers/</span><span class="si">%s</span><span class="s">/diagnostics&quot;</span> <span class="o">%</span> <span class="n">serverid</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get</span><span class="p">(</span><span class="n">msg</span><span class="o">=</span><span class="n">apiurl</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="s">&#39;admin&#39;</span><span class="p">,</span> <span class="n">urltype</span><span class="o">=</span><span class="s">&#39;adminURL&#39;</span><span class="p">)</span>
 </div>
@@ -939,16 +939,16 @@
         <span class="k">return</span> <span class="n">ret</span>
 
     <span class="c">#</span>
-<div class="viewcode-block" id="openstack.ks_get_extensions"><a class="viewcode-back" href="../../../../modules/cloudmesh.iaas.openstack.html#cloudmesh.iaas.openstack.cm_compute.openstack.ks_get_extensions">[docs]</a>    <span class="k">def</span> <span class="nf">ks_get_extensions</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="openstack.ks_get_extensions"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.iaas.openstack.html#cloudmesh.iaas.openstack.cm_compute.openstack.ks_get_extensions">[docs]</a>    <span class="k">def</span> <span class="nf">ks_get_extensions</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">pass</span>
 
     <span class="c"># conf = self._get_service_endpoint(&quot;identity&quot;)</span>
 </div>
-<div class="viewcode-block" id="openstack.keypair_list"><a class="viewcode-back" href="../../../../modules/cloudmesh.iaas.openstack.html#cloudmesh.iaas.openstack.cm_compute.openstack.keypair_list">[docs]</a>    <span class="k">def</span> <span class="nf">keypair_list</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="openstack.keypair_list"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.iaas.openstack.html#cloudmesh.iaas.openstack.cm_compute.openstack.keypair_list">[docs]</a>    <span class="k">def</span> <span class="nf">keypair_list</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">apiurl</span> <span class="o">=</span> <span class="s">&quot;os-keypairs&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get</span><span class="p">(</span><span class="n">msg</span><span class="o">=</span><span class="n">apiurl</span><span class="p">,</span> <span class="n">urltype</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">service_url_type</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="openstack.keypair_add"><a class="viewcode-back" href="../../../../modules/cloudmesh.iaas.openstack.html#cloudmesh.iaas.openstack.cm_compute.openstack.keypair_add">[docs]</a>    <span class="k">def</span> <span class="nf">keypair_add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">keyname</span><span class="p">,</span> <span class="n">keycontent</span><span class="p">):</span>
+<div class="viewcode-block" id="openstack.keypair_add"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.iaas.openstack.html#cloudmesh.iaas.openstack.cm_compute.openstack.keypair_add">[docs]</a>    <span class="k">def</span> <span class="nf">keypair_add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">keyname</span><span class="p">,</span> <span class="n">keycontent</span><span class="p">):</span>
         <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">lineno</span><span class="p">())</span> <span class="o">+</span> <span class="s">&quot;:adding a keypair in cm_compute...&quot;</span><span class="p">)</span>
         <span class="c"># keysnow = self.keypair_list()</span>
         <span class="n">url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_service_endpoint</span><span class="p">(</span><span class="s">&quot;compute&quot;</span><span class="p">)[</span><span class="bp">self</span><span class="o">.</span><span class="n">service_url_type</span><span class="p">]</span>
@@ -962,7 +962,7 @@
         <span class="c"># print params</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_post</span><span class="p">(</span><span class="n">posturl</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="openstack.keypair_remove"><a class="viewcode-back" href="../../../../modules/cloudmesh.iaas.openstack.html#cloudmesh.iaas.openstack.cm_compute.openstack.keypair_remove">[docs]</a>    <span class="k">def</span> <span class="nf">keypair_remove</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">keyname</span><span class="p">):</span>
+<div class="viewcode-block" id="openstack.keypair_remove"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.iaas.openstack.html#cloudmesh.iaas.openstack.cm_compute.openstack.keypair_remove">[docs]</a>    <span class="k">def</span> <span class="nf">keypair_remove</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">keyname</span><span class="p">):</span>
         <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">lineno</span><span class="p">())</span> <span class="o">+</span> <span class="s">&quot;:removing a keypair in cm_compute...&quot;</span><span class="p">)</span>
 
         <span class="n">conf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_service_endpoint</span><span class="p">(</span><span class="s">&quot;compute&quot;</span><span class="p">)</span>
@@ -980,7 +980,7 @@
                 <span class="k">pass</span>
         <span class="k">return</span> <span class="n">ret</span>
 </div>
-<div class="viewcode-block" id="openstack.vm_create"><a class="viewcode-back" href="../../../../modules/cloudmesh.iaas.openstack.html#cloudmesh.iaas.openstack.cm_compute.openstack.vm_create">[docs]</a>    <span class="k">def</span> <span class="nf">vm_create</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span>
+<div class="viewcode-block" id="openstack.vm_create"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.iaas.openstack.html#cloudmesh.iaas.openstack.cm_compute.openstack.vm_create">[docs]</a>    <span class="k">def</span> <span class="nf">vm_create</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span>
                   <span class="n">flavor_name</span><span class="p">,</span>
                   <span class="n">image_id</span><span class="p">,</span>
                   <span class="n">security_groups</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
@@ -1046,7 +1046,7 @@
 
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_post</span><span class="p">(</span><span class="n">posturl</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="openstack.vm_delete"><a class="viewcode-back" href="../../../../modules/cloudmesh.iaas.openstack.html#cloudmesh.iaas.openstack.cm_compute.openstack.vm_delete">[docs]</a>    <span class="k">def</span> <span class="nf">vm_delete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">id</span><span class="p">):</span>
+<div class="viewcode-block" id="openstack.vm_delete"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.iaas.openstack.html#cloudmesh.iaas.openstack.cm_compute.openstack.vm_delete">[docs]</a>    <span class="k">def</span> <span class="nf">vm_delete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">id</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        delete a single vm and returns the id</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -1069,7 +1069,7 @@
                 <span class="k">pass</span>
         <span class="k">return</span> <span class="n">ret</span>
 </div>
-<div class="viewcode-block" id="openstack.stack_create"><a class="viewcode-back" href="../../../../modules/cloudmesh.iaas.openstack.html#cloudmesh.iaas.openstack.cm_compute.openstack.stack_create">[docs]</a>    <span class="k">def</span> <span class="nf">stack_create</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">template_url</span><span class="p">,</span> <span class="n">parameters</span><span class="p">,</span> <span class="n">timeout_mins</span><span class="o">=</span><span class="mi">60</span><span class="p">):</span>
+<div class="viewcode-block" id="openstack.stack_create"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.iaas.openstack.html#cloudmesh.iaas.openstack.cm_compute.openstack.stack_create">[docs]</a>    <span class="k">def</span> <span class="nf">stack_create</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">template_url</span><span class="p">,</span> <span class="n">parameters</span><span class="p">,</span> <span class="n">timeout_mins</span><span class="o">=</span><span class="mi">60</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Create a stack by OpenStack Heat Orchestration</span>
 <span class="sd">        </span>
@@ -1092,7 +1092,7 @@
 
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_post</span><span class="p">(</span><span class="n">posturl</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="openstack.stack_delete"><a class="viewcode-back" href="../../../../modules/cloudmesh.iaas.openstack.html#cloudmesh.iaas.openstack.cm_compute.openstack.stack_delete">[docs]</a>    <span class="k">def</span> <span class="nf">stack_delete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">stack_name</span><span class="p">):</span>
+<div class="viewcode-block" id="openstack.stack_delete"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.iaas.openstack.html#cloudmesh.iaas.openstack.cm_compute.openstack.stack_delete">[docs]</a>    <span class="k">def</span> <span class="nf">stack_delete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">stack_name</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        delete a specified stack and returns the id</span>
 
@@ -1131,7 +1131,7 @@
 
     <span class="c"># possibly for future use in network management via Neuron</span>
     <span class="c"># currently is not being used</span></div>
-<div class="viewcode-block" id="openstack.get_network_id"><a class="viewcode-back" href="../../../../modules/cloudmesh.iaas.openstack.html#cloudmesh.iaas.openstack.cm_compute.openstack.get_network_id">[docs]</a>    <span class="k">def</span> <span class="nf">get_network_id</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="openstack.get_network_id"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.iaas.openstack.html#cloudmesh.iaas.openstack.cm_compute.openstack.get_network_id">[docs]</a>    <span class="k">def</span> <span class="nf">get_network_id</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Obtaining router/expertnal gateway info via the rest api call</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -1141,7 +1141,7 @@
             <span class="n">ret</span> <span class="o">=</span> <span class="n">r</span><span class="p">[</span><span class="s">&quot;floating_ip&quot;</span><span class="p">][</span><span class="s">&quot;ip&quot;</span><span class="p">]</span>
         <span class="k">return</span> <span class="n">r</span>
 </div>
-<div class="viewcode-block" id="openstack.get_public_ip"><a class="viewcode-back" href="../../../../modules/cloudmesh.iaas.openstack.html#cloudmesh.iaas.openstack.cm_compute.openstack.get_public_ip">[docs]</a>    <span class="k">def</span> <span class="nf">get_public_ip</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="openstack.get_public_ip"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.iaas.openstack.html#cloudmesh.iaas.openstack.cm_compute.openstack.get_public_ip">[docs]</a>    <span class="k">def</span> <span class="nf">get_public_ip</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Obtaining a floating ip from the pool via the rest api call</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -1179,7 +1179,7 @@
         <span class="c">#    print (r)</span>
         <span class="k">return</span> <span class="n">ret</span>
 </div>
-<div class="viewcode-block" id="openstack.assign_public_ip"><a class="viewcode-back" href="../../../../modules/cloudmesh.iaas.openstack.html#cloudmesh.iaas.openstack.cm_compute.openstack.assign_public_ip">[docs]</a>    <span class="k">def</span> <span class="nf">assign_public_ip</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">serverid</span><span class="p">,</span> <span class="n">ip</span><span class="p">):</span>
+<div class="viewcode-block" id="openstack.assign_public_ip"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.iaas.openstack.html#cloudmesh.iaas.openstack.cm_compute.openstack.assign_public_ip">[docs]</a>    <span class="k">def</span> <span class="nf">assign_public_ip</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">serverid</span><span class="p">,</span> <span class="n">ip</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        assigning public ip to an instance</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -1193,7 +1193,7 @@
         <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&quot;POST PARAMS {0}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">params</span><span class="p">))</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_post</span><span class="p">(</span><span class="n">posturl</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="openstack.delete_public_ip"><a class="viewcode-back" href="../../../../modules/cloudmesh.iaas.openstack.html#cloudmesh.iaas.openstack.cm_compute.openstack.delete_public_ip">[docs]</a>    <span class="k">def</span> <span class="nf">delete_public_ip</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">idofip</span><span class="p">):</span>
+<div class="viewcode-block" id="openstack.delete_public_ip"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.iaas.openstack.html#cloudmesh.iaas.openstack.cm_compute.openstack.delete_public_ip">[docs]</a>    <span class="k">def</span> <span class="nf">delete_public_ip</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">idofip</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        delete a public ip that is assigned but not currently being used</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -1212,7 +1212,7 @@
                 <span class="k">pass</span>
         <span class="k">return</span> <span class="n">ret</span>
 </div>
-<div class="viewcode-block" id="openstack.list_allocated_ips"><a class="viewcode-back" href="../../../../modules/cloudmesh.iaas.openstack.html#cloudmesh.iaas.openstack.cm_compute.openstack.list_allocated_ips">[docs]</a>    <span class="k">def</span> <span class="nf">list_allocated_ips</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="openstack.list_allocated_ips"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.iaas.openstack.html#cloudmesh.iaas.openstack.cm_compute.openstack.list_allocated_ips">[docs]</a>    <span class="k">def</span> <span class="nf">list_allocated_ips</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        return list of ips allocated to current account</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -1225,7 +1225,7 @@
         <span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">,</span> <span class="n">verify</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_get_cacert</span><span class="p">())</span>
         <span class="k">return</span> <span class="n">r</span><span class="o">.</span><span class="n">json</span><span class="p">()[</span><span class="s">&quot;floating_ips&quot;</span><span class="p">]</span>
 </div>
-<div class="viewcode-block" id="openstack.release_unused_public_ips"><a class="viewcode-back" href="../../../../modules/cloudmesh.iaas.openstack.html#cloudmesh.iaas.openstack.cm_compute.openstack.release_unused_public_ips">[docs]</a>    <span class="k">def</span> <span class="nf">release_unused_public_ips</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="openstack.release_unused_public_ips"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.iaas.openstack.html#cloudmesh.iaas.openstack.cm_compute.openstack.release_unused_public_ips">[docs]</a>    <span class="k">def</span> <span class="nf">release_unused_public_ips</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">ips</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">list_allocated_ips</span><span class="p">()</span>
         <span class="n">ips_id_to_instance</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="k">for</span> <span class="n">ip</span> <span class="ow">in</span> <span class="n">ips</span><span class="p">:</span>
@@ -1318,7 +1318,7 @@
         <span class="k">return</span> <span class="n">d</span>
 
     <span class="c"># new</span>
-<div class="viewcode-block" id="openstack.get_extensions"><a class="viewcode-back" href="../../../../modules/cloudmesh.iaas.openstack.html#cloudmesh.iaas.openstack.cm_compute.openstack.get_extensions">[docs]</a>    <span class="k">def</span> <span class="nf">get_extensions</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="openstack.get_extensions"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.iaas.openstack.html#cloudmesh.iaas.openstack.cm_compute.openstack.get_extensions">[docs]</a>    <span class="k">def</span> <span class="nf">get_extensions</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">time_stamp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_now</span><span class="p">()</span>
         <span class="n">msg</span> <span class="o">=</span> <span class="s">&quot;extensons&quot;</span>
         <span class="c"># list = self._get(msg)[&#39;extensions&#39;]</span>
@@ -1330,7 +1330,7 @@
             <span class="nb">list</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_list_to_dict</span><span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="s">&#39;name&#39;</span><span class="p">,</span> <span class="s">&quot;extensions&quot;</span><span class="p">,</span> <span class="n">time_stamp</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="openstack.get_limits"><a class="viewcode-back" href="../../../../modules/cloudmesh.iaas.openstack.html#cloudmesh.iaas.openstack.cm_compute.openstack.get_limits">[docs]</a>    <span class="k">def</span> <span class="nf">get_limits</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="openstack.get_limits"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.iaas.openstack.html#cloudmesh.iaas.openstack.cm_compute.openstack.get_limits">[docs]</a>    <span class="k">def</span> <span class="nf">get_limits</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;Gets absolute and rate limit information, including information on</span>
 <span class="sd">        currently used absolute limits.&#39;&#39;&#39;</span>
         <span class="n">time_stamp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_now</span><span class="p">()</span>
@@ -1338,7 +1338,7 @@
         <span class="n">_dict</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="n">urltype</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">service_url_type</span><span class="p">)[</span><span class="s">&#39;limits&#39;</span><span class="p">]</span>
         <span class="k">return</span> <span class="n">_dict</span>
 </div>
-<div class="viewcode-block" id="openstack.get_absolute_limits"><a class="viewcode-back" href="../../../../modules/cloudmesh.iaas.openstack.html#cloudmesh.iaas.openstack.cm_compute.openstack.get_absolute_limits">[docs]</a>    <span class="k">def</span> <span class="nf">get_absolute_limits</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">view</span><span class="o">=</span><span class="s">&quot;original&quot;</span><span class="p">):</span>
+<div class="viewcode-block" id="openstack.get_absolute_limits"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.iaas.openstack.html#cloudmesh.iaas.openstack.cm_compute.openstack.get_absolute_limits">[docs]</a>    <span class="k">def</span> <span class="nf">get_absolute_limits</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">view</span><span class="o">=</span><span class="s">&quot;original&quot;</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;Gets absolute limit information</span>
 <span class="sd">        </span>
 <span class="sd">            Args:</span>
@@ -1375,7 +1375,7 @@
             <span class="k">return</span> <span class="n">limits</span><span class="p">[</span><span class="s">&#39;absolute&#39;</span><span class="p">]</span>
 
     <span class="c"># new</span></div>
-<div class="viewcode-block" id="openstack.get_servers"><a class="viewcode-back" href="../../../../modules/cloudmesh.iaas.openstack.html#cloudmesh.iaas.openstack.cm_compute.openstack.get_servers">[docs]</a>    <span class="k">def</span> <span class="nf">get_servers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="openstack.get_servers"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.iaas.openstack.html#cloudmesh.iaas.openstack.cm_compute.openstack.get_servers">[docs]</a>    <span class="k">def</span> <span class="nf">get_servers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">time_stamp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_now</span><span class="p">()</span>
         <span class="n">msg</span> <span class="o">=</span> <span class="s">&quot;servers/detail&quot;</span>
         <span class="nb">list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="n">urltype</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">service_url_type</span><span class="p">)[</span><span class="s">&#39;servers&#39;</span><span class="p">]</span>
@@ -1390,7 +1390,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">servers</span>
 
     <span class="c"># new</span></div>
-<div class="viewcode-block" id="openstack.get_flavors"><a class="viewcode-back" href="../../../../modules/cloudmesh.iaas.openstack.html#cloudmesh.iaas.openstack.cm_compute.openstack.get_flavors">[docs]</a>    <span class="k">def</span> <span class="nf">get_flavors</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="openstack.get_flavors"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.iaas.openstack.html#cloudmesh.iaas.openstack.cm_compute.openstack.get_flavors">[docs]</a>    <span class="k">def</span> <span class="nf">get_flavors</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">time_stamp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_now</span><span class="p">()</span>
         <span class="n">msg</span> <span class="o">=</span> <span class="s">&quot;flavors/detail&quot;</span>
         <span class="nb">list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="n">urltype</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">service_url_type</span><span class="p">)[</span><span class="s">&#39;flavors&#39;</span><span class="p">]</span>
@@ -1404,19 +1404,19 @@
 
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">flavors</span>
 </div>
-<div class="viewcode-block" id="openstack.flavorid"><a class="viewcode-back" href="../../../../modules/cloudmesh.iaas.openstack.html#cloudmesh.iaas.openstack.cm_compute.openstack.flavorid">[docs]</a>    <span class="k">def</span> <span class="nf">flavorid</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+<div class="viewcode-block" id="openstack.flavorid"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.iaas.openstack.html#cloudmesh.iaas.openstack.cm_compute.openstack.flavorid">[docs]</a>    <span class="k">def</span> <span class="nf">flavorid</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
         <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">flavors</span><span class="p">:</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">flavors</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="s">&#39;name&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">name</span><span class="p">:</span>
                 <span class="k">return</span> <span class="n">key</span>
 </div>
-<div class="viewcode-block" id="openstack.flavor"><a class="viewcode-back" href="../../../../modules/cloudmesh.iaas.openstack.html#cloudmesh.iaas.openstack.cm_compute.openstack.flavor">[docs]</a>    <span class="k">def</span> <span class="nf">flavor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">id_or_name</span><span class="p">):</span>
+<div class="viewcode-block" id="openstack.flavor"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.iaas.openstack.html#cloudmesh.iaas.openstack.cm_compute.openstack.flavor">[docs]</a>    <span class="k">def</span> <span class="nf">flavor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">id_or_name</span><span class="p">):</span>
         <span class="n">keys</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">flavors</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">id_or_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">keys</span><span class="p">:</span>
             <span class="n">key</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">flavorid</span><span class="p">(</span><span class="n">id_or_name</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">flavors</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
 
     <span class="c"># new</span></div>
-<div class="viewcode-block" id="openstack.get_images"><a class="viewcode-back" href="../../../../modules/cloudmesh.iaas.openstack.html#cloudmesh.iaas.openstack.cm_compute.openstack.get_images">[docs]</a>    <span class="k">def</span> <span class="nf">get_images</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="openstack.get_images"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.iaas.openstack.html#cloudmesh.iaas.openstack.cm_compute.openstack.get_images">[docs]</a>    <span class="k">def</span> <span class="nf">get_images</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;List images&#39;&#39;&#39;</span>
         <span class="n">time_stamp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_now</span><span class="p">()</span>
         <span class="n">msg</span> <span class="o">=</span> <span class="s">&quot;images/detail&quot;</span>
@@ -1424,7 +1424,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">images</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_list_to_dict</span><span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="s">&#39;id&#39;</span><span class="p">,</span> <span class="s">&quot;image&quot;</span><span class="p">,</span> <span class="n">time_stamp</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">images</span>
 </div>
-<div class="viewcode-block" id="openstack.get_security_groups"><a class="viewcode-back" href="../../../../modules/cloudmesh.iaas.openstack.html#cloudmesh.iaas.openstack.cm_compute.openstack.get_security_groups">[docs]</a>    <span class="k">def</span> <span class="nf">get_security_groups</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="openstack.get_security_groups"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.iaas.openstack.html#cloudmesh.iaas.openstack.cm_compute.openstack.get_security_groups">[docs]</a>    <span class="k">def</span> <span class="nf">get_security_groups</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;Lists security groups. &#39;&#39;&#39;</span>
         <span class="n">time_stamp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_now</span><span class="p">()</span>
         <span class="nb">list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">list_security_groups</span><span class="p">()[</span><span class="s">&#39;security_groups&#39;</span><span class="p">]</span>
@@ -1432,7 +1432,7 @@
                                                   <span class="n">time_stamp</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">security_groups</span>
 </div>
-<div class="viewcode-block" id="openstack.get_stacks"><a class="viewcode-back" href="../../../../modules/cloudmesh.iaas.openstack.html#cloudmesh.iaas.openstack.cm_compute.openstack.get_stacks">[docs]</a>    <span class="k">def</span> <span class="nf">get_stacks</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="openstack.get_stacks"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.iaas.openstack.html#cloudmesh.iaas.openstack.cm_compute.openstack.get_stacks">[docs]</a>    <span class="k">def</span> <span class="nf">get_stacks</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;Lists active stacks.&#39;&#39;&#39;</span>
         <span class="n">time_stamp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_now</span><span class="p">()</span>
         <span class="n">msg</span> <span class="o">=</span> <span class="s">&quot;stacks&quot;</span>
@@ -1442,7 +1442,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">stacks</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_list_to_dict</span><span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="s">&#39;id&#39;</span><span class="p">,</span> <span class="s">&#39;stacks&#39;</span><span class="p">,</span> <span class="n">time_stamp</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">stacks</span>
 </div>
-<div class="viewcode-block" id="openstack.get_usage"><a class="viewcode-back" href="../../../../modules/cloudmesh.iaas.openstack.html#cloudmesh.iaas.openstack.cm_compute.openstack.get_usage">[docs]</a>    <span class="k">def</span> <span class="nf">get_usage</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="openstack.get_usage"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.iaas.openstack.html#cloudmesh.iaas.openstack.cm_compute.openstack.get_usage">[docs]</a>    <span class="k">def</span> <span class="nf">get_usage</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;Report usage statistics on compute and storage resources.&#39;&#39;&#39;</span>
         <span class="n">time_stamp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_now</span><span class="p">()</span>
         <span class="n">tenant_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">user_token</span><span class="p">[</span><span class="s">&#39;access&#39;</span><span class="p">][</span><span class="s">&#39;token&#39;</span><span class="p">][</span><span class="s">&#39;tenant&#39;</span><span class="p">][</span><span class="s">&#39;id&#39;</span><span class="p">]</span>
@@ -1455,7 +1455,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">usage</span> <span class="o">=</span> <span class="n">_dict</span>
         <span class="k">return</span> <span class="n">_dict</span>
 </div>
-<div class="viewcode-block" id="openstack.get_quota"><a class="viewcode-back" href="../../../../modules/cloudmesh.iaas.openstack.html#cloudmesh.iaas.openstack.cm_compute.openstack.get_quota">[docs]</a>    <span class="k">def</span> <span class="nf">get_quota</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="openstack.get_quota"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.iaas.openstack.html#cloudmesh.iaas.openstack.cm_compute.openstack.get_quota">[docs]</a>    <span class="k">def</span> <span class="nf">get_quota</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39; View quotas for a tenant (project). Administrators only, depending</span>
 <span class="sd">        on policy settings. &#39;&#39;&#39;</span>
         <span class="n">time_stamp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_now</span><span class="p">()</span>
@@ -1500,12 +1500,12 @@
 <span class="sd">        return self._list_to_dict(list, &#39;id&#39;, &quot;users&quot;, time_stamp)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="openstack.get_meta"><a class="viewcode-back" href="../../../../modules/cloudmesh.iaas.openstack.html#cloudmesh.iaas.openstack.cm_compute.openstack.get_meta">[docs]</a>    <span class="k">def</span> <span class="nf">get_meta</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">id</span><span class="p">):</span>
+<div class="viewcode-block" id="openstack.get_meta"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.iaas.openstack.html#cloudmesh.iaas.openstack.cm_compute.openstack.get_meta">[docs]</a>    <span class="k">def</span> <span class="nf">get_meta</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">id</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;get the metadata dict for the vm with the given id&quot;&quot;&quot;</span>
         <span class="n">msg</span> <span class="o">=</span> <span class="s">&quot;/servers/</span><span class="si">%s</span><span class="s">/metadata&quot;</span> <span class="o">%</span> <span class="nb">id</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="n">urltype</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">service_url_type</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="openstack.set_meta"><a class="viewcode-back" href="../../../../modules/cloudmesh.iaas.openstack.html#cloudmesh.iaas.openstack.cm_compute.openstack.set_meta">[docs]</a>    <span class="k">def</span> <span class="nf">set_meta</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">id</span><span class="p">,</span> <span class="n">metadata</span><span class="p">,</span> <span class="n">replace</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+<div class="viewcode-block" id="openstack.set_meta"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.iaas.openstack.html#cloudmesh.iaas.openstack.cm_compute.openstack.set_meta">[docs]</a>    <span class="k">def</span> <span class="nf">set_meta</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">id</span><span class="p">,</span> <span class="n">metadata</span><span class="p">,</span> <span class="n">replace</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;set the metadata for the given vm with the id&quot;&quot;&quot;</span>
         <span class="n">conf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_service_endpoint</span><span class="p">()</span>
         <span class="n">conf</span><span class="p">[</span><span class="s">&#39;serverid&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">id</span>
@@ -1573,7 +1573,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">flavors</span> <span class="o">=</span> <span class="n">result</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">flavors</span>
 
-<div class="viewcode-block" id="openstack.get_flavors_from_yaml"><a class="viewcode-back" href="../../../../modules/cloudmesh.iaas.openstack.html#cloudmesh.iaas.openstack.cm_compute.openstack.get_flavors_from_yaml">[docs]</a>    <span class="k">def</span> <span class="nf">get_flavors_from_yaml</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="openstack.get_flavors_from_yaml"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.iaas.openstack.html#cloudmesh.iaas.openstack.cm_compute.openstack.get_flavors_from_yaml">[docs]</a>    <span class="k">def</span> <span class="nf">get_flavors_from_yaml</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">obj</span> <span class="o">=</span> <span class="n">cm_config_flavor</span><span class="p">()</span>
         <span class="n">flavors</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;cloudmesh.flavor&#39;</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">flavors</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">label</span><span class="p">)</span>
@@ -1594,7 +1594,7 @@
         <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_usage</span><span class="p">()</span>
         <span class="k">return</span> <span class="n">result</span>
 
-<div class="viewcode-block" id="openstack.limits"><a class="viewcode-back" href="../../../../modules/cloudmesh.iaas.openstack.html#cloudmesh.iaas.openstack.cm_compute.openstack.limits">[docs]</a>    <span class="k">def</span> <span class="nf">limits</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="openstack.limits"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.iaas.openstack.html#cloudmesh.iaas.openstack.cm_compute.openstack.limits">[docs]</a>    <span class="k">def</span> <span class="nf">limits</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; returns the limits of a tenant&quot;&quot;&quot;</span>
 
         <span class="nb">list</span> <span class="o">=</span> <span class="p">[]</span>
@@ -1613,13 +1613,13 @@
 
     <span class="c"># return the security groups for the current authenticated tenant, in dict</span>
     <span class="c"># format</span></div>
-<div class="viewcode-block" id="openstack.list_security_groups"><a class="viewcode-back" href="../../../../modules/cloudmesh.iaas.openstack.html#cloudmesh.iaas.openstack.cm_compute.openstack.list_security_groups">[docs]</a>    <span class="k">def</span> <span class="nf">list_security_groups</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="openstack.list_security_groups"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.iaas.openstack.html#cloudmesh.iaas.openstack.cm_compute.openstack.list_security_groups">[docs]</a>    <span class="k">def</span> <span class="nf">list_security_groups</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">apiurl</span> <span class="o">=</span> <span class="s">&quot;os-security-groups&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get</span><span class="p">(</span><span class="n">apiurl</span><span class="p">,</span> <span class="n">urltype</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">service_url_type</span><span class="p">)</span>
 
     <span class="c"># return the security group id given a name, if it&#39;s defined in the current tenant</span>
     <span class="c"># The id is used to identify a group when adding more rules to it</span></div>
-<div class="viewcode-block" id="openstack.find_security_groupid_by_name"><a class="viewcode-back" href="../../../../modules/cloudmesh.iaas.openstack.html#cloudmesh.iaas.openstack.cm_compute.openstack.find_security_groupid_by_name">[docs]</a>    <span class="k">def</span> <span class="nf">find_security_groupid_by_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+<div class="viewcode-block" id="openstack.find_security_groupid_by_name"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.iaas.openstack.html#cloudmesh.iaas.openstack.cm_compute.openstack.find_security_groupid_by_name">[docs]</a>    <span class="k">def</span> <span class="nf">find_security_groupid_by_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
         <span class="n">groupid</span> <span class="o">=</span> <span class="bp">None</span>
         <span class="n">secgroups</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">list_security_groups</span><span class="p">()</span>
         <span class="k">for</span> <span class="n">secgroup</span> <span class="ow">in</span> <span class="n">secgroups</span><span class="p">[</span><span class="s">&quot;security_groups&quot;</span><span class="p">]:</span>
@@ -1631,7 +1631,7 @@
     <span class="c"># creating a security group, and optionally add rules to it</span>
     <span class="c"># for the current TENANT that it authenticated as</span>
     <span class="c"># This implementation is based on the rest api</span></div>
-<div class="viewcode-block" id="openstack.create_security_group"><a class="viewcode-back" href="../../../../modules/cloudmesh.iaas.openstack.html#cloudmesh.iaas.openstack.cm_compute.openstack.create_security_group">[docs]</a>    <span class="k">def</span> <span class="nf">create_security_group</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">secgroup</span><span class="p">,</span> <span class="n">rules</span><span class="o">=</span><span class="p">[]):</span>
+<div class="viewcode-block" id="openstack.create_security_group"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.iaas.openstack.html#cloudmesh.iaas.openstack.cm_compute.openstack.create_security_group">[docs]</a>    <span class="k">def</span> <span class="nf">create_security_group</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">secgroup</span><span class="p">,</span> <span class="n">rules</span><span class="o">=</span><span class="p">[]):</span>
         <span class="n">url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_service_endpoint</span><span class="p">(</span><span class="s">&quot;compute&quot;</span><span class="p">)[</span><span class="bp">self</span><span class="o">.</span><span class="n">service_url_type</span><span class="p">]</span>
         <span class="n">posturl</span> <span class="o">=</span> <span class="s">&quot;</span><span class="si">%s</span><span class="s">/os-security-groups&quot;</span> <span class="o">%</span> <span class="n">url</span>
         <span class="n">params</span> <span class="o">=</span> <span class="p">{</span><span class="s">&quot;security_group&quot;</span><span class="p">:</span>
@@ -1662,7 +1662,7 @@
         <span class="k">return</span> <span class="n">groupid</span>
 
     <span class="c"># add rules to an existing security group</span></div>
-<div class="viewcode-block" id="openstack.add_security_group_rules"><a class="viewcode-back" href="../../../../modules/cloudmesh.iaas.openstack.html#cloudmesh.iaas.openstack.cm_compute.openstack.add_security_group_rules">[docs]</a>    <span class="k">def</span> <span class="nf">add_security_group_rules</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">groupid</span><span class="p">,</span> <span class="n">rules</span><span class="p">):</span>
+<div class="viewcode-block" id="openstack.add_security_group_rules"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.iaas.openstack.html#cloudmesh.iaas.openstack.cm_compute.openstack.add_security_group_rules">[docs]</a>    <span class="k">def</span> <span class="nf">add_security_group_rules</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">groupid</span><span class="p">,</span> <span class="n">rules</span><span class="p">):</span>
         <span class="n">url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_service_endpoint</span><span class="p">(</span><span class="s">&quot;compute&quot;</span><span class="p">)[</span><span class="bp">self</span><span class="o">.</span><span class="n">service_url_type</span><span class="p">]</span>
         <span class="n">posturl</span> <span class="o">=</span> <span class="s">&quot;</span><span class="si">%s</span><span class="s">/os-security-group-rules&quot;</span> <span class="o">%</span> <span class="n">url</span>
         <span class="n">ret</span> <span class="o">=</span> <span class="bp">None</span>
@@ -1909,7 +1909,7 @@
 <span class="sd">    &#39;&#39;&#39;</span>
 
     <span class="nd">@donotchange</span>
-<div class="viewcode-block" id="openstack.vms_user"><a class="viewcode-back" href="../../../../modules/cloudmesh.iaas.openstack.html#cloudmesh.iaas.openstack.cm_compute.openstack.vms_user">[docs]</a>    <span class="k">def</span> <span class="nf">vms_user</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">refresh</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+<div class="viewcode-block" id="openstack.vms_user"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.iaas.openstack.html#cloudmesh.iaas.openstack.cm_compute.openstack.vms_user">[docs]</a>    <span class="k">def</span> <span class="nf">vms_user</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">refresh</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        find my vms</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -1931,7 +1931,7 @@
     <span class="c"># list project vms</span>
     <span class="c">#</span>
 </div>
-<div class="viewcode-block" id="openstack.vms_project"><a class="viewcode-back" href="../../../../modules/cloudmesh.iaas.openstack.html#cloudmesh.iaas.openstack.cm_compute.openstack.vms_project">[docs]</a>    <span class="k">def</span> <span class="nf">vms_project</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">refresh</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+<div class="viewcode-block" id="openstack.vms_project"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.iaas.openstack.html#cloudmesh.iaas.openstack.cm_compute.openstack.vms_project">[docs]</a>    <span class="k">def</span> <span class="nf">vms_project</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">refresh</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        find my vms that arein this project. this method was needed for openstack essex deployment on fg</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -1952,7 +1952,7 @@
     <span class="c">#</span>
 </div>
     <span class="nd">@donotchange</span>
-<div class="viewcode-block" id="openstack.vms_delete_user"><a class="viewcode-back" href="../../../../modules/cloudmesh.iaas.openstack.html#cloudmesh.iaas.openstack.cm_compute.openstack.vms_delete_user">[docs]</a>    <span class="k">def</span> <span class="nf">vms_delete_user</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="openstack.vms_delete_user"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.iaas.openstack.html#cloudmesh.iaas.openstack.cm_compute.openstack.vms_delete_user">[docs]</a>    <span class="k">def</span> <span class="nf">vms_delete_user</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        find my vms and delete them</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -1968,7 +1968,7 @@
     <span class="c">#</span>
 </div>
     <span class="nd">@donotchange</span>
-<div class="viewcode-block" id="openstack.find"><a class="viewcode-back" href="../../../../modules/cloudmesh.iaas.openstack.html#cloudmesh.iaas.openstack.cm_compute.openstack.find">[docs]</a>    <span class="k">def</span> <span class="nf">find</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<div class="viewcode-block" id="openstack.find"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.iaas.openstack.html#cloudmesh.iaas.openstack.cm_compute.openstack.find">[docs]</a>    <span class="k">def</span> <span class="nf">find</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;find my vms&quot;&quot;&quot;</span>
         <span class="n">ids</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="s">&#39;user_id&#39;</span> <span class="ow">and</span> <span class="n">value</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
@@ -2024,7 +2024,7 @@
     <span class="c"># will be moved into one class</span>
 
     <span class="nd">@donotchange</span>
-<div class="viewcode-block" id="openstack.table_col_to_dict"><a class="viewcode-back" href="../../../../modules/cloudmesh.iaas.openstack.html#cloudmesh.iaas.openstack.cm_compute.openstack.table_col_to_dict">[docs]</a>    <span class="k">def</span> <span class="nf">table_col_to_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">body</span><span class="p">):</span>
+<div class="viewcode-block" id="openstack.table_col_to_dict"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.iaas.openstack.html#cloudmesh.iaas.openstack.cm_compute.openstack.table_col_to_dict">[docs]</a>    <span class="k">def</span> <span class="nf">table_col_to_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">body</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;converts a given list of rows to a dict&quot;&quot;&quot;</span>
         <span class="n">result</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="k">for</span> <span class="n">element</span> <span class="ow">in</span> <span class="n">body</span><span class="p">:</span>
@@ -2034,7 +2034,7 @@
         <span class="k">return</span> <span class="n">result</span>
 </div>
     <span class="nd">@donotchange</span>
-<div class="viewcode-block" id="openstack.table_matrix"><a class="viewcode-back" href="../../../../modules/cloudmesh.iaas.openstack.html#cloudmesh.iaas.openstack.cm_compute.openstack.table_matrix">[docs]</a>    <span class="k">def</span> <span class="nf">table_matrix</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">format</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<div class="viewcode-block" id="openstack.table_matrix"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.iaas.openstack.html#cloudmesh.iaas.openstack.cm_compute.openstack.table_matrix">[docs]</a>    <span class="k">def</span> <span class="nf">table_matrix</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">format</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;converts a given pretty table to a list of rows or a</span>
 <span class="sd">        dict. The format can be specified with &#39;dict&#39; to return a</span>
 <span class="sd">        dict. otherwise it returns an array&quot;&quot;&quot;</span>
@@ -2072,7 +2072,7 @@
 
     <span class="c"># will be moved into utils</span></div>
     <span class="nd">@donotchange</span>
-<div class="viewcode-block" id="openstack.parse_isotime"><a class="viewcode-back" href="../../../../modules/cloudmesh.iaas.openstack.html#cloudmesh.iaas.openstack.cm_compute.openstack.parse_isotime">[docs]</a>    <span class="k">def</span> <span class="nf">parse_isotime</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">timestr</span><span class="p">):</span>
+<div class="viewcode-block" id="openstack.parse_isotime"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.iaas.openstack.html#cloudmesh.iaas.openstack.cm_compute.openstack.parse_isotime">[docs]</a>    <span class="k">def</span> <span class="nf">parse_isotime</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">timestr</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Parse time from ISO 8601 format&quot;&quot;&quot;</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">iso8601</span><span class="o">.</span><span class="n">parse_date</span><span class="p">(</span><span class="n">timestr</span><span class="p">)</span>
@@ -2081,7 +2081,7 @@
         <span class="k">except</span> <span class="ne">TypeError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">message</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="openstack.usage"><a class="viewcode-back" href="../../../../modules/cloudmesh.iaas.openstack.html#cloudmesh.iaas.openstack.cm_compute.openstack.usage">[docs]</a>    <span class="k">def</span> <span class="nf">usage</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tenant_id</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">serverid</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">format</span><span class="o">=</span><span class="s">&#39;dict&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="openstack.usage"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.iaas.openstack.html#cloudmesh.iaas.openstack.cm_compute.openstack.usage">[docs]</a>    <span class="k">def</span> <span class="nf">usage</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tenant_id</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">serverid</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">format</span><span class="o">=</span><span class="s">&#39;dict&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; returns the usage information of the tennant&quot;&quot;&quot;</span>
         <span class="n">DEFAULT_STAT_DURATION</span> <span class="o">=</span> <span class="mi">30</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">tenant_id</span><span class="p">:</span>
@@ -2230,7 +2230,7 @@
 <span class="sd">                    vm[&#39;user_id&#39;] == userid)</span>
 <span class="sd">    &#39;&#39;&#39;</span>
 
-<div class="viewcode-block" id="openstack.display_regex"><a class="viewcode-back" href="../../../../modules/cloudmesh.iaas.openstack.html#cloudmesh.iaas.openstack.cm_compute.openstack.display_regex">[docs]</a>    <span class="k">def</span> <span class="nf">display_regex</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state_check</span><span class="p">,</span> <span class="n">userid</span><span class="p">):</span>
+<div class="viewcode-block" id="openstack.display_regex"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.iaas.openstack.html#cloudmesh.iaas.openstack.cm_compute.openstack.display_regex">[docs]</a>    <span class="k">def</span> <span class="nf">display_regex</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state_check</span><span class="p">,</span> <span class="n">userid</span><span class="p">):</span>
 
         <span class="k">print</span><span class="p">(</span><span class="n">state_check</span><span class="p">)</span>
         <span class="k">for</span> <span class="p">(</span><span class="nb">id</span><span class="p">,</span> <span class="n">vm</span><span class="p">)</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">servers</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>

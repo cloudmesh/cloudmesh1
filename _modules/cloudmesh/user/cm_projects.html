@@ -574,7 +574,7 @@
 <span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">print_function</span>
 
 
-<div class="viewcode-block" id="cm_projects"><a class="viewcode-back" href="../../../modules/cloudmesh.user.html#cloudmesh.user.cm_projects.cm_projects">[docs]</a><span class="k">class</span> <span class="nc">cm_projects</span><span class="p">():</span>
+<div class="viewcode-block" id="cm_projects"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.user.html#cloudmesh.user.cm_projects.cm_projects">[docs]</a><span class="k">class</span> <span class="nc">cm_projects</span><span class="p">():</span>
 
     <span class="n">cm_kind</span> <span class="o">=</span> <span class="s">&quot;fg_project&quot;</span>
     <span class="n">project_url_basename</span> <span class="o">=</span> <span class="s">&quot;https://portal.futuregrid.org/projects/&quot;</span>
@@ -582,11 +582,11 @@
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span>
 
-<div class="viewcode-block" id="cm_projects.update"><a class="viewcode-back" href="../../../modules/cloudmesh.user.html#cloudmesh.user.cm_projects.cm_projects.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="cm_projects.update"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.user.html#cloudmesh.user.cm_projects.cm_projects.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;retrieves the information from the portal into mongo&quot;&quot;&quot;</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span>
 </div>
-<div class="viewcode-block" id="cm_projects.number"><a class="viewcode-back" href="../../../modules/cloudmesh.user.html#cloudmesh.user.cm_projects.cm_projects.number">[docs]</a>    <span class="k">def</span> <span class="nf">number</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">identifier</span><span class="p">):</span>
+<div class="viewcode-block" id="cm_projects.number"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.user.html#cloudmesh.user.cm_projects.cm_projects.number">[docs]</a>    <span class="k">def</span> <span class="nf">number</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">identifier</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        returns the number of a probect. Input can be.</span>
 <span class="sd">        Assume number is 82</span>
@@ -607,10 +607,10 @@
             <span class="n">number</span> <span class="o">=</span> <span class="n">_id</span>
         <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">number</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="cm_projects.url"><a class="viewcode-back" href="../../../modules/cloudmesh.user.html#cloudmesh.user.cm_projects.cm_projects.url">[docs]</a>    <span class="k">def</span> <span class="nf">url</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">identifier</span><span class="p">):</span>
+<div class="viewcode-block" id="cm_projects.url"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.user.html#cloudmesh.user.cm_projects.cm_projects.url">[docs]</a>    <span class="k">def</span> <span class="nf">url</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">identifier</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">project_url_basename</span> <span class="o">+</span> <span class="nb">id</span><span class="p">(</span><span class="n">identifier</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="cm_projects.info"><a class="viewcode-back" href="../../../modules/cloudmesh.user.html#cloudmesh.user.cm_projects.cm_projects.info">[docs]</a>    <span class="k">def</span> <span class="nf">info</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">identifier</span><span class="p">,</span> <span class="n">unavailable</span><span class="o">=</span><span class="s">&quot;not available&quot;</span><span class="p">):</span>
+<div class="viewcode-block" id="cm_projects.info"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.user.html#cloudmesh.user.cm_projects.cm_projects.info">[docs]</a>    <span class="k">def</span> <span class="nf">info</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">identifier</span><span class="p">,</span> <span class="n">unavailable</span><span class="o">=</span><span class="s">&quot;not available&quot;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        returns a dict with the information about the project.</span>
 <span class="sd">        This includes</span>
@@ -627,7 +627,7 @@
         <span class="n">number</span> <span class="o">=</span> <span class="nb">id</span><span class="p">(</span><span class="n">identifier</span><span class="p">)</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span>
 </div>
-<div class="viewcode-block" id="cm_projects.add"><a class="viewcode-back" href="../../../modules/cloudmesh.user.html#cloudmesh.user.cm_projects.cm_projects.add">[docs]</a>    <span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">identifier</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="cm_projects.add"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.user.html#cloudmesh.user.cm_projects.cm_projects.add">[docs]</a>    <span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">identifier</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        adds the named attributes to the mongo db for the given project</span>
 <span class="sd">        &quot;&quot;&quot;</span>

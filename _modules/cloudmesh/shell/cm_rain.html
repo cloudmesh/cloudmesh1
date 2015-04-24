@@ -637,11 +637,11 @@
 <span class="c"># from cloudmesh.util.util import parse_time_interval</span>
 
 
-<div class="viewcode-block" id="not_implemented"><a class="viewcode-back" href="../../../modules/cloudmesh.shell.html#cloudmesh.shell.cm_rain.not_implemented">[docs]</a><span class="k">def</span> <span class="nf">not_implemented</span><span class="p">():</span>
+<div class="viewcode-block" id="not_implemented"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.shell.html#cloudmesh.shell.cm_rain.not_implemented">[docs]</a><span class="k">def</span> <span class="nf">not_implemented</span><span class="p">():</span>
     <span class="k">print</span><span class="p">(</span><span class="s">&quot;ERROR: not yet implemented&quot;</span><span class="p">)</span>
 
 </div>
-<div class="viewcode-block" id="yn_choice"><a class="viewcode-back" href="../../../modules/cloudmesh.shell.html#cloudmesh.shell.cm_rain.yn_choice">[docs]</a><span class="k">def</span> <span class="nf">yn_choice</span><span class="p">(</span><span class="n">message</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s">&#39;y&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="yn_choice"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.shell.html#cloudmesh.shell.cm_rain.yn_choice">[docs]</a><span class="k">def</span> <span class="nf">yn_choice</span><span class="p">(</span><span class="n">message</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s">&#39;y&#39;</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;http://stackoverflow.com/questions/3041986/python-command-line-yes-no-input&quot;&quot;&quot;</span>
     <span class="n">choices</span> <span class="o">=</span> <span class="s">&#39;Y/n&#39;</span> <span class="k">if</span> <span class="n">default</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="p">(</span><span class="s">&#39;y&#39;</span><span class="p">,</span> <span class="s">&#39;yes&#39;</span><span class="p">)</span> <span class="k">else</span> <span class="s">&#39;y/N&#39;</span>
     <span class="n">choice</span> <span class="o">=</span> <span class="nb">raw_input</span><span class="p">(</span><span class="s">&quot;</span><span class="si">%s</span><span class="s"> (</span><span class="si">%s</span><span class="s">) &quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">message</span><span class="p">,</span> <span class="n">choices</span><span class="p">))</span>
@@ -649,7 +649,7 @@
     <span class="k">return</span> <span class="bp">True</span> <span class="k">if</span> <span class="n">choice</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="n">values</span> <span class="k">else</span> <span class="bp">False</span>
 
 </div>
-<div class="viewcode-block" id="parse_time_interval"><a class="viewcode-back" href="../../../modules/cloudmesh.shell.html#cloudmesh.shell.cm_rain.parse_time_interval">[docs]</a><span class="k">def</span> <span class="nf">parse_time_interval</span><span class="p">(</span><span class="n">time_start</span><span class="p">,</span> <span class="n">time_end</span><span class="p">):</span>
+<div class="viewcode-block" id="parse_time_interval"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.shell.html#cloudmesh.shell.cm_rain.parse_time_interval">[docs]</a><span class="k">def</span> <span class="nf">parse_time_interval</span><span class="p">(</span><span class="n">time_start</span><span class="p">,</span> <span class="n">time_end</span><span class="p">):</span>
     <span class="n">t_end</span> <span class="o">=</span> <span class="n">time_end</span>
     <span class="n">t_start</span> <span class="o">=</span> <span class="n">time_start</span>
 
@@ -667,7 +667,7 @@
     <span class="k">return</span> <span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">t_start</span><span class="p">),</span> <span class="nb">str</span><span class="p">(</span><span class="n">t_end</span><span class="p">))</span>
 
 </div>
-<div class="viewcode-block" id="rain_command"><a class="viewcode-back" href="../../../modules/cloudmesh.shell.html#cloudmesh.shell.cm_rain.rain_command">[docs]</a><span class="k">def</span> <span class="nf">rain_command</span><span class="p">(</span><span class="n">arguments</span><span class="p">):</span>
+<div class="viewcode-block" id="rain_command"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.shell.html#cloudmesh.shell.cm_rain.rain_command">[docs]</a><span class="k">def</span> <span class="nf">rain_command</span><span class="p">(</span><span class="n">arguments</span><span class="p">):</span>
 
     <span class="k">for</span> <span class="nb">list</span> <span class="ow">in</span> <span class="p">[</span><span class="s">&quot;HOSTS&quot;</span><span class="p">,</span> <span class="s">&quot;USERS&quot;</span><span class="p">,</span> <span class="s">&quot;PROJECTS&quot;</span><span class="p">,</span> <span class="s">&quot;--project&quot;</span><span class="p">,</span> <span class="s">&quot;--user&quot;</span><span class="p">]:</span>
         <span class="k">try</span><span class="p">:</span>

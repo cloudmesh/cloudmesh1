@@ -602,13 +602,11 @@
 <span class="nd">@task</span>
 <div class="viewcode-block" id="publish"><a class="viewcode-back" href="../../api/fabfile/fabfile.html#fabfile.doc.publish">[docs]</a><span class="k">def</span> <span class="nf">publish</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot;deploy the documentation on gh-pages&quot;&quot;&quot;</span>
-    <span class="c"># html()</span>
-    <span class="n">local</span><span class="p">(</span><span class="s">&#39;cd docs/build/html &#39;</span>
-          <span class="s">&#39;&amp;&amp; git add .  &#39;</span>
-          <span class="s">&#39;&amp;&amp; git commit -m &quot;site generated&quot;&#39;</span>
-          <span class="s">&#39;&amp;&amp; git push origin gh-pages&#39;</span><span class="p">)</span>
-    <span class="n">local</span><span class="p">(</span><span class="s">&#39;git commit -a -m &quot;build site&quot;&#39;</span><span class="p">)</span>
-    <span class="n">local</span><span class="p">(</span><span class="s">&quot;git push origin master&quot;</span><span class="p">)</span>
+    <span class="n">local</span><span class="p">(</span><span class="s">&quot;ghp-import -p docs/build/html&quot;</span><span class="p">)</span>
+    <span class="c">#html()</span>
+    <span class="c">#local(&#39;cd docs/build/html &amp;&amp; git add .  &amp;&amp; git commit -m &quot;site generated&quot; &amp;&amp; git push origin gh-pages&#39;)</span>
+    <span class="c">#local(&#39;git commit -a -m &quot;build site&quot;&#39;)</span>
+    <span class="c">#local(&quot;git push origin master&quot;)</span>
 
 </div>
 <span class="nd">@task</span>

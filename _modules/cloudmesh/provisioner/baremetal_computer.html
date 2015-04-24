@@ -585,7 +585,7 @@
 <span class="n">log</span> <span class="o">=</span> <span class="n">LOGGER</span><span class="p">(</span><span class="n">__file__</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="BaremetalComputer"><a class="viewcode-back" href="../../../modules/cloudmesh.provisioner.html#cloudmesh.provisioner.baremetal_computer.BaremetalComputer">[docs]</a><span class="k">class</span> <span class="nc">BaremetalComputer</span><span class="p">:</span>
+<div class="viewcode-block" id="BaremetalComputer"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.provisioner.html#cloudmesh.provisioner.baremetal_computer.BaremetalComputer">[docs]</a><span class="k">class</span> <span class="nc">BaremetalComputer</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;Baremetal computer class.</span>
 <span class="sd">    First, this class also provide a easy API to initialize the cobbler baremetal computers in mongodb, e.g., mac and power info,</span>
 <span class="sd">    Second, this class have an API through which user can get the detail information to provision a cobbler baremetal computer</span>
@@ -597,7 +597,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">db_client</span> <span class="o">=</span> <span class="n">DBHelper</span><span class="p">(</span><span class="n">coll_name</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">bm_status</span> <span class="o">=</span> <span class="n">BaremetalStatus</span><span class="p">()</span>
 
-<div class="viewcode-block" id="BaremetalComputer.get_default_query"><a class="viewcode-back" href="../../../modules/cloudmesh.provisioner.html#cloudmesh.provisioner.baremetal_computer.BaremetalComputer.get_default_query">[docs]</a>    <span class="k">def</span> <span class="nf">get_default_query</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="BaremetalComputer.get_default_query"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.provisioner.html#cloudmesh.provisioner.baremetal_computer.BaremetalComputer.get_default_query">[docs]</a>    <span class="k">def</span> <span class="nf">get_default_query</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        query helper function.</span>
 <span class="sd">        :return: the default query field.</span>
@@ -608,7 +608,7 @@
                 <span class="s">&quot;cm_key&quot;</span><span class="p">:</span> <span class="s">&quot;server&quot;</span><span class="p">,</span>
                 <span class="p">}</span>
 </div>
-<div class="viewcode-block" id="BaremetalComputer.get_full_query"><a class="viewcode-back" href="../../../modules/cloudmesh.provisioner.html#cloudmesh.provisioner.baremetal_computer.BaremetalComputer.get_full_query">[docs]</a>    <span class="k">def</span> <span class="nf">get_full_query</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query_elem</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<div class="viewcode-block" id="BaremetalComputer.get_full_query"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.provisioner.html#cloudmesh.provisioner.baremetal_computer.BaremetalComputer.get_full_query">[docs]</a>    <span class="k">def</span> <span class="nf">get_full_query</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query_elem</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        merge the default query and user defined query.</span>
 <span class="sd">        :return: the full query dict</span>
@@ -618,7 +618,7 @@
             <span class="n">result</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">query_elem</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">result</span>
 </div>
-<div class="viewcode-block" id="BaremetalComputer.read_data_from_yaml"><a class="viewcode-back" href="../../../modules/cloudmesh.provisioner.html#cloudmesh.provisioner.baremetal_computer.BaremetalComputer.read_data_from_yaml">[docs]</a>    <span class="k">def</span> <span class="nf">read_data_from_yaml</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="BaremetalComputer.read_data_from_yaml"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.provisioner.html#cloudmesh.provisioner.baremetal_computer.BaremetalComputer.read_data_from_yaml">[docs]</a>    <span class="k">def</span> <span class="nf">read_data_from_yaml</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        read mac address and bmc configuration information from **mac.yaml** file.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -646,7 +646,7 @@
                 <span class="n">result</span><span class="p">[</span><span class="n">cluster</span><span class="p">]</span> <span class="o">=</span> <span class="n">mac_data</span>
         <span class="k">return</span> <span class="n">result</span>
 </div>
-<div class="viewcode-block" id="BaremetalComputer.insert_mac_data_to_inventory"><a class="viewcode-back" href="../../../modules/cloudmesh.provisioner.html#cloudmesh.provisioner.baremetal_computer.BaremetalComputer.insert_mac_data_to_inventory">[docs]</a>    <span class="k">def</span> <span class="nf">insert_mac_data_to_inventory</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="BaremetalComputer.insert_mac_data_to_inventory"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.provisioner.html#cloudmesh.provisioner.baremetal_computer.BaremetalComputer.insert_mac_data_to_inventory">[docs]</a>    <span class="k">def</span> <span class="nf">insert_mac_data_to_inventory</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Insert the mac address information including power config into inventory.</span>
 <span class="sd">        This API should be called **BEFORE** baremetal provision.</span>
@@ -661,7 +661,7 @@
             <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">update_mac_address</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">result</span>
 </div>
-<div class="viewcode-block" id="BaremetalComputer.update_mac_address"><a class="viewcode-back" href="../../../modules/cloudmesh.provisioner.html#cloudmesh.provisioner.baremetal_computer.BaremetalComputer.update_mac_address">[docs]</a>    <span class="k">def</span> <span class="nf">update_mac_address</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mac_dict</span><span class="p">):</span>
+<div class="viewcode-block" id="BaremetalComputer.update_mac_address"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.provisioner.html#cloudmesh.provisioner.baremetal_computer.BaremetalComputer.update_mac_address">[docs]</a>    <span class="k">def</span> <span class="nf">update_mac_address</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mac_dict</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        update *inventory* db with mac address information.</span>
 <span class="sd">        :param dict mac_dict: a dict with the following formation. *label_name* is the *cm_id* defined in inventory.</span>
@@ -700,7 +700,7 @@
                     <span class="k">break</span>
         <span class="k">return</span> <span class="n">result</span>
 </div>
-<div class="viewcode-block" id="BaremetalComputer.get_host_info"><a class="viewcode-back" href="../../../modules/cloudmesh.provisioner.html#cloudmesh.provisioner.baremetal_computer.BaremetalComputer.get_host_info">[docs]</a>    <span class="k">def</span> <span class="nf">get_host_info</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host_id</span><span class="p">,</span> <span class="n">info_format</span><span class="o">=</span><span class="s">&quot;cobbler&quot;</span><span class="p">):</span>
+<div class="viewcode-block" id="BaremetalComputer.get_host_info"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.provisioner.html#cloudmesh.provisioner.baremetal_computer.BaremetalComputer.get_host_info">[docs]</a>    <span class="k">def</span> <span class="nf">get_host_info</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host_id</span><span class="p">,</span> <span class="n">info_format</span><span class="o">=</span><span class="s">&quot;cobbler&quot;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        get the required host info for baremetal computer.</span>
 <span class="sd">        :param string host_id: the unique name/id of a node in cloudmesh</span>
@@ -747,7 +747,7 @@
                 <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s">&quot;get_host_info_{0}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">info_format</span><span class="p">))(</span><span class="n">result</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">result</span>
 </div>
-<div class="viewcode-block" id="BaremetalComputer.get_cluster_name_server"><a class="viewcode-back" href="../../../modules/cloudmesh.provisioner.html#cloudmesh.provisioner.baremetal_computer.BaremetalComputer.get_cluster_name_server">[docs]</a>    <span class="k">def</span> <span class="nf">get_cluster_name_server</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cluster_id</span><span class="p">):</span>
+<div class="viewcode-block" id="BaremetalComputer.get_cluster_name_server"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.provisioner.html#cloudmesh.provisioner.baremetal_computer.BaremetalComputer.get_cluster_name_server">[docs]</a>    <span class="k">def</span> <span class="nf">get_cluster_name_server</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cluster_id</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;find the name servers for a cluster</span>
 <span class="sd">        :param string cluster_id: the unique ID of a cluster</span>
 <span class="sd">        :return: None if not exist a name server for the cluster, otherwise a string represents the one or more name servers</span>
@@ -763,7 +763,7 @@
                 <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">record</span><span class="p">[</span><span class="s">&quot;cm_value&quot;</span><span class="p">])</span>
         <span class="k">return</span> <span class="bp">None</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">result</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">1</span> <span class="k">else</span> <span class="s">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="BaremetalComputer.change_dict_key"><a class="viewcode-back" href="../../../modules/cloudmesh.provisioner.html#cloudmesh.provisioner.baremetal_computer.BaremetalComputer.change_dict_key">[docs]</a>    <span class="k">def</span> <span class="nf">change_dict_key</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data_dict</span><span class="p">,</span> <span class="n">fields</span><span class="p">):</span>
+<div class="viewcode-block" id="BaremetalComputer.change_dict_key"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.provisioner.html#cloudmesh.provisioner.baremetal_computer.BaremetalComputer.change_dict_key">[docs]</a>    <span class="k">def</span> <span class="nf">change_dict_key</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data_dict</span><span class="p">,</span> <span class="n">fields</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        change the key in dict from old_key to new_key.</span>
 <span class="sd">        :param dict fields: the projection from old_key to new_key. {&quot;old_key&quot;: &quot;new_key&quot;}</span>
@@ -772,7 +772,7 @@
             <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">data_dict</span><span class="p">:</span>
                 <span class="n">data_dict</span><span class="p">[</span><span class="n">fields</span><span class="p">[</span><span class="n">key</span><span class="p">]]</span> <span class="o">=</span> <span class="n">data_dict</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="BaremetalComputer.fill_dict_default_key"><a class="viewcode-back" href="../../../modules/cloudmesh.provisioner.html#cloudmesh.provisioner.baremetal_computer.BaremetalComputer.fill_dict_default_key">[docs]</a>    <span class="k">def</span> <span class="nf">fill_dict_default_key</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data_dict</span><span class="p">,</span> <span class="n">fields</span><span class="p">):</span>
+<div class="viewcode-block" id="BaremetalComputer.fill_dict_default_key"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.provisioner.html#cloudmesh.provisioner.baremetal_computer.BaremetalComputer.fill_dict_default_key">[docs]</a>    <span class="k">def</span> <span class="nf">fill_dict_default_key</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data_dict</span><span class="p">,</span> <span class="n">fields</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        fill the dict with default key-value pair.</span>
 <span class="sd">        :param dict fields: the default key-value pair. {&quot;key&quot;: &quot;default&quot;}</span>
@@ -781,7 +781,7 @@
             <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">data_dict</span><span class="p">:</span>
                 <span class="n">data_dict</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">fields</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
 </div>
-<div class="viewcode-block" id="BaremetalComputer.get_host_info_cobbler"><a class="viewcode-back" href="../../../modules/cloudmesh.provisioner.html#cloudmesh.provisioner.baremetal_computer.BaremetalComputer.get_host_info_cobbler">[docs]</a>    <span class="k">def</span> <span class="nf">get_host_info_cobbler</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host_dict</span><span class="p">):</span>
+<div class="viewcode-block" id="BaremetalComputer.get_host_info_cobbler"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.provisioner.html#cloudmesh.provisioner.baremetal_computer.BaremetalComputer.get_host_info_cobbler">[docs]</a>    <span class="k">def</span> <span class="nf">get_host_info_cobbler</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host_dict</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        convert general host info dict to the formation of cobbler host formation</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -809,7 +809,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">change_dict_key</span><span class="p">(</span><span class="n">one_interface</span><span class="p">,</span> <span class="n">interface_fields</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">fill_dict_default_key</span><span class="p">(</span><span class="n">one_interface</span><span class="p">,</span> <span class="n">interface_default</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="BaremetalComputer.insert_blank_baremetal_list"><a class="viewcode-back" href="../../../modules/cloudmesh.provisioner.html#cloudmesh.provisioner.baremetal_computer.BaremetalComputer.insert_blank_baremetal_list">[docs]</a>    <span class="k">def</span> <span class="nf">insert_blank_baremetal_list</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="BaremetalComputer.insert_blank_baremetal_list"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.provisioner.html#cloudmesh.provisioner.baremetal_computer.BaremetalComputer.insert_blank_baremetal_list">[docs]</a>    <span class="k">def</span> <span class="nf">insert_blank_baremetal_list</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;insert a blank document of baremetal computers list into mongodb</span>
 <span class="sd">        ONLY called ONCE by **fab mongo.inventory**</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -823,7 +823,7 @@
         <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">db_client</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">elem</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">result</span><span class="p">[</span><span class="s">&quot;result&quot;</span><span class="p">]</span>
 </div>
-<div class="viewcode-block" id="BaremetalComputer.enable_baremetal_computers"><a class="viewcode-back" href="../../../modules/cloudmesh.provisioner.html#cloudmesh.provisioner.baremetal_computer.BaremetalComputer.enable_baremetal_computers">[docs]</a>    <span class="k">def</span> <span class="nf">enable_baremetal_computers</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">hosts</span><span class="p">):</span>
+<div class="viewcode-block" id="BaremetalComputer.enable_baremetal_computers"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.provisioner.html#cloudmesh.provisioner.baremetal_computer.BaremetalComputer.enable_baremetal_computers">[docs]</a>    <span class="k">def</span> <span class="nf">enable_baremetal_computers</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">hosts</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;add the list of *hosts* to be baremetal computers</span>
 <span class="sd">        :param list hosts: the list of hosts with the formation [&quot;host1&quot;, &quot;host2&quot;,]</span>
 <span class="sd">        :return: True means enabled successfully, otherwise False</span>
@@ -836,7 +836,7 @@
             <span class="k">return</span> <span class="n">result</span><span class="p">[</span><span class="s">&quot;result&quot;</span><span class="p">]</span>
         <span class="k">return</span> <span class="bp">True</span>
 </div>
-<div class="viewcode-block" id="BaremetalComputer.disable_baremetal_computers"><a class="viewcode-back" href="../../../modules/cloudmesh.provisioner.html#cloudmesh.provisioner.baremetal_computer.BaremetalComputer.disable_baremetal_computers">[docs]</a>    <span class="k">def</span> <span class="nf">disable_baremetal_computers</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">hosts</span><span class="p">):</span>
+<div class="viewcode-block" id="BaremetalComputer.disable_baremetal_computers"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.provisioner.html#cloudmesh.provisioner.baremetal_computer.BaremetalComputer.disable_baremetal_computers">[docs]</a>    <span class="k">def</span> <span class="nf">disable_baremetal_computers</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">hosts</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;remove the list of *hosts* from baremetal computers</span>
 <span class="sd">        :param list hosts: the list of hosts with the formation [&quot;host1&quot;, &quot;host2&quot;,]</span>
 <span class="sd">        :return: True means disabled successfully, otherwise False</span>
@@ -849,7 +849,7 @@
             <span class="k">return</span> <span class="n">result</span><span class="p">[</span><span class="s">&quot;result&quot;</span><span class="p">]</span>
         <span class="k">return</span> <span class="bp">True</span>
 </div>
-<div class="viewcode-block" id="BaremetalComputer.get_baremetal_computers"><a class="viewcode-back" href="../../../modules/cloudmesh.provisioner.html#cloudmesh.provisioner.baremetal_computer.BaremetalComputer.get_baremetal_computers">[docs]</a>    <span class="k">def</span> <span class="nf">get_baremetal_computers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="BaremetalComputer.get_baremetal_computers"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.provisioner.html#cloudmesh.provisioner.baremetal_computer.BaremetalComputer.get_baremetal_computers">[docs]</a>    <span class="k">def</span> <span class="nf">get_baremetal_computers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;get the list of baremetal computers</span>
 <span class="sd">        :return: the list of hosts with the formation [&quot;host1&quot;, &quot;host2&quot;,] or None if failed</span>
 <span class="sd">        &quot;&quot;&quot;</span>

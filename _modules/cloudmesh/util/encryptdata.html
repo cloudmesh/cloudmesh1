@@ -607,28 +607,28 @@
 <span class="kn">from</span> <span class="nn">cloudmesh_base.locations</span> <span class="kn">import</span> <span class="n">config_file_prefix</span>
 
 
-<div class="viewcode-block" id="pad"><a class="viewcode-back" href="../../../modules/cloudmesh.util.html#cloudmesh.util.encryptdata.pad">[docs]</a><span class="k">def</span> <span class="nf">pad</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">bs</span><span class="p">):</span>
+<div class="viewcode-block" id="pad"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.util.html#cloudmesh.util.encryptdata.pad">[docs]</a><span class="k">def</span> <span class="nf">pad</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">bs</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Pad data to the given blocksize, PKCS-5 style.</span>
 <span class="sd">    :param data: the data</span>
 <span class="sd">    :param bs: the blocksize &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">data</span> <span class="o">+</span> <span class="p">(</span><span class="n">bs</span> <span class="o">-</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="o">%</span> <span class="n">bs</span><span class="p">)</span> <span class="o">*</span> <span class="nb">chr</span><span class="p">(</span><span class="n">bs</span> <span class="o">-</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="o">%</span> <span class="n">bs</span><span class="p">)</span>
 
 </div>
-<div class="viewcode-block" id="unpad"><a class="viewcode-back" href="../../../modules/cloudmesh.util.html#cloudmesh.util.encryptdata.unpad">[docs]</a><span class="k">def</span> <span class="nf">unpad</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+<div class="viewcode-block" id="unpad"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.util.html#cloudmesh.util.encryptdata.unpad">[docs]</a><span class="k">def</span> <span class="nf">unpad</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Remove the padding characters.</span>
 <span class="sd">    :param data: the data</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="nb">ord</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])]</span>
 
 </div>
-<div class="viewcode-block" id="keydigest"><a class="viewcode-back" href="../../../modules/cloudmesh.util.html#cloudmesh.util.encryptdata.keydigest">[docs]</a><span class="k">def</span> <span class="nf">keydigest</span><span class="p">(</span><span class="n">key</span><span class="p">):</span>
+<div class="viewcode-block" id="keydigest"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.util.html#cloudmesh.util.encryptdata.keydigest">[docs]</a><span class="k">def</span> <span class="nf">keydigest</span><span class="p">(</span><span class="n">key</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Easy way to get a 32-bit key.</span>
 <span class="sd">    :param key: the key</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">sha256</span><span class="p">(</span><span class="n">key</span><span class="p">)</span><span class="o">.</span><span class="n">digest</span><span class="p">()</span>
 
 </div>
-<div class="viewcode-block" id="encrypt"><a class="viewcode-back" href="../../../modules/cloudmesh.util.html#cloudmesh.util.encryptdata.encrypt">[docs]</a><span class="k">def</span> <span class="nf">encrypt</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">password</span><span class="p">):</span>
+<div class="viewcode-block" id="encrypt"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.util.html#cloudmesh.util.encryptdata.encrypt">[docs]</a><span class="k">def</span> <span class="nf">encrypt</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">password</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Encrypts the given data using the password.</span>
 
@@ -646,7 +646,7 @@
     <span class="k">return</span> <span class="n">b64encode</span><span class="p">(</span><span class="n">iv</span> <span class="o">+</span> <span class="n">cypher</span><span class="p">)</span>
 
 </div>
-<div class="viewcode-block" id="decrypt"><a class="viewcode-back" href="../../../modules/cloudmesh.util.html#cloudmesh.util.encryptdata.decrypt">[docs]</a><span class="k">def</span> <span class="nf">decrypt</span><span class="p">(</span><span class="n">data64</span><span class="p">,</span> <span class="n">password</span><span class="p">):</span>
+<div class="viewcode-block" id="decrypt"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.util.html#cloudmesh.util.encryptdata.decrypt">[docs]</a><span class="k">def</span> <span class="nf">decrypt</span><span class="p">(</span><span class="n">data64</span><span class="p">,</span> <span class="n">password</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Decrypts the given data using the password.</span>
 
 <span class="sd">    The data64 should be the base64 encoded encrypted value created</span>
@@ -664,7 +664,7 @@
     <span class="k">return</span> <span class="n">unpad</span><span class="p">(</span><span class="n">aes</span><span class="o">.</span><span class="n">decrypt</span><span class="p">(</span><span class="n">cypher</span><span class="p">))</span>
 
 </div>
-<div class="viewcode-block" id="encrypt_file"><a class="viewcode-back" href="../../../modules/cloudmesh.util.html#cloudmesh.util.encryptdata.encrypt_file">[docs]</a><span class="k">def</span> <span class="nf">encrypt_file</span><span class="p">(</span><span class="n">filepath</span><span class="p">):</span>
+<div class="viewcode-block" id="encrypt_file"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.util.html#cloudmesh.util.encryptdata.encrypt_file">[docs]</a><span class="k">def</span> <span class="nf">encrypt_file</span><span class="p">(</span><span class="n">filepath</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Encrypt file contents to base64.</span>
 <span class="sd">    :param filepath: the path of the file.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -678,7 +678,7 @@
         <span class="k">return</span> <span class="n">filepath</span>
 
 </div>
-<div class="viewcode-block" id="decrypt_file"><a class="viewcode-back" href="../../../modules/cloudmesh.util.html#cloudmesh.util.encryptdata.decrypt_file">[docs]</a><span class="k">def</span> <span class="nf">decrypt_file</span><span class="p">(</span><span class="n">content</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<div class="viewcode-block" id="decrypt_file"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.util.html#cloudmesh.util.encryptdata.decrypt_file">[docs]</a><span class="k">def</span> <span class="nf">decrypt_file</span><span class="p">(</span><span class="n">content</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Write a file by descrypting the content and return a filepath.</span>
 <span class="sd">    :param content: the content to be written</span>
 <span class="sd">    :param filename: the file name, if non is specified a unique</span>

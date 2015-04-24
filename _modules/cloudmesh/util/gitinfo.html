@@ -578,7 +578,7 @@
 <span class="kn">from</span> <span class="nn">cloudmesh_base.util</span> <span class="kn">import</span> <span class="n">banner</span>
 
 
-<div class="viewcode-block" id="GitInfo"><a class="viewcode-back" href="../../../modules/cloudmesh.util.html#cloudmesh.util.gitinfo.GitInfo">[docs]</a><span class="k">class</span> <span class="nc">GitInfo</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<div class="viewcode-block" id="GitInfo"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.util.html#cloudmesh.util.gitinfo.GitInfo">[docs]</a><span class="k">class</span> <span class="nc">GitInfo</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
 
     <span class="sd">&quot;&quot;&quot;This class can be used to return some elementary information</span>
 <span class="sd">    about the git hub directory.  This includes the:</span>
@@ -606,14 +606,14 @@
         <span class="sd">&quot;&quot;&quot;init method&quot;&quot;&quot;</span>
         <span class="k">pass</span>
 
-<div class="viewcode-block" id="GitInfo.version"><a class="viewcode-back" href="../../../modules/cloudmesh.util.html#cloudmesh.util.gitinfo.GitInfo.version">[docs]</a>    <span class="k">def</span> <span class="nf">version</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="GitInfo.version"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.util.html#cloudmesh.util.gitinfo.GitInfo.version">[docs]</a>    <span class="k">def</span> <span class="nf">version</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        retruns the verison of the code from github</span>
 <span class="sd">        :rtype: the git tags</span>
 <span class="sd">        &#39;&#39;&#39;</span>
         <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">Shell</span><span class="o">.</span><span class="n">git</span><span class="p">(</span><span class="s">&quot;describe&quot;</span><span class="p">,</span> <span class="s">&quot;--tags&quot;</span><span class="p">))[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
 </div>
-<div class="viewcode-block" id="GitInfo.emails"><a class="viewcode-back" href="../../../modules/cloudmesh.util.html#cloudmesh.util.gitinfo.GitInfo.emails">[docs]</a>    <span class="k">def</span> <span class="nf">emails</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">format_arg</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<div class="viewcode-block" id="GitInfo.emails"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.util.html#cloudmesh.util.gitinfo.GitInfo.emails">[docs]</a>    <span class="k">def</span> <span class="nf">emails</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">format_arg</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        returns the emails of the authors either as a text or as a dict. The</span>
 <span class="sd">        format is specified as an argument.</span>
@@ -641,7 +641,7 @@
                 <span class="n">emails</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">emails</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
             <span class="k">return</span> <span class="n">emails</span>
 </div>
-<div class="viewcode-block" id="GitInfo.authors"><a class="viewcode-back" href="../../../modules/cloudmesh.util.html#cloudmesh.util.gitinfo.GitInfo.authors">[docs]</a>    <span class="k">def</span> <span class="nf">authors</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">format_arg</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<div class="viewcode-block" id="GitInfo.authors"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.util.html#cloudmesh.util.gitinfo.GitInfo.authors">[docs]</a>    <span class="k">def</span> <span class="nf">authors</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">format_arg</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        returns the authors of the authors either as a text or as a dict. The</span>
 <span class="sd">        format is specified as an argument.</span>
@@ -659,7 +659,7 @@
                 <span class="n">authors</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">authors</span><span class="p">[</span><span class="n">name</span><span class="p">])</span>
             <span class="k">return</span> <span class="n">authors</span>
 </div>
-<div class="viewcode-block" id="GitInfo.info"><a class="viewcode-back" href="../../../modules/cloudmesh.util.html#cloudmesh.util.gitinfo.GitInfo.info">[docs]</a>    <span class="k">def</span> <span class="nf">info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="GitInfo.info"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.util.html#cloudmesh.util.gitinfo.GitInfo.info">[docs]</a>    <span class="k">def</span> <span class="nf">info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        returns the information about authors, emails, and commits in a dict.</span>
 <span class="sd">        :rtype: a dict with the information</span>
@@ -675,7 +675,7 @@
                 <span class="s">&quot;email&quot;</span><span class="p">:</span> <span class="n">email</span><span class="p">[</span><span class="n">name</span><span class="p">]}</span>
         <span class="k">return</span> <span class="n">info</span>
 </div>
-<div class="viewcode-block" id="GitInfo.stat"><a class="viewcode-back" href="../../../modules/cloudmesh.util.html#cloudmesh.util.gitinfo.GitInfo.stat">[docs]</a>    <span class="k">def</span> <span class="nf">stat</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">email</span><span class="p">):</span>
+<div class="viewcode-block" id="GitInfo.stat"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.util.html#cloudmesh.util.gitinfo.GitInfo.stat">[docs]</a>    <span class="k">def</span> <span class="nf">stat</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">email</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        returns a statistic of a git author with the given e_mail.</span>
 
@@ -706,7 +706,7 @@
                 <span class="s">&quot;deleted&quot;</span><span class="p">:</span> <span class="n">sums</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
                 <span class="s">&quot;lineschanged&quot;</span><span class="p">:</span> <span class="n">sums</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">sums</span><span class="p">[</span><span class="mi">2</span><span class="p">]}</span>
 </div>
-<div class="viewcode-block" id="GitInfo.compute"><a class="viewcode-back" href="../../../modules/cloudmesh.util.html#cloudmesh.util.gitinfo.GitInfo.compute">[docs]</a>    <span class="k">def</span> <span class="nf">compute</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="GitInfo.compute"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.util.html#cloudmesh.util.gitinfo.GitInfo.compute">[docs]</a>    <span class="k">def</span> <span class="nf">compute</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        computes the statistic of all authors in a git repository and</span>
 <span class="sd">        returns the result as a dict.</span>

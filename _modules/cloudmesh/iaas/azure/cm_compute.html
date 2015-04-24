@@ -591,7 +591,7 @@
 <span class="kn">from</span> <span class="nn">cloudmesh_common.util</span> <span class="kn">import</span> <span class="n">get_unique_name</span><span class="p">,</span> <span class="n">get_rand_string</span>
 
 
-<div class="viewcode-block" id="azure"><a class="viewcode-back" href="../../../../modules/cloudmesh.iaas.azure.html#cloudmesh.iaas.azure.cm_compute.azure">[docs]</a><span class="k">class</span> <span class="nc">azure</span><span class="p">(</span><span class="n">ComputeBaseType</span><span class="p">):</span>
+<div class="viewcode-block" id="azure"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.iaas.azure.html#cloudmesh.iaas.azure.cm_compute.azure">[docs]</a><span class="k">class</span> <span class="nc">azure</span><span class="p">(</span><span class="n">ComputeBaseType</span><span class="p">):</span>
     <span class="n">DEFAULT_LABEL</span> <span class="o">=</span> <span class="s">&quot;azure&quot;</span>
     <span class="n">name_prefix</span> <span class="o">=</span> <span class="s">&quot;cm-&quot;</span>
 
@@ -612,13 +612,13 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">set_credential</span><span class="p">(</span><span class="n">credential</span><span class="p">,</span> <span class="n">admin_credential</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
 
-<div class="viewcode-block" id="azure.set_credential"><a class="viewcode-back" href="../../../../modules/cloudmesh.iaas.azure.html#cloudmesh.iaas.azure.cm_compute.azure.set_credential">[docs]</a>    <span class="k">def</span> <span class="nf">set_credential</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cred</span><span class="p">,</span> <span class="n">admin_cred</span><span class="p">):</span>
+<div class="viewcode-block" id="azure.set_credential"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.iaas.azure.html#cloudmesh.iaas.azure.cm_compute.azure.set_credential">[docs]</a>    <span class="k">def</span> <span class="nf">set_credential</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cred</span><span class="p">,</span> <span class="n">admin_cred</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">cred</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">user_credential</span> <span class="o">=</span> <span class="n">cred</span>
         <span class="k">if</span> <span class="n">admin_cred</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">admin_credential</span> <span class="o">=</span> <span class="n">admin_cred</span>
 </div>
-<div class="viewcode-block" id="azure.set_vars"><a class="viewcode-back" href="../../../../modules/cloudmesh.iaas.azure.html#cloudmesh.iaas.azure.cm_compute.azure.set_vars">[docs]</a>    <span class="k">def</span> <span class="nf">set_vars</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="azure.set_vars"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.iaas.azure.html#cloudmesh.iaas.azure.cm_compute.azure.set_vars">[docs]</a>    <span class="k">def</span> <span class="nf">set_vars</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Set default variables for the azure class&quot;&quot;&quot;</span>
 
         <span class="c"># Set a default name from uuid random string</span>
@@ -637,7 +637,7 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">cloud_services</span> <span class="o">=</span> <span class="bp">None</span>
 </div>
-<div class="viewcode-block" id="azure.load_default"><a class="viewcode-back" href="../../../../modules/cloudmesh.iaas.azure.html#cloudmesh.iaas.azure.cm_compute.azure.load_default">[docs]</a>    <span class="k">def</span> <span class="nf">load_default</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">label</span><span class="p">):</span>
+<div class="viewcode-block" id="azure.load_default"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.iaas.azure.html#cloudmesh.iaas.azure.cm_compute.azure.load_default">[docs]</a>    <span class="k">def</span> <span class="nf">load_default</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">label</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Load default values and set them to the object</span>
 
 <span class="sd">        :param label: the section name to load from yaml</span>
@@ -669,7 +669,7 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">label</span> <span class="o">=</span> <span class="n">label</span>
 </div>
-<div class="viewcode-block" id="azure.connect"><a class="viewcode-back" href="../../../../modules/cloudmesh.iaas.azure.html#cloudmesh.iaas.azure.cm_compute.azure.connect">[docs]</a>    <span class="k">def</span> <span class="nf">connect</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="azure.connect"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.iaas.azure.html#cloudmesh.iaas.azure.cm_compute.azure.connect">[docs]</a>    <span class="k">def</span> <span class="nf">connect</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">subscription_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">user_credential</span><span class="p">[</span><span class="s">&#39;subscriptionid&#39;</span><span class="p">]</span>
         <span class="n">certificate_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">user_credential</span><span class="p">[</span><span class="s">&#39;managementcertfile&#39;</span><span class="p">]</span>
 
@@ -680,7 +680,7 @@
     <span class="k">def</span> <span class="nf">_get_images_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_images</span><span class="p">()</span>
 
-<div class="viewcode-block" id="azure.get_images"><a class="viewcode-back" href="../../../../modules/cloudmesh.iaas.azure.html#cloudmesh.iaas.azure.cm_compute.azure.get_images">[docs]</a>    <span class="k">def</span> <span class="nf">get_images</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="azure.get_images"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.iaas.azure.html#cloudmesh.iaas.azure.cm_compute.azure.get_images">[docs]</a>    <span class="k">def</span> <span class="nf">get_images</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Return available operating systems images on Windows Azure</span>
 
 <span class="sd">        :returns: dict.</span>
@@ -710,7 +710,7 @@
     <span class="k">def</span> <span class="nf">_get_services_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">list_services</span><span class="p">()</span>
 
-<div class="viewcode-block" id="azure.list_services"><a class="viewcode-back" href="../../../../modules/cloudmesh.iaas.azure.html#cloudmesh.iaas.azure.cm_compute.azure.list_services">[docs]</a>    <span class="k">def</span> <span class="nf">list_services</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="azure.list_services"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.iaas.azure.html#cloudmesh.iaas.azure.cm_compute.azure.list_services">[docs]</a>    <span class="k">def</span> <span class="nf">list_services</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Return the cloud services available on the account.</span>
 <span class="sd">        cloud service is required to create a deployment.</span>
 
@@ -733,7 +733,7 @@
 
         <span class="k">return</span> <span class="n">res</span>
 </div>
-<div class="viewcode-block" id="azure.list_deployments"><a class="viewcode-back" href="../../../../modules/cloudmesh.iaas.azure.html#cloudmesh.iaas.azure.cm_compute.azure.list_deployments">[docs]</a>    <span class="k">def</span> <span class="nf">list_deployments</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="azure.list_deployments"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.iaas.azure.html#cloudmesh.iaas.azure.cm_compute.azure.list_deployments">[docs]</a>    <span class="k">def</span> <span class="nf">list_deployments</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Return the deployments available on the account.</span>
 <span class="sd">        A launched vm instance is a deployment.</span>
 
@@ -755,7 +755,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">servers</span> <span class="o">=</span> <span class="n">deployments</span>
         <span class="k">return</span> <span class="n">deployments</span>
 </div>
-<div class="viewcode-block" id="azure.azure_naming_convention"><a class="viewcode-back" href="../../../../modules/cloudmesh.iaas.azure.html#cloudmesh.iaas.azure.cm_compute.azure.azure_naming_convention">[docs]</a>    <span class="k">def</span> <span class="nf">azure_naming_convention</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+<div class="viewcode-block" id="azure.azure_naming_convention"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.iaas.azure.html#cloudmesh.iaas.azure.cm_compute.azure.azure_naming_convention">[docs]</a>    <span class="k">def</span> <span class="nf">azure_naming_convention</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
         <span class="c"># Azure Naming convention</span>
         <span class="c"># The name can contain only letters, numbers, and hyphens. The name must</span>
         <span class="c"># start with a letter and must end with a letter or a number.</span>
@@ -766,7 +766,7 @@
         <span class="n">vm_name</span> <span class="o">=</span> <span class="n">vm_name</span>  <span class="c"># + &quot;-&quot; + get_rand_string()</span>
         <span class="k">return</span> <span class="n">vm_name</span>
 </div>
-<div class="viewcode-block" id="azure.vm_create"><a class="viewcode-back" href="../../../../modules/cloudmesh.iaas.azure.html#cloudmesh.iaas.azure.cm_compute.azure.vm_create">[docs]</a>    <span class="k">def</span> <span class="nf">vm_create</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span>
+<div class="viewcode-block" id="azure.vm_create"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.iaas.azure.html#cloudmesh.iaas.azure.cm_compute.azure.vm_create">[docs]</a>    <span class="k">def</span> <span class="nf">vm_create</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span>
                   <span class="n">flavor_name</span><span class="p">,</span>
                   <span class="n">image_id</span><span class="p">,</span>
                   <span class="n">security_groups</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
@@ -786,12 +786,12 @@
 
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">create_vm</span><span class="p">()</span>
 </div>
-<div class="viewcode-block" id="azure.set_linux_cfg"><a class="viewcode-back" href="../../../../modules/cloudmesh.iaas.azure.html#cloudmesh.iaas.azure.cm_compute.azure.set_linux_cfg">[docs]</a>    <span class="k">def</span> <span class="nf">set_linux_cfg</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">refresh</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+<div class="viewcode-block" id="azure.set_linux_cfg"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.iaas.azure.html#cloudmesh.iaas.azure.cm_compute.azure.set_linux_cfg">[docs]</a>    <span class="k">def</span> <span class="nf">set_linux_cfg</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">refresh</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">refresh</span> <span class="ow">or</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">linux_config</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">linux_config</span> <span class="o">=</span> <span class="n">LinuxConfigurationSet</span><span class="p">(</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">get_name</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">userid</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="bp">True</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="azure.create_vm"><a class="viewcode-back" href="../../../../modules/cloudmesh.iaas.azure.html#cloudmesh.iaas.azure.cm_compute.azure.create_vm">[docs]</a>    <span class="k">def</span> <span class="nf">create_vm</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="azure.create_vm"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.iaas.azure.html#cloudmesh.iaas.azure.cm_compute.azure.create_vm">[docs]</a>    <span class="k">def</span> <span class="nf">create_vm</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Create a Window Azure Virtual Machine</span>
 
 <span class="sd">        :returns: azure.servicemanagement.AsynchronousOperationResult</span>
@@ -831,10 +831,10 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">result</span> <span class="o">=</span> <span class="n">result</span>
         <span class="k">return</span> <span class="n">result</span>
 </div>
-<div class="viewcode-block" id="azure.vm_delete"><a class="viewcode-back" href="../../../../modules/cloudmesh.iaas.azure.html#cloudmesh.iaas.azure.cm_compute.azure.vm_delete">[docs]</a>    <span class="k">def</span> <span class="nf">vm_delete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+<div class="viewcode-block" id="azure.vm_delete"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.iaas.azure.html#cloudmesh.iaas.azure.cm_compute.azure.vm_delete">[docs]</a>    <span class="k">def</span> <span class="nf">vm_delete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">delete_vm</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="azure.delete_vm"><a class="viewcode-back" href="../../../../modules/cloudmesh.iaas.azure.html#cloudmesh.iaas.azure.cm_compute.azure.delete_vm">[docs]</a>    <span class="k">def</span> <span class="nf">delete_vm</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+<div class="viewcode-block" id="azure.delete_vm"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.iaas.azure.html#cloudmesh.iaas.azure.cm_compute.azure.delete_vm">[docs]</a>    <span class="k">def</span> <span class="nf">delete_vm</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Tear down the virtual machine deployment (instance).</span>
 <span class="sd">        It requires several steps to clear up all allocated resources.</span>
 
@@ -872,10 +872,10 @@
                 <span class="k">pass</span>
                 <span class="c"># self.bc.delete_container(self.container_name)</span>
 </div>
-<div class="viewcode-block" id="azure.list_cloud_services"><a class="viewcode-back" href="../../../../modules/cloudmesh.iaas.azure.html#cloudmesh.iaas.azure.cm_compute.azure.list_cloud_services">[docs]</a>    <span class="k">def</span> <span class="nf">list_cloud_services</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="azure.list_cloud_services"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.iaas.azure.html#cloudmesh.iaas.azure.cm_compute.azure.list_cloud_services">[docs]</a>    <span class="k">def</span> <span class="nf">list_cloud_services</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">sms</span><span class="o">.</span><span class="n">list_hosted_services</span><span class="p">()</span>
 </div>
-<div class="viewcode-block" id="azure.set_name"><a class="viewcode-back" href="../../../../modules/cloudmesh.iaas.azure.html#cloudmesh.iaas.azure.cm_compute.azure.set_name">[docs]</a>    <span class="k">def</span> <span class="nf">set_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+<div class="viewcode-block" id="azure.set_name"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.iaas.azure.html#cloudmesh.iaas.azure.cm_compute.azure.set_name">[docs]</a>    <span class="k">def</span> <span class="nf">set_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Set a name of the virtual machine to deploy. Unique name is required</span>
 <span class="sd">        to avoid duplication.</span>
 
@@ -885,10 +885,10 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
 </div>
-<div class="viewcode-block" id="azure.get_name"><a class="viewcode-back" href="../../../../modules/cloudmesh.iaas.azure.html#cloudmesh.iaas.azure.cm_compute.azure.get_name">[docs]</a>    <span class="k">def</span> <span class="nf">get_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="azure.get_name"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.iaas.azure.html#cloudmesh.iaas.azure.cm_compute.azure.get_name">[docs]</a>    <span class="k">def</span> <span class="nf">get_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span>
 </div>
-<div class="viewcode-block" id="azure.create_hosted_service"><a class="viewcode-back" href="../../../../modules/cloudmesh.iaas.azure.html#cloudmesh.iaas.azure.cm_compute.azure.create_hosted_service">[docs]</a>    <span class="k">def</span> <span class="nf">create_hosted_service</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="azure.create_hosted_service"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.iaas.azure.html#cloudmesh.iaas.azure.cm_compute.azure.create_hosted_service">[docs]</a>    <span class="k">def</span> <span class="nf">create_hosted_service</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Create a cloud (hosted) service via create_hosted_service()</span>
 <span class="sd">        :param name: (optional) the name of a cloud service to use</span>
 <span class="sd">        :type name: str.</span>
@@ -902,7 +902,7 @@
                                        <span class="n">label</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
                                        <span class="n">location</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">location</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="azure.set_location"><a class="viewcode-back" href="../../../../modules/cloudmesh.iaas.azure.html#cloudmesh.iaas.azure.cm_compute.azure.set_location">[docs]</a>    <span class="k">def</span> <span class="nf">set_location</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+<div class="viewcode-block" id="azure.set_location"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.iaas.azure.html#cloudmesh.iaas.azure.cm_compute.azure.set_location">[docs]</a>    <span class="k">def</span> <span class="nf">set_location</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Set a geographical location for the virtual machine</span>
 
 <span class="sd">        :param name: the location</span>
@@ -911,10 +911,10 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">location</span> <span class="o">=</span> <span class="n">name</span>
 </div>
-<div class="viewcode-block" id="azure.get_location"><a class="viewcode-back" href="../../../../modules/cloudmesh.iaas.azure.html#cloudmesh.iaas.azure.cm_compute.azure.get_location">[docs]</a>    <span class="k">def</span> <span class="nf">get_location</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="azure.get_location"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.iaas.azure.html#cloudmesh.iaas.azure.cm_compute.azure.get_location">[docs]</a>    <span class="k">def</span> <span class="nf">get_location</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">location</span>
 </div>
-<div class="viewcode-block" id="azure.set_os_image"><a class="viewcode-back" href="../../../../modules/cloudmesh.iaas.azure.html#cloudmesh.iaas.azure.cm_compute.azure.set_os_image">[docs]</a>    <span class="k">def</span> <span class="nf">set_os_image</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+<div class="viewcode-block" id="azure.set_os_image"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.iaas.azure.html#cloudmesh.iaas.azure.cm_compute.azure.set_os_image">[docs]</a>    <span class="k">def</span> <span class="nf">set_os_image</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Set os image for the virtual machine</span>
 
 <span class="sd">        :param name: the name of the operating system image to use</span>
@@ -923,7 +923,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">os_image_name</span> <span class="o">=</span> <span class="n">name</span>
 </div>
-<div class="viewcode-block" id="azure.load_os_image"><a class="viewcode-back" href="../../../../modules/cloudmesh.iaas.azure.html#cloudmesh.iaas.azure.cm_compute.azure.load_os_image">[docs]</a>    <span class="k">def</span> <span class="nf">load_os_image</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<div class="viewcode-block" id="azure.load_os_image"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.iaas.azure.html#cloudmesh.iaas.azure.cm_compute.azure.load_os_image">[docs]</a>    <span class="k">def</span> <span class="nf">load_os_image</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Load the os image information from Windows Azure</span>
 
 <span class="sd">        :param name: the name of the os image to load</span>
@@ -934,7 +934,7 @@
             <span class="n">name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">os_image_name</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">os_image</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sms</span><span class="o">.</span><span class="n">get_os_image</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="azure.get_media_url"><a class="viewcode-back" href="../../../../modules/cloudmesh.iaas.azure.html#cloudmesh.iaas.azure.cm_compute.azure.get_media_url">[docs]</a>    <span class="k">def</span> <span class="nf">get_media_url</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="azure.get_media_url"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.iaas.azure.html#cloudmesh.iaas.azure.cm_compute.azure.get_media_url">[docs]</a>    <span class="k">def</span> <span class="nf">get_media_url</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Return a media url to create a http url for the blob file</span>
 
 <span class="sd">        :returns: str.</span>
@@ -952,7 +952,7 @@
 
         <span class="k">return</span> <span class="n">media_url</span>
 </div>
-<div class="viewcode-block" id="azure.get_storage_account"><a class="viewcode-back" href="../../../../modules/cloudmesh.iaas.azure.html#cloudmesh.iaas.azure.cm_compute.azure.get_storage_account">[docs]</a>    <span class="k">def</span> <span class="nf">get_storage_account</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="azure.get_storage_account"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.iaas.azure.html#cloudmesh.iaas.azure.cm_compute.azure.get_storage_account">[docs]</a>    <span class="k">def</span> <span class="nf">get_storage_account</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Return a storage account.</span>
 
 <span class="sd">        If there is a selected image to deploy, the same storage account will be</span>
@@ -976,7 +976,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">storage_account</span> <span class="o">=</span> <span class="n">account_name</span>
         <span class="k">return</span> <span class="n">account_name</span>
 </div>
-<div class="viewcode-block" id="azure.get_last_storage_account"><a class="viewcode-back" href="../../../../modules/cloudmesh.iaas.azure.html#cloudmesh.iaas.azure.cm_compute.azure.get_last_storage_account">[docs]</a>    <span class="k">def</span> <span class="nf">get_last_storage_account</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="azure.get_last_storage_account"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.iaas.azure.html#cloudmesh.iaas.azure.cm_compute.azure.get_last_storage_account">[docs]</a>    <span class="k">def</span> <span class="nf">get_last_storage_account</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Return the last storage account name of a subscription id</span>
 
 <span class="sd">        :returns: str.</span>
@@ -992,7 +992,7 @@
             <span class="n">storage_account</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_name</span><span class="p">()</span>
             <span class="k">return</span> <span class="n">storage_account</span>
 </div>
-<div class="viewcode-block" id="azure.create_storage_account"><a class="viewcode-back" href="../../../../modules/cloudmesh.iaas.azure.html#cloudmesh.iaas.azure.cm_compute.azure.create_storage_account">[docs]</a>    <span class="k">def</span> <span class="nf">create_storage_account</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="azure.create_storage_account"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.iaas.azure.html#cloudmesh.iaas.azure.cm_compute.azure.create_storage_account">[docs]</a>    <span class="k">def</span> <span class="nf">create_storage_account</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_name</span><span class="p">()[:</span><span class="mi">24</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&quot;-&quot;</span><span class="p">,</span> <span class="s">&quot;&quot;</span><span class="p">)</span>
         <span class="c"># A name for the storage account that is unique within Windows Azure.</span>
         <span class="c"># Storage account names must be between 3 and 24 characters in</span>
@@ -1006,7 +1006,7 @@
                                         <span class="n">label</span><span class="o">=</span><span class="n">labe</span><span class="p">,</span>
                                         <span class="n">location</span><span class="o">=</span><span class="n">loca</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="azure.get_hostname"><a class="viewcode-back" href="../../../../modules/cloudmesh.iaas.azure.html#cloudmesh.iaas.azure.cm_compute.azure.get_hostname">[docs]</a>    <span class="k">def</span> <span class="nf">get_hostname</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">):</span>
+<div class="viewcode-block" id="azure.get_hostname"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.iaas.azure.html#cloudmesh.iaas.azure.cm_compute.azure.get_hostname">[docs]</a>    <span class="k">def</span> <span class="nf">get_hostname</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Return a hostname from the url.</span>
 <span class="sd">        top hostname indicates a storage account name</span>
 
@@ -1022,19 +1022,19 @@
 
         <span class="k">return</span> <span class="n">host</span>
 </div>
-<div class="viewcode-block" id="azure.get_container"><a class="viewcode-back" href="../../../../modules/cloudmesh.iaas.azure.html#cloudmesh.iaas.azure.cm_compute.azure.get_container">[docs]</a>    <span class="k">def</span> <span class="nf">get_container</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="azure.get_container"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.iaas.azure.html#cloudmesh.iaas.azure.cm_compute.azure.get_container">[docs]</a>    <span class="k">def</span> <span class="nf">get_container</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">container</span>
 </div>
-<div class="viewcode-block" id="azure.get_blobname"><a class="viewcode-back" href="../../../../modules/cloudmesh.iaas.azure.html#cloudmesh.iaas.azure.cm_compute.azure.get_blobname">[docs]</a>    <span class="k">def</span> <span class="nf">get_blobname</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="azure.get_blobname"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.iaas.azure.html#cloudmesh.iaas.azure.cm_compute.azure.get_blobname">[docs]</a>    <span class="k">def</span> <span class="nf">get_blobname</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">blobname</span>
 </div>
-<div class="viewcode-block" id="azure.get_os_name"><a class="viewcode-back" href="../../../../modules/cloudmesh.iaas.azure.html#cloudmesh.iaas.azure.cm_compute.azure.get_os_name">[docs]</a>    <span class="k">def</span> <span class="nf">get_os_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="azure.get_os_name"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.iaas.azure.html#cloudmesh.iaas.azure.cm_compute.azure.get_os_name">[docs]</a>    <span class="k">def</span> <span class="nf">get_os_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">os_image_name</span>
 </div>
-<div class="viewcode-block" id="azure.get_blob_domain"><a class="viewcode-back" href="../../../../modules/cloudmesh.iaas.azure.html#cloudmesh.iaas.azure.cm_compute.azure.get_blob_domain">[docs]</a>    <span class="k">def</span> <span class="nf">get_blob_domain</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="azure.get_blob_domain"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.iaas.azure.html#cloudmesh.iaas.azure.cm_compute.azure.get_blob_domain">[docs]</a>    <span class="k">def</span> <span class="nf">get_blob_domain</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">blob_domain</span>
 </div>
-<div class="viewcode-block" id="azure.set_ssh_keys"><a class="viewcode-back" href="../../../../modules/cloudmesh.iaas.azure.html#cloudmesh.iaas.azure.cm_compute.azure.set_ssh_keys">[docs]</a>    <span class="k">def</span> <span class="nf">set_ssh_keys</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">):</span>
+<div class="viewcode-block" id="azure.set_ssh_keys"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.iaas.azure.html#cloudmesh.iaas.azure.cm_compute.azure.set_ssh_keys">[docs]</a>    <span class="k">def</span> <span class="nf">set_ssh_keys</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Configure the login credentials with ssh keys for the virtual machine.</span>
 <span class="sd">        This is only for linux OS, not Windows.</span>
 
@@ -1078,10 +1078,10 @@
         <span class="c"># reference:</span>
         <span class="c"># http://www.sslshopper.com/article-most-common-openssl-commands.html</span>
 </div>
-<div class="viewcode-block" id="azure.keypair_list"><a class="viewcode-back" href="../../../../modules/cloudmesh.iaas.azure.html#cloudmesh.iaas.azure.cm_compute.azure.keypair_list">[docs]</a>    <span class="k">def</span> <span class="nf">keypair_list</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="azure.keypair_list"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.iaas.azure.html#cloudmesh.iaas.azure.cm_compute.azure.keypair_list">[docs]</a>    <span class="k">def</span> <span class="nf">keypair_list</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="p">[]</span>
 </div>
-<div class="viewcode-block" id="azure.keypair_add"><a class="viewcode-back" href="../../../../modules/cloudmesh.iaas.azure.html#cloudmesh.iaas.azure.cm_compute.azure.keypair_add">[docs]</a>    <span class="k">def</span> <span class="nf">keypair_add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">content</span><span class="p">):</span>
+<div class="viewcode-block" id="azure.keypair_add"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.iaas.azure.html#cloudmesh.iaas.azure.cm_compute.azure.keypair_add">[docs]</a>    <span class="k">def</span> <span class="nf">keypair_add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">content</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">load_thumbprint</span><span class="p">()</span>
         <span class="n">fp</span> <span class="o">=</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">NamedTemporaryFile</span><span class="p">(</span><span class="n">delete</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
         <span class="n">fp</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">b</span><span class="s">&#39;</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">content</span><span class="p">)</span>
@@ -1094,12 +1094,12 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">set_linux_cfg</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">linux_config</span><span class="o">.</span><span class="n">ssh</span><span class="o">.</span><span class="n">public_keys</span><span class="o">.</span><span class="n">public_keys</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">publickey</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="azure.load_thumbprint"><a class="viewcode-back" href="../../../../modules/cloudmesh.iaas.azure.html#cloudmesh.iaas.azure.cm_compute.azure.load_thumbprint">[docs]</a>    <span class="k">def</span> <span class="nf">load_thumbprint</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="azure.load_thumbprint"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.iaas.azure.html#cloudmesh.iaas.azure.cm_compute.azure.load_thumbprint">[docs]</a>    <span class="k">def</span> <span class="nf">load_thumbprint</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">thumbprint</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">thumbprint</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">thumbprint_path</span><span class="p">,</span> <span class="s">&#39;r&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
 </div>
-<div class="viewcode-block" id="azure.set_network"><a class="viewcode-back" href="../../../../modules/cloudmesh.iaas.azure.html#cloudmesh.iaas.azure.cm_compute.azure.set_network">[docs]</a>    <span class="k">def</span> <span class="nf">set_network</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="azure.set_network"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.iaas.azure.html#cloudmesh.iaas.azure.cm_compute.azure.set_network">[docs]</a>    <span class="k">def</span> <span class="nf">set_network</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Configure network for a virtual machine.</span>
 <span class="sd">        End Points (ports) can be opened through this function.</span>
 <span class="sd">        For example, opening ssh(22) port will be configured.</span>
@@ -1111,7 +1111,7 @@
             <span class="n">ConfigurationSetInputEndpoint</span><span class="p">(</span><span class="s">&#39;ssh&#39;</span><span class="p">,</span> <span class="s">&#39;tcp&#39;</span><span class="p">,</span> <span class="s">&#39;22&#39;</span><span class="p">,</span> <span class="s">&#39;22&#39;</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">network</span> <span class="o">=</span> <span class="n">network</span>
 </div>
-<div class="viewcode-block" id="azure.set_service_certs"><a class="viewcode-back" href="../../../../modules/cloudmesh.iaas.azure.html#cloudmesh.iaas.azure.cm_compute.azure.set_service_certs">[docs]</a>    <span class="k">def</span> <span class="nf">set_service_certs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="azure.set_service_certs"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.iaas.azure.html#cloudmesh.iaas.azure.cm_compute.azure.set_service_certs">[docs]</a>    <span class="k">def</span> <span class="nf">set_service_certs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Add a certificate to cloud (hosted) service.</span>
 <span class="sd">        Personal Information Exchange (.pfx) should exist in the azure config</span>
 <span class="sd">        directory (e.g. $HOME/.azure/.ssh/myCert.pfx). Python SDK only support</span>
@@ -1134,23 +1134,23 @@
                                                     <span class="n">password</span><span class="o">=</span><span class="n">cert_password</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">cert_return</span> <span class="o">=</span> <span class="n">cert_res</span>
 </div>
-<div class="viewcode-block" id="azure.set_userid"><a class="viewcode-back" href="../../../../modules/cloudmesh.iaas.azure.html#cloudmesh.iaas.azure.cm_compute.azure.set_userid">[docs]</a>    <span class="k">def</span> <span class="nf">set_userid</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+<div class="viewcode-block" id="azure.set_userid"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.iaas.azure.html#cloudmesh.iaas.azure.cm_compute.azure.set_userid">[docs]</a>    <span class="k">def</span> <span class="nf">set_userid</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">userid</span> <span class="o">=</span> <span class="n">name</span>
 </div>
-<div class="viewcode-block" id="azure.set_user_password"><a class="viewcode-back" href="../../../../modules/cloudmesh.iaas.azure.html#cloudmesh.iaas.azure.cm_compute.azure.set_user_password">[docs]</a>    <span class="k">def</span> <span class="nf">set_user_password</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">passwd</span><span class="p">):</span>
+<div class="viewcode-block" id="azure.set_user_password"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.iaas.azure.html#cloudmesh.iaas.azure.cm_compute.azure.set_user_password">[docs]</a>    <span class="k">def</span> <span class="nf">set_user_password</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">passwd</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">user_passwd</span> <span class="o">=</span> <span class="n">passwd</span>
 </div>
-<div class="viewcode-block" id="azure.get_authorized_keys_path"><a class="viewcode-back" href="../../../../modules/cloudmesh.iaas.azure.html#cloudmesh.iaas.azure.cm_compute.azure.get_authorized_keys_path">[docs]</a>    <span class="k">def</span> <span class="nf">get_authorized_keys_path</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="azure.get_authorized_keys_path"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.iaas.azure.html#cloudmesh.iaas.azure.cm_compute.azure.get_authorized_keys_path">[docs]</a>    <span class="k">def</span> <span class="nf">get_authorized_keys_path</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">authorized_keys_path</span> <span class="o">=</span> <span class="s">&quot;/home/&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">userid</span> <span class="o">+</span> \
                                     <span class="s">&quot;/.ssh/authorized_keys&quot;</span>
 
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">authorized_keys_path</span>
 </div>
-<div class="viewcode-block" id="azure.get_key_pair_path"><a class="viewcode-back" href="../../../../modules/cloudmesh.iaas.azure.html#cloudmesh.iaas.azure.cm_compute.azure.get_key_pair_path">[docs]</a>    <span class="k">def</span> <span class="nf">get_key_pair_path</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="azure.get_key_pair_path"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.iaas.azure.html#cloudmesh.iaas.azure.cm_compute.azure.get_key_pair_path">[docs]</a>    <span class="k">def</span> <span class="nf">get_key_pair_path</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">path</span> <span class="o">=</span> <span class="s">&quot;/home/&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">userid</span> <span class="o">+</span> <span class="s">&#39;/.azure/myPrivateKey.key&#39;</span>
         <span class="k">return</span> <span class="n">path</span>
 </div>
-<div class="viewcode-block" id="azure.set_flavor"><a class="viewcode-back" href="../../../../modules/cloudmesh.iaas.azure.html#cloudmesh.iaas.azure.cm_compute.azure.set_flavor">[docs]</a>    <span class="k">def</span> <span class="nf">set_flavor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">size</span><span class="p">):</span>
+<div class="viewcode-block" id="azure.set_flavor"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.iaas.azure.html#cloudmesh.iaas.azure.cm_compute.azure.set_flavor">[docs]</a>    <span class="k">def</span> <span class="nf">set_flavor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">size</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Set role size (flavor)</span>
 
 <span class="sd">        :param size: ExtraSmall|Small|Medium|Large|ExtraLarge</span>
@@ -1159,14 +1159,14 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">flavor</span> <span class="o">=</span> <span class="n">size</span>
 </div>
-<div class="viewcode-block" id="azure.set_flavor_by_idx"><a class="viewcode-back" href="../../../../modules/cloudmesh.iaas.azure.html#cloudmesh.iaas.azure.cm_compute.azure.set_flavor_by_idx">[docs]</a>    <span class="k">def</span> <span class="nf">set_flavor_by_idx</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">idx</span><span class="p">):</span>
+<div class="viewcode-block" id="azure.set_flavor_by_idx"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.iaas.azure.html#cloudmesh.iaas.azure.cm_compute.azure.set_flavor_by_idx">[docs]</a>    <span class="k">def</span> <span class="nf">set_flavor_by_idx</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">idx</span><span class="p">):</span>
         <span class="n">flavors</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">def_flavors</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">flavors</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">flavors</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s">&#39;id&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="nb">str</span><span class="p">(</span><span class="n">idx</span><span class="p">):</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">set_flavor</span><span class="p">(</span><span class="n">flavors</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s">&#39;name&#39;</span><span class="p">])</span>
                 <span class="k">return</span>
 </div>
-<div class="viewcode-block" id="azure.get_flavor"><a class="viewcode-back" href="../../../../modules/cloudmesh.iaas.azure.html#cloudmesh.iaas.azure.cm_compute.azure.get_flavor">[docs]</a>    <span class="k">def</span> <span class="nf">get_flavor</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="azure.get_flavor"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.iaas.azure.html#cloudmesh.iaas.azure.cm_compute.azure.get_flavor">[docs]</a>    <span class="k">def</span> <span class="nf">get_flavor</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Return the image size to deploy</span>
 
 <span class="sd">        :returns: str.</span>
@@ -1174,7 +1174,7 @@
 
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">flavor</span>
 </div>
-<div class="viewcode-block" id="azure.get_status"><a class="viewcode-back" href="../../../../modules/cloudmesh.iaas.azure.html#cloudmesh.iaas.azure.cm_compute.azure.get_status">[docs]</a>    <span class="k">def</span> <span class="nf">get_status</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<div class="viewcode-block" id="azure.get_status"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.iaas.azure.html#cloudmesh.iaas.azure.cm_compute.azure.get_status">[docs]</a>    <span class="k">def</span> <span class="nf">get_status</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Get information about the deployed service by the name</span>
 
 <span class="sd">        :param name: the name of the deployment</span>
@@ -1188,7 +1188,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">sms</span><span class="o">.</span><span class="n">get_deployment_by_name</span><span class="p">(</span><span class="n">service_name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span>
                                                <span class="n">deployment_name</span><span class="o">=</span><span class="n">name</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="azure.encode_output"><a class="viewcode-back" href="../../../../modules/cloudmesh.iaas.azure.html#cloudmesh.iaas.azure.cm_compute.azure.encode_output">[docs]</a>    <span class="k">def</span> <span class="nf">encode_output</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">deployments</span><span class="p">):</span>
+<div class="viewcode-block" id="azure.encode_output"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.iaas.azure.html#cloudmesh.iaas.azure.cm_compute.azure.encode_output">[docs]</a>    <span class="k">def</span> <span class="nf">encode_output</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">deployments</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Chance key names of the deployments to fit into openstack&#39;s list.</span>
 <span class="sd">           name, status, addresses, flavor, id, user_id, metadata, key_name,</span>
 <span class="sd">           created are required in openstack&#39;s list.</span>
@@ -1238,13 +1238,13 @@
             <span class="n">deployment</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s">&quot;vip&quot;</span><span class="p">:</span> <span class="n">public_ip</span><span class="p">})</span>
             <span class="n">deployment</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s">&quot;role_instance_list&quot;</span><span class="p">:</span> <span class="bp">None</span><span class="p">})</span>
 </div>
-<div class="viewcode-block" id="azure.convert_states"><a class="viewcode-back" href="../../../../modules/cloudmesh.iaas.azure.html#cloudmesh.iaas.azure.cm_compute.azure.convert_states">[docs]</a>    <span class="k">def</span> <span class="nf">convert_states</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
+<div class="viewcode-block" id="azure.convert_states"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.iaas.azure.html#cloudmesh.iaas.azure.cm_compute.azure.convert_states">[docs]</a>    <span class="k">def</span> <span class="nf">convert_states</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">state</span> <span class="o">==</span> <span class="s">&quot;Running&quot;</span><span class="p">:</span>
             <span class="k">return</span> <span class="s">&quot;ACTIVE&quot;</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">state</span>
 </div>
-<div class="viewcode-block" id="azure.convert_ips"><a class="viewcode-back" href="../../../../modules/cloudmesh.iaas.azure.html#cloudmesh.iaas.azure.cm_compute.azure.convert_ips">[docs]</a>    <span class="k">def</span> <span class="nf">convert_ips</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">role_instance_list</span><span class="p">):</span>
+<div class="viewcode-block" id="azure.convert_ips"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.iaas.azure.html#cloudmesh.iaas.azure.cm_compute.azure.convert_ips">[docs]</a>    <span class="k">def</span> <span class="nf">convert_ips</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">role_instance_list</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Convert azure&#39;s data into openstack&#39;s type</span>
 
 <span class="sd">        role_instance_list is an azure class which contains, for example,</span>
@@ -1282,7 +1282,7 @@
                  <span class="p">}</span>
         <span class="k">return</span> <span class="n">res</span>
 </div>
-<div class="viewcode-block" id="azure.convert_flavors"><a class="viewcode-back" href="../../../../modules/cloudmesh.iaas.azure.html#cloudmesh.iaas.azure.cm_compute.azure.convert_flavors">[docs]</a>    <span class="k">def</span> <span class="nf">convert_flavors</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">role_instance_list</span><span class="p">):</span>
+<div class="viewcode-block" id="azure.convert_flavors"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.iaas.azure.html#cloudmesh.iaas.azure.cm_compute.azure.convert_flavors">[docs]</a>    <span class="k">def</span> <span class="nf">convert_flavors</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">role_instance_list</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Convert azure&#39;s data into openstack&#39;s type</span>
 
 <span class="sd">        :param role_instance_list: role instance list class of azure</span>
@@ -1302,7 +1302,7 @@
                      <span class="s">u&#39;rel&#39;</span><span class="p">:</span> <span class="bp">None</span><span class="p">}]}</span>
         <span class="k">return</span> <span class="n">res</span>
 </div>
-<div class="viewcode-block" id="azure.release_unused_public_ips"><a class="viewcode-back" href="../../../../modules/cloudmesh.iaas.azure.html#cloudmesh.iaas.azure.cm_compute.azure.release_unused_public_ips">[docs]</a>    <span class="k">def</span> <span class="nf">release_unused_public_ips</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="azure.release_unused_public_ips"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.iaas.azure.html#cloudmesh.iaas.azure.cm_compute.azure.release_unused_public_ips">[docs]</a>    <span class="k">def</span> <span class="nf">release_unused_public_ips</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span>
 </div>
     <span class="k">def</span> <span class="nf">_get_flavors_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -1316,12 +1316,12 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">flavors</span> <span class="o">=</span> <span class="n">result</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">flavors</span>
 
-<div class="viewcode-block" id="azure.get_flavors_from_yaml"><a class="viewcode-back" href="../../../../modules/cloudmesh.iaas.azure.html#cloudmesh.iaas.azure.cm_compute.azure.get_flavors_from_yaml">[docs]</a>    <span class="k">def</span> <span class="nf">get_flavors_from_yaml</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="azure.get_flavors_from_yaml"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.iaas.azure.html#cloudmesh.iaas.azure.cm_compute.azure.get_flavors_from_yaml">[docs]</a>    <span class="k">def</span> <span class="nf">get_flavors_from_yaml</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">obj</span> <span class="o">=</span> <span class="n">cm_config_flavor</span><span class="p">()</span>
         <span class="n">flavors</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;cloudmesh.flavor&#39;</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">flavors</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">label</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="azure.list_flavors"><a class="viewcode-back" href="../../../../modules/cloudmesh.iaas.azure.html#cloudmesh.iaas.azure.cm_compute.azure.list_flavors">[docs]</a>    <span class="k">def</span> <span class="nf">list_flavors</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="azure.list_flavors"><a class="viewcode-back" href="../../../../api/cloudmesh/cloudmesh.iaas.azure.html#cloudmesh.iaas.azure.cm_compute.azure.list_flavors">[docs]</a>    <span class="k">def</span> <span class="nf">list_flavors</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">flavors</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">def_flavors</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">flavors</span>

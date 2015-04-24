@@ -593,7 +593,7 @@
 <span class="n">log</span> <span class="o">=</span> <span class="n">LOGGER</span><span class="p">(</span><span class="n">__file__</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="pbs_note_builder"><a class="viewcode-back" href="../../../modules/cloudmesh.pbs.html#cloudmesh.pbs.pbs_note.pbs_note_builder">[docs]</a><span class="k">class</span> <span class="nc">pbs_note_builder</span><span class="p">:</span>
+<div class="viewcode-block" id="pbs_note_builder"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.pbs.html#cloudmesh.pbs.pbs_note.pbs_note_builder">[docs]</a><span class="k">class</span> <span class="nc">pbs_note_builder</span><span class="p">:</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user</span><span class="p">,</span> <span class="n">host</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">username</span> <span class="o">=</span> <span class="n">user</span>
@@ -603,12 +603,12 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">pbs_nodes_info</span> <span class="o">=</span> <span class="bp">None</span>
 
     <span class="c"># get recent pbsnodes info</span>
-<div class="viewcode-block" id="pbs_note_builder.fetch_pbs_nodes_info"><a class="viewcode-back" href="../../../modules/cloudmesh.pbs.html#cloudmesh.pbs.pbs_note.pbs_note_builder.fetch_pbs_nodes_info">[docs]</a>    <span class="k">def</span> <span class="nf">fetch_pbs_nodes_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="pbs_note_builder.fetch_pbs_nodes_info"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.pbs.html#cloudmesh.pbs.pbs_note.pbs_note_builder.fetch_pbs_nodes_info">[docs]</a>    <span class="k">def</span> <span class="nf">fetch_pbs_nodes_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">pbs</span> <span class="o">=</span> <span class="n">PBS</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">username</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">hostname</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">pbs_nodes_info</span> <span class="o">=</span> <span class="n">pbs</span><span class="o">.</span><span class="n">pbsnodes</span><span class="p">()</span>
         <span class="c"># print self.pbs_nodes_info</span>
 </div>
-<div class="viewcode-block" id="pbs_note_builder.check_node_validation"><a class="viewcode-back" href="../../../modules/cloudmesh.pbs.html#cloudmesh.pbs.pbs_note.pbs_note_builder.check_node_validation">[docs]</a>    <span class="k">def</span> <span class="nf">check_node_validation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
+<div class="viewcode-block" id="pbs_note_builder.check_node_validation"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.pbs.html#cloudmesh.pbs.pbs_note.pbs_note_builder.check_node_validation">[docs]</a>    <span class="k">def</span> <span class="nf">check_node_validation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
         <span class="n">node_id_label</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">inventory</span><span class="o">.</span><span class="n">get_host_id_label</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
         <span class="n">berror</span> <span class="o">=</span> <span class="bp">False</span>
         <span class="k">if</span> <span class="n">node_id_label</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
@@ -626,14 +626,14 @@
 
         <span class="k">return</span> <span class="n">node_id_label</span>
 </div>
-<div class="viewcode-block" id="pbs_note_builder.get_note"><a class="viewcode-back" href="../../../modules/cloudmesh.pbs.html#cloudmesh.pbs.pbs_note.pbs_note_builder.get_note">[docs]</a>    <span class="k">def</span> <span class="nf">get_note</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
+<div class="viewcode-block" id="pbs_note_builder.get_note"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.pbs.html#cloudmesh.pbs.pbs_note.pbs_note_builder.get_note">[docs]</a>    <span class="k">def</span> <span class="nf">get_note</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
         <span class="p">(</span><span class="n">node_id</span><span class="p">,</span> <span class="n">node_label</span><span class="p">)</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">check_node_validation</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
         <span class="k">print</span><span class="p">(</span><span class="s">&quot;{0}-note: {1}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">node_id</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">pbs_nodes_info</span><span class="p">[</span><span class="n">node_label</span><span class="p">][</span><span class="s">&quot;note&quot;</span><span class="p">]))</span>
 
     <span class="c"># node is the server name, e.g., i129, i15</span>
     <span class="c"># note is a dict, {&quot;attr1&quot;: &quot;value1&quot;, &quot;attr2&quot;: &quot;value2&quot;}</span>
     <span class="c"># setNote doesn&#39;t check the correctness of the attribute-value pair</span></div>
-<div class="viewcode-block" id="pbs_note_builder.set_note"><a class="viewcode-back" href="../../../modules/cloudmesh.pbs.html#cloudmesh.pbs.pbs_note.pbs_note_builder.set_note">[docs]</a>    <span class="k">def</span> <span class="nf">set_note</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span> <span class="n">note</span><span class="p">):</span>
+<div class="viewcode-block" id="pbs_note_builder.set_note"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.pbs.html#cloudmesh.pbs.pbs_note.pbs_note_builder.set_note">[docs]</a>    <span class="k">def</span> <span class="nf">set_note</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span> <span class="n">note</span><span class="p">):</span>
         <span class="p">(</span><span class="n">node_id</span><span class="p">,</span> <span class="n">node_label</span><span class="p">)</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">check_node_validation</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
 
         <span class="c"># [&quot;note&quot;] ONLY has two type: dict or string</span>
@@ -669,15 +669,15 @@
 
     <span class="c"># set server&#39;s temperature</span>
     <span class="c"># a shortcut of set_note</span></div>
-<div class="viewcode-block" id="pbs_note_builder.set_temperature_note"><a class="viewcode-back" href="../../../modules/cloudmesh.pbs.html#cloudmesh.pbs.pbs_note.pbs_note_builder.set_temperature_note">[docs]</a>    <span class="k">def</span> <span class="nf">set_temperature_note</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span> <span class="n">temp</span><span class="p">):</span>
+<div class="viewcode-block" id="pbs_note_builder.set_temperature_note"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.pbs.html#cloudmesh.pbs.pbs_note.pbs_note_builder.set_temperature_note">[docs]</a>    <span class="k">def</span> <span class="nf">set_temperature_note</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span> <span class="n">temp</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">set_one_note</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="s">&quot;temperature&quot;</span><span class="p">,</span> <span class="n">temp</span><span class="p">)</span>
 
     <span class="c"># set server&#39;s service type</span>
     <span class="c"># a shortcut of set_note</span></div>
-<div class="viewcode-block" id="pbs_note_builder.set_service_note"><a class="viewcode-back" href="../../../modules/cloudmesh.pbs.html#cloudmesh.pbs.pbs_note.pbs_note_builder.set_service_note">[docs]</a>    <span class="k">def</span> <span class="nf">set_service_note</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span> <span class="n">service</span><span class="p">):</span>
+<div class="viewcode-block" id="pbs_note_builder.set_service_note"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.pbs.html#cloudmesh.pbs.pbs_note.pbs_note_builder.set_service_note">[docs]</a>    <span class="k">def</span> <span class="nf">set_service_note</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span> <span class="n">service</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">set_one_note</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="s">&quot;service&quot;</span><span class="p">,</span> <span class="n">service</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="pbs_note_builder.set_one_note"><a class="viewcode-back" href="../../../modules/cloudmesh.pbs.html#cloudmesh.pbs.pbs_note.pbs_note_builder.set_one_note">[docs]</a>    <span class="k">def</span> <span class="nf">set_one_note</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span> <span class="n">attr</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+<div class="viewcode-block" id="pbs_note_builder.set_one_note"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.pbs.html#cloudmesh.pbs.pbs_note.pbs_note_builder.set_one_note">[docs]</a>    <span class="k">def</span> <span class="nf">set_one_note</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span> <span class="n">attr</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">set_note</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="p">{</span><span class="n">attr</span><span class="p">:</span> <span class="n">value</span><span class="p">})</span>
 
 <span class="c"># test only</span></div></div>

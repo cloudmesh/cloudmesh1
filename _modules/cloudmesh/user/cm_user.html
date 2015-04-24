@@ -605,7 +605,7 @@
 <span class="n">log</span> <span class="o">=</span> <span class="n">LOGGER</span><span class="p">(</span><span class="n">__file__</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="cm_user"><a class="viewcode-back" href="../../../modules/cloudmesh.user.html#cloudmesh.user.cm_user.cm_user">[docs]</a><span class="k">class</span> <span class="nc">cm_user</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<div class="viewcode-block" id="cm_user"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.user.html#cloudmesh.user.cm_user.cm_user">[docs]</a><span class="k">class</span> <span class="nc">cm_user</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
 
     <span class="sd">&quot;&quot;&quot;cm_user provides user information including the ldap&#39;s and the clouds&#39;.</span>
 <span class="sd">    The ldap has a user profile such as a first name, last name and active</span>
@@ -624,7 +624,7 @@
             <span class="s">&quot;cloudmesh.server.ldap.with_ldap&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">connect_db</span><span class="p">()</span>
 
-<div class="viewcode-block" id="cm_user.authenticate"><a class="viewcode-back" href="../../../modules/cloudmesh.user.html#cloudmesh.user.cm_user.cm_user.authenticate">[docs]</a>    <span class="k">def</span> <span class="nf">authenticate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">userId</span><span class="p">,</span> <span class="n">password</span><span class="p">):</span>
+<div class="viewcode-block" id="cm_user.authenticate"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.user.html#cloudmesh.user.cm_user.cm_user.authenticate">[docs]</a>    <span class="k">def</span> <span class="nf">authenticate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">userId</span><span class="p">,</span> <span class="n">password</span><span class="p">):</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">with_ldap</span><span class="p">:</span>
             <span class="c"># return True</span>
             <span class="n">passhash</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_credential</span><span class="p">(</span>
@@ -639,7 +639,7 @@
             <span class="n">log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s">&quot;{0}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
             <span class="k">return</span> <span class="bp">False</span>
 </div>
-<div class="viewcode-block" id="cm_user.generate_yaml"><a class="viewcode-back" href="../../../modules/cloudmesh.user.html#cloudmesh.user.cm_user.cm_user.generate_yaml">[docs]</a>    <span class="k">def</span> <span class="nf">generate_yaml</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">id</span><span class="p">,</span> <span class="n">basename</span><span class="p">):</span>
+<div class="viewcode-block" id="cm_user.generate_yaml"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.user.html#cloudmesh.user.cm_user.cm_user.generate_yaml">[docs]</a>    <span class="k">def</span> <span class="nf">generate_yaml</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">id</span><span class="p">,</span> <span class="n">basename</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        Generates the content for a yaml file based on the passed parameters.</span>
 
@@ -664,7 +664,7 @@
 
         <span class="k">return</span> <span class="n">out</span>
 </div>
-<div class="viewcode-block" id="cm_user.connect_db"><a class="viewcode-back" href="../../../modules/cloudmesh.user.html#cloudmesh.user.cm_user.cm_user.connect_db">[docs]</a>    <span class="k">def</span> <span class="nf">connect_db</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="cm_user.connect_db"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.user.html#cloudmesh.user.cm_user.cm_user.connect_db">[docs]</a>    <span class="k">def</span> <span class="nf">connect_db</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Connect to the mongo db.&quot;&quot;&quot;</span>
 
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">from_yaml</span><span class="p">:</span>
@@ -679,7 +679,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">db_defaults</span> <span class="o">=</span> <span class="n">get_mongo_db</span><span class="p">(</span><span class="n">defaults_collection</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">userdb_passwd</span> <span class="o">=</span> <span class="n">get_mongo_db</span><span class="p">(</span><span class="n">passwd_collection</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="cm_user.info"><a class="viewcode-back" href="../../../modules/cloudmesh.user.html#cloudmesh.user.cm_user.cm_user.info">[docs]</a>    <span class="k">def</span> <span class="nf">info</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">portal_id</span><span class="p">,</span> <span class="n">cloud_names</span><span class="o">=</span><span class="p">[]):</span>
+<div class="viewcode-block" id="cm_user.info"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.user.html#cloudmesh.user.cm_user.cm_user.info">[docs]</a>    <span class="k">def</span> <span class="nf">info</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">portal_id</span><span class="p">,</span> <span class="n">cloud_names</span><span class="o">=</span><span class="p">[]):</span>
         <span class="sd">&quot;&quot;&quot;Return the: the list of cloud names to search, e.g.</span>
 <span class="sd">        india</span>
 <span class="sd">        :type cloud_names: list</span>
@@ -748,7 +748,7 @@
     <span class="c"># default_cloud = &#39;india&#39;</span>
     <span class="n">default_cloud</span> <span class="o">=</span> <span class="bp">None</span>
 
-<div class="viewcode-block" id="cm_user.init_defaults"><a class="viewcode-back" href="../../../modules/cloudmesh.user.html#cloudmesh.user.cm_user.cm_user.init_defaults">[docs]</a>    <span class="k">def</span> <span class="nf">init_defaults</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">username</span><span class="p">):</span>
+<div class="viewcode-block" id="cm_user.init_defaults"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.user.html#cloudmesh.user.cm_user.cm_user.init_defaults">[docs]</a>    <span class="k">def</span> <span class="nf">init_defaults</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">username</span><span class="p">):</span>
         <span class="c"># ONLY for debug</span>
         <span class="c"># added by HC on Nov. 11, 2013 to test LDAP and user.mongo</span>
         <span class="c"># BEGIN debug</span>
@@ -844,7 +844,7 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">update_defaults</span><span class="p">(</span><span class="n">username</span><span class="p">,</span> <span class="n">defaults</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="cm_user.update_users_project_names"><a class="viewcode-back" href="../../../modules/cloudmesh.user.html#cloudmesh.user.cm_user.cm_user.update_users_project_names">[docs]</a>    <span class="k">def</span> <span class="nf">update_users_project_names</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">projects</span><span class="p">):</span>
+<div class="viewcode-block" id="cm_user.update_users_project_names"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.user.html#cloudmesh.user.cm_user.cm_user.update_users_project_names">[docs]</a>    <span class="k">def</span> <span class="nf">update_users_project_names</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">projects</span><span class="p">):</span>
 
         <span class="k">if</span> <span class="s">&quot;active&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">projects</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
             <span class="n">projects</span><span class="p">[</span><span class="s">&quot;active&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
@@ -854,7 +854,7 @@
 
         <span class="k">return</span> <span class="n">projects</span>
 </div>
-<div class="viewcode-block" id="cm_user.list_users"><a class="viewcode-back" href="../../../modules/cloudmesh.user.html#cloudmesh.user.cm_user.cm_user.list_users">[docs]</a>    <span class="k">def</span> <span class="nf">list_users</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cloud_names</span><span class="o">=</span><span class="p">[]):</span>
+<div class="viewcode-block" id="cm_user.list_users"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.user.html#cloudmesh.user.cm_user.cm_user.list_users">[docs]</a>    <span class="k">def</span> <span class="nf">list_users</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cloud_names</span><span class="o">=</span><span class="p">[]):</span>
         <span class="sd">&quot;&quot;&quot;Return all user information with a given cloud.</span>
 
 <span class="sd">        :param cloud_names: the cloud name</span>
@@ -921,7 +921,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
 
     <span class="nd">@deprecated</span>
-<div class="viewcode-block" id="cm_user.get_name"><a class="viewcode-back" href="../../../modules/cloudmesh.user.html#cloudmesh.user.cm_user.cm_user.get_name">[docs]</a>    <span class="k">def</span> <span class="nf">get_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">portal_id</span><span class="p">):</span>
+<div class="viewcode-block" id="cm_user.get_name"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.user.html#cloudmesh.user.cm_user.cm_user.get_name">[docs]</a>    <span class="k">def</span> <span class="nf">get_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">portal_id</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Return a user name in a tuple. (firstname, lastname)</span>
 
 <span class="sd">        :param portal_id: the unique portal id</span>
@@ -938,14 +938,14 @@
 
         <span class="k">return</span> <span class="p">(</span><span class="n">first_name</span><span class="p">,</span> <span class="n">last_name</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="cm_user.update_defaults"><a class="viewcode-back" href="../../../modules/cloudmesh.user.html#cloudmesh.user.cm_user.cm_user.update_defaults">[docs]</a>    <span class="k">def</span> <span class="nf">update_defaults</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">username</span><span class="p">,</span> <span class="n">d</span><span class="p">):</span>
+<div class="viewcode-block" id="cm_user.update_defaults"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.user.html#cloudmesh.user.cm_user.cm_user.update_defaults">[docs]</a>    <span class="k">def</span> <span class="nf">update_defaults</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">username</span><span class="p">,</span> <span class="n">d</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Sets the defaults for a user &quot;&quot;&quot;</span>
         <span class="n">stored_d</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_defaults</span><span class="p">(</span><span class="n">username</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">attribute</span> <span class="ow">in</span> <span class="n">d</span><span class="p">:</span>
             <span class="n">stored_d</span><span class="p">[</span><span class="n">attribute</span><span class="p">]</span> <span class="o">=</span> <span class="n">d</span><span class="p">[</span><span class="n">attribute</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">set_defaults</span><span class="p">(</span><span class="n">username</span><span class="p">,</span> <span class="n">stored_d</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="cm_user.set_defaults"><a class="viewcode-back" href="../../../modules/cloudmesh.user.html#cloudmesh.user.cm_user.cm_user.set_defaults">[docs]</a>    <span class="k">def</span> <span class="nf">set_defaults</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">username</span><span class="p">,</span> <span class="n">d</span><span class="p">):</span>
+<div class="viewcode-block" id="cm_user.set_defaults"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.user.html#cloudmesh.user.cm_user.cm_user.set_defaults">[docs]</a>    <span class="k">def</span> <span class="nf">set_defaults</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">username</span><span class="p">,</span> <span class="n">d</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Sets the defaults for a user &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">d</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">dict</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">db_defaults</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s">&#39;cm_user_id&#39;</span><span class="p">:</span> <span class="n">username</span><span class="p">},</span> <span class="n">d</span><span class="p">,</span> <span class="n">upsert</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
@@ -953,7 +953,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">,</span> <span class="s">&#39;defaults value must be a dict&#39;</span>
 </div>
-<div class="viewcode-block" id="cm_user.set_default_attribute"><a class="viewcode-back" href="../../../modules/cloudmesh.user.html#cloudmesh.user.cm_user.cm_user.set_default_attribute">[docs]</a>    <span class="k">def</span> <span class="nf">set_default_attribute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">username</span><span class="p">,</span> <span class="n">attribute</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+<div class="viewcode-block" id="cm_user.set_default_attribute"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.user.html#cloudmesh.user.cm_user.cm_user.set_default_attribute">[docs]</a>    <span class="k">def</span> <span class="nf">set_default_attribute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">username</span><span class="p">,</span> <span class="n">attribute</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;will set a variable in mongo</span>
 <span class="sd">            [&quot;defaults&quot;][attribute]</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -961,7 +961,7 @@
         <span class="n">d</span><span class="p">[</span><span class="n">attribute</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">set_defaults</span><span class="p">(</span><span class="n">username</span><span class="p">,</span> <span class="n">d</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="cm_user.get_defaults"><a class="viewcode-back" href="../../../modules/cloudmesh.user.html#cloudmesh.user.cm_user.cm_user.get_defaults">[docs]</a>    <span class="k">def</span> <span class="nf">get_defaults</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">username</span><span class="p">):</span>
+<div class="viewcode-block" id="cm_user.get_defaults"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.user.html#cloudmesh.user.cm_user.cm_user.get_defaults">[docs]</a>    <span class="k">def</span> <span class="nf">get_defaults</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">username</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;returns the defaults for the user&quot;&quot;&quot;</span>
         <span class="n">user</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">db_defaults</span><span class="o">.</span><span class="n">find_one</span><span class="p">({</span><span class="s">&#39;cm_user_id&#39;</span><span class="p">:</span> <span class="n">username</span><span class="p">})</span>
 
@@ -969,7 +969,7 @@
             <span class="n">user</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="k">return</span> <span class="n">user</span>
 </div>
-<div class="viewcode-block" id="cm_user.set_user"><a class="viewcode-back" href="../../../modules/cloudmesh.user.html#cloudmesh.user.cm_user.cm_user.set_user">[docs]</a>    <span class="k">def</span> <span class="nf">set_user</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">username</span><span class="p">,</span> <span class="n">d</span><span class="p">):</span>
+<div class="viewcode-block" id="cm_user.set_user"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.user.html#cloudmesh.user.cm_user.cm_user.set_user">[docs]</a>    <span class="k">def</span> <span class="nf">set_user</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">username</span><span class="p">,</span> <span class="n">d</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Sets the data for a user &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">d</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">dict</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">db_users</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s">&#39;cm_user_id&#39;</span><span class="p">:</span> <span class="n">username</span><span class="p">},</span> <span class="n">d</span><span class="p">,</span> <span class="n">upsert</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
@@ -977,7 +977,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">,</span> <span class="s">&#39;user data value must be a dict&#39;</span>
 </div>
-<div class="viewcode-block" id="cm_user.set_user_attribute"><a class="viewcode-back" href="../../../modules/cloudmesh.user.html#cloudmesh.user.cm_user.cm_user.set_user_attribute">[docs]</a>    <span class="k">def</span> <span class="nf">set_user_attribute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">username</span><span class="p">,</span> <span class="n">attribute</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+<div class="viewcode-block" id="cm_user.set_user_attribute"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.user.html#cloudmesh.user.cm_user.cm_user.set_user_attribute">[docs]</a>    <span class="k">def</span> <span class="nf">set_user_attribute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">username</span><span class="p">,</span> <span class="n">attribute</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;will set a variable in mongo</span>
 <span class="sd">            [&quot;user&quot;][attribute]</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -985,7 +985,7 @@
         <span class="n">d</span><span class="p">[</span><span class="n">attribute</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">set_user</span><span class="p">(</span><span class="n">username</span><span class="p">,</span> <span class="n">d</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="cm_user.get_user"><a class="viewcode-back" href="../../../modules/cloudmesh.user.html#cloudmesh.user.cm_user.cm_user.get_user">[docs]</a>    <span class="k">def</span> <span class="nf">get_user</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">username</span><span class="p">):</span>
+<div class="viewcode-block" id="cm_user.get_user"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.user.html#cloudmesh.user.cm_user.cm_user.get_user">[docs]</a>    <span class="k">def</span> <span class="nf">get_user</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">username</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;returns the data for the user&quot;&quot;&quot;</span>
         <span class="n">user</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">db_users</span><span class="o">.</span><span class="n">find_one</span><span class="p">({</span><span class="s">&#39;cm_user_id&#39;</span><span class="p">:</span> <span class="n">username</span><span class="p">})</span>
 
@@ -993,20 +993,20 @@
             <span class="n">user</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="k">return</span> <span class="n">user</span>
 </div>
-<div class="viewcode-block" id="cm_user.delete_projects"><a class="viewcode-back" href="../../../modules/cloudmesh.user.html#cloudmesh.user.cm_user.cm_user.delete_projects">[docs]</a>    <span class="k">def</span> <span class="nf">delete_projects</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">username</span><span class="p">,</span> <span class="n">project</span><span class="p">):</span>
+<div class="viewcode-block" id="cm_user.delete_projects"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.user.html#cloudmesh.user.cm_user.cm_user.delete_projects">[docs]</a>    <span class="k">def</span> <span class="nf">delete_projects</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">username</span><span class="p">,</span> <span class="n">project</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Deletes the project from an active project list and a completed project list&quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">section_name</span> <span class="ow">in</span> <span class="p">[</span><span class="s">&quot;active&quot;</span><span class="p">,</span> <span class="s">&quot;completed&quot;</span><span class="p">]:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">update_projects</span><span class="p">(</span><span class="n">section_name</span><span class="p">,</span> <span class="s">&quot;delete&quot;</span><span class="p">,</span>  <span class="n">username</span><span class="p">,</span> <span class="n">project</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="cm_user.add_active_projects"><a class="viewcode-back" href="../../../modules/cloudmesh.user.html#cloudmesh.user.cm_user.cm_user.add_active_projects">[docs]</a>    <span class="k">def</span> <span class="nf">add_active_projects</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">username</span><span class="p">,</span> <span class="n">project</span><span class="p">):</span>
+<div class="viewcode-block" id="cm_user.add_active_projects"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.user.html#cloudmesh.user.cm_user.cm_user.add_active_projects">[docs]</a>    <span class="k">def</span> <span class="nf">add_active_projects</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">username</span><span class="p">,</span> <span class="n">project</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Adds the active project list on a given project&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">update_projects</span><span class="p">(</span><span class="s">&quot;active&quot;</span><span class="p">,</span> <span class="s">&quot;add&quot;</span><span class="p">,</span>  <span class="n">username</span><span class="p">,</span> <span class="n">project</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="cm_user.add_completed_projects"><a class="viewcode-back" href="../../../modules/cloudmesh.user.html#cloudmesh.user.cm_user.cm_user.add_completed_projects">[docs]</a>    <span class="k">def</span> <span class="nf">add_completed_projects</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">username</span><span class="p">,</span> <span class="n">project</span><span class="p">):</span>
+<div class="viewcode-block" id="cm_user.add_completed_projects"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.user.html#cloudmesh.user.cm_user.cm_user.add_completed_projects">[docs]</a>    <span class="k">def</span> <span class="nf">add_completed_projects</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">username</span><span class="p">,</span> <span class="n">project</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Adds the completed project list on a given project&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">update_projects</span><span class="p">(</span><span class="s">&quot;completed&quot;</span><span class="p">,</span> <span class="s">&quot;add&quot;</span><span class="p">,</span>  <span class="n">username</span><span class="p">,</span> <span class="n">project</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="cm_user.update_projects"><a class="viewcode-back" href="../../../modules/cloudmesh.user.html#cloudmesh.user.cm_user.cm_user.update_projects">[docs]</a>    <span class="k">def</span> <span class="nf">update_projects</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">section_name</span><span class="p">,</span> <span class="n">action</span><span class="p">,</span> <span class="n">username</span><span class="p">,</span> <span class="n">project</span><span class="p">):</span>
+<div class="viewcode-block" id="cm_user.update_projects"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.user.html#cloudmesh.user.cm_user.cm_user.update_projects">[docs]</a>    <span class="k">def</span> <span class="nf">update_projects</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">section_name</span><span class="p">,</span> <span class="n">action</span><span class="p">,</span> <span class="n">username</span><span class="p">,</span> <span class="n">project</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Updates the project list on a ginve project&quot;&quot;&quot;</span>
         <span class="n">userinfo</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_user</span><span class="p">(</span><span class="n">username</span><span class="p">)</span>
         <span class="n">projects</span> <span class="o">=</span> <span class="n">userinfo</span><span class="p">[</span><span class="s">&#39;projects&#39;</span><span class="p">][</span><span class="n">section_name</span><span class="p">]</span>
@@ -1019,7 +1019,7 @@
         <span class="n">userinfo</span><span class="p">[</span><span class="s">&#39;projects&#39;</span><span class="p">][</span><span class="n">section_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">projects</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">set_user</span><span class="p">(</span><span class="n">username</span><span class="p">,</span> <span class="n">userinfo</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="cm_user.set_credential"><a class="viewcode-back" href="../../../modules/cloudmesh.user.html#cloudmesh.user.cm_user.cm_user.set_credential">[docs]</a>    <span class="k">def</span> <span class="nf">set_credential</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">username</span><span class="p">,</span> <span class="n">cloud</span><span class="p">,</span> <span class="n">credential</span><span class="p">,</span> <span class="n">cred_type</span><span class="o">=</span><span class="s">&#39;cloud&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="cm_user.set_credential"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.user.html#cloudmesh.user.cm_user.cm_user.set_credential">[docs]</a>    <span class="k">def</span> <span class="nf">set_credential</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">username</span><span class="p">,</span> <span class="n">cloud</span><span class="p">,</span> <span class="n">credential</span><span class="p">,</span> <span class="n">cred_type</span><span class="o">=</span><span class="s">&#39;cloud&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;credential is a dict&quot;&quot;&quot;</span>
         <span class="n">safe_credential</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="k">if</span> <span class="n">cred_type</span> <span class="ow">in</span> <span class="p">(</span><span class="s">&#39;cloud&#39;</span><span class="p">,</span> <span class="s">&#39;cm_password_local&#39;</span><span class="p">):</span>
@@ -1030,7 +1030,7 @@
                                       <span class="p">{</span><span class="s">&quot;cm_user_id&quot;</span><span class="p">:</span> <span class="n">username</span><span class="p">,</span> <span class="s">&quot;credential&quot;</span><span class="p">:</span> <span class="n">safe_credential</span><span class="p">,</span>
                                        <span class="s">&quot;</span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">cred_type</span><span class="p">:</span> <span class="n">cloud</span><span class="p">},</span> <span class="n">upsert</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="cm_user.get_credential"><a class="viewcode-back" href="../../../modules/cloudmesh.user.html#cloudmesh.user.cm_user.cm_user.get_credential">[docs]</a>    <span class="k">def</span> <span class="nf">get_credential</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">username</span><span class="p">,</span> <span class="n">cloud</span><span class="p">,</span> <span class="n">cred_type</span><span class="o">=</span><span class="s">&#39;cloud&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="cm_user.get_credential"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.user.html#cloudmesh.user.cm_user.cm_user.get_credential">[docs]</a>    <span class="k">def</span> <span class="nf">get_credential</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">username</span><span class="p">,</span> <span class="n">cloud</span><span class="p">,</span> <span class="n">cred_type</span><span class="o">=</span><span class="s">&#39;cloud&#39;</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">cred_type</span> <span class="ow">in</span> <span class="p">(</span><span class="s">&#39;cloud&#39;</span><span class="p">,</span> <span class="s">&#39;cm_password_local&#39;</span><span class="p">):</span>
             <span class="k">try</span><span class="p">:</span>
                 <span class="n">safe_credential</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">userdb_passwd</span><span class="o">.</span><span class="n">find_one</span><span class="p">(</span>
@@ -1047,7 +1047,7 @@
             <span class="k">except</span><span class="p">:</span>
                 <span class="k">return</span> <span class="bp">None</span>
 </div>
-<div class="viewcode-block" id="cm_user.get_credentials"><a class="viewcode-back" href="../../../modules/cloudmesh.user.html#cloudmesh.user.cm_user.cm_user.get_credentials">[docs]</a>    <span class="k">def</span> <span class="nf">get_credentials</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">username</span><span class="p">):</span>
+<div class="viewcode-block" id="cm_user.get_credentials"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.user.html#cloudmesh.user.cm_user.cm_user.get_credentials">[docs]</a>    <span class="k">def</span> <span class="nf">get_credentials</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">username</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Return all user passwords for all clouds</span>
 <span class="sd">        in the form of a dict, keyed by cloud name&quot;&quot;&quot;</span>
         <span class="n">credentials</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">userdb_passwd</span><span class="o">.</span><span class="n">find</span><span class="p">({</span><span class="s">&quot;cm_user_id&quot;</span><span class="p">:</span> <span class="n">username</span><span class="p">})</span>

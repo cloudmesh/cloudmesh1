@@ -605,24 +605,24 @@
     <span class="n">log</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s">&quot;AWS NOT ENABLED&quot;</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="cm_MongoBase"><a class="viewcode-back" href="../../modules/cloudmesh.html#cloudmesh.cm_mongo.cm_MongoBase">[docs]</a><span class="k">class</span> <span class="nc">cm_MongoBase</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<div class="viewcode-block" id="cm_MongoBase"><a class="viewcode-back" href="../../api/cloudmesh/cloudmesh.html#cloudmesh.cm_mongo.cm_MongoBase">[docs]</a><span class="k">class</span> <span class="nc">cm_MongoBase</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">cm_type</span> <span class="o">=</span> <span class="s">&quot;overwriteme&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
 
-<div class="viewcode-block" id="cm_MongoBase.connect"><a class="viewcode-back" href="../../modules/cloudmesh.html#cloudmesh.cm_mongo.cm_MongoBase.connect">[docs]</a>    <span class="k">def</span> <span class="nf">connect</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="cm_MongoBase.connect"><a class="viewcode-back" href="../../api/cloudmesh/cloudmesh.html#cloudmesh.cm_mongo.cm_MongoBase.connect">[docs]</a>    <span class="k">def</span> <span class="nf">connect</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">db_mongo</span> <span class="o">=</span> <span class="n">get_mongo_db</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cm_type</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="cm_MongoBase.get"><a class="viewcode-back" href="../../modules/cloudmesh.html#cloudmesh.cm_mongo.cm_MongoBase.get">[docs]</a>    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">username</span><span class="p">):</span>
+<div class="viewcode-block" id="cm_MongoBase.get"><a class="viewcode-back" href="../../api/cloudmesh/cloudmesh.html#cloudmesh.cm_mongo.cm_MongoBase.get">[docs]</a>    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">username</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">find_one</span><span class="p">({</span><span class="s">&quot;cm_id&quot;</span><span class="p">:</span> <span class="n">username</span><span class="p">,</span> <span class="s">&quot;cm_type&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">cm_type</span><span class="p">})</span>
 </div>
-<div class="viewcode-block" id="cm_MongoBase.set"><a class="viewcode-back" href="../../modules/cloudmesh.html#cloudmesh.cm_mongo.cm_MongoBase.set">[docs]</a>    <span class="k">def</span> <span class="nf">set</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">username</span><span class="p">,</span> <span class="n">d</span><span class="p">):</span>
+<div class="viewcode-block" id="cm_MongoBase.set"><a class="viewcode-back" href="../../api/cloudmesh/cloudmesh.html#cloudmesh.cm_mongo.cm_MongoBase.set">[docs]</a>    <span class="k">def</span> <span class="nf">set</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">username</span><span class="p">,</span> <span class="n">d</span><span class="p">):</span>
         <span class="n">element</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
         <span class="n">element</span><span class="p">[</span><span class="s">&quot;cm_id&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">username</span>
         <span class="n">element</span><span class="p">[</span><span class="s">&quot;cm_type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cm_type</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s">&quot;cm_id&quot;</span><span class="p">:</span> <span class="n">username</span><span class="p">,</span> <span class="s">&quot;cm_type&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">cm_type</span><span class="p">},</span> <span class="n">element</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="cm_MongoBase.update"><a class="viewcode-back" href="../../modules/cloudmesh.html#cloudmesh.cm_mongo.cm_MongoBase.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query</span><span class="p">,</span> <span class="n">values</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<div class="viewcode-block" id="cm_MongoBase.update"><a class="viewcode-back" href="../../api/cloudmesh/cloudmesh.html#cloudmesh.cm_mongo.cm_MongoBase.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query</span><span class="p">,</span> <span class="n">values</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        executes a query and updates the results from mongo db.</span>
 <span class="sd">        :param query:</span>
@@ -632,38 +632,38 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">db_mongo</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">values</span><span class="p">,</span> <span class="n">upsert</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="cm_MongoBase.insert"><a class="viewcode-back" href="../../modules/cloudmesh.html#cloudmesh.cm_mongo.cm_MongoBase.insert">[docs]</a>    <span class="k">def</span> <span class="nf">insert</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element</span><span class="p">):</span>
+<div class="viewcode-block" id="cm_MongoBase.insert"><a class="viewcode-back" href="../../api/cloudmesh/cloudmesh.html#cloudmesh.cm_mongo.cm_MongoBase.insert">[docs]</a>    <span class="k">def</span> <span class="nf">insert</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">db_mongo</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">element</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="cm_MongoBase.find"><a class="viewcode-back" href="../../modules/cloudmesh.html#cloudmesh.cm_mongo.cm_MongoBase.find">[docs]</a>    <span class="k">def</span> <span class="nf">find</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query</span><span class="p">):</span>
+<div class="viewcode-block" id="cm_MongoBase.find"><a class="viewcode-back" href="../../api/cloudmesh/cloudmesh.html#cloudmesh.cm_mongo.cm_MongoBase.find">[docs]</a>    <span class="k">def</span> <span class="nf">find</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        executes a query and returns the results from mongo db.</span>
 <span class="sd">        :param query:</span>
 <span class="sd">        &#39;&#39;&#39;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">db_mongo</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="cm_MongoBase.remove"><a class="viewcode-back" href="../../modules/cloudmesh.html#cloudmesh.cm_mongo.cm_MongoBase.remove">[docs]</a>    <span class="k">def</span> <span class="nf">remove</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query</span><span class="p">):</span>
+<div class="viewcode-block" id="cm_MongoBase.remove"><a class="viewcode-back" href="../../api/cloudmesh/cloudmesh.html#cloudmesh.cm_mongo.cm_MongoBase.remove">[docs]</a>    <span class="k">def</span> <span class="nf">remove</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        executes a query and removes the results from mongo db.</span>
 <span class="sd">        :param query:</span>
 <span class="sd">        &#39;&#39;&#39;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">db_mongo</span><span class="o">.</span><span class="n">remoe</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="cm_MongoBase.find_one"><a class="viewcode-back" href="../../modules/cloudmesh.html#cloudmesh.cm_mongo.cm_MongoBase.find_one">[docs]</a>    <span class="k">def</span> <span class="nf">find_one</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query</span><span class="p">):</span>
+<div class="viewcode-block" id="cm_MongoBase.find_one"><a class="viewcode-back" href="../../api/cloudmesh/cloudmesh.html#cloudmesh.cm_mongo.cm_MongoBase.find_one">[docs]</a>    <span class="k">def</span> <span class="nf">find_one</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        executes a query and returns the results from mongo db.</span>
 <span class="sd">        :param query:</span>
 <span class="sd">        &#39;&#39;&#39;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">db_mongo</span><span class="o">.</span><span class="n">find_one</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="cm_MongoBase.clear"><a class="viewcode-back" href="../../modules/cloudmesh.html#cloudmesh.cm_mongo.cm_MongoBase.clear">[docs]</a>    <span class="k">def</span> <span class="nf">clear</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="cm_MongoBase.clear"><a class="viewcode-back" href="../../api/cloudmesh/cloudmesh.html#cloudmesh.cm_mongo.cm_MongoBase.clear">[docs]</a>    <span class="k">def</span> <span class="nf">clear</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">db_mongo</span><span class="o">.</span><span class="n">remove</span><span class="p">({</span><span class="s">&quot;cm_type&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">cm_type</span><span class="p">})</span>
 </div>
-<div class="viewcode-block" id="cm_MongoBase.wipe"><a class="viewcode-back" href="../../modules/cloudmesh.html#cloudmesh.cm_mongo.cm_MongoBase.wipe">[docs]</a>    <span class="k">def</span> <span class="nf">wipe</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="cm_MongoBase.wipe"><a class="viewcode-back" href="../../api/cloudmesh/cloudmesh.html#cloudmesh.cm_mongo.cm_MongoBase.wipe">[docs]</a>    <span class="k">def</span> <span class="nf">wipe</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">db_mongo</span><span class="o">.</span><span class="n">remove</span><span class="p">({})</span>
 
 </div></div>
-<div class="viewcode-block" id="cm_mongo"><a class="viewcode-back" href="../../modules/cloudmesh.html#cloudmesh.cm_mongo.cm_mongo">[docs]</a><span class="k">class</span> <span class="nc">cm_mongo</span><span class="p">:</span>
+<div class="viewcode-block" id="cm_mongo"><a class="viewcode-back" href="../../api/cloudmesh/cloudmesh.html#cloudmesh.cm_mongo.cm_mongo">[docs]</a><span class="k">class</span> <span class="nc">cm_mongo</span><span class="p">:</span>
     <span class="n">clouds</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="n">client</span> <span class="o">=</span> <span class="bp">None</span>
     <span class="n">db_clouds</span> <span class="o">=</span> <span class="bp">None</span>
@@ -703,7 +703,7 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">config</span> <span class="o">=</span> <span class="n">cm_config</span><span class="p">()</span>
 
-<div class="viewcode-block" id="cm_mongo.cloud_provider"><a class="viewcode-back" href="../../modules/cloudmesh.html#cloudmesh.cm_mongo.cm_mongo.cloud_provider">[docs]</a>    <span class="k">def</span> <span class="nf">cloud_provider</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">kind</span><span class="p">):</span>
+<div class="viewcode-block" id="cm_mongo.cloud_provider"><a class="viewcode-back" href="../../api/cloudmesh/cloudmesh.html#cloudmesh.cm_mongo.cm_mongo.cloud_provider">[docs]</a>    <span class="k">def</span> <span class="nf">cloud_provider</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">kind</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        returns the cloud provider based on the kind</span>
 <span class="sd">        :param kind: the kind is openstack, eucalyptus, or azure (&lt; is not yet supported)</span>
@@ -725,7 +725,7 @@
     <span class="c"># BUG NO USER IS INVOLVED</span>
     <span class="c">#</span>
 </div>
-<div class="viewcode-block" id="cm_mongo.get_credential"><a class="viewcode-back" href="../../modules/cloudmesh.html#cloudmesh.cm_mongo.cm_mongo.get_credential">[docs]</a>    <span class="k">def</span> <span class="nf">get_credential</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cm_user_id</span><span class="p">,</span> <span class="n">cloud</span><span class="p">):</span>
+<div class="viewcode-block" id="cm_mongo.get_credential"><a class="viewcode-back" href="../../api/cloudmesh/cloudmesh.html#cloudmesh.cm_mongo.cm_mongo.get_credential">[docs]</a>    <span class="k">def</span> <span class="nf">get_credential</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cm_user_id</span><span class="p">,</span> <span class="n">cloud</span><span class="p">):</span>
         <span class="c"># DEBUG</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">_args</span> <span class="o">=</span> <span class="nb">locals</span><span class="p">()</span>
@@ -754,7 +754,7 @@
             <span class="k">print</span><span class="p">(</span><span class="n">traceback</span><span class="o">.</span><span class="n">format_exc</span><span class="p">())</span>
             <span class="k">return</span> <span class="bp">None</span>
 </div>
-<div class="viewcode-block" id="cm_mongo.get_cloud_info"><a class="viewcode-back" href="../../modules/cloudmesh.html#cloudmesh.cm_mongo.cm_mongo.get_cloud_info">[docs]</a>    <span class="k">def</span> <span class="nf">get_cloud_info</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cm_user_id</span><span class="p">,</span> <span class="n">cloudname</span><span class="p">):</span>
+<div class="viewcode-block" id="cm_mongo.get_cloud_info"><a class="viewcode-back" href="../../api/cloudmesh/cloudmesh.html#cloudmesh.cm_mongo.cm_mongo.get_cloud_info">[docs]</a>    <span class="k">def</span> <span class="nf">get_cloud_info</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cm_user_id</span><span class="p">,</span> <span class="n">cloudname</span><span class="p">):</span>
 
         <span class="c"># DEBUG</span>
         <span class="k">try</span><span class="p">:</span>
@@ -798,7 +798,7 @@
 
         <span class="k">return</span> <span class="n">cloud_config</span>
 </div>
-<div class="viewcode-block" id="cm_mongo.get_cloud"><a class="viewcode-back" href="../../modules/cloudmesh.html#cloudmesh.cm_mongo.cm_mongo.get_cloud">[docs]</a>    <span class="k">def</span> <span class="nf">get_cloud</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cm_user_id</span><span class="p">,</span> <span class="n">cloud_name</span><span class="p">,</span> <span class="n">force</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+<div class="viewcode-block" id="cm_mongo.get_cloud"><a class="viewcode-back" href="../../api/cloudmesh/cloudmesh.html#cloudmesh.cm_mongo.cm_mongo.get_cloud">[docs]</a>    <span class="k">def</span> <span class="nf">get_cloud</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cm_user_id</span><span class="p">,</span> <span class="n">cloud_name</span><span class="p">,</span> <span class="n">force</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
 
         <span class="c"># DEBUG</span>
         <span class="k">try</span><span class="p">:</span>
@@ -918,7 +918,7 @@
                 <span class="k">print</span><span class="p">(</span><span class="n">traceback</span><span class="o">.</span><span class="n">format_exc</span><span class="p">())</span>
         <span class="k">return</span> <span class="n">cloud</span>
 </div>
-<div class="viewcode-block" id="cm_mongo.active_clouds"><a class="viewcode-back" href="../../modules/cloudmesh.html#cloudmesh.cm_mongo.cm_mongo.active_clouds">[docs]</a>    <span class="k">def</span> <span class="nf">active_clouds</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cm_user_id</span><span class="p">):</span>
+<div class="viewcode-block" id="cm_mongo.active_clouds"><a class="viewcode-back" href="../../api/cloudmesh/cloudmesh.html#cloudmesh.cm_mongo.cm_mongo.active_clouds">[docs]</a>    <span class="k">def</span> <span class="nf">active_clouds</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cm_user_id</span><span class="p">):</span>
         <span class="n">ret_clouds</span> <span class="o">=</span> <span class="bp">None</span>
 
         <span class="c"># If the user has registered and activated some clouds from the web gui,</span>
@@ -937,7 +937,7 @@
                 <span class="n">ret_clouds</span> <span class="o">=</span> <span class="n">user</span><span class="p">[</span><span class="s">&#39;activeclouds&#39;</span><span class="p">]</span>
         <span class="k">return</span> <span class="n">ret_clouds</span>
 </div>
-<div class="viewcode-block" id="cm_mongo.active_project"><a class="viewcode-back" href="../../modules/cloudmesh.html#cloudmesh.cm_mongo.cm_mongo.active_project">[docs]</a>    <span class="k">def</span> <span class="nf">active_project</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cm_user_id</span><span class="p">):</span>
+<div class="viewcode-block" id="cm_mongo.active_project"><a class="viewcode-back" href="../../api/cloudmesh/cloudmesh.html#cloudmesh.cm_mongo.cm_mongo.active_project">[docs]</a>    <span class="k">def</span> <span class="nf">active_project</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cm_user_id</span><span class="p">):</span>
         <span class="c"># DEBUG</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">_args</span> <span class="o">=</span> <span class="nb">locals</span><span class="p">()</span>
@@ -951,7 +951,7 @@
         <span class="n">user</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">db_defaults</span><span class="o">.</span><span class="n">find_one</span><span class="p">({</span><span class="s">&#39;cm_user_id&#39;</span><span class="p">:</span> <span class="n">cm_user_id</span><span class="p">})</span>
         <span class="k">return</span> <span class="n">user</span><span class="p">[</span><span class="s">&#39;project&#39;</span><span class="p">]</span>
 </div>
-<div class="viewcode-block" id="cm_mongo.activate"><a class="viewcode-back" href="../../modules/cloudmesh.html#cloudmesh.cm_mongo.cm_mongo.activate">[docs]</a>    <span class="k">def</span> <span class="nf">activate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cm_user_id</span><span class="p">,</span> <span class="n">names</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<div class="viewcode-block" id="cm_mongo.activate"><a class="viewcode-back" href="../../api/cloudmesh/cloudmesh.html#cloudmesh.cm_mongo.cm_mongo.activate">[docs]</a>    <span class="k">def</span> <span class="nf">activate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cm_user_id</span><span class="p">,</span> <span class="n">names</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
 
         <span class="c"># The cm_user_id should be ALWAYS set and passed through to this call</span>
         <span class="c"># On Web gui the g.user.id has the username</span>
@@ -989,7 +989,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">activate_userinfo</span><span class="p">(</span><span class="n">cm_user_id</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">activated</span> <span class="o">=</span> <span class="bp">True</span>
 </div>
-<div class="viewcode-block" id="cm_mongo.activate_userinfo"><a class="viewcode-back" href="../../modules/cloudmesh.html#cloudmesh.cm_mongo.cm_mongo.activate_userinfo">[docs]</a>    <span class="k">def</span> <span class="nf">activate_userinfo</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cm_user_id</span><span class="p">):</span>
+<div class="viewcode-block" id="cm_mongo.activate_userinfo"><a class="viewcode-back" href="../../api/cloudmesh/cloudmesh.html#cloudmesh.cm_mongo.cm_mongo.activate_userinfo">[docs]</a>    <span class="k">def</span> <span class="nf">activate_userinfo</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cm_user_id</span><span class="p">):</span>
         <span class="c"># Set userinfo</span>
         <span class="kn">from</span> <span class="nn">cloudmesh.user.cm_user</span> <span class="kn">import</span> <span class="n">cm_user</span>
 
@@ -997,18 +997,18 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">userinfo</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cm_user</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">cm_user_id</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">userid</span> <span class="o">=</span> <span class="n">cm_user_id</span>
 </div>
-<div class="viewcode-block" id="cm_mongo.get_userinfo"><a class="viewcode-back" href="../../modules/cloudmesh.html#cloudmesh.cm_mongo.cm_mongo.get_userinfo">[docs]</a>    <span class="k">def</span> <span class="nf">get_userinfo</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cm_user_id</span><span class="p">):</span>
+<div class="viewcode-block" id="cm_mongo.get_userinfo"><a class="viewcode-back" href="../../api/cloudmesh/cloudmesh.html#cloudmesh.cm_mongo.cm_mongo.get_userinfo">[docs]</a>    <span class="k">def</span> <span class="nf">get_userinfo</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cm_user_id</span><span class="p">):</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">userinfo</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">activate_userinfo</span><span class="p">(</span><span class="n">cm_user_id</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">userinfo</span>
 </div>
-<div class="viewcode-block" id="cm_mongo.check_activated"><a class="viewcode-back" href="../../modules/cloudmesh.html#cloudmesh.cm_mongo.cm_mongo.check_activated">[docs]</a>    <span class="k">def</span> <span class="nf">check_activated</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="cm_mongo.check_activated"><a class="viewcode-back" href="../../api/cloudmesh/cloudmesh.html#cloudmesh.cm_mongo.cm_mongo.check_activated">[docs]</a>    <span class="k">def</span> <span class="nf">check_activated</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">activated</span><span class="p">:</span>
             <span class="n">log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s">&quot;Activation first!&quot;</span><span class="p">)</span>
             <span class="k">return</span> <span class="bp">False</span>
         <span class="k">return</span> <span class="bp">True</span>
 </div>
-<div class="viewcode-block" id="cm_mongo.refresh"><a class="viewcode-back" href="../../modules/cloudmesh.html#cloudmesh.cm_mongo.cm_mongo.refresh">[docs]</a>    <span class="k">def</span> <span class="nf">refresh</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cm_user_id</span><span class="p">,</span> <span class="n">names</span><span class="o">=</span><span class="p">[</span><span class="s">&quot;all&quot;</span><span class="p">],</span> <span class="n">types</span><span class="o">=</span><span class="p">[</span><span class="s">&quot;all&quot;</span><span class="p">]):</span>
+<div class="viewcode-block" id="cm_mongo.refresh"><a class="viewcode-back" href="../../api/cloudmesh/cloudmesh.html#cloudmesh.cm_mongo.cm_mongo.refresh">[docs]</a>    <span class="k">def</span> <span class="nf">refresh</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cm_user_id</span><span class="p">,</span> <span class="n">names</span><span class="o">=</span><span class="p">[</span><span class="s">&quot;all&quot;</span><span class="p">],</span> <span class="n">types</span><span class="o">=</span><span class="p">[</span><span class="s">&quot;all&quot;</span><span class="p">]):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        This method obtains information about servers, images, and</span>
 <span class="sd">        flavors that build the cloudmesh. The information is held</span>
@@ -1135,7 +1135,7 @@
 <span class="sd">        return data</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="cm_mongo.find"><a class="viewcode-back" href="../../modules/cloudmesh.html#cloudmesh.cm_mongo.cm_mongo.find">[docs]</a>    <span class="k">def</span> <span class="nf">find</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query</span><span class="p">):</span>
+<div class="viewcode-block" id="cm_mongo.find"><a class="viewcode-back" href="../../api/cloudmesh/cloudmesh.html#cloudmesh.cm_mongo.cm_mongo.find">[docs]</a>    <span class="k">def</span> <span class="nf">find</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        executes a query and returns the results from mongo db.</span>
 <span class="sd">        :param query:</span>
@@ -1162,13 +1162,13 @@
                 <span class="n">data</span><span class="p">[</span><span class="n">name</span><span class="p">][</span><span class="n">entry</span><span class="p">[</span><span class="s">&#39;id&#39;</span><span class="p">]]</span> <span class="o">=</span> <span class="n">entry</span>
         <span class="k">return</span> <span class="n">data</span>
 
-<div class="viewcode-block" id="cm_mongo.users"><a class="viewcode-back" href="../../modules/cloudmesh.html#cloudmesh.cm_mongo.cm_mongo.users">[docs]</a>    <span class="k">def</span> <span class="nf">users</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">clouds</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<div class="viewcode-block" id="cm_mongo.users"><a class="viewcode-back" href="../../api/cloudmesh/cloudmesh.html#cloudmesh.cm_mongo.cm_mongo.users">[docs]</a>    <span class="k">def</span> <span class="nf">users</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">clouds</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        returns all the servers from all clouds</span>
 <span class="sd">        &#39;&#39;&#39;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_kind</span><span class="p">(</span><span class="s">&#39;users&#39;</span><span class="p">,</span> <span class="n">clouds</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="cm_mongo.tenants"><a class="viewcode-back" href="../../modules/cloudmesh.html#cloudmesh.cm_mongo.cm_mongo.tenants">[docs]</a>    <span class="k">def</span> <span class="nf">tenants</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">clouds</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<div class="viewcode-block" id="cm_mongo.tenants"><a class="viewcode-back" href="../../api/cloudmesh/cloudmesh.html#cloudmesh.cm_mongo.cm_mongo.tenants">[docs]</a>    <span class="k">def</span> <span class="nf">tenants</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">clouds</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        returns all the servers from all clouds</span>
 <span class="sd">        &#39;&#39;&#39;</span>
@@ -1177,31 +1177,31 @@
     <span class="c">#</span>
     <span class="c"># BUG</span>
     <span class="c">#</span></div>
-<div class="viewcode-block" id="cm_mongo.servers"><a class="viewcode-back" href="../../modules/cloudmesh.html#cloudmesh.cm_mongo.cm_mongo.servers">[docs]</a>    <span class="k">def</span> <span class="nf">servers</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">clouds</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">cm_user_id</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<div class="viewcode-block" id="cm_mongo.servers"><a class="viewcode-back" href="../../api/cloudmesh/cloudmesh.html#cloudmesh.cm_mongo.cm_mongo.servers">[docs]</a>    <span class="k">def</span> <span class="nf">servers</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">clouds</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">cm_user_id</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        returns all the servers from all clouds</span>
 <span class="sd">        &#39;&#39;&#39;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_kind</span><span class="p">(</span><span class="s">&#39;servers&#39;</span><span class="p">,</span> <span class="n">clouds</span><span class="p">,</span> <span class="n">cm_user_id</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="cm_mongo.flavors"><a class="viewcode-back" href="../../modules/cloudmesh.html#cloudmesh.cm_mongo.cm_mongo.flavors">[docs]</a>    <span class="k">def</span> <span class="nf">flavors</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">clouds</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">cm_user_id</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<div class="viewcode-block" id="cm_mongo.flavors"><a class="viewcode-back" href="../../api/cloudmesh/cloudmesh.html#cloudmesh.cm_mongo.cm_mongo.flavors">[docs]</a>    <span class="k">def</span> <span class="nf">flavors</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">clouds</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">cm_user_id</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        returns all the flavors from the various clouds</span>
 <span class="sd">        &#39;&#39;&#39;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_kind</span><span class="p">(</span><span class="s">&#39;flavors&#39;</span><span class="p">,</span> <span class="n">clouds</span><span class="p">,</span> <span class="n">cm_user_id</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="cm_mongo.images"><a class="viewcode-back" href="../../modules/cloudmesh.html#cloudmesh.cm_mongo.cm_mongo.images">[docs]</a>    <span class="k">def</span> <span class="nf">images</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">clouds</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">cm_user_id</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<div class="viewcode-block" id="cm_mongo.images"><a class="viewcode-back" href="../../api/cloudmesh/cloudmesh.html#cloudmesh.cm_mongo.cm_mongo.images">[docs]</a>    <span class="k">def</span> <span class="nf">images</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">clouds</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">cm_user_id</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        returns all the images from various clouds</span>
 <span class="sd">        &#39;&#39;&#39;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_kind</span><span class="p">(</span><span class="s">&#39;images&#39;</span><span class="p">,</span> <span class="n">clouds</span><span class="p">,</span> <span class="n">cm_user_id</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="cm_mongo.security_groups"><a class="viewcode-back" href="../../modules/cloudmesh.html#cloudmesh.cm_mongo.cm_mongo.security_groups">[docs]</a>    <span class="k">def</span> <span class="nf">security_groups</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">clouds</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">cm_user_id</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<div class="viewcode-block" id="cm_mongo.security_groups"><a class="viewcode-back" href="../../api/cloudmesh/cloudmesh.html#cloudmesh.cm_mongo.cm_mongo.security_groups">[docs]</a>    <span class="k">def</span> <span class="nf">security_groups</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">clouds</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">cm_user_id</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        returns all the security groups from various clouds</span>
 <span class="sd">        &#39;&#39;&#39;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_kind</span><span class="p">(</span><span class="s">&#39;e_security_groups&#39;</span><span class="p">,</span> <span class="n">clouds</span><span class="p">,</span> <span class="n">cm_user_id</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="cm_mongo.stacks"><a class="viewcode-back" href="../../modules/cloudmesh.html#cloudmesh.cm_mongo.cm_mongo.stacks">[docs]</a>    <span class="k">def</span> <span class="nf">stacks</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">clouds</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">cm_user_id</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<div class="viewcode-block" id="cm_mongo.stacks"><a class="viewcode-back" href="../../api/cloudmesh/cloudmesh.html#cloudmesh.cm_mongo.cm_mongo.stacks">[docs]</a>    <span class="k">def</span> <span class="nf">stacks</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">clouds</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">cm_user_id</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        returns all stacks from clouds</span>
 <span class="sd">        &#39;&#39;&#39;</span>
@@ -1209,13 +1209,13 @@
 
     <span class="c"># need to make sure other clouds have the same flavor dict as in openstack</span>
     <span class="c"># otherwise will need to put this into the openstack iaas class</span></div>
-<div class="viewcode-block" id="cm_mongo.flavor_name_to_id"><a class="viewcode-back" href="../../modules/cloudmesh.html#cloudmesh.cm_mongo.cm_mongo.flavor_name_to_id">[docs]</a>    <span class="k">def</span> <span class="nf">flavor_name_to_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cloud</span><span class="p">,</span> <span class="n">flavor_name</span><span class="p">):</span>
+<div class="viewcode-block" id="cm_mongo.flavor_name_to_id"><a class="viewcode-back" href="../../api/cloudmesh/cloudmesh.html#cloudmesh.cm_mongo.cm_mongo.flavor_name_to_id">[docs]</a>    <span class="k">def</span> <span class="nf">flavor_name_to_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cloud</span><span class="p">,</span> <span class="n">flavor_name</span><span class="p">):</span>
         <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">flavors</span><span class="p">([</span><span class="n">cloud</span><span class="p">])[</span><span class="n">cloud</span><span class="p">]</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
             <span class="k">if</span> <span class="n">value</span><span class="p">[</span><span class="s">&quot;name&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">flavor_name</span><span class="p">:</span>
                 <span class="k">return</span> <span class="n">key</span>
         <span class="k">return</span> <span class="o">-</span><span class="mi">1</span>
 </div>
-<div class="viewcode-block" id="cm_mongo.flavor"><a class="viewcode-back" href="../../modules/cloudmesh.html#cloudmesh.cm_mongo.cm_mongo.flavor">[docs]</a>    <span class="k">def</span> <span class="nf">flavor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cloudname</span><span class="p">,</span> <span class="n">flavorname</span><span class="p">,</span> <span class="n">cm_user_id</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<div class="viewcode-block" id="cm_mongo.flavor"><a class="viewcode-back" href="../../api/cloudmesh/cloudmesh.html#cloudmesh.cm_mongo.cm_mongo.flavor">[docs]</a>    <span class="k">def</span> <span class="nf">flavor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cloudname</span><span class="p">,</span> <span class="n">flavorname</span><span class="p">,</span> <span class="n">cm_user_id</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Get a single flavor on a given cloud&quot;&quot;&quot;</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">flavors</span><span class="p">([</span><span class="n">cloudname</span><span class="p">])[</span><span class="n">cloudname</span><span class="p">][</span><span class="n">flavorname</span><span class="p">]</span>
@@ -1226,14 +1226,14 @@
                     <span class="k">return</span> <span class="n">value</span>
             <span class="k">return</span> <span class="o">-</span><span class="mi">1</span>
 </div>
-<div class="viewcode-block" id="cm_mongo.image"><a class="viewcode-back" href="../../modules/cloudmesh.html#cloudmesh.cm_mongo.cm_mongo.image">[docs]</a>    <span class="k">def</span> <span class="nf">image</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cloudname</span><span class="p">,</span> <span class="n">imagename</span><span class="p">,</span> <span class="n">cm_user_id</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<div class="viewcode-block" id="cm_mongo.image"><a class="viewcode-back" href="../../api/cloudmesh/cloudmesh.html#cloudmesh.cm_mongo.cm_mongo.image">[docs]</a>    <span class="k">def</span> <span class="nf">image</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cloudname</span><span class="p">,</span> <span class="n">imagename</span><span class="p">,</span> <span class="n">cm_user_id</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Get a single image on a given cloud&quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">images</span><span class="p">([</span><span class="n">cloudname</span><span class="p">])[</span><span class="n">cloudname</span><span class="p">]</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
             <span class="k">if</span> <span class="n">value</span><span class="p">[</span><span class="s">&#39;name&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">imagename</span><span class="p">:</span>
                 <span class="k">return</span> <span class="n">value</span>
         <span class="k">return</span> <span class="o">-</span><span class="mi">1</span>
 </div>
-<div class="viewcode-block" id="cm_mongo.default"><a class="viewcode-back" href="../../modules/cloudmesh.html#cloudmesh.cm_mongo.cm_mongo.default">[docs]</a>    <span class="k">def</span> <span class="nf">default</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cloudname</span><span class="p">,</span> <span class="n">attribute</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">cm_user_id</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<div class="viewcode-block" id="cm_mongo.default"><a class="viewcode-back" href="../../api/cloudmesh/cloudmesh.html#cloudmesh.cm_mongo.cm_mongo.default">[docs]</a>    <span class="k">def</span> <span class="nf">default</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cloudname</span><span class="p">,</span> <span class="n">attribute</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">cm_user_id</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Set a default value on a given type between &#39;image&#39; or &#39;flavor&#39;&quot;&quot;&quot;</span>
 
         <span class="k">if</span> <span class="ow">not</span> <span class="n">cm_user_id</span><span class="p">:</span>
@@ -1260,7 +1260,7 @@
                                                <span class="n">defaults</span><span class="p">[</span><span class="s">&#39;flavors&#39;</span><span class="p">])</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">cm_user</span><span class="o">.</span><span class="n">get_defaults</span><span class="p">(</span><span class="n">cm_user_id</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="cm_mongo.start"><a class="viewcode-back" href="../../modules/cloudmesh.html#cloudmesh.cm_mongo.cm_mongo.start">[docs]</a>    <span class="k">def</span> <span class="nf">start</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cloud</span><span class="p">,</span> <span class="n">cm_user_id</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">flavor</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+<div class="viewcode-block" id="cm_mongo.start"><a class="viewcode-back" href="../../api/cloudmesh/cloudmesh.html#cloudmesh.cm_mongo.cm_mongo.start">[docs]</a>    <span class="k">def</span> <span class="nf">start</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cloud</span><span class="p">,</span> <span class="n">cm_user_id</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">flavor</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
               <span class="n">image</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">meta</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Launch a new VM instance with a default setting for flavor, image and</span>
 <span class="sd">        key name&quot;&quot;&quot;</span>
@@ -1313,7 +1313,7 @@
 
         <span class="k">return</span> <span class="n">result</span>
 </div>
-<div class="viewcode-block" id="cm_mongo.vm_create"><a class="viewcode-back" href="../../modules/cloudmesh.html#cloudmesh.cm_mongo.cm_mongo.vm_create">[docs]</a>    <span class="k">def</span> <span class="nf">vm_create</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+<div class="viewcode-block" id="cm_mongo.vm_create"><a class="viewcode-back" href="../../api/cloudmesh/cloudmesh.html#cloudmesh.cm_mongo.cm_mongo.vm_create">[docs]</a>    <span class="k">def</span> <span class="nf">vm_create</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                   <span class="n">cloud</span><span class="p">,</span>
                   <span class="n">prefix</span><span class="p">,</span>
                   <span class="n">index</span><span class="p">,</span>
@@ -1341,7 +1341,7 @@
         <span class="n">result</span><span class="p">[</span><span class="s">&quot;cloud&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">cloud</span>
         <span class="k">return</span> <span class="n">result</span>
 </div>
-<div class="viewcode-block" id="cm_mongo.vm_create_queue"><a class="viewcode-back" href="../../modules/cloudmesh.html#cloudmesh.cm_mongo.cm_mongo.vm_create_queue">[docs]</a>    <span class="k">def</span> <span class="nf">vm_create_queue</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cloud</span><span class="p">,</span> <span class="n">prefix</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">vm_flavor</span><span class="p">,</span> <span class="n">vm_image</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">meta</span><span class="p">,</span> <span class="n">cm_user_id</span><span class="p">,</span> <span class="n">givenvmname</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<div class="viewcode-block" id="cm_mongo.vm_create_queue"><a class="viewcode-back" href="../../api/cloudmesh/cloudmesh.html#cloudmesh.cm_mongo.cm_mongo.vm_create_queue">[docs]</a>    <span class="k">def</span> <span class="nf">vm_create_queue</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cloud</span><span class="p">,</span> <span class="n">prefix</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">vm_flavor</span><span class="p">,</span> <span class="n">vm_image</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">meta</span><span class="p">,</span> <span class="n">cm_user_id</span><span class="p">,</span> <span class="n">givenvmname</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        same as vm_create but runs with a celery task queue</span>
 
@@ -1373,7 +1373,7 @@
             <span class="p">},</span>
             <span class="n">queue</span><span class="o">=</span><span class="n">queue_name</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="cm_mongo.assign_public_ip"><a class="viewcode-back" href="../../modules/cloudmesh.html#cloudmesh.cm_mongo.cm_mongo.assign_public_ip">[docs]</a>    <span class="k">def</span> <span class="nf">assign_public_ip</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cloud</span><span class="p">,</span> <span class="n">server</span><span class="p">,</span> <span class="n">cm_user_id</span><span class="p">):</span>
+<div class="viewcode-block" id="cm_mongo.assign_public_ip"><a class="viewcode-back" href="../../api/cloudmesh/cloudmesh.html#cloudmesh.cm_mongo.cm_mongo.assign_public_ip">[docs]</a>    <span class="k">def</span> <span class="nf">assign_public_ip</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cloud</span><span class="p">,</span> <span class="n">server</span><span class="p">,</span> <span class="n">cm_user_id</span><span class="p">):</span>
         <span class="n">cloudmanager</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">clouds</span><span class="p">[</span><span class="n">cm_user_id</span><span class="p">][</span><span class="n">cloud</span><span class="p">][</span><span class="s">&quot;manager&quot;</span><span class="p">]</span>
         <span class="nb">type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">clouds</span><span class="p">[</span><span class="n">cm_user_id</span><span class="p">][</span><span class="n">cloud</span><span class="p">][</span><span class="s">&quot;cm_type&quot;</span><span class="p">]</span>
         <span class="k">if</span> <span class="nb">type</span> <span class="o">==</span> <span class="s">&#39;openstack&#39;</span><span class="p">:</span>
@@ -1398,7 +1398,7 @@
             <span class="n">ret</span> <span class="o">=</span> <span class="bp">None</span>
         <span class="k">return</span> <span class="n">ret</span>
 </div>
-<div class="viewcode-block" id="cm_mongo.release_unused_public_ips"><a class="viewcode-back" href="../../modules/cloudmesh.html#cloudmesh.cm_mongo.cm_mongo.release_unused_public_ips">[docs]</a>    <span class="k">def</span> <span class="nf">release_unused_public_ips</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cloud</span><span class="p">,</span> <span class="n">cm_user_id</span><span class="p">):</span>
+<div class="viewcode-block" id="cm_mongo.release_unused_public_ips"><a class="viewcode-back" href="../../api/cloudmesh/cloudmesh.html#cloudmesh.cm_mongo.cm_mongo.release_unused_public_ips">[docs]</a>    <span class="k">def</span> <span class="nf">release_unused_public_ips</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cloud</span><span class="p">,</span> <span class="n">cm_user_id</span><span class="p">):</span>
         <span class="n">cloudmanager</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">clouds</span><span class="p">[</span><span class="n">cm_user_id</span><span class="p">][</span><span class="n">cloud</span><span class="p">][</span><span class="s">&quot;manager&quot;</span><span class="p">]</span>
         <span class="nb">type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">clouds</span><span class="p">[</span><span class="n">cm_user_id</span><span class="p">][</span><span class="n">cloud</span><span class="p">][</span><span class="s">&quot;cm_type&quot;</span><span class="p">]</span>
         <span class="k">if</span> <span class="nb">type</span> <span class="o">==</span> <span class="s">&#39;openstack&#39;</span><span class="p">:</span>
@@ -1407,7 +1407,7 @@
             <span class="n">ret</span> <span class="o">=</span> <span class="bp">None</span>
         <span class="k">return</span> <span class="n">ret</span>
 </div>
-<div class="viewcode-block" id="cm_mongo.delete"><a class="viewcode-back" href="../../modules/cloudmesh.html#cloudmesh.cm_mongo.cm_mongo.delete">[docs]</a>    <span class="k">def</span> <span class="nf">delete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cloud</span><span class="p">,</span> <span class="n">server</span><span class="p">,</span> <span class="n">cm_user_id</span><span class="p">):</span>
+<div class="viewcode-block" id="cm_mongo.delete"><a class="viewcode-back" href="../../api/cloudmesh/cloudmesh.html#cloudmesh.cm_mongo.cm_mongo.delete">[docs]</a>    <span class="k">def</span> <span class="nf">delete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cloud</span><span class="p">,</span> <span class="n">server</span><span class="p">,</span> <span class="n">cm_user_id</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Delete vm instances and release unused public ips&quot;&quot;&quot;</span>
 
         <span class="c"># Hyungro Lee - Sep 4th, 2014</span>
@@ -1417,11 +1417,11 @@
         <span class="n">res</span> <span class="o">=</span> <span class="p">{</span><span class="s">&quot;vm_delete&quot;</span><span class="p">:</span> <span class="n">res1</span><span class="p">,</span> <span class="s">&quot;release_unused_public_ips&quot;</span><span class="p">:</span> <span class="n">res2</span><span class="p">}</span>
         <span class="k">return</span> <span class="n">res</span>
 </div>
-<div class="viewcode-block" id="cm_mongo.vm_delete"><a class="viewcode-back" href="../../modules/cloudmesh.html#cloudmesh.cm_mongo.cm_mongo.vm_delete">[docs]</a>    <span class="k">def</span> <span class="nf">vm_delete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cloud</span><span class="p">,</span> <span class="n">server</span><span class="p">,</span> <span class="n">cm_user_id</span><span class="p">):</span>
+<div class="viewcode-block" id="cm_mongo.vm_delete"><a class="viewcode-back" href="../../api/cloudmesh/cloudmesh.html#cloudmesh.cm_mongo.cm_mongo.vm_delete">[docs]</a>    <span class="k">def</span> <span class="nf">vm_delete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cloud</span><span class="p">,</span> <span class="n">server</span><span class="p">,</span> <span class="n">cm_user_id</span><span class="p">):</span>
         <span class="n">cloudmanager</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">clouds</span><span class="p">[</span><span class="n">cm_user_id</span><span class="p">][</span><span class="n">cloud</span><span class="p">][</span><span class="s">&quot;manager&quot;</span><span class="p">]</span>
         <span class="k">return</span> <span class="n">cloudmanager</span><span class="o">.</span><span class="n">vm_delete</span><span class="p">(</span><span class="n">server</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="cm_mongo.stack_create"><a class="viewcode-back" href="../../modules/cloudmesh.html#cloudmesh.cm_mongo.cm_mongo.stack_create">[docs]</a>    <span class="k">def</span> <span class="nf">stack_create</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cloud</span><span class="p">,</span> <span class="n">cm_user_id</span><span class="p">,</span> <span class="n">servername</span><span class="p">,</span> <span class="n">template_url</span><span class="p">,</span>
+<div class="viewcode-block" id="cm_mongo.stack_create"><a class="viewcode-back" href="../../api/cloudmesh/cloudmesh.html#cloudmesh.cm_mongo.cm_mongo.stack_create">[docs]</a>    <span class="k">def</span> <span class="nf">stack_create</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cloud</span><span class="p">,</span> <span class="n">cm_user_id</span><span class="p">,</span> <span class="n">servername</span><span class="p">,</span> <span class="n">template_url</span><span class="p">,</span>
                      <span class="n">parameters</span><span class="p">):</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">cloudmanager</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">clouds</span><span class="p">[</span><span class="n">cm_user_id</span><span class="p">][</span><span class="n">cloud</span><span class="p">][</span><span class="s">&#39;manager&#39;</span><span class="p">]</span>
@@ -1429,14 +1429,14 @@
         <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">None</span>
 </div>
-<div class="viewcode-block" id="cm_mongo.stack_delete"><a class="viewcode-back" href="../../modules/cloudmesh.html#cloudmesh.cm_mongo.cm_mongo.stack_delete">[docs]</a>    <span class="k">def</span> <span class="nf">stack_delete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cloud</span><span class="p">,</span> <span class="n">cm_user_id</span><span class="p">,</span> <span class="n">server</span><span class="p">):</span>
+<div class="viewcode-block" id="cm_mongo.stack_delete"><a class="viewcode-back" href="../../api/cloudmesh/cloudmesh.html#cloudmesh.cm_mongo.cm_mongo.stack_delete">[docs]</a>    <span class="k">def</span> <span class="nf">stack_delete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cloud</span><span class="p">,</span> <span class="n">cm_user_id</span><span class="p">,</span> <span class="n">server</span><span class="p">):</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">cloudmanager</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">clouds</span><span class="p">[</span><span class="n">cm_user_id</span><span class="p">][</span><span class="n">cloud</span><span class="p">][</span><span class="s">&#39;manager&#39;</span><span class="p">]</span>
             <span class="k">return</span> <span class="n">cloudmanager</span><span class="o">.</span><span class="n">stack_delete</span><span class="p">(</span><span class="n">server</span><span class="p">)</span>
         <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">None</span>
 </div>
-<div class="viewcode-block" id="cm_mongo.usage"><a class="viewcode-back" href="../../modules/cloudmesh.html#cloudmesh.cm_mongo.cm_mongo.usage">[docs]</a>    <span class="k">def</span> <span class="nf">usage</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cloud</span><span class="p">,</span> <span class="n">cm_user_id</span><span class="p">):</span>
+<div class="viewcode-block" id="cm_mongo.usage"><a class="viewcode-back" href="../../api/cloudmesh/cloudmesh.html#cloudmesh.cm_mongo.cm_mongo.usage">[docs]</a>    <span class="k">def</span> <span class="nf">usage</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cloud</span><span class="p">,</span> <span class="n">cm_user_id</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;Gets usage reports&#39;&#39;&#39;</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">cloudmanager</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">clouds</span><span class="p">[</span><span class="n">cm_user_id</span><span class="p">][</span><span class="n">cloud</span><span class="p">][</span><span class="s">&#39;manager&#39;</span><span class="p">]</span>
@@ -1444,7 +1444,7 @@
         <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">None</span>
 </div>
-<div class="viewcode-block" id="cm_mongo.quota"><a class="viewcode-back" href="../../modules/cloudmesh.html#cloudmesh.cm_mongo.cm_mongo.quota">[docs]</a>    <span class="k">def</span> <span class="nf">quota</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cloud</span><span class="p">,</span> <span class="n">cm_user_id</span><span class="p">):</span>
+<div class="viewcode-block" id="cm_mongo.quota"><a class="viewcode-back" href="../../api/cloudmesh/cloudmesh.html#cloudmesh.cm_mongo.cm_mongo.quota">[docs]</a>    <span class="k">def</span> <span class="nf">quota</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cloud</span><span class="p">,</span> <span class="n">cm_user_id</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;Gets current settings for project quota&#39;&#39;&#39;</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">cloudmanager</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">clouds</span><span class="p">[</span><span class="n">cm_user_id</span><span class="p">][</span><span class="n">cloud</span><span class="p">][</span><span class="s">&#39;manager&#39;</span><span class="p">]</span>
@@ -1452,7 +1452,7 @@
         <span class="k">except</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">None</span>
 </div>
-<div class="viewcode-block" id="cm_mongo.limits"><a class="viewcode-back" href="../../modules/cloudmesh.html#cloudmesh.cm_mongo.cm_mongo.limits">[docs]</a>    <span class="k">def</span> <span class="nf">limits</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cloud</span><span class="p">,</span> <span class="n">cm_user_id</span><span class="p">):</span>
+<div class="viewcode-block" id="cm_mongo.limits"><a class="viewcode-back" href="../../api/cloudmesh/cloudmesh.html#cloudmesh.cm_mongo.cm_mongo.limits">[docs]</a>    <span class="k">def</span> <span class="nf">limits</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cloud</span><span class="p">,</span> <span class="n">cm_user_id</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;Gets limits information&#39;&#39;&#39;</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">cloudmanager</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">clouds</span><span class="p">[</span><span class="n">cm_user_id</span><span class="p">][</span><span class="n">cloud</span><span class="p">][</span><span class="s">&#39;manager&#39;</span><span class="p">]</span>
@@ -1460,7 +1460,7 @@
         <span class="k">except</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">None</span>
 </div>
-<div class="viewcode-block" id="cm_mongo.usage_with_limits"><a class="viewcode-back" href="../../modules/cloudmesh.html#cloudmesh.cm_mongo.cm_mongo.usage_with_limits">[docs]</a>    <span class="k">def</span> <span class="nf">usage_with_limits</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cloud</span><span class="p">,</span> <span class="n">cm_user_id</span><span class="p">):</span>
+<div class="viewcode-block" id="cm_mongo.usage_with_limits"><a class="viewcode-back" href="../../api/cloudmesh/cloudmesh.html#cloudmesh.cm_mongo.cm_mongo.usage_with_limits">[docs]</a>    <span class="k">def</span> <span class="nf">usage_with_limits</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cloud</span><span class="p">,</span> <span class="n">cm_user_id</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;Gets limits with usage information&#39;&#39;&#39;</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">cloudmanager</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">clouds</span><span class="p">[</span><span class="n">cm_user_id</span><span class="p">][</span><span class="n">cloud</span><span class="p">][</span><span class="s">&#39;manager&#39;</span><span class="p">]</span>
@@ -1468,7 +1468,7 @@
         <span class="k">except</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">None</span>
 </div>
-<div class="viewcode-block" id="cm_mongo.launcher_import"><a class="viewcode-back" href="../../modules/cloudmesh.html#cloudmesh.cm_mongo.cm_mongo.launcher_import">[docs]</a>    <span class="k">def</span> <span class="nf">launcher_import</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">launcher_name</span><span class="p">,</span> <span class="n">username</span><span class="p">):</span>
+<div class="viewcode-block" id="cm_mongo.launcher_import"><a class="viewcode-back" href="../../api/cloudmesh/cloudmesh.html#cloudmesh.cm_mongo.cm_mongo.launcher_import">[docs]</a>    <span class="k">def</span> <span class="nf">launcher_import</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">launcher_name</span><span class="p">,</span> <span class="n">username</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        insert a launcher/recipe into db_clouds</span>
 <span class="sd">        &#39;&#39;&#39;</span>
@@ -1477,7 +1477,7 @@
         <span class="n">d</span><span class="p">[</span><span class="s">&#39;cm_user_id&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">username</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">db_clouds</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="cm_mongo.launcher_get"><a class="viewcode-back" href="../../modules/cloudmesh.html#cloudmesh.cm_mongo.cm_mongo.launcher_get">[docs]</a>    <span class="k">def</span> <span class="nf">launcher_get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">username</span><span class="p">,</span> <span class="n">launcher_name</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<div class="viewcode-block" id="cm_mongo.launcher_get"><a class="viewcode-back" href="../../api/cloudmesh/cloudmesh.html#cloudmesh.cm_mongo.cm_mongo.launcher_get">[docs]</a>    <span class="k">def</span> <span class="nf">launcher_get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">username</span><span class="p">,</span> <span class="n">launcher_name</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">launcher_name</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">db_clouds</span><span class="o">.</span><span class="n">find_one</span><span class="p">({</span><span class="s">&#39;cm_kind&#39;</span><span class="p">:</span> <span class="s">&#39;launcher&#39;</span><span class="p">,</span>
                                             <span class="s">&#39;cm_user_id&#39;</span><span class="p">:</span> <span class="n">username</span><span class="p">,</span>
@@ -1486,13 +1486,13 @@
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">db_clouds</span><span class="o">.</span><span class="n">find</span><span class="p">({</span><span class="s">&#39;cm_kind&#39;</span><span class="p">:</span> <span class="s">&#39;launcher&#39;</span><span class="p">,</span>
                                         <span class="s">&#39;cm_user_id&#39;</span><span class="p">:</span> <span class="n">username</span><span class="p">})</span>
 </div>
-<div class="viewcode-block" id="cm_mongo.launcher_remove"><a class="viewcode-back" href="../../modules/cloudmesh.html#cloudmesh.cm_mongo.cm_mongo.launcher_remove">[docs]</a>    <span class="k">def</span> <span class="nf">launcher_remove</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">username</span><span class="p">,</span> <span class="n">launcher_name</span><span class="p">):</span>
+<div class="viewcode-block" id="cm_mongo.launcher_remove"><a class="viewcode-back" href="../../api/cloudmesh/cloudmesh.html#cloudmesh.cm_mongo.cm_mongo.launcher_remove">[docs]</a>    <span class="k">def</span> <span class="nf">launcher_remove</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">username</span><span class="p">,</span> <span class="n">launcher_name</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">db_clouds</span><span class="o">.</span><span class="n">remove</span><span class="p">({</span><span class="s">&#39;cm_kind&#39;</span><span class="p">:</span> <span class="s">&#39;launcher&#39;</span><span class="p">,</span>
                                <span class="s">&#39;cm_user_id&#39;</span><span class="p">:</span> <span class="n">username</span><span class="p">,</span>
                                <span class="s">&#39;cm_launcher&#39;</span><span class="p">:</span> <span class="n">launcher_name</span><span class="p">})</span>
 
 </div>
-<div class="viewcode-block" id="cm_mongo.vmname"><a class="viewcode-back" href="../../modules/cloudmesh.html#cloudmesh.cm_mongo.cm_mongo.vmname">[docs]</a>    <span class="k">def</span> <span class="nf">vmname</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">idx</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">cm_user_id</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<div class="viewcode-block" id="cm_mongo.vmname"><a class="viewcode-back" href="../../api/cloudmesh/cloudmesh.html#cloudmesh.cm_mongo.cm_mongo.vmname">[docs]</a>    <span class="k">def</span> <span class="nf">vmname</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">idx</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">cm_user_id</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Return a vm name to use next time. prefix or index can be</span>
 <span class="sd">        given to update a vm name (optional)</span>
 
@@ -1517,10 +1517,10 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">userinfo</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cm_user</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">cm_user_id</span><span class="p">)</span>
         <span class="k">return</span> <span class="s">&quot;</span><span class="si">%(prefix)s</span><span class="s">_</span><span class="si">%(index)s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">userinfo</span><span class="p">[</span><span class="s">&#39;defaults&#39;</span><span class="p">]</span>
 </div>
-<div class="viewcode-block" id="cm_mongo.vmname_next"><a class="viewcode-back" href="../../modules/cloudmesh.html#cloudmesh.cm_mongo.cm_mongo.vmname_next">[docs]</a>    <span class="k">def</span> <span class="nf">vmname_next</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="cm_mongo.vmname_next"><a class="viewcode-back" href="../../api/cloudmesh/cloudmesh.html#cloudmesh.cm_mongo.cm_mongo.vmname_next">[docs]</a>    <span class="k">def</span> <span class="nf">vmname_next</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">vmname</span><span class="p">(</span><span class="n">idx</span><span class="o">=</span><span class="s">&quot;+1&quot;</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="cm_mongo.ssh_execute"><a class="viewcode-back" href="../../modules/cloudmesh.html#cloudmesh.cm_mongo.cm_mongo.ssh_execute">[docs]</a>    <span class="k">def</span> <span class="nf">ssh_execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ipaddr</span><span class="p">,</span> <span class="n">username</span><span class="o">=</span><span class="s">&quot;ubuntu&quot;</span><span class="p">,</span> <span class="n">command</span><span class="o">=</span><span class="s">&quot;ls -al&quot;</span><span class="p">,</span>
+<div class="viewcode-block" id="cm_mongo.ssh_execute"><a class="viewcode-back" href="../../api/cloudmesh/cloudmesh.html#cloudmesh.cm_mongo.cm_mongo.ssh_execute">[docs]</a>    <span class="k">def</span> <span class="nf">ssh_execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ipaddr</span><span class="p">,</span> <span class="n">username</span><span class="o">=</span><span class="s">&quot;ubuntu&quot;</span><span class="p">,</span> <span class="n">command</span><span class="o">=</span><span class="s">&quot;ls -al&quot;</span><span class="p">,</span>
                     <span class="n">pkey</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">raise_err</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
 
         <span class="k">try</span><span class="p">:</span>
@@ -1531,7 +1531,7 @@
             <span class="k">if</span> <span class="n">raise_err</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="n">e</span>
 </div>
-<div class="viewcode-block" id="cm_mongo.wait"><a class="viewcode-back" href="../../modules/cloudmesh.html#cloudmesh.cm_mongo.cm_mongo.wait">[docs]</a>    <span class="k">def</span> <span class="nf">wait</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ipaddr</span><span class="p">,</span> <span class="n">username</span><span class="o">=</span><span class="s">&quot;ubuntu&quot;</span><span class="p">,</span> <span class="n">command</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">pkey</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+<div class="viewcode-block" id="cm_mongo.wait"><a class="viewcode-back" href="../../api/cloudmesh/cloudmesh.html#cloudmesh.cm_mongo.cm_mongo.wait">[docs]</a>    <span class="k">def</span> <span class="nf">wait</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ipaddr</span><span class="p">,</span> <span class="n">username</span><span class="o">=</span><span class="s">&quot;ubuntu&quot;</span><span class="p">,</span> <span class="n">command</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">pkey</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
              <span class="n">interval</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">retry</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">raise_err</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
 
         <span class="n">command</span> <span class="o">=</span> <span class="s">&quot;echo $USER&quot;</span>
@@ -1554,11 +1554,11 @@
         <span class="k">return</span> <span class="n">success</span>
 
 </div></div>
-<div class="viewcode-block" id="cm_mongo_status"><a class="viewcode-back" href="../../modules/cloudmesh.html#cloudmesh.cm_mongo.cm_mongo_status">[docs]</a><span class="k">class</span> <span class="nc">cm_mongo_status</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<div class="viewcode-block" id="cm_mongo_status"><a class="viewcode-back" href="../../api/cloudmesh/cloudmesh.html#cloudmesh.cm_mongo.cm_mongo_status">[docs]</a><span class="k">class</span> <span class="nc">cm_mongo_status</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">conn</span> <span class="o">=</span> <span class="n">DBConnFactory</span><span class="o">.</span><span class="n">getconn</span><span class="p">(</span><span class="s">&quot;admin&quot;</span><span class="p">)</span>
 
-<div class="viewcode-block" id="cm_mongo_status.serverStatus"><a class="viewcode-back" href="../../modules/cloudmesh.html#cloudmesh.cm_mongo.cm_mongo_status.serverStatus">[docs]</a>    <span class="k">def</span> <span class="nf">serverStatus</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="cm_mongo_status.serverStatus"><a class="viewcode-back" href="../../api/cloudmesh/cloudmesh.html#cloudmesh.cm_mongo.cm_mongo_status.serverStatus">[docs]</a>    <span class="k">def</span> <span class="nf">serverStatus</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">command</span><span class="p">(</span><span class="s">&quot;serverStatus&quot;</span><span class="p">)</span>
 
 </div></div>

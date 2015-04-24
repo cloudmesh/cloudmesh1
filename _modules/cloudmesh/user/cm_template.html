@@ -597,14 +597,14 @@
 <span class="c"># ----------------------------------------------------------------------</span>
 
 
-<div class="viewcode-block" id="cm_template"><a class="viewcode-back" href="../../../modules/cloudmesh.user.html#cloudmesh.user.cm_template.cm_template">[docs]</a><span class="k">class</span> <span class="nc">cm_template</span><span class="p">():</span>
+<div class="viewcode-block" id="cm_template"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.user.html#cloudmesh.user.cm_template.cm_template">[docs]</a><span class="k">class</span> <span class="nc">cm_template</span><span class="p">():</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">filename</span> <span class="o">=</span> <span class="n">path_expand</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">content</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="p">,</span> <span class="s">&#39;r&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
 
-<div class="viewcode-block" id="cm_template.variables"><a class="viewcode-back" href="../../../modules/cloudmesh.user.html#cloudmesh.user.cm_template.cm_template.variables">[docs]</a>    <span class="k">def</span> <span class="nf">variables</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="cm_template.variables"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.user.html#cloudmesh.user.cm_template.cm_template.variables">[docs]</a>    <span class="k">def</span> <span class="nf">variables</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="nb">vars</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
         <span class="n">lines</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">content</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()</span>
         <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">lines</span><span class="p">:</span>
@@ -616,7 +616,7 @@
                         <span class="nb">vars</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
         <span class="k">return</span> <span class="nb">vars</span>
 </div>
-<div class="viewcode-block" id="cm_template.grep"><a class="viewcode-back" href="../../../modules/cloudmesh.user.html#cloudmesh.user.cm_template.cm_template.grep">[docs]</a>    <span class="k">def</span> <span class="nf">grep</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">strip</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+<div class="viewcode-block" id="cm_template.grep"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.user.html#cloudmesh.user.cm_template.cm_template.grep">[docs]</a>    <span class="k">def</span> <span class="nf">grep</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">strip</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
         <span class="n">result</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">s</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">variables</span><span class="p">())</span>
         <span class="k">for</span> <span class="n">attribute</span> <span class="ow">in</span> <span class="n">s</span><span class="p">:</span>
@@ -632,7 +632,7 @@
         <span class="n">parsed_content</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">content</span><span class="p">)</span>
         <span class="k">print</span><span class="p">(</span><span class="n">meta</span><span class="o">.</span><span class="n">find_undeclared_variables</span><span class="p">(</span><span class="n">parsed_content</span><span class="p">))</span>
 
-<div class="viewcode-block" id="cm_template.replace"><a class="viewcode-back" href="../../../modules/cloudmesh.user.html#cloudmesh.user.cm_template.cm_template.replace">[docs]</a>    <span class="k">def</span> <span class="nf">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="s">&#39;text&#39;</span><span class="p">,</span> <span class="n">values</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<div class="viewcode-block" id="cm_template.replace"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.user.html#cloudmesh.user.cm_template.cm_template.replace">[docs]</a>    <span class="k">def</span> <span class="nf">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="s">&#39;text&#39;</span><span class="p">,</span> <span class="n">values</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
 
         <span class="k">try</span><span class="p">:</span>
             <span class="n">template</span> <span class="o">=</span> <span class="n">Template</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">content</span><span class="p">)</span>
@@ -664,7 +664,7 @@
 
         <span class="k">return</span> <span class="n">yaml</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="n">default_flow_style</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
 
-<div class="viewcode-block" id="cm_template.generate_from_dict"><a class="viewcode-back" href="../../../modules/cloudmesh.user.html#cloudmesh.user.cm_template.cm_template.generate_from_dict">[docs]</a>    <span class="k">def</span> <span class="nf">generate_from_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">out_file</span><span class="p">):</span>
+<div class="viewcode-block" id="cm_template.generate_from_dict"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.user.html#cloudmesh.user.cm_template.cm_template.generate_from_dict">[docs]</a>    <span class="k">def</span> <span class="nf">generate_from_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">out_file</span><span class="p">):</span>
         <span class="n">cloudmesh_yaml</span> <span class="o">=</span> <span class="n">path_expand</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="p">)</span>
         <span class="n">t</span> <span class="o">=</span> <span class="n">cm_template</span><span class="p">(</span><span class="n">cloudmesh_yaml</span><span class="p">)</span>
 
@@ -675,7 +675,7 @@
         <span class="n">yaml_file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
         <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&quot;Written new yaml file in &quot;</span> <span class="o">+</span> <span class="n">location</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="cm_template.generate"><a class="viewcode-back" href="../../../modules/cloudmesh.user.html#cloudmesh.user.cm_template.cm_template.generate">[docs]</a>    <span class="k">def</span> <span class="nf">generate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+<div class="viewcode-block" id="cm_template.generate"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.user.html#cloudmesh.user.cm_template.cm_template.generate">[docs]</a>    <span class="k">def</span> <span class="nf">generate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                  <span class="n">me_file</span><span class="p">,</span>
                  <span class="n">out_file</span><span class="p">):</span>
         <span class="n">cloudmesh_yaml</span> <span class="o">=</span> <span class="n">path_expand</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="p">)</span>

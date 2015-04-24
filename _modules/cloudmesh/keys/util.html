@@ -578,7 +578,7 @@
 <span class="kn">from</span> <span class="nn">cloudmesh_base.util</span> <span class="kn">import</span> <span class="n">path_expand</span>
 
 
-<div class="viewcode-block" id="read_key"><a class="viewcode-back" href="../../../modules/cloudmesh.keys.html#cloudmesh.keys.util.read_key">[docs]</a><span class="k">def</span> <span class="nf">read_key</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+<div class="viewcode-block" id="read_key"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.keys.html#cloudmesh.keys.util.read_key">[docs]</a><span class="k">def</span> <span class="nf">read_key</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
     <span class="n">key</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="n">key</span><span class="p">[</span><span class="s">&#39;filename&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">path_expand</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
     <span class="n">key</span><span class="p">[</span><span class="s">&#39;string&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s">&quot;r&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
@@ -586,7 +586,7 @@
     <span class="k">return</span> <span class="n">key</span>
 
 </div>
-<div class="viewcode-block" id="get_fingerprint"><a class="viewcode-back" href="../../../modules/cloudmesh.keys.html#cloudmesh.keys.util.get_fingerprint">[docs]</a><span class="k">def</span> <span class="nf">get_fingerprint</span><span class="p">(</span><span class="n">entirekey</span><span class="p">):</span>
+<div class="viewcode-block" id="get_fingerprint"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.keys.html#cloudmesh.keys.util.get_fingerprint">[docs]</a><span class="k">def</span> <span class="nf">get_fingerprint</span><span class="p">(</span><span class="n">entirekey</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;returns the fingerprint of a key.</span>
 <span class="sd">    :param entireky: the key</span>
 <span class="sd">    :type entirekey: string</span>
@@ -598,7 +598,7 @@
         <span class="k">return</span> <span class="s">&#39;&#39;</span>
 
 </div>
-<div class="viewcode-block" id="key_fingerprint"><a class="viewcode-back" href="../../../modules/cloudmesh.keys.html#cloudmesh.keys.util.key_fingerprint">[docs]</a><span class="k">def</span> <span class="nf">key_fingerprint</span><span class="p">(</span><span class="n">key_string</span><span class="p">):</span>
+<div class="viewcode-block" id="key_fingerprint"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.keys.html#cloudmesh.keys.util.key_fingerprint">[docs]</a><span class="k">def</span> <span class="nf">key_fingerprint</span><span class="p">(</span><span class="n">key_string</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;create the fingerprint form just the key.</span>
 
 <span class="sd">    :param key_string: the key</span>
@@ -609,7 +609,7 @@
     <span class="k">return</span> <span class="s">&#39;:&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">a</span> <span class="o">+</span> <span class="n">b</span> <span class="k">for</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">fp_plain</span><span class="p">[::</span><span class="mi">2</span><span class="p">],</span> <span class="n">fp_plain</span><span class="p">[</span><span class="mi">1</span><span class="p">::</span><span class="mi">2</span><span class="p">]))</span>
 
 </div>
-<div class="viewcode-block" id="key_parse"><a class="viewcode-back" href="../../../modules/cloudmesh.keys.html#cloudmesh.keys.util.key_parse">[docs]</a><span class="k">def</span> <span class="nf">key_parse</span><span class="p">(</span><span class="n">keystring</span><span class="p">):</span>
+<div class="viewcode-block" id="key_parse"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.keys.html#cloudmesh.keys.util.key_parse">[docs]</a><span class="k">def</span> <span class="nf">key_parse</span><span class="p">(</span><span class="n">keystring</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    parse the keystring/keycontent into type,key,comment</span>
 <span class="sd">    :param keystring: the content of a key in string format</span>
@@ -626,7 +626,7 @@
     <span class="k">return</span> <span class="p">(</span><span class="n">keystype</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">comment</span><span class="p">)</span>
 
 </div>
-<div class="viewcode-block" id="key_validate"><a class="viewcode-back" href="../../../modules/cloudmesh.keys.html#cloudmesh.keys.util.key_validate">[docs]</a><span class="k">def</span> <span class="nf">key_validate</span><span class="p">(</span><span class="n">keytype</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+<div class="viewcode-block" id="key_validate"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.keys.html#cloudmesh.keys.util.key_validate">[docs]</a><span class="k">def</span> <span class="nf">key_validate</span><span class="p">(</span><span class="n">keytype</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;reads the key string from a file. THIS FUNCTION HAS A BUG.</span>
 
 <span class="sd">    :param key: either the name of  a file that contains the key, or the entire contents of such a file</span>
@@ -665,7 +665,7 @@
 <span class="c"># unit testing</span>
 
 
-<div class="viewcode-block" id="main"><a class="viewcode-back" href="../../../modules/cloudmesh.keys.html#cloudmesh.keys.util.main">[docs]</a><span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+<div class="viewcode-block" id="main"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.keys.html#cloudmesh.keys.util.main">[docs]</a><span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
     <span class="n">key1</span> <span class="o">=</span> <span class="s">&quot;ssh-rsa abcdefg comment&quot;</span>
     <span class="n">key2</span> <span class="o">=</span> <span class="s">&quot;ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDD+NswLi/zjz7Vf575eo9iWWku5m4nVSPMgP13JbKCTVKtavAXt8UPZTkYVWiUSeXRqlf+EZM11U8Mq6C/P/ECJS868rn2KSwFosNPF0OOz8zmTvBQShtvBBBVd1kmZePxFGviZbKwe3z3iATLKE8h7pwcupqTin9m3FhQRsGSF7YTFcGXv0ZqxFA2j9+Ix7SVbN5IYxxgwc+mxOzYIy1SKEAOPJQFXKkiXxNdLSzGgjkurhPAIns8MNYL9usKMGzhgp656onGkSbQHZR3ZHsSsTXWP3SV5ih4QTTFunwB6C0TMQVsEGw1P49hhFktb3md+RC4DFP7ZOzfkd9nne2B mycomment&quot;</span>
     <span class="k">print</span><span class="p">(</span><span class="n">key_validate</span><span class="p">(</span><span class="s">&quot;string&quot;</span><span class="p">,</span> <span class="n">key1</span><span class="p">))</span>

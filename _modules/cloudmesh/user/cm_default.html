@@ -584,7 +584,7 @@
 <span class="n">log</span> <span class="o">=</span> <span class="n">LOGGER</span><span class="p">(</span><span class="n">__file__</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="shell_command_default"><a class="viewcode-back" href="../../../modules/cloudmesh.user.html#cloudmesh.user.cm_default.shell_command_default">[docs]</a><span class="k">def</span> <span class="nf">shell_command_default</span><span class="p">(</span><span class="n">arguments</span><span class="p">):</span>
+<div class="viewcode-block" id="shell_command_default"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.user.html#cloudmesh.user.cm_default.shell_command_default">[docs]</a><span class="k">def</span> <span class="nf">shell_command_default</span><span class="p">(</span><span class="n">arguments</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    ::</span>
 
@@ -658,7 +658,7 @@
     <span class="n">call</span><span class="o">.</span><span class="n">execute</span><span class="p">()</span>
 
 </div>
-<div class="viewcode-block" id="DefaultCommand"><a class="viewcode-back" href="../../../modules/cloudmesh.user.html#cloudmesh.user.cm_default.DefaultCommand">[docs]</a><span class="k">class</span> <span class="nc">DefaultCommand</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<div class="viewcode-block" id="DefaultCommand"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.user.html#cloudmesh.user.cm_default.DefaultCommand">[docs]</a><span class="k">class</span> <span class="nc">DefaultCommand</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arguments</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">arguments</span> <span class="o">=</span> <span class="n">arguments</span>
         <span class="c"># print (self.arguments)</span>
@@ -709,7 +709,7 @@
                 <span class="n">defaults_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">user_obj</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">username</span><span class="p">)</span>
                 <span class="k">print</span><span class="p">(</span><span class="n">defaults_data</span><span class="p">[</span><span class="s">&#39;shell_print_format&#39;</span><span class="p">])</span>
 
-<div class="viewcode-block" id="DefaultCommand.get_defaults"><a class="viewcode-back" href="../../../modules/cloudmesh.user.html#cloudmesh.user.cm_default.DefaultCommand.get_defaults">[docs]</a>    <span class="k">def</span> <span class="nf">get_defaults</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="DefaultCommand.get_defaults"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.user.html#cloudmesh.user.cm_default.DefaultCommand.get_defaults">[docs]</a>    <span class="k">def</span> <span class="nf">get_defaults</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        return all defaults in dict</span>
 <span class="sd">        &#39;&#39;&#39;</span>
@@ -820,7 +820,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">print</span><span class="p">(</span><span class="s">&quot;refresh as default: &quot;</span><span class="p">,</span> <span class="n">get_command_list_refresh_default_setting</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">username</span><span class="p">))</span>
 
-<div class="viewcode-block" id="DefaultCommand.execute"><a class="viewcode-back" href="../../../modules/cloudmesh.user.html#cloudmesh.user.cm_default.DefaultCommand.execute">[docs]</a>    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="DefaultCommand.execute"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.user.html#cloudmesh.user.cm_default.DefaultCommand.execute">[docs]</a>    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">arguments</span><span class="p">[</span><span class="s">&#39;format&#39;</span><span class="p">]:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_default_format</span><span class="p">()</span>
         <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">arguments</span><span class="p">[</span><span class="s">&#39;cloud&#39;</span><span class="p">]:</span>

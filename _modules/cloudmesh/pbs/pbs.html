@@ -589,7 +589,7 @@
 <span class="n">log</span> <span class="o">=</span> <span class="n">LOGGER</span><span class="p">(</span><span class="n">__file__</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="PBS"><a class="viewcode-back" href="../../../modules/cloudmesh.pbs.html#cloudmesh.pbs.pbs.PBS">[docs]</a><span class="k">class</span> <span class="nc">PBS</span><span class="p">:</span>
+<div class="viewcode-block" id="PBS"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.pbs.html#cloudmesh.pbs.pbs.PBS">[docs]</a><span class="k">class</span> <span class="nc">PBS</span><span class="p">:</span>
     <span class="n">user</span> <span class="o">=</span> <span class="bp">None</span>
     <span class="n">host</span> <span class="o">=</span> <span class="bp">None</span>
     <span class="n">pbs_qstat_data</span> <span class="o">=</span> <span class="bp">None</span>
@@ -622,7 +622,7 @@
                 <span class="s">&#39;bravo.futuregrid.org&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s">&#39;bravo&#39;</span><span class="p">,</span> <span class="s">&#39;bravo-long&#39;</span><span class="p">],</span>
             <span class="p">}</span>
 
-<div class="viewcode-block" id="PBS.requister_joint_queues"><a class="viewcode-back" href="../../../modules/cloudmesh.pbs.html#cloudmesh.pbs.pbs.PBS.requister_joint_queues">[docs]</a>    <span class="k">def</span> <span class="nf">requister_joint_queues</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cluster_queues</span><span class="p">):</span>
+<div class="viewcode-block" id="PBS.requister_joint_queues"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.pbs.html#cloudmesh.pbs.pbs.PBS.requister_joint_queues">[docs]</a>    <span class="k">def</span> <span class="nf">requister_joint_queues</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cluster_queues</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;allows the registration of queues for multiple clusters managed through the same queuing server</span>
 
 
@@ -635,7 +635,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">cluster_queues</span> <span class="o">=</span> <span class="n">cluster_queues</span>
 </div>
-<div class="viewcode-block" id="PBS.qinfo_user"><a class="viewcode-back" href="../../../modules/cloudmesh.pbs.html#cloudmesh.pbs.pbs.PBS.qinfo_user">[docs]</a>    <span class="k">def</span> <span class="nf">qinfo_user</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">refresh</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+<div class="viewcode-block" id="PBS.qinfo_user"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.pbs.html#cloudmesh.pbs.pbs.PBS.qinfo_user">[docs]</a>    <span class="k">def</span> <span class="nf">qinfo_user</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">refresh</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Return the number of user from qstat</span>
 
 <span class="sd">            example line is:</span>
@@ -658,7 +658,7 @@
 
         <span class="k">return</span> <span class="n">merged_data</span>
 </div>
-<div class="viewcode-block" id="PBS.merge_queues"><a class="viewcode-back" href="../../../modules/cloudmesh.pbs.html#cloudmesh.pbs.pbs.PBS.merge_queues">[docs]</a>    <span class="k">def</span> <span class="nf">merge_queues</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">machines</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+<div class="viewcode-block" id="PBS.merge_queues"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.pbs.html#cloudmesh.pbs.pbs.PBS.merge_queues">[docs]</a>    <span class="k">def</span> <span class="nf">merge_queues</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">machines</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
         <span class="n">res</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">machines</span><span class="p">:</span>
@@ -676,7 +676,7 @@
                             <span class="n">res</span><span class="p">[</span><span class="n">machine</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">row</span><span class="p">]</span>
         <span class="k">return</span> <span class="n">res</span>
 </div>
-<div class="viewcode-block" id="PBS.convert_into_json"><a class="viewcode-back" href="../../../modules/cloudmesh.pbs.html#cloudmesh.pbs.pbs.PBS.convert_into_json">[docs]</a>    <span class="k">def</span> <span class="nf">convert_into_json</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">qstat</span><span class="p">):</span>
+<div class="viewcode-block" id="PBS.convert_into_json"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.pbs.html#cloudmesh.pbs.pbs.PBS.convert_into_json">[docs]</a>    <span class="k">def</span> <span class="nf">convert_into_json</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">qstat</span><span class="p">):</span>
 
         <span class="n">list_qstat</span> <span class="o">=</span> <span class="n">qstat</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
         <span class="k">try</span><span class="p">:</span>
@@ -693,7 +693,7 @@
         <span class="n">res</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">DictReader</span><span class="p">(</span><span class="n">tmp</span><span class="p">,</span> <span class="n">skipinitialspace</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">res</span>
 </div>
-<div class="viewcode-block" id="PBS.qinfo"><a class="viewcode-back" href="../../../modules/cloudmesh.pbs.html#cloudmesh.pbs.pbs.PBS.qinfo">[docs]</a>    <span class="k">def</span> <span class="nf">qinfo</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">refresh</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+<div class="viewcode-block" id="PBS.qinfo"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.pbs.html#cloudmesh.pbs.pbs.PBS.qinfo">[docs]</a>    <span class="k">def</span> <span class="nf">qinfo</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">refresh</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;returns qstat -Q -f in dict format&quot;&quot;&quot;</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">pbs_qinfo_data</span> <span class="ow">is</span> <span class="bp">None</span> <span class="ow">or</span> <span class="n">refresh</span><span class="p">:</span>
@@ -748,7 +748,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">qinfo_extract</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cluster_queues</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">pbs_qinfo_data</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="PBS.qinfo_extract"><a class="viewcode-back" href="../../../modules/cloudmesh.pbs.html#cloudmesh.pbs.pbs.PBS.qinfo_extract">[docs]</a>    <span class="k">def</span> <span class="nf">qinfo_extract</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cluster_queues</span><span class="p">,</span> <span class="n">qinfo_data</span><span class="p">):</span>
+<div class="viewcode-block" id="PBS.qinfo_extract"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.pbs.html#cloudmesh.pbs.pbs.PBS.qinfo_extract">[docs]</a>    <span class="k">def</span> <span class="nf">qinfo_extract</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cluster_queues</span><span class="p">,</span> <span class="n">qinfo_data</span><span class="p">):</span>
 
         <span class="c"># initialize the queues</span>
         <span class="n">queues</span> <span class="o">=</span> <span class="p">{}</span>
@@ -773,25 +773,25 @@
                 <span class="s">&quot;can not execute qmgr on host {0}, command:&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="p">,</span> <span class="n">command</span><span class="p">))</span>
         <span class="k">return</span> <span class="n">result</span>
 
-<div class="viewcode-block" id="PBS.create_node"><a class="viewcode-back" href="../../../modules/cloudmesh.pbs.html#cloudmesh.pbs.pbs.PBS.create_node">[docs]</a>    <span class="k">def</span> <span class="nf">create_node</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+<div class="viewcode-block" id="PBS.create_node"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.pbs.html#cloudmesh.pbs.pbs.PBS.create_node">[docs]</a>    <span class="k">def</span> <span class="nf">create_node</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;create node&quot;&quot;&quot;</span>
         <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_qmgr</span><span class="p">(</span><span class="s">&quot;create node {0}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">))</span>
         <span class="k">return</span> <span class="n">result</span>
 </div>
-<div class="viewcode-block" id="PBS.set_np"><a class="viewcode-back" href="../../../modules/cloudmesh.pbs.html#cloudmesh.pbs.pbs.PBS.set_np">[docs]</a>    <span class="k">def</span> <span class="nf">set_np</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">np</span><span class="p">):</span>
+<div class="viewcode-block" id="PBS.set_np"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.pbs.html#cloudmesh.pbs.pbs.PBS.set_np">[docs]</a>    <span class="k">def</span> <span class="nf">set_np</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">np</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;set node %name np %np | qmgr&quot;&quot;&quot;</span>
         <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_qmgr</span><span class="p">(</span><span class="s">&quot;set node {0} np {1}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">np</span><span class="p">))</span>
         <span class="k">return</span> <span class="n">result</span>
 </div>
-<div class="viewcode-block" id="PBS.set_properties"><a class="viewcode-back" href="../../../modules/cloudmesh.pbs.html#cloudmesh.pbs.pbs.PBS.set_properties">[docs]</a>    <span class="k">def</span> <span class="nf">set_properties</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">properties</span><span class="p">):</span>
+<div class="viewcode-block" id="PBS.set_properties"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.pbs.html#cloudmesh.pbs.pbs.PBS.set_properties">[docs]</a>    <span class="k">def</span> <span class="nf">set_properties</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">properties</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;set node % properties %&quot;&quot;&quot;</span>
         <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_qmgr</span><span class="p">(</span><span class="s">&quot;set node {0} properties {1}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">properties</span><span class="p">))</span>
 </div>
-<div class="viewcode-block" id="PBS.set_note"><a class="viewcode-back" href="../../../modules/cloudmesh.pbs.html#cloudmesh.pbs.pbs.PBS.set_note">[docs]</a>    <span class="k">def</span> <span class="nf">set_note</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">note</span><span class="p">):</span>
+<div class="viewcode-block" id="PBS.set_note"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.pbs.html#cloudmesh.pbs.pbs.PBS.set_note">[docs]</a>    <span class="k">def</span> <span class="nf">set_note</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">note</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;set node % note %&quot;&quot;&quot;</span>
         <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_qmgr</span><span class="p">(</span><span class="s">&quot;set node {0} note {1}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">note</span><span class="p">))</span>
 </div>
-<div class="viewcode-block" id="PBS.pbsnodes"><a class="viewcode-back" href="../../../modules/cloudmesh.pbs.html#cloudmesh.pbs.pbs.PBS.pbsnodes">[docs]</a>    <span class="k">def</span> <span class="nf">pbsnodes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">refresh</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+<div class="viewcode-block" id="PBS.pbsnodes"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.pbs.html#cloudmesh.pbs.pbs.PBS.pbsnodes">[docs]</a>    <span class="k">def</span> <span class="nf">pbsnodes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">refresh</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;returns the pbs node infor from an pbs_nodes_raw_data is a string see above for example&quot;&quot;&quot;</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">pbs_nodes_data</span> <span class="ow">is</span> <span class="bp">None</span> <span class="ow">or</span> <span class="n">refresh</span><span class="p">:</span>
@@ -831,11 +831,11 @@
 
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">pbs_nodes_data</span>
 </div>
-<div class="viewcode-block" id="PBS.exists"><a class="viewcode-back" href="../../../modules/cloudmesh.pbs.html#cloudmesh.pbs.pbs.PBS.exists">[docs]</a>    <span class="k">def</span> <span class="nf">exists</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">):</span>
+<div class="viewcode-block" id="PBS.exists"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.pbs.html#cloudmesh.pbs.pbs.PBS.exists">[docs]</a>    <span class="k">def</span> <span class="nf">exists</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; prints true if the host is in the node list &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">host</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">pbs_nodes_data</span>
 </div>
-<div class="viewcode-block" id="PBS.set"><a class="viewcode-back" href="../../../modules/cloudmesh.pbs.html#cloudmesh.pbs.pbs.PBS.set">[docs]</a>    <span class="k">def</span> <span class="nf">set</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">spec</span><span class="p">,</span> <span class="n">attribute</span><span class="p">):</span>
+<div class="viewcode-block" id="PBS.set"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.pbs.html#cloudmesh.pbs.pbs.PBS.set">[docs]</a>    <span class="k">def</span> <span class="nf">set</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">spec</span><span class="p">,</span> <span class="n">attribute</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;add an attribute for the specified hosts in the format</span>
 <span class="sd">        i[1-20]. which would set the attribute for all hosts in i1 to</span>
 <span class="sd">        i20&quot;&quot;&quot;</span>
@@ -847,7 +847,7 @@
         <span class="sd">&quot;&quot;&quot;add an attribute for the specified hosts&quot;&quot;&quot;</span>
         <span class="k">print</span><span class="p">(</span><span class="s">&quot;TODO: ALLAN&quot;</span><span class="p">)</span>
 
-<div class="viewcode-block" id="PBS.qstat"><a class="viewcode-back" href="../../../modules/cloudmesh.pbs.html#cloudmesh.pbs.pbs.PBS.qstat">[docs]</a>    <span class="k">def</span> <span class="nf">qstat</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">refresh</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+<div class="viewcode-block" id="PBS.qstat"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.pbs.html#cloudmesh.pbs.pbs.PBS.qstat">[docs]</a>    <span class="k">def</span> <span class="nf">qstat</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">refresh</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">pbs_qstat_data</span> <span class="ow">is</span> <span class="bp">None</span> <span class="ow">or</span> <span class="n">refresh</span><span class="p">:</span>
             <span class="k">try</span><span class="p">:</span>
                 <span class="n">xmldata</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span>
@@ -889,7 +889,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">qstat_extract</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cluster_queues</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">pbs_qstat_data</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="PBS.qstat_extract"><a class="viewcode-back" href="../../../modules/cloudmesh.pbs.html#cloudmesh.pbs.pbs.PBS.qstat_extract">[docs]</a>    <span class="k">def</span> <span class="nf">qstat_extract</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cluster_queues</span><span class="p">,</span> <span class="n">qstat_data</span><span class="p">):</span>
+<div class="viewcode-block" id="PBS.qstat_extract"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.pbs.html#cloudmesh.pbs.pbs.PBS.qstat_extract">[docs]</a>    <span class="k">def</span> <span class="nf">qstat_extract</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cluster_queues</span><span class="p">,</span> <span class="n">qstat_data</span><span class="p">):</span>
 
         <span class="c"># initialize the queues</span>
         <span class="n">queues</span> <span class="o">=</span> <span class="p">{}</span>
@@ -906,7 +906,7 @@
                     <span class="c"># log.error(&quot;no data found for {0}&quot;.format(q))</span>
         <span class="k">return</span> <span class="n">queues</span>
 </div>
-<div class="viewcode-block" id="PBS.get_uniq_users"><a class="viewcode-back" href="../../../modules/cloudmesh.pbs.html#cloudmesh.pbs.pbs.PBS.get_uniq_users">[docs]</a>    <span class="k">def</span> <span class="nf">get_uniq_users</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">refresh</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+<div class="viewcode-block" id="PBS.get_uniq_users"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.pbs.html#cloudmesh.pbs.pbs.PBS.get_uniq_users">[docs]</a>    <span class="k">def</span> <span class="nf">get_uniq_users</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">refresh</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">pbs_qstat_data</span> <span class="ow">is</span> <span class="bp">None</span> <span class="ow">or</span> <span class="n">refresh</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">qstat</span><span class="p">()</span>
 
@@ -923,7 +923,7 @@
 
         <span class="k">return</span> <span class="n">job_owner</span>
 </div>
-<div class="viewcode-block" id="PBS.get_machine_name"><a class="viewcode-back" href="../../../modules/cloudmesh.pbs.html#cloudmesh.pbs.pbs.PBS.get_machine_name">[docs]</a>    <span class="k">def</span> <span class="nf">get_machine_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">qname</span><span class="p">):</span>
+<div class="viewcode-block" id="PBS.get_machine_name"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.pbs.html#cloudmesh.pbs.pbs.PBS.get_machine_name">[docs]</a>    <span class="k">def</span> <span class="nf">get_machine_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">qname</span><span class="p">):</span>
         <span class="n">machines</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cluster_queues</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">machines</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">qname</span>
@@ -934,7 +934,7 @@
 
         <span class="k">return</span> <span class="n">qname</span>
 </div>
-<div class="viewcode-block" id="PBS.service_distribution"><a class="viewcode-back" href="../../../modules/cloudmesh.pbs.html#cloudmesh.pbs.pbs.PBS.service_distribution">[docs]</a>    <span class="k">def</span> <span class="nf">service_distribution</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">simple</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+<div class="viewcode-block" id="PBS.service_distribution"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.pbs.html#cloudmesh.pbs.pbs.PBS.service_distribution">[docs]</a>    <span class="k">def</span> <span class="nf">service_distribution</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">simple</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;prints the distribution of services&quot;&quot;&quot;</span>
 
         <span class="k">def</span> <span class="nf">pbsnodes_data</span><span class="p">(</span><span class="n">host</span><span class="p">):</span>

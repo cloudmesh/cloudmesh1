@@ -591,7 +591,7 @@
 <span class="n">log</span> <span class="o">=</span> <span class="n">LOGGER</span><span class="p">(</span><span class="n">__file__</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="shell_command_cloud"><a class="viewcode-back" href="../../../modules/cloudmesh.shell.html#cloudmesh.shell.cm_cloud.shell_command_cloud">[docs]</a><span class="k">def</span> <span class="nf">shell_command_cloud</span><span class="p">(</span><span class="n">arguments</span><span class="p">):</span>
+<div class="viewcode-block" id="shell_command_cloud"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.shell.html#cloudmesh.shell.cm_cloud.shell_command_cloud">[docs]</a><span class="k">def</span> <span class="nf">shell_command_cloud</span><span class="p">(</span><span class="n">arguments</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    ::</span>
 
@@ -714,7 +714,7 @@
     <span class="n">command_execute</span><span class="o">.</span><span class="n">execute</span><span class="p">()</span>
 
 </div>
-<div class="viewcode-block" id="CloudManage"><a class="viewcode-back" href="../../../modules/cloudmesh.shell.html#cloudmesh.shell.cm_cloud.CloudManage">[docs]</a><span class="k">class</span> <span class="nc">CloudManage</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<div class="viewcode-block" id="CloudManage"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.shell.html#cloudmesh.shell.cm_cloud.CloudManage">[docs]</a><span class="k">class</span> <span class="nc">CloudManage</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    a class provides funtions used to manage cloud info in the mongo</span>
 <span class="sd">    </span>
@@ -754,7 +754,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_connect_to_mongo</span><span class="p">()</span>  <span class="c"># TODO: i think that cm_mongo does this?</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">mongo</span><span class="o">.</span><span class="n">db_user</span><span class="o">.</span><span class="n">find_one</span><span class="p">({</span><span class="s">&#39;cm_user_id&#39;</span><span class="p">:</span> <span class="n">username</span><span class="p">})</span>
 
-<div class="viewcode-block" id="CloudManage.get_clouds"><a class="viewcode-back" href="../../../modules/cloudmesh.shell.html#cloudmesh.shell.cm_cloud.CloudManage.get_clouds">[docs]</a>    <span class="k">def</span> <span class="nf">get_clouds</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">username</span><span class="p">,</span> <span class="n">admin</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">getone</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">cloudname</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<div class="viewcode-block" id="CloudManage.get_clouds"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.shell.html#cloudmesh.shell.cm_cloud.CloudManage.get_clouds">[docs]</a>    <span class="k">def</span> <span class="nf">get_clouds</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">username</span><span class="p">,</span> <span class="n">admin</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">getone</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">cloudname</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        retreive cloud information from db_clouds.</span>
 <span class="sd">        TODO: duplicates functionality from Mongobase class and cm_mongo</span>
@@ -792,7 +792,7 @@
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">mongo</span><span class="o">.</span><span class="n">db_clouds</span><span class="o">.</span><span class="n">find</span><span class="p">({</span><span class="s">&#39;cm_kind&#39;</span><span class="p">:</span> <span class="s">&#39;cloud&#39;</span><span class="p">,</span>
                                               <span class="s">&#39;cm_user_id&#39;</span><span class="p">:</span> <span class="n">username</span><span class="p">})</span>
 </div>
-<div class="viewcode-block" id="CloudManage.get_selected_cloud"><a class="viewcode-back" href="../../../modules/cloudmesh.shell.html#cloudmesh.shell.cm_cloud.CloudManage.get_selected_cloud">[docs]</a>    <span class="k">def</span> <span class="nf">get_selected_cloud</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">username</span><span class="p">):</span>
+<div class="viewcode-block" id="CloudManage.get_selected_cloud"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.shell.html#cloudmesh.shell.cm_cloud.CloudManage.get_selected_cloud">[docs]</a>    <span class="k">def</span> <span class="nf">get_selected_cloud</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">username</span><span class="p">):</span>
         <span class="c"># DEBUG</span>
 
         <span class="sd">&quot;&quot;&quot;</span>
@@ -833,7 +833,7 @@
 
         <span class="k">return</span> <span class="n">cloud</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s">&quot;ascii&quot;</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="CloudManage.update_selected_cloud"><a class="viewcode-back" href="../../../modules/cloudmesh.shell.html#cloudmesh.shell.cm_cloud.CloudManage.update_selected_cloud">[docs]</a>    <span class="k">def</span> <span class="nf">update_selected_cloud</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">username</span><span class="p">,</span> <span class="n">cloudname</span><span class="p">):</span>
+<div class="viewcode-block" id="CloudManage.update_selected_cloud"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.shell.html#cloudmesh.shell.cm_cloud.CloudManage.update_selected_cloud">[docs]</a>    <span class="k">def</span> <span class="nf">update_selected_cloud</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">username</span><span class="p">,</span> <span class="n">cloudname</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        set user selected cloud, which is current worked on cloud in the shell</span>
 <span class="sd">        </span>
@@ -846,7 +846,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">mongo</span><span class="o">.</span><span class="n">db_user</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s">&#39;cm_user_id&#39;</span><span class="p">:</span> <span class="n">username</span><span class="p">},</span>
                                   <span class="p">{</span><span class="s">&#39;$set&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s">&#39;selected_cloud&#39;</span><span class="p">:</span> <span class="n">cloudname</span><span class="p">}})</span>
 </div>
-<div class="viewcode-block" id="CloudManage.get_default_cloud"><a class="viewcode-back" href="../../../modules/cloudmesh.shell.html#cloudmesh.shell.cm_cloud.CloudManage.get_default_cloud">[docs]</a>    <span class="k">def</span> <span class="nf">get_default_cloud</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">username</span><span class="p">):</span>
+<div class="viewcode-block" id="CloudManage.get_default_cloud"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.shell.html#cloudmesh.shell.cm_cloud.CloudManage.get_default_cloud">[docs]</a>    <span class="k">def</span> <span class="nf">get_default_cloud</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">username</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        get the default cloud, return None if not set</span>
 <span class="sd">        </span>
@@ -863,7 +863,7 @@
             <span class="n">cloud</span> <span class="o">=</span> <span class="bp">None</span>
         <span class="k">return</span> <span class="n">cloud</span>
 </div>
-<div class="viewcode-block" id="CloudManage.update_default_cloud"><a class="viewcode-back" href="../../../modules/cloudmesh.shell.html#cloudmesh.shell.cm_cloud.CloudManage.update_default_cloud">[docs]</a>    <span class="k">def</span> <span class="nf">update_default_cloud</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">username</span><span class="p">,</span> <span class="n">cloudname</span><span class="p">):</span>
+<div class="viewcode-block" id="CloudManage.update_default_cloud"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.shell.html#cloudmesh.shell.cm_cloud.CloudManage.update_default_cloud">[docs]</a>    <span class="k">def</span> <span class="nf">update_default_cloud</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">username</span><span class="p">,</span> <span class="n">cloudname</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        set default cloud</span>
 <span class="sd">        </span>
@@ -876,7 +876,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">mongo</span><span class="o">.</span><span class="n">db_defaults</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s">&#39;cm_user_id&#39;</span><span class="p">:</span> <span class="n">username</span><span class="p">},</span>
                                       <span class="p">{</span><span class="s">&#39;$set&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s">&#39;cloud&#39;</span><span class="p">:</span> <span class="n">cloudname</span><span class="p">}})</span>
 </div>
-<div class="viewcode-block" id="CloudManage.get_default_cloud_for_nova"><a class="viewcode-back" href="../../../modules/cloudmesh.shell.html#cloudmesh.shell.cm_cloud.CloudManage.get_default_cloud_for_nova">[docs]</a>    <span class="k">def</span> <span class="nf">get_default_cloud_for_nova</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">username</span><span class="p">):</span>
+<div class="viewcode-block" id="CloudManage.get_default_cloud_for_nova"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.shell.html#cloudmesh.shell.cm_cloud.CloudManage.get_default_cloud_for_nova">[docs]</a>    <span class="k">def</span> <span class="nf">get_default_cloud_for_nova</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">username</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        Gets the default cloud for nova command, return None if not set.</span>
 
@@ -896,7 +896,7 @@
             <span class="n">cloud</span> <span class="o">=</span> <span class="bp">None</span>
         <span class="k">return</span> <span class="n">cloud</span>
 </div>
-<div class="viewcode-block" id="CloudManage.update_default_cloud_for_nova"><a class="viewcode-back" href="../../../modules/cloudmesh.shell.html#cloudmesh.shell.cm_cloud.CloudManage.update_default_cloud_for_nova">[docs]</a>    <span class="k">def</span> <span class="nf">update_default_cloud_for_nova</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">username</span><span class="p">,</span> <span class="n">cloudname</span><span class="p">):</span>
+<div class="viewcode-block" id="CloudManage.update_default_cloud_for_nova"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.shell.html#cloudmesh.shell.cm_cloud.CloudManage.update_default_cloud_for_nova">[docs]</a>    <span class="k">def</span> <span class="nf">update_default_cloud_for_nova</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">username</span><span class="p">,</span> <span class="n">cloudname</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        Sets default cloud for nova command.</span>
 
@@ -913,7 +913,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">mongo</span><span class="o">.</span><span class="n">db_defaults</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s">&#39;cm_user_id&#39;</span><span class="p">:</span> <span class="n">username</span><span class="p">},</span>
                                       <span class="p">{</span><span class="s">&#39;$set&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s">&#39;nova-cloud&#39;</span><span class="p">:</span> <span class="n">cloudname</span><span class="p">}})</span>
 </div>
-<div class="viewcode-block" id="CloudManage.update_cloud_name"><a class="viewcode-back" href="../../../modules/cloudmesh.shell.html#cloudmesh.shell.cm_cloud.CloudManage.update_cloud_name">[docs]</a>    <span class="k">def</span> <span class="nf">update_cloud_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">username</span><span class="p">,</span> <span class="n">cloudname</span><span class="p">,</span> <span class="n">newname</span><span class="p">):</span>
+<div class="viewcode-block" id="CloudManage.update_cloud_name"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.shell.html#cloudmesh.shell.cm_cloud.CloudManage.update_cloud_name">[docs]</a>    <span class="k">def</span> <span class="nf">update_cloud_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">username</span><span class="p">,</span> <span class="n">cloudname</span><span class="p">,</span> <span class="n">newname</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        update the name of a cloud in db, this will update the cloud name in</span>
 <span class="sd">        other places if it is used</span>
@@ -945,7 +945,7 @@
         <span class="k">except</span><span class="p">:</span>
             <span class="k">pass</span>
 </div>
-<div class="viewcode-block" id="CloudManage.activate_cloud"><a class="viewcode-back" href="../../../modules/cloudmesh.shell.html#cloudmesh.shell.cm_cloud.CloudManage.activate_cloud">[docs]</a>    <span class="k">def</span> <span class="nf">activate_cloud</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">username</span><span class="p">,</span> <span class="n">cloudname</span><span class="p">):</span>
+<div class="viewcode-block" id="CloudManage.activate_cloud"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.shell.html#cloudmesh.shell.cm_cloud.CloudManage.activate_cloud">[docs]</a>    <span class="k">def</span> <span class="nf">activate_cloud</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">username</span><span class="p">,</span> <span class="n">cloudname</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        activate a cloud, this function just try to modify the registered_clouds</span>
 <span class="sd">        and the activeclouds lists in db_defaults</span>
@@ -983,7 +983,7 @@
                 <span class="p">{</span><span class="s">&#39;cm_user_id&#39;</span><span class="p">:</span> <span class="n">username</span><span class="p">},</span> <span class="n">defaults</span><span class="p">,</span> <span class="n">upsert</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
             <span class="k">return</span> <span class="mi">1</span>
 </div>
-<div class="viewcode-block" id="CloudManage.deactivate_cloud"><a class="viewcode-back" href="../../../modules/cloudmesh.shell.html#cloudmesh.shell.cm_cloud.CloudManage.deactivate_cloud">[docs]</a>    <span class="k">def</span> <span class="nf">deactivate_cloud</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">username</span><span class="p">,</span> <span class="n">cloudname</span><span class="p">):</span>
+<div class="viewcode-block" id="CloudManage.deactivate_cloud"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.shell.html#cloudmesh.shell.cm_cloud.CloudManage.deactivate_cloud">[docs]</a>    <span class="k">def</span> <span class="nf">deactivate_cloud</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">username</span><span class="p">,</span> <span class="n">cloudname</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        deactivate a cloud</span>
 <span class="sd">        what the function does: delete the cloud name from activecloud in </span>
@@ -1004,7 +1004,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">mongo</span><span class="o">.</span><span class="n">db_defaults</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
             <span class="p">{</span><span class="s">&#39;cm_user_id&#39;</span><span class="p">:</span> <span class="n">username</span><span class="p">},</span> <span class="n">defaults</span><span class="p">,</span> <span class="n">upsert</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="CloudManage.remove_cloud"><a class="viewcode-back" href="../../../modules/cloudmesh.shell.html#cloudmesh.shell.cm_cloud.CloudManage.remove_cloud">[docs]</a>    <span class="k">def</span> <span class="nf">remove_cloud</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">username</span><span class="p">,</span> <span class="n">cloudname</span><span class="p">):</span>
+<div class="viewcode-block" id="CloudManage.remove_cloud"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.shell.html#cloudmesh.shell.cm_cloud.CloudManage.remove_cloud">[docs]</a>    <span class="k">def</span> <span class="nf">remove_cloud</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">username</span><span class="p">,</span> <span class="n">cloudname</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        remove a cloud from db</span>
 <span class="sd">        if the cloud is the selected_cloud, the selected_cloud value will be</span>
@@ -1032,7 +1032,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">mongo</span><span class="o">.</span><span class="n">db_user</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
                 <span class="p">{</span><span class="s">&#39;cm_user_id&#39;</span><span class="p">:</span> <span class="n">username</span><span class="p">},</span> <span class="p">{</span><span class="s">&#39;$unset&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s">&#39;selected_cloud&#39;</span><span class="p">:</span> <span class="s">&#39;&#39;</span><span class="p">}})</span>
 </div>
-<div class="viewcode-block" id="CloudManage.get_cloud_defaultinfo"><a class="viewcode-back" href="../../../modules/cloudmesh.shell.html#cloudmesh.shell.cm_cloud.CloudManage.get_cloud_defaultinfo">[docs]</a>    <span class="k">def</span> <span class="nf">get_cloud_defaultinfo</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">username</span><span class="p">,</span> <span class="n">cloudname</span><span class="p">):</span>
+<div class="viewcode-block" id="CloudManage.get_cloud_defaultinfo"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.shell.html#cloudmesh.shell.cm_cloud.CloudManage.get_cloud_defaultinfo">[docs]</a>    <span class="k">def</span> <span class="nf">get_cloud_defaultinfo</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">username</span><span class="p">,</span> <span class="n">cloudname</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        return names of default flavor and image of a cloud, none if not exits</span>
 <span class="sd">        </span>
@@ -1072,7 +1072,7 @@
 
         <span class="k">return</span> <span class="n">res</span>
 </div>
-<div class="viewcode-block" id="CloudManage.get_default_flavor_id"><a class="viewcode-back" href="../../../modules/cloudmesh.shell.html#cloudmesh.shell.cm_cloud.CloudManage.get_default_flavor_id">[docs]</a>    <span class="k">def</span> <span class="nf">get_default_flavor_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">username</span><span class="p">,</span> <span class="n">cloudname</span><span class="p">):</span>
+<div class="viewcode-block" id="CloudManage.get_default_flavor_id"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.shell.html#cloudmesh.shell.cm_cloud.CloudManage.get_default_flavor_id">[docs]</a>    <span class="k">def</span> <span class="nf">get_default_flavor_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">username</span><span class="p">,</span> <span class="n">cloudname</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        return the id of the dafault flavor of a cloud</span>
 <span class="sd">        </span>
@@ -1092,7 +1092,7 @@
             <span class="k">pass</span>
         <span class="k">return</span> <span class="n">flavor_id</span>
 </div>
-<div class="viewcode-block" id="CloudManage.update_default_flavor_id"><a class="viewcode-back" href="../../../modules/cloudmesh.shell.html#cloudmesh.shell.cm_cloud.CloudManage.update_default_flavor_id">[docs]</a>    <span class="k">def</span> <span class="nf">update_default_flavor_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">username</span><span class="p">,</span> <span class="n">cloudname</span><span class="p">,</span> <span class="nb">id</span><span class="p">):</span>
+<div class="viewcode-block" id="CloudManage.update_default_flavor_id"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.shell.html#cloudmesh.shell.cm_cloud.CloudManage.update_default_flavor_id">[docs]</a>    <span class="k">def</span> <span class="nf">update_default_flavor_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">username</span><span class="p">,</span> <span class="n">cloudname</span><span class="p">,</span> <span class="nb">id</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        update the id of default flavor of a cloud</span>
 <span class="sd">        </span>
@@ -1115,7 +1115,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">mongo</span><span class="o">.</span><span class="n">db_defaults</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s">&#39;cm_user_id&#39;</span><span class="p">:</span> <span class="n">username</span><span class="p">},</span>
                                       <span class="p">{</span><span class="s">&#39;$set&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s">&#39;flavors&#39;</span><span class="p">:</span> <span class="n">flavors</span><span class="p">}})</span>
 </div>
-<div class="viewcode-block" id="CloudManage.get_flavors"><a class="viewcode-back" href="../../../modules/cloudmesh.shell.html#cloudmesh.shell.cm_cloud.CloudManage.get_flavors">[docs]</a>    <span class="k">def</span> <span class="nf">get_flavors</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">getall</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">cloudname</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">getone</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<div class="viewcode-block" id="CloudManage.get_flavors"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.shell.html#cloudmesh.shell.cm_cloud.CloudManage.get_flavors">[docs]</a>    <span class="k">def</span> <span class="nf">get_flavors</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">getall</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">cloudname</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">getone</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        retrieve flavors information from db_clouds</span>
 <span class="sd">        </span>
@@ -1143,7 +1143,7 @@
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">mongo</span><span class="o">.</span><span class="n">db_clouds</span><span class="o">.</span><span class="n">find</span><span class="p">({</span><span class="s">&#39;cm_kind&#39;</span><span class="p">:</span> <span class="s">&#39;flavors&#39;</span><span class="p">,</span>
                                               <span class="s">&#39;cm_cloud&#39;</span><span class="p">:</span> <span class="n">cloudname</span><span class="p">})</span>
 </div>
-<div class="viewcode-block" id="CloudManage.get_default_image_id"><a class="viewcode-back" href="../../../modules/cloudmesh.shell.html#cloudmesh.shell.cm_cloud.CloudManage.get_default_image_id">[docs]</a>    <span class="k">def</span> <span class="nf">get_default_image_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">username</span><span class="p">,</span> <span class="n">cloudname</span><span class="p">):</span>
+<div class="viewcode-block" id="CloudManage.get_default_image_id"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.shell.html#cloudmesh.shell.cm_cloud.CloudManage.get_default_image_id">[docs]</a>    <span class="k">def</span> <span class="nf">get_default_image_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">username</span><span class="p">,</span> <span class="n">cloudname</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        return the id of the dafault image of a cloud</span>
 <span class="sd">        </span>
@@ -1163,7 +1163,7 @@
             <span class="k">pass</span>
         <span class="k">return</span> <span class="n">image_id</span>
 </div>
-<div class="viewcode-block" id="CloudManage.update_default_image_id"><a class="viewcode-back" href="../../../modules/cloudmesh.shell.html#cloudmesh.shell.cm_cloud.CloudManage.update_default_image_id">[docs]</a>    <span class="k">def</span> <span class="nf">update_default_image_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">username</span><span class="p">,</span> <span class="n">cloudname</span><span class="p">,</span> <span class="nb">id</span><span class="p">):</span>
+<div class="viewcode-block" id="CloudManage.update_default_image_id"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.shell.html#cloudmesh.shell.cm_cloud.CloudManage.update_default_image_id">[docs]</a>    <span class="k">def</span> <span class="nf">update_default_image_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">username</span><span class="p">,</span> <span class="n">cloudname</span><span class="p">,</span> <span class="nb">id</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        update the id of default image of a cloud</span>
 <span class="sd">        </span>
@@ -1185,7 +1185,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">mongo</span><span class="o">.</span><span class="n">db_defaults</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s">&#39;cm_user_id&#39;</span><span class="p">:</span> <span class="n">username</span><span class="p">},</span>
                                       <span class="p">{</span><span class="s">&#39;$set&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s">&#39;images&#39;</span><span class="p">:</span> <span class="n">images</span><span class="p">}})</span>
 </div>
-<div class="viewcode-block" id="CloudManage.get_images"><a class="viewcode-back" href="../../../modules/cloudmesh.shell.html#cloudmesh.shell.cm_cloud.CloudManage.get_images">[docs]</a>    <span class="k">def</span> <span class="nf">get_images</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">getall</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">cloudname</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">getone</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<div class="viewcode-block" id="CloudManage.get_images"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.shell.html#cloudmesh.shell.cm_cloud.CloudManage.get_images">[docs]</a>    <span class="k">def</span> <span class="nf">get_images</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">getall</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">cloudname</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">getone</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        retrieve image information from db_clouds</span>
 <span class="sd">        </span>
@@ -1216,7 +1216,7 @@
     <span class="c"># ------------------------------------------------------------------------</span>
     <span class="c"># supporting functions for shell</span>
     <span class="c"># ------------------------------------------------------------------------</span></div>
-<div class="viewcode-block" id="CloudManage.print_cloud_flavors"><a class="viewcode-back" href="../../../modules/cloudmesh.shell.html#cloudmesh.shell.cm_cloud.CloudManage.print_cloud_flavors">[docs]</a>    <span class="k">def</span> <span class="nf">print_cloud_flavors</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">username</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">cloudname</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">itemkeys</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+<div class="viewcode-block" id="CloudManage.print_cloud_flavors"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.shell.html#cloudmesh.shell.cm_cloud.CloudManage.print_cloud_flavors">[docs]</a>    <span class="k">def</span> <span class="nf">print_cloud_flavors</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">username</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">cloudname</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">itemkeys</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
                             <span class="n">refresh</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">print_format</span><span class="o">=</span><span class="s">&quot;table&quot;</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        prints flavors of a cloud in shell</span>
@@ -1315,7 +1315,7 @@
         <span class="k">if</span> <span class="n">output</span><span class="p">:</span>
             <span class="k">return</span> <span class="p">[</span><span class="n">flavor_names</span><span class="p">,</span> <span class="n">flavor_ids</span><span class="p">]</span>
 </div>
-<div class="viewcode-block" id="CloudManage.print_cloud_images"><a class="viewcode-back" href="../../../modules/cloudmesh.shell.html#cloudmesh.shell.cm_cloud.CloudManage.print_cloud_images">[docs]</a>    <span class="k">def</span> <span class="nf">print_cloud_images</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">username</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">cloudname</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">itemkeys</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+<div class="viewcode-block" id="CloudManage.print_cloud_images"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.shell.html#cloudmesh.shell.cm_cloud.CloudManage.print_cloud_images">[docs]</a>    <span class="k">def</span> <span class="nf">print_cloud_images</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">username</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">cloudname</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">itemkeys</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
                            <span class="n">refresh</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">print_format</span><span class="o">=</span><span class="s">&quot;table&quot;</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        refer to print_cloud_flavors</span>
@@ -1385,7 +1385,7 @@
         <span class="k">if</span> <span class="n">output</span><span class="p">:</span>
             <span class="k">return</span> <span class="p">[</span><span class="n">image_names</span><span class="p">,</span> <span class="n">image_ids</span><span class="p">]</span>
 </div>
-<div class="viewcode-block" id="CloudManage.print_cloud_servers"><a class="viewcode-back" href="../../../modules/cloudmesh.shell.html#cloudmesh.shell.cm_cloud.CloudManage.print_cloud_servers">[docs]</a>    <span class="k">def</span> <span class="nf">print_cloud_servers</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+<div class="viewcode-block" id="CloudManage.print_cloud_servers"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.shell.html#cloudmesh.shell.cm_cloud.CloudManage.print_cloud_servers">[docs]</a>    <span class="k">def</span> <span class="nf">print_cloud_servers</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                             <span class="n">username</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
                             <span class="n">cloudname</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
                             <span class="n">itemkeys</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
@@ -1552,7 +1552,7 @@
             <span class="c"># ------------------------------------------------------------------------</span>
 
 </div></div>
-<div class="viewcode-block" id="CloudCommand"><a class="viewcode-back" href="../../../modules/cloudmesh.shell.html#cloudmesh.shell.cm_cloud.CloudCommand">[docs]</a><span class="k">class</span> <span class="nc">CloudCommand</span><span class="p">(</span><span class="n">CloudManage</span><span class="p">):</span>
+<div class="viewcode-block" id="CloudCommand"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.shell.html#cloudmesh.shell.cm_cloud.CloudCommand">[docs]</a><span class="k">class</span> <span class="nc">CloudCommand</span><span class="p">(</span><span class="n">CloudManage</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    a class of functions serve shell command &quot;cloud&quot;</span>
 <span class="sd">    &#39;&#39;&#39;</span>
@@ -2144,7 +2144,7 @@
             <span class="k">return</span>
 
     <span class="c"># --------------------------------------------------------------------------</span>
-<div class="viewcode-block" id="CloudCommand.get_working_cloud_name"><a class="viewcode-back" href="../../../modules/cloudmesh.shell.html#cloudmesh.shell.cm_cloud.CloudCommand.get_working_cloud_name">[docs]</a>    <span class="k">def</span> <span class="nf">get_working_cloud_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="CloudCommand.get_working_cloud_name"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.shell.html#cloudmesh.shell.cm_cloud.CloudCommand.get_working_cloud_name">[docs]</a>    <span class="k">def</span> <span class="nf">get_working_cloud_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        get the name of a cloud to work on, if CLOUD not given, will pick the</span>
 <span class="sd">        selected cloud</span>
@@ -2158,7 +2158,7 @@
             <span class="k">return</span> <span class="bp">False</span>
         <span class="k">return</span> <span class="n">name</span>
 </div>
-<div class="viewcode-block" id="CloudCommand.execute"><a class="viewcode-back" href="../../../modules/cloudmesh.shell.html#cloudmesh.shell.cm_cloud.CloudCommand.execute">[docs]</a>    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="CloudCommand.execute"><a class="viewcode-back" href="../../../api/cloudmesh/cloudmesh.shell.html#cloudmesh.shell.cm_cloud.CloudCommand.execute">[docs]</a>    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="c"># print self.arguments ###########</span>
         <span class="k">if</span> <span class="s">&#39;list&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">arguments</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">arguments</span><span class="p">[</span><span class="s">&#39;list&#39;</span><span class="p">]:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_cloud_list</span><span class="p">()</span>
