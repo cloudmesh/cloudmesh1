@@ -4,14 +4,6 @@ cloudmesh_common package
 Submodules
 ----------
 
-cloudmesh_common.logger module
-------------------------------
-
-.. automodule:: cloudmesh_common.logger
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
 cloudmesh_common.tables module
 ------------------------------
 

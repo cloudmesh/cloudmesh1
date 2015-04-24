@@ -61,6 +61,14 @@ cloudmesh.inventory module
     :undoc-members:
     :show-inheritance:
 
+cloudmesh.version module
+------------------------
+
+.. automodule:: cloudmesh.version
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 
 Module contents
 ---------------

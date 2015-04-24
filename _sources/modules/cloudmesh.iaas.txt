@@ -34,46 +34,6 @@ cloudmesh.iaas.Ec2SecurityGroup module
     :undoc-members:
     :show-inheritance:
 
-cloudmesh.iaas.cm_cloud module
-------------------------------
-
-.. automodule:: cloudmesh.iaas.cm_cloud
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-cloudmesh.iaas.cm_flavor module
--------------------------------
-
-.. automodule:: cloudmesh.iaas.cm_flavor
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-cloudmesh.iaas.cm_image module
-------------------------------
-
-.. automodule:: cloudmesh.iaas.cm_image
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-cloudmesh.iaas.cm_security_group module
----------------------------------------
-
-.. automodule:: cloudmesh.iaas.cm_security_group
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-cloudmesh.iaas.cm_vm module
----------------------------
-
-.. automodule:: cloudmesh.iaas.cm_vm
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
 
 Module contents
 ---------------

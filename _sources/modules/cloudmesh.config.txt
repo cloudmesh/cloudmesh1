@@ -4,14 +4,6 @@ cloudmesh.config package
 Submodules
 ----------
 
-cloudmesh.config.ConfigDict module
-----------------------------------
-
-.. automodule:: cloudmesh.config.ConfigDict
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
 cloudmesh.config.YAML module
 ----------------------------
 

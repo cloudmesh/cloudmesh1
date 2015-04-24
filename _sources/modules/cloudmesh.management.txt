@@ -20,6 +20,14 @@ cloudmesh.management.cm_account module
     :undoc-members:
     :show-inheritance:
 
+cloudmesh.management.cm_account_admin module
+--------------------------------------------
+
+.. automodule:: cloudmesh.management.cm_account_admin
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 cloudmesh.management.comittee module
 ------------------------------------
 
@@ -32,6 +40,14 @@ cloudmesh.management.generate module
 ------------------------------------
 
 .. automodule:: cloudmesh.management.generate
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+cloudmesh.management.generate_classes module
+--------------------------------------------
+
+.. automodule:: cloudmesh.management.generate_classes
     :members:
     :undoc-members:
     :show-inheritance:

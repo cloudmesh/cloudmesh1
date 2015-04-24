@@ -212,6 +212,14 @@ cloudmesh_cmd3.plugins.cm_shell_security_group module
     :undoc-members:
     :show-inheritance:
 
+cloudmesh_cmd3.plugins.cm_shell_ssh module
+------------------------------------------
+
+.. automodule:: cloudmesh_cmd3.plugins.cm_shell_ssh
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 cloudmesh_cmd3.plugins.cm_shell_stack module
 --------------------------------------------
 

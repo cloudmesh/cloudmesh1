@@ -12,6 +12,14 @@ cloudmesh_admin.admin module
     :undoc-members:
     :show-inheritance:
 
+cloudmesh_admin.server_admin module
+-----------------------------------
+
+.. automodule:: cloudmesh_admin.server_admin
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 
 Module contents
 ---------------

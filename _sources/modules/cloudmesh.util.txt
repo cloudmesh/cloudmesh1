@@ -76,14 +76,6 @@ cloudmesh.util.ping module
     :undoc-members:
     :show-inheritance:
 
-cloudmesh.util.shellutil module
--------------------------------
-
-.. automodule:: cloudmesh.util.shellutil
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
 cloudmesh.util.ssh module
 -------------------------
 
