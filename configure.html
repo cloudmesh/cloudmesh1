@@ -1,0 +1,1770 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>2. Configuration with Yaml Files &mdash; my Cloudmesh Core documentation</title>
+    
+    <link rel="stylesheet" href="_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/bootstrap-3.2.0/css/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="_static/bootstrap-3.2.0/css/bootstrap-theme.min.css" type="text/css" />
+    <link rel="stylesheet" href="_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="_static/my-styles.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     'Core',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="_static/bootstrap-3.2.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="_static/bootstrap-sphinx.js"></script>
+    <link rel="author" title="About these documents" href="about.html" />
+    <link rel="top" title="my Cloudmesh Core documentation" href="index.html" />
+    <link rel="next" title="3. Documentation" href="doc.html" />
+    <link rel="prev" title="1.3. Celery Setup" href="celery.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+  </head>
+  <body role="document">
+
+   
+
+      
+   
+
+
+  <div id="navbar" class="navbar navbar-inverse navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="index.html"><img src="_static/fg-logo-white-24x36.png">
+          Cloudmesh</a>
+        <span class="navbar-text navbar-version pull-left"><b>Core</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="about.html">1. Overview</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="about.html#system-monitoring-and-operations">1.1. System Monitoring and Operations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="about.html#user-and-project-services">1.2. User and Project Services</a></li>
+<li class="toctree-l3"><a class="reference internal" href="about.html#accounting-and-app-store">1.3. Accounting and App Store</a></li>
+<li class="toctree-l3"><a class="reference internal" href="about.html#networking">1.4. Networking</a></li>
+<li class="toctree-l3"><a class="reference internal" href="about.html#monitoring">1.5. Monitoring</a></li>
+<li class="toctree-l3"><a class="reference internal" href="about.html#role-and-use-of-standards-and-open-source-software">1.6. Role and Use of Standards and Open Source Software</a></li>
+<li class="toctree-l3"><a class="reference internal" href="about.html#features">1.7. Features</a></li>
+<li class="toctree-l3"><a class="reference internal" href="about.html#bugs">1.8. Bugs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="about.html#project-contributors">1.9. Project Contributors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="about.html#history">1.10. History</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="about.html#cloudmesh-0-1">1.10.1. Cloudmesh 0.1</a></li>
+<li class="toctree-l4"><a class="reference internal" href="about.html#cloudmesh-0-2">1.10.2. Cloudmesh 0.2</a></li>
+<li class="toctree-l4"><a class="reference internal" href="about.html#cloudmesh-0-3">1.10.3. Cloudmesh 0.3</a></li>
+<li class="toctree-l4"><a class="reference internal" href="about.html#cloudmesh-0-4">1.10.4. Cloudmesh 0.4</a></li>
+<li class="toctree-l4"><a class="reference internal" href="about.html#cloudmesh-0-5-0-7">1.10.5. Cloudmesh 0.5 - 0.7</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="rain.html">2. Rain</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hpc.html">3. HPC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cloud.html">4. IaaS</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="cloud.html#interfaces">4.1. Interfaces</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cloud.html#integration-of-external-clouds">4.2. Integration of External Clouds</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cloud.html#open-source">4.3. Open Source</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="contact.html">5. Contact</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="contact.html#contributors">5.1. Contributors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="contact.html#alumni">5.2. Alumni</a></li>
+<li class="toctree-l3"><a class="reference internal" href="contact.html#blog">5.3. Blog</a></li>
+<li class="toctree-l3"><a class="reference internal" href="contact.html#repository">5.4. Repository</a></li>
+<li class="toctree-l3"><a class="reference internal" href="contact.html#support">5.5. Support</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="news.html">6. News</a></li>
+<li class="toctree-l2"><a class="reference internal" href="screenshots.html">7. Screenshots</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="screenshots.html#cloud-management">7.1. Cloud Management</a></li>
+<li class="toctree-l3"><a class="reference internal" href="screenshots.html#provisioning-raining-not-yet-released">7.2. Provisioning/Raining (Not yet released)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="screenshots.html#batch-queues">7.3. Batch Queues</a></li>
+<li class="toctree-l3"><a class="reference internal" href="screenshots.html#status">7.4. Status</a></li>
+<li class="toctree-l3"><a class="reference internal" href="screenshots.html#inventory">7.5. Inventory</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="bib.html">8. References</a></li>
+<li class="toctree-l2"><a class="reference internal" href="faq.html">9. FAQ</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="faq.html#are-there-any-screenshots">9.1. Are there any screenshots?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="faq.html#setup-register-cloud-in-the-cloudmesh-futuregrid-org-service">9.2. Setup - Register cloud in the cloudmesh.futuregrid.org service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="faq.html#setup-local-deploy">9.3. Setup - Local deploy</a></li>
+<li class="toctree-l3"><a class="reference internal" href="faq.html#general-questions">9.4. General Questions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="faq.html#development-questions">9.5. Development Questions</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">1. Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="developer.html">1.1. Prepare the Environment</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="developer.html#github">1.1.1. Github</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="developer.html#github-ssh-keys">1.1.1.1. Github ssh keys</a></li>
+<li class="toctree-l4"><a class="reference internal" href="developer.html#git-username-and-e-mail">1.1.1.2. Git username and e-mail</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="developer.html#getting-the-cloudmesh-source-code">1.1.2. Getting the Cloudmesh Source Code</a></li>
+<li class="toctree-l3"><a class="reference internal" href="developer.html#preparing-the-system">1.1.3. Preparing the system</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="developer.html#modify-your-rc-file">1.1.3.1. Modify your rc file:</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="developer.html#install-the-requirements">1.1.4. Install the Requirements</a></li>
+<li class="toctree-l3"><a class="reference internal" href="developer.html#creating-an-initial-user">1.1.5. Creating an initial user</a></li>
+<li class="toctree-l3"><a class="reference internal" href="developer.html#initial-documentation">1.1.6. Initial Documentation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="developer.html#quickinstall-the-environment">1.1.7. Quickinstall the Environment</a></li>
+<li class="toctree-l3"><a class="reference internal" href="developer.html#initial-yaml-files">1.1.8. Initial YAML files</a></li>
+<li class="toctree-l3"><a class="reference internal" href="developer.html#install-cloudmesh-code">1.1.9. Install cloudmesh code</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="developer.html#the-cloudmesh-yaml-file">1.1.9.1. The cloudmesh.yaml file</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="developer.html#mongo-db">1.1.10. Mongo-Db</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="developer.html#list-of-commands-optional">1.1.10.1. List of Commands(Optional)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="developer.html#mongo-commands-that-need-to-be-issued-important">1.1.10.2. Mongo commands that need to be issued (Important)</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="developer.html#starting-the-web-service">1.1.11. Starting the Web Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="developer.html#starting-and-testing-the-queue-service">1.1.12. Starting and testing the Queue Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="developer.html#blockdiag-family">1.1.13. Blockdiag family</a></li>
+<li class="toctree-l3"><a class="reference internal" href="developer.html#developer-tests">1.1.14. Developer Tests</a></li>
+<li class="toctree-l3"><a class="reference internal" href="developer.html#install-python">1.1.15. Install Python</a></li>
+<li class="toctree-l3"><a class="reference internal" href="developer.html#starting-the-rabbitmq-service">1.1.16. Starting the  RabbitMQ service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="developer.html#example-start-the-gui-for-development">1.1.17. Example: Start the GUI for development</a></li>
+<li class="toctree-l3"><a class="reference internal" href="developer.html#with-access-to-ldap">1.1.18. With access to LDAP</a></li>
+<li class="toctree-l3"><a class="reference internal" href="developer.html#without-access-to-ldap">1.1.19. Without access to LDAP</a></li>
+<li class="toctree-l3"><a class="reference internal" href="developer.html#cloudmesh-deployment">1.1.20. Cloudmesh deployment</a></li>
+<li class="toctree-l3"><a class="reference internal" href="developer.html#imports-in-cloudmesh-common">1.1.21. Imports in cloudmesh_common</a></li>
+<li class="toctree-l3"><a class="reference internal" href="developer.html#osx-system-preparation-tips">1.1.22. OSX System preparation Tips</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="cobbler.html">1.2. Cloudmesh Installation wit Cobbler Integration</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="cobbler.html#install-ubuntu-14-04">1.2.1. Install Ubuntu 14.04</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cobbler.html#prepare-the-system">1.2.2. Prepare the system</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cobbler.html#install-cloudmesh">1.2.3. Install Cloudmesh</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cobbler.html#cobbler">1.2.4. Cobbler</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="celery.html">1.3. Celery Setup</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="celery.html#starting-and-stopping-celery">1.3.1. Starting and Stopping Celery</a></li>
+<li class="toctree-l3"><a class="reference internal" href="celery.html#log-and-pid-files">1.3.2. Log and Pid Files</a></li>
+<li class="toctree-l3"><a class="reference internal" href="celery.html#current-celery-based-tasks-under-development">1.3.3. Current Celery Based Tasks (Under Development)</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="celery.html#launcher-simulation">1.3.3.1. Launcher (Simulation)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="celery.html#provisioner">1.3.3.2. Provisioner</a></li>
+<li class="toctree-l4"><a class="reference internal" href="celery.html#pbs-qstat">1.3.3.3. pbs (qstat)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="celery.html#rain-bare-metal-provisioning-with-cobbler-and-rain">1.3.3.4. rain (bare-metal provisioning with cobbler and rain)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="celery.html#rack-system-temperatures">1.3.3.5. rack (system temperatures)</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">2. Configuration with Yaml Files</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#initialization">2.1. Initialization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#cloud-activation-india-openstack">2.2. Cloud Activation - India Openstack</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#format-of-the-cloudmesh-yaml-file">2.3. Format of the cloudmesh.yaml file</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#configuration-file-rc-file">2.4. Configuration file (rc file)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#adding-devstack-to-cloudmesh-yaml-tbd">2.5. Adding devstack to <code class="docutils literal"><span class="pre">cloudmesh.yaml</span></code> (TBD)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#adding-dreamhost-to-cloudmesh-yaml">2.6. Adding dreamhost to <code class="docutils literal"><span class="pre">cloudmesh.yaml</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#hp-cloud">2.6.1. HP Cloud</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#azure">2.6.2. Azure</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#azure-quickstart">2.6.2.1. Azure Quickstart</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#azure-account">2.6.2.1.1. Azure account</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#download-credentials">2.6.2.1.2. Download credentials</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#install-azure-cli">2.6.2.1.3. Install Azure CLI</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#import-credentials-via-azure-cli">2.6.2.1.4. Import Credentials via Azure CLI</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#download-subscription-file-publishsettings">2.6.2.1.5. Download Subscription File (.publishsettings)</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#place-x-509-certificate-on-cloudmesh">2.6.2.1.6. Place X.509 certificate on Cloudmesh</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#replace-subscription-id">2.6.2.1.7. Replace Subscription ID</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#test-azure-virtual-machine">2.6.2.1.8. Test Azure Virtual Machine</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#example-azure-cloudmesh-configuration">2.6.2.1.9. Example Azure cloudmesh configuration</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#amazon-web-services">2.7. Amazon Web Services</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#india">2.7.1. India</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#alamo">2.7.2. Alamo</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#a-complete-example">2.7.3. A complete example</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#cloudmesh-server-yaml">2.8. cloudmesh-server.yaml</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#debugging">2.8.1. Debugging</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#web-ui">2.8.2. Web UI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ldap-integration">2.8.3. LDAP Integration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#clusters">2.8.4. Clusters</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#roles">2.8.5. Roles</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#keystone-server">2.8.6. Keystone server</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mongo">2.8.7. Mongo</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#complete-example">2.8.8. Complete Example</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#cloudmesh-cluster-yaml">2.9. cloudmesh_cluster.yaml</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#metadata">2.9.1. Metadata</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id1">2.9.2. Clusters</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#a-cluster">2.9.3. A Cluster</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#network">2.9.4. Network:</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#other-yaml-files">2.10. Other Yaml files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#me-sample">2.11. Me Sample</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ec2-credentials-this-secition-is-outdated">2.12. EC2 Credentials (THIS SECITION IS OUTDATED)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="doc.html">3. Documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="doc.html#creating-the-documentation">3.1. Creating the Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc.html#creating-the-documentation-in-a-single-page">3.2. Creating the documentation in a single page</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc.html#documenting-the-code">3.3. Documenting the code</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="shell.html">4. Cloudmesh Shell</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="cm-shell.html">4.1. Cloudmesh Shell</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="cm-shell.html#commandline">4.1.1. Commandline</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cm-shell.html#shell-usage">4.1.2. Shell Usage</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="cm-shell.html#command-overview">4.2. Command Overview</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="cm-shell.html#help">4.2.1. Help</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cm-shell.html#info">4.2.2. Info</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cm-shell.html#variables">4.2.3. Variables</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cm-shell.html#defaults">4.2.4. Defaults</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cm-shell.html#managing-users">4.2.5. Managing Users</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cm-shell.html#managing-clouds">4.2.6. Managing Clouds</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="cm-shell.html#register-a-cloud">4.2.6.1. Register a cloud</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cm-shell.html#activate-cloud">4.2.6.2. Activate cloud</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="cm-shell.html#managing-projects">4.2.7. Managing Projects</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="cm-shell.html#project-list">4.2.7.1. Project List</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cm-shell.html#project-information">4.2.7.2. Project Information</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cm-shell.html#project-activation">4.2.7.3. Project Activation</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="cm-shell.html#managing-keys">4.2.8. Managing Keys</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cm-shell.html#managing-images">4.2.9. Managing Images</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="cm-shell.html#list-images">4.2.9.1. List images</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cm-shell.html#image-information">4.2.9.2. Image information</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cm-shell.html#default-image">4.2.9.3. Default image</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="cm-shell.html#managing-flavors">4.2.10. Managing Flavors</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="cm-shell.html#list-flavors">4.2.10.1. List Flavors</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cm-shell.html#flavor-information">4.2.10.2. Flavor information</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cm-shell.html#default-flavor">4.2.10.3. Default Flavor</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="cm-shell.html#managing-virtual-machines">4.2.11. Managing Virtual Machines</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="cm-shell.html#starting-vms">4.2.11.1. Starting VMs</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="cm-shell.html#vm-history">4.2.11.1.1. VM History</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="cm-shell.html#managing-security-groups">4.2.11.2. Managing Security Groups</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cm-shell.html#managing-volumes">4.2.11.3. Managing Volumes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cm-shell.html#managing-heat-s-for-openstack">4.2.11.4. Managing heat&#8217;s for OpenStack</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="cm-shell.html#id1">4.2.12. Managing Security Groups</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cm-shell.html#examples">4.2.13. Examples</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cm-shell.html#todo-most-likely-in-cloud-command-and-register-command">4.2.14. TODO (most likely in cloud command and register command)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="cm-shell-rain.html">4.3. Cloudmesh Shell Rain</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="cm-shell-rain.html#managing-servers-hosts">4.3.1. Managing Servers/hosts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cm-shell-rain.html#user-project-and-role-policies">4.3.2. User, Project and Role Policies</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cm-shell-rain.html#information">4.3.3. Information</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cm-shell-rain.html#provisioning">4.3.4. Provisioning</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cm-shell-rain.html#status">4.3.5. Status</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cm-shell-rain.html#reservation-interface-extension">4.3.6. Reservation Interface (extension)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cm-shell-rain.html#time-format">4.3.7. Time Format</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="cm-manage.html">4.4. cm-manage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="man/man.html">4.5. Commands</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="man/man.html#eof">4.5.1. EOF</a></li>
+<li class="toctree-l3"><a class="reference internal" href="man/man.html#admin">4.5.2. admin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="man/man.html#banner">4.5.3. banner</a></li>
+<li class="toctree-l3"><a class="reference internal" href="man/man.html#clear">4.5.4. clear</a></li>
+<li class="toctree-l3"><a class="reference internal" href="man/man.html#cloud">4.5.5. cloud</a></li>
+<li class="toctree-l3"><a class="reference internal" href="man/man.html#cluster">4.5.6. cluster</a></li>
+<li class="toctree-l3"><a class="reference internal" href="man/man.html#color">4.5.7. color</a></li>
+<li class="toctree-l3"><a class="reference internal" href="man/man.html#debug">4.5.8. debug</a></li>
+<li class="toctree-l3"><a class="reference internal" href="man/man.html#default">4.5.9. default</a></li>
+<li class="toctree-l3"><a class="reference internal" href="man/man.html#dot2">4.5.10. dot2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="man/man.html#edit">4.5.11. edit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="man/man.html#exec">4.5.12. exec</a></li>
+<li class="toctree-l3"><a class="reference internal" href="man/man.html#exp">4.5.13. exp</a></li>
+<li class="toctree-l3"><a class="reference internal" href="man/man.html#flavor">4.5.14. flavor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="man/man.html#graphviz">4.5.15. graphviz</a></li>
+<li class="toctree-l3"><a class="reference internal" href="man/man.html#group">4.5.16. group</a></li>
+<li class="toctree-l3"><a class="reference internal" href="man/man.html#help">4.5.17. help</a></li>
+<li class="toctree-l3"><a class="reference internal" href="man/man.html#image">4.5.18. image</a></li>
+<li class="toctree-l3"><a class="reference internal" href="man/man.html#info">4.5.19. info</a></li>
+<li class="toctree-l3"><a class="reference internal" href="man/man.html#init">4.5.20. init</a></li>
+<li class="toctree-l3"><a class="reference internal" href="man/man.html#inventory">4.5.21. inventory</a></li>
+<li class="toctree-l3"><a class="reference internal" href="man/man.html#key">4.5.22. key</a></li>
+<li class="toctree-l3"><a class="reference internal" href="man/man.html#label">4.5.23. label</a></li>
+<li class="toctree-l3"><a class="reference internal" href="man/man.html#launcher">4.5.24. launcher</a></li>
+<li class="toctree-l3"><a class="reference internal" href="man/man.html#limits">4.5.25. limits</a></li>
+<li class="toctree-l3"><a class="reference internal" href="man/man.html#list">4.5.26. list</a></li>
+<li class="toctree-l3"><a class="reference internal" href="man/man.html#load">4.5.27. load</a></li>
+<li class="toctree-l3"><a class="reference internal" href="man/man.html#loglevel">4.5.28. loglevel</a></li>
+<li class="toctree-l3"><a class="reference internal" href="man/man.html#man">4.5.29. man</a></li>
+<li class="toctree-l3"><a class="reference internal" href="man/man.html#metric">4.5.30. metric</a></li>
+<li class="toctree-l3"><a class="reference internal" href="man/man.html#notebook">4.5.31. notebook</a></li>
+<li class="toctree-l3"><a class="reference internal" href="man/man.html#nova">4.5.32. nova</a></li>
+<li class="toctree-l3"><a class="reference internal" href="man/man.html#open">4.5.33. open</a></li>
+<li class="toctree-l3"><a class="reference internal" href="man/man.html#pause">4.5.34. pause</a></li>
+<li class="toctree-l3"><a class="reference internal" href="man/man.html#plugins">4.5.35. plugins</a></li>
+<li class="toctree-l3"><a class="reference internal" href="man/man.html#project">4.5.36. project</a></li>
+<li class="toctree-l3"><a class="reference internal" href="man/man.html#py">4.5.37. py</a></li>
+<li class="toctree-l3"><a class="reference internal" href="man/man.html#q">4.5.38. q</a></li>
+<li class="toctree-l3"><a class="reference internal" href="man/man.html#qstat">4.5.39. qstat</a></li>
+<li class="toctree-l3"><a class="reference internal" href="man/man.html#quit">4.5.40. quit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="man/man.html#quota">4.5.41. quota</a></li>
+<li class="toctree-l3"><a class="reference internal" href="man/man.html#rain">4.5.42. rain</a></li>
+<li class="toctree-l3"><a class="reference internal" href="man/man.html#register">4.5.43. register</a></li>
+<li class="toctree-l3"><a class="reference internal" href="man/man.html#script">4.5.44. script</a></li>
+<li class="toctree-l3"><a class="reference internal" href="man/man.html#security-group">4.5.45. security_group</a></li>
+<li class="toctree-l3"><a class="reference internal" href="man/man.html#setup-yaml">4.5.46. setup_yaml</a></li>
+<li class="toctree-l3"><a class="reference internal" href="man/man.html#ssh">4.5.47. ssh</a></li>
+<li class="toctree-l3"><a class="reference internal" href="man/man.html#stack">4.5.48. stack</a></li>
+<li class="toctree-l3"><a class="reference internal" href="man/man.html#status">4.5.49. status</a></li>
+<li class="toctree-l3"><a class="reference internal" href="man/man.html#storm">4.5.50. storm</a></li>
+<li class="toctree-l3"><a class="reference internal" href="man/man.html#timer">4.5.51. timer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="man/man.html#usage">4.5.52. usage</a></li>
+<li class="toctree-l3"><a class="reference internal" href="man/man.html#use">4.5.53. use</a></li>
+<li class="toctree-l3"><a class="reference internal" href="man/man.html#user">4.5.54. user</a></li>
+<li class="toctree-l3"><a class="reference internal" href="man/man.html#var">4.5.55. var</a></li>
+<li class="toctree-l3"><a class="reference internal" href="man/man.html#verbose">4.5.56. verbose</a></li>
+<li class="toctree-l3"><a class="reference internal" href="man/man.html#version">4.5.57. version</a></li>
+<li class="toctree-l3"><a class="reference internal" href="man/man.html#vm">4.5.58. vm</a></li>
+<li class="toctree-l3"><a class="reference internal" href="man/man.html#volume">4.5.59. volume</a></li>
+<li class="toctree-l3"><a class="reference internal" href="man/man.html#web">4.5.60. web</a></li>
+<li class="toctree-l3"><a class="reference internal" href="man/man.html#yaml">4.5.61. yaml</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="metric.html">5. Cloudmesh Metric</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="metric.html#routes">5.1. Routes</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">6. Contributing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="tasks.html">6.1. Issue Management</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="tasks.html#labels">6.1.1. Labels</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tasks.html#priority">6.1.2. Priority</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tasks.html#inactivity">6.1.3. Inactivity</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tasks.html#shortcuts">6.1.4. Shortcuts</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="coding.html">6.2. Cloudmesh Style Guide</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="coding.html#information">6.2.1. Information</a></li>
+<li class="toctree-l3"><a class="reference internal" href="coding.html#general">6.2.2. General</a></li>
+<li class="toctree-l3"><a class="reference internal" href="coding.html#imports">6.2.3. Imports</a></li>
+<li class="toctree-l3"><a class="reference internal" href="coding.html#human-alphabetical-order-examples">6.2.4. Human Alphabetical Order Examples</a></li>
+<li class="toctree-l3"><a class="reference internal" href="coding.html#docstrings">6.2.5. Docstrings</a></li>
+<li class="toctree-l3"><a class="reference internal" href="coding.html#dictionaries-lists">6.2.6. Dictionaries/Lists</a></li>
+<li class="toctree-l3"><a class="reference internal" href="coding.html#calling-methods">6.2.7. Calling Methods</a></li>
+<li class="toctree-l3"><a class="reference internal" href="coding.html#internationalization-i18n-strings">6.2.8. Internationalization (i18n) Strings</a></li>
+<li class="toctree-l3"><a class="reference internal" href="coding.html#python-3-x-compatibility">6.2.9. Python 3.x compatibility</a></li>
+<li class="toctree-l3"><a class="reference internal" href="coding.html#creating-unit-tests">6.2.10. Creating Unit Tests</a></li>
+<li class="toctree-l3"><a class="reference internal" href="coding.html#running-tests">6.2.11. Running Tests</a></li>
+<li class="toctree-l3"><a class="reference internal" href="coding.html#commit-messages">6.2.12. Commit Messages</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="hacking.html">6.3. Tips for Editing</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="hacking.html#aptana-studio-develpment-environment-optional">6.3.1. Aptana Studio - Develpment Environment(optional)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="hacking.html#emacs-as-editor">6.3.2. Emacs as editor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="hacking.html#replace-text-in-many-files-from-the-commandline">6.3.3. Replace Text in many files from the commandline</a></li>
+<li class="toctree-l3"><a class="reference internal" href="hacking.html#mongodb-tools">6.3.4. MongoDB Tools</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="hacking.html#robomongo">6.3.4.1. Robomongo</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="hacking.html#python-tools">6.3.5. Python Tools</a></li>
+<li class="toctree-l3"><a class="reference internal" href="hacking.html#git-pull-request">6.3.6. Git Pull Request</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="vagrant.html">6.4. Cloudmesh Vagrant Developers Environment</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="vagrant.html#vagrant">6.4.1. Vagrant</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vagrant.html#veewee">6.4.2. Veewee</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vagrant.html#creating-a-cloudmesh-test">6.4.3. Creating a cloudmesh test</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="appendix.html">7. Appendix</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="cm-shell-new.html">7.1. Proposed Commands</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="cm-shell-new.html#label">7.1.1. Label</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="deploy.html">7.2. Production Deployment Server</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="deploy.html#instalation">7.2.1. Instalation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="deploy.html#starting-the-deployed-server">7.2.2. Starting the deployed server</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="fg.html">7.3. FutureGrid Specific tips</a></li>
+<li class="toctree-l2"><a class="reference internal" href="old-cm/cm.html">7.4. CM</a></li>
+<li class="toctree-l2"><a class="reference internal" href="old-cm/cm.html#using-cloud-mesh">7.5. Using Cloud Mesh</a></li>
+<li class="toctree-l2"><a class="reference internal" href="old-cm/cm_cli.html">7.6. cloudmesh command</a></li>
+<li class="toctree-l2"><a class="reference internal" href="old-cm/cmcli.html">7.7. cm config</a></li>
+<li class="toctree-l2"><a class="reference internal" href="old-cm/intro.html">7.8. Cloud Mesh</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="old-cm/intro.html#commands">7.8.1. Commands</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="cloudmesh.html">7.9. Overview</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="cloudmesh.html#system-monitoring-and-operations">7.9.1. System Monitoring and Operations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cloudmesh.html#user-and-project-services">7.9.2. User and Project Services</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="cloudmesh.html#accounting-and-app-store">7.9.2.1. Accounting and App Store</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cloudmesh.html#networking">7.9.2.2. Networking</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cloudmesh.html#monitoring">7.9.2.3. Monitoring</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cloudmesh.html#role-and-use-of-standards-and-open-source-software">7.9.2.4. Role and Use of Standards and Open Source Software</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="futuregrid.html">7.10. FutureGrid</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plan/design.html">7.11. Design: Blueprint</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="plan/design.html#features">7.11.1. Features</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plan/design.html#difference-to-other-efforts">7.11.2. Difference to other efforts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plan/design.html#component-view">7.11.3. Component View</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plan/design.html#component-user-management">7.11.4. Component User Management</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plan/design.html#user-management">7.11.5. User Management</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plan/design.html#accounting-will-not-be-worked-on-much">7.11.6. Accounting (Will not be worked on much)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plan/design.html#component-resource-management-includes-cloudshifting-as-part-of-reservation">7.11.7. Component Resource Management (includes cloudshifting as part of reservation)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plan/design.html#resource-management">7.11.8. Resource Management</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plan/design.html#scheduler">7.11.9. Scheduler</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plan/design.html#interfaces">7.11.10. Interfaces</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="plan/mock.html">7.12. Mockup</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="plan/mock.html#create-user">7.12.1. create_user</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="plan/plan.html">7.13. Plan: Cloudmesh Service Shift</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="plan/plan.html#project-objectives">7.13.1. Project Objectives</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plan/plan.html#development-objectives">7.13.2. Development Objectives</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="plan/plan.html#production-objectives">7.13.2.1. Production Objectives</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="plan/plan.html#project-deliverables">7.13.3. Project Deliverables</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plan/plan.html#evolution-of-the-project">7.13.4. Evolution of the Project</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plan/plan.html#refernce-materials">7.13.5. Refernce Materials</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plan/plan.html#definitions-and-acronyms">7.13.6. Definitions and Acronyms</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="user.html">7.14. Cloudmesh Shell</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="user.html#user-commands">7.14.1. User Commands</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">2. Configuration with Yaml Files</a><ul>
+<li><a class="reference internal" href="#initialization">2.1. Initialization</a></li>
+<li><a class="reference internal" href="#cloud-activation-india-openstack">2.2. Cloud Activation - India Openstack</a></li>
+<li><a class="reference internal" href="#format-of-the-cloudmesh-yaml-file">2.3. Format of the cloudmesh.yaml file</a></li>
+<li><a class="reference internal" href="#configuration-file-rc-file">2.4. Configuration file (rc file)</a></li>
+<li><a class="reference internal" href="#adding-devstack-to-cloudmesh-yaml-tbd">2.5. Adding devstack to <code class="docutils literal"><span class="pre">cloudmesh.yaml</span></code> (TBD)</a></li>
+<li><a class="reference internal" href="#adding-dreamhost-to-cloudmesh-yaml">2.6. Adding dreamhost to <code class="docutils literal"><span class="pre">cloudmesh.yaml</span></code></a><ul>
+<li><a class="reference internal" href="#hp-cloud">2.6.1. HP Cloud</a></li>
+<li><a class="reference internal" href="#azure">2.6.2. Azure</a><ul>
+<li><a class="reference internal" href="#azure-quickstart">2.6.2.1. Azure Quickstart</a><ul>
+<li><a class="reference internal" href="#azure-account">2.6.2.1.1. Azure account</a></li>
+<li><a class="reference internal" href="#download-credentials">2.6.2.1.2. Download credentials</a></li>
+<li><a class="reference internal" href="#install-azure-cli">2.6.2.1.3. Install Azure CLI</a></li>
+<li><a class="reference internal" href="#import-credentials-via-azure-cli">2.6.2.1.4. Import Credentials via Azure CLI</a></li>
+<li><a class="reference internal" href="#download-subscription-file-publishsettings">2.6.2.1.5. Download Subscription File (.publishsettings)</a></li>
+<li><a class="reference internal" href="#place-x-509-certificate-on-cloudmesh">2.6.2.1.6. Place X.509 certificate on Cloudmesh</a></li>
+<li><a class="reference internal" href="#replace-subscription-id">2.6.2.1.7. Replace Subscription ID</a></li>
+<li><a class="reference internal" href="#test-azure-virtual-machine">2.6.2.1.8. Test Azure Virtual Machine</a></li>
+<li><a class="reference internal" href="#example-azure-cloudmesh-configuration">2.6.2.1.9. Example Azure cloudmesh configuration</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#amazon-web-services">2.7. Amazon Web Services</a><ul>
+<li><a class="reference internal" href="#india">2.7.1. India</a></li>
+<li><a class="reference internal" href="#alamo">2.7.2. Alamo</a></li>
+<li><a class="reference internal" href="#a-complete-example">2.7.3. A complete example</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#cloudmesh-server-yaml">2.8. cloudmesh-server.yaml</a><ul>
+<li><a class="reference internal" href="#debugging">2.8.1. Debugging</a></li>
+<li><a class="reference internal" href="#web-ui">2.8.2. Web UI</a></li>
+<li><a class="reference internal" href="#ldap-integration">2.8.3. LDAP Integration</a></li>
+<li><a class="reference internal" href="#clusters">2.8.4. Clusters</a></li>
+<li><a class="reference internal" href="#roles">2.8.5. Roles</a></li>
+<li><a class="reference internal" href="#keystone-server">2.8.6. Keystone server</a></li>
+<li><a class="reference internal" href="#mongo">2.8.7. Mongo</a></li>
+<li><a class="reference internal" href="#complete-example">2.8.8. Complete Example</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#cloudmesh-cluster-yaml">2.9. cloudmesh_cluster.yaml</a><ul>
+<li><a class="reference internal" href="#metadata">2.9.1. Metadata</a></li>
+<li><a class="reference internal" href="#id1">2.9.2. Clusters</a></li>
+<li><a class="reference internal" href="#a-cluster">2.9.3. A Cluster</a></li>
+<li><a class="reference internal" href="#network">2.9.4. Network:</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#other-yaml-files">2.10. Other Yaml files</a></li>
+<li><a class="reference internal" href="#me-sample">2.11. Me Sample</a></li>
+<li><a class="reference internal" href="#ec2-credentials-this-secition-is-outdated">2.12. EC2 Credentials (THIS SECITION IS OUTDATED)</a></li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+              
+                
+  <li>
+    <a href="celery.html" title="Previous Chapter: 1.3. Celery Setup"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; 1.3. Celery Setu...</span>
+    </a>
+  </li>
+  <li>
+    <a href="doc.html" title="Next Chapter: 3. Documentation"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">3. Documentation &raquo;</span>
+    </a>
+  </li>
+              
+            
+            
+            
+            
+              <li class="hidden-sm">
+<div id="sourcelink">
+  <a href="_sources/configure.txt"
+     rel="nofollow">Source</a>
+</div></li>
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+      <div class="col-md-3">
+        <div id="sidebar" class="bs-sidenav" role="complementary"><h4>Site Contents</h4>
+
+<ul>
+  <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">1. Installation</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">2. Configuration with Yaml Files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="doc.html">3. Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="shell.html">4. Cloudmesh Shell</a></li>
+<li class="toctree-l1"><a class="reference internal" href="metric.html">5. Cloudmesh Metric</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">6. Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="appendix.html">7. Appendix</a></li>
+</ul>
+
+</ul>
+
+<hr>
+
+<h4>Page Contents</h4><ul>
+<li><a class="reference internal" href="#">2. Configuration with Yaml Files</a><ul>
+<li><a class="reference internal" href="#initialization">2.1. Initialization</a></li>
+<li><a class="reference internal" href="#cloud-activation-india-openstack">2.2. Cloud Activation - India Openstack</a></li>
+<li><a class="reference internal" href="#format-of-the-cloudmesh-yaml-file">2.3. Format of the cloudmesh.yaml file</a></li>
+<li><a class="reference internal" href="#configuration-file-rc-file">2.4. Configuration file (rc file)</a></li>
+<li><a class="reference internal" href="#adding-devstack-to-cloudmesh-yaml-tbd">2.5. Adding devstack to <code class="docutils literal"><span class="pre">cloudmesh.yaml</span></code> (TBD)</a></li>
+<li><a class="reference internal" href="#adding-dreamhost-to-cloudmesh-yaml">2.6. Adding dreamhost to <code class="docutils literal"><span class="pre">cloudmesh.yaml</span></code></a><ul>
+<li><a class="reference internal" href="#hp-cloud">2.6.1. HP Cloud</a></li>
+<li><a class="reference internal" href="#azure">2.6.2. Azure</a><ul>
+<li><a class="reference internal" href="#azure-quickstart">2.6.2.1. Azure Quickstart</a><ul>
+<li><a class="reference internal" href="#azure-account">2.6.2.1.1. Azure account</a></li>
+<li><a class="reference internal" href="#download-credentials">2.6.2.1.2. Download credentials</a></li>
+<li><a class="reference internal" href="#install-azure-cli">2.6.2.1.3. Install Azure CLI</a></li>
+<li><a class="reference internal" href="#import-credentials-via-azure-cli">2.6.2.1.4. Import Credentials via Azure CLI</a></li>
+<li><a class="reference internal" href="#download-subscription-file-publishsettings">2.6.2.1.5. Download Subscription File (.publishsettings)</a></li>
+<li><a class="reference internal" href="#place-x-509-certificate-on-cloudmesh">2.6.2.1.6. Place X.509 certificate on Cloudmesh</a></li>
+<li><a class="reference internal" href="#replace-subscription-id">2.6.2.1.7. Replace Subscription ID</a></li>
+<li><a class="reference internal" href="#test-azure-virtual-machine">2.6.2.1.8. Test Azure Virtual Machine</a></li>
+<li><a class="reference internal" href="#example-azure-cloudmesh-configuration">2.6.2.1.9. Example Azure cloudmesh configuration</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#amazon-web-services">2.7. Amazon Web Services</a><ul>
+<li><a class="reference internal" href="#india">2.7.1. India</a></li>
+<li><a class="reference internal" href="#alamo">2.7.2. Alamo</a></li>
+<li><a class="reference internal" href="#a-complete-example">2.7.3. A complete example</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#cloudmesh-server-yaml">2.8. cloudmesh-server.yaml</a><ul>
+<li><a class="reference internal" href="#debugging">2.8.1. Debugging</a></li>
+<li><a class="reference internal" href="#web-ui">2.8.2. Web UI</a></li>
+<li><a class="reference internal" href="#ldap-integration">2.8.3. LDAP Integration</a></li>
+<li><a class="reference internal" href="#clusters">2.8.4. Clusters</a></li>
+<li><a class="reference internal" href="#roles">2.8.5. Roles</a></li>
+<li><a class="reference internal" href="#keystone-server">2.8.6. Keystone server</a></li>
+<li><a class="reference internal" href="#mongo">2.8.7. Mongo</a></li>
+<li><a class="reference internal" href="#complete-example">2.8.8. Complete Example</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#cloudmesh-cluster-yaml">2.9. cloudmesh_cluster.yaml</a><ul>
+<li><a class="reference internal" href="#metadata">2.9.1. Metadata</a></li>
+<li><a class="reference internal" href="#id1">2.9.2. Clusters</a></li>
+<li><a class="reference internal" href="#a-cluster">2.9.3. A Cluster</a></li>
+<li><a class="reference internal" href="#network">2.9.4. Network:</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#other-yaml-files">2.10. Other Yaml files</a></li>
+<li><a class="reference internal" href="#me-sample">2.11. Me Sample</a></li>
+<li><a class="reference internal" href="#ec2-credentials-this-secition-is-outdated">2.12. EC2 Credentials (THIS SECITION IS OUTDATED)</a></li>
+</ul>
+</li>
+</ul>
+
+<form action="search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+<div id="sourcelink">
+  <a href="_sources/configure.txt"
+     rel="nofollow">Source</a>
+</div>
+        </div>
+      </div>
+    <div class="col-md-9">
+      
+  <div class="section" id="configuration-with-yaml-files">
+<h1>2. Configuration with Yaml Files<a class="headerlink" href="#configuration-with-yaml-files" title="Permalink to this headline">¶</a></h1>
+<p>Cloudmesh comes with a set of convenient configuration files in the
+yaml format.  As the files are in yaml format, it is important that
+you make sure that prior to saving the file the indentation is
+correct and that all tabs are replaced with spaces.</p>
+<p>All cloudmesh configuration files are placed in the directory:</p>
+<div class="highlight-bash"><div class="highlight"><pre>~/.cloudmesh
+</pre></div>
+</div>
+<p>Users will only to worry about the file</p>
+<blockquote>
+<div>~/.cloudmesh/cloudmesh.yaml</div></blockquote>
+<p>Other yaml files interact with the backend system. In general it is
+sufficient to have just a cloudmesh.yaml file so you run cloudmesh in
+user mode.</p>
+<div class="section" id="initialization">
+<h2>2.1. Initialization<a class="headerlink" href="#initialization" title="Permalink to this headline">¶</a></h2>
+<p>If you do not have a yaml file or a .cloudmesh directory, the best way
+to create it is by downloading the source code from cloudmesh and
+install it as discussed in the instalation section.</p>
+<p>The cloudmesh configuration files can than be created with the
+command:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>./install new
+</pre></div>
+</div>
+<p>This will create a <cite>~/.cloudmesh</cite> directory with some basic yaml files
+that you will need to modify.</p>
+</div>
+<div class="section" id="cloud-activation-india-openstack">
+<h2>2.2. Cloud Activation - India Openstack<a class="headerlink" href="#cloud-activation-india-openstack" title="Permalink to this headline">¶</a></h2>
+<p>For FutureSystems we have additionally provided a script that automatically
+creates some yaml files from the installation. In future FutureSystems will
+provide directly a yaml for cloudmesh so that this step is unnecessary. Before
+you can execute this command you must make sure that you can log into india via
+ssh. Once you have verified this for example with:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>ssh <span class="nv">$PORTALNAME</span>@india.futuregrid.org hostname
+</pre></div>
+</div>
+<p>Now create the yaml file while fetching some information from the
+remote machines:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>cm-iu user fetch
+</pre></div>
+</div>
+<p>First it will ask you which username you have on FutureSystems. The name
+may be different from your current local machine name. Please enter
+your name when you see:</p>
+<div class="highlight-bash"><div class="highlight"><pre>Please enter your portal user id <span class="o">[</span>default: albert<span class="o">]</span>:
+</pre></div>
+</div>
+<p>After this you can update the yaml files with the data fetched from
+the india and sierra with the command:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>cm-iu user create
+</pre></div>
+</div>
+<p>The reason why we have separated the commands and not just created one
+command is to provide you with the ability to double check overwriting
+possibly an existing rc file.</p>
+<p>This will create for you in your $HOME/.cloudmesh directory:</p>
+<div class="highlight-bash"><div class="highlight"><pre>.cloudmesh/clouds/india/juno
+</pre></div>
+</div>
+<p>This command only works if you have access to the login node for the
+machine called india.</p>
+</div>
+<div class="section" id="format-of-the-cloudmesh-yaml-file">
+<h2>2.3. Format of the cloudmesh.yaml file<a class="headerlink" href="#format-of-the-cloudmesh-yaml-file" title="Permalink to this headline">¶</a></h2>
+<p>Next we will present selected details of the yaml format of the:</p>
+<div class="highlight-bash"><div class="highlight"><pre>cloudmesh.yaml
+</pre></div>
+</div>
+<p>file. It includes like:</p>
+<div class="highlight-bash"><div class="highlight"><pre>cloudmesh:
+  active:
+  - india
+  clouds:
+      india:
+          cm_heading: India OpenStack, Juno
+          cm_host: india.futuregrid.org
+          cm_label: ios_juno
+          cm_service_url_type: publicURL
+          cm_type: openstack
+          cm_type_version: juno
+          credentials:
+              OS_AUTH_URL: https://i5r.idp.iu.futuregrid.org:5000/v2.0
+              OS_CACERT: <span class="nv">$HOME</span>/.cloudmesh/india-juno-cacert.pem
+              OS_PASSWORD: PUT_YOUR OPENSTCK_PASSWORD_HERE look it
+              OS_TENANT_NAME: PUT_YOUR_PROJECTID_HERE
+              OS_USERNAME: PUT_YOUR_PROTALNAME_HERE
+              OS_VERSION: juno
+          default:
+              flavor: None
+</pre></div>
+</div>
+<p>The file begins with the keyword cloudmesh and has all further
+information indented under it. An active: attribute allows you to
+specify clouds that you would like to use. This enables you to select
+from a large list of predefined clouds that may be given to you as
+template in a cloudmesh.yaml file those clouds you like to actually
+use. In our initial example we provide you with just one active cloud
+called. Hence you see under active:</p>
+<div class="highlight-bash"><div class="highlight"><pre>active:
+- india
+</pre></div>
+</div>
+<p>If there are more than one cloud you would simply add the label of
+that cloud in the array. As we only have one cloud and activate in
+this examle only this cloud we only have:</p>
+<div class="highlight-bash"><div class="highlight"><pre>active:
+- india
+</pre></div>
+</div>
+<p>Next, we need to define several attributes for the active clouds. This
+must be done carefully and you need to possibly check with your
+cloudprovider for the information that is filled in as part of a
+credential section. As we need to identify a cloud we use the same
+identifier that we used in the active cloud. This identifier is rather
+arbitrary, but from experience we use on FutureGrid the nameing scheme
+machinename_cloudtype_cloudversion. But one can naturally chose any
+name that follows the yaml conventions. Pleas eonly use characters in
+[<a href="#id3"><span class="problematic" id="id4">A-Za-z0-9_</span></a>]. Do not us a minus sign but use an underscor instead in
+any attribute name to avoid issues.</p>
+<p>Cloudmesh uses a number of convenient attributes that are starting
+with &#8220;<a href="#id5"><span class="problematic" id="id6">cm_</span></a>&#8221;. These include</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">cm_heading:</th><td class="field-body"><p class="first">Specifies a heading for the cloud that is used in several user
+interfaces when refering to this cloud</p>
+<p>Example: Sierra OpenStack, Grizzly</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">cm_host:</th><td class="field-body"><p class="first">Specifies the hostname of the cloud that is used in some cases to
+connect to it.  In many cases this value is not needed.</p>
+<p>Example: sierra.futuregrid.org</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">cm_label:</th><td class="field-body"><p class="first">Specifies a simple very short abbreviation of the cloud that can be
+used with the commandline tools. Often it is inconvenient so specify
+for example sierra_openstack_grizzly. instead a user can specify an
+arbitrary label for that cloud such as sierra, or in our case we
+used sos.</p>
+<p>Example: sos</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">cm_type:</th><td class="field-body"><p class="first">The type of a cloud is very important as it will deterimine how we
+interact with it</p>
+<p>Example: openstack</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name" colspan="2">cm_type_version:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><p class="first">Besides the type we can have also a number of versions that
+specifies how we interact with the cloud.</p>
+<p class="last">Example: havana</p>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="configuration-file-rc-file">
+<h2>2.4. Configuration file (rc file)<a class="headerlink" href="#configuration-file-rc-file" title="Permalink to this headline">¶</a></h2>
+<p>In most IaaS platforms, configuration files (in the form of an &#8220;rc
+file&#8221;) are provided as credentials. These credentials should be
+imported in cloudmesh.yaml.</p>
+</div>
+<div class="section" id="adding-devstack-to-cloudmesh-yaml-tbd">
+<h2>2.5. Adding devstack to <code class="docutils literal"><span class="pre">cloudmesh.yaml</span></code> (TBD)<a class="headerlink" href="#adding-devstack-to-cloudmesh-yaml-tbd" title="Permalink to this headline">¶</a></h2>
+<p>DevStack offers an easy method to try out Openstack on your machine or
+in a virtual machine (VM). <a class="reference external" href="http://devstack.org">DevStack</a> provides
+a setup guide and configuration here: <a class="reference external" href="http://devstack.org/configuration.html">Configuration</a>.</p>
+</div>
+<div class="section" id="adding-dreamhost-to-cloudmesh-yaml">
+<h2>2.6. Adding dreamhost to <code class="docutils literal"><span class="pre">cloudmesh.yaml</span></code><a class="headerlink" href="#adding-dreamhost-to-cloudmesh-yaml" title="Permalink to this headline">¶</a></h2>
+<p>Dreamhost provides an Openstack cloud that can be accessed through the
+dreamhost panel at:</p>
+<ul class="simple">
+<li><a class="reference external" href="https://panel.dreamhost.com/index.cgi">https://panel.dreamhost.com/index.cgi</a></li>
+</ul>
+<p>The Horizon interface is located at</p>
+<ul class="simple">
+<li><a class="reference external" href="https://dashboard.dreamcompute.com">https://dashboard.dreamcompute.com</a></li>
+</ul>
+<p>If you are a customer of dreamhost, use your username and password
+that was send to you.</p>
+<p>To use cloudmesh, please add this username and password in the
+placeholder for dreamhost.</p>
+<div class="section" id="hp-cloud">
+<h3>2.6.1. HP Cloud<a class="headerlink" href="#hp-cloud" title="Permalink to this headline">¶</a></h3>
+<p>The cloud offered from HP is an Openstack cloud and contains the
+ability to conduct project and user based billing. As this cloud is
+Openstack it behaves much the same as the once defined on India and
+Sierra. There may be differences based on the version.</p>
+<p>HP provides an interface to their cloud through horizon. The
+documentation for it can be found at:</p>
+<ul class="simple">
+<li><a class="reference external" href="http://docs.hpcloud.com/hpcloudconsole">http://docs.hpcloud.com/hpcloudconsole</a></li>
+</ul>
+<p>To use the cloud you have to first create an account with HP, which
+will charge you real money for using their cloud. Make sure you
+understand what costs will be charged before you request thousands of
+virtual machines. Naturally this is valid for any other commercial
+cloud also. The console for the HP cloud is available at:</p>
+<ul class="simple">
+<li><a class="reference external" href="http://www.hpcloud.com/console">http://www.hpcloud.com/console</a></li>
+</ul>
+<p>Which will bring you to their horizon interface:</p>
+<ul class="simple">
+<li><a class="reference external" href="https://horizon.hpcloud.com">https://horizon.hpcloud.com</a></li>
+</ul>
+<p>You can add your username and password into the cloudmesh.yaml in the
+.cloudmesh directory. It is that simple. However, presently the data
+is stored in cleartext which we will change in future. Thus if your
+would like to run cloudmesh we currently recommend running it on your
+own local machine. Make sure that the access to the yaml file is
+properly secured.</p>
+<p>HP provides multiple regions and they can be easily configured in
+cloudmesh. We provide examples for two regions:</p>
+<div class="highlight-bash"><div class="highlight"><pre>hp:
+  cm_heading: HP Openstack
+  cm_label: hpos
+  cm_type: openstack
+  cm_type_version: grizzly
+  credentials:
+    OS_AUTH_URL: https://region-a.geo-1.identity.hpcloudsvc.com:35357/v2.0/
+    OS_CACERT: None
+    OS_PASSWORD: mypassword
+    OS_TENANT_NAME: mytenantname
+    OS_USERNAME: myusername
+    OS_REGION: az-1.region-a.geo-1
+  default:
+    flavor: standard.small
+    image: 142792
+hp_east:
+  cm_heading: HP Openstack
+  cm_label: hpeos
+  cm_type: openstack
+  cm_type_version: grizzly
+  credentials:
+    OS_AUTH_URL: https://region-b.geo-1.identity.hpcloudsvc.com:35357/v2.0/
+    OS_CACERT: None
+    OS_PASSWORD: mypassword
+    OS_TENANT_NAME: mytenantname
+    OS_USERNAME: myusername
+    OS_REGION: region-b.geo-1
+  default:
+    flavor: standard.small
+    image: 142792
+</pre></div>
+</div>
+</div>
+<div class="section" id="azure">
+<h3>2.6.2. Azure<a class="headerlink" href="#azure" title="Permalink to this headline">¶</a></h3>
+<p>Microsoft Windows Azure offers security credentials per a valid
+subscription on a user account. Based on the subscription id,
+chargeable usage is going to be applied to your bill. To authenticate
+requests to Azure, you need to configure your credentials for
+Cloudmesh. The following step-by-step tutorial explains the
+configuration of Azure credentials on Cloudmesh.</p>
+<p>To connect Azure Virtual Machines to Cloudmesh, you need to provide
+Azure credentials to authenticate requrests in the yaml file. You can
+find the credentials in the</p>
+<ul class="simple">
+<li><a class="reference external" href="https://manage.windowsazure.com">Azure Management Portal</a></li>
+</ul>
+<p>which is a web interface to manage your account and Azure Virtual
+Machines.  Also, you can find credentials by downloading the
+subscription file (.publishsettings) here:</p>
+<ul class="simple">
+<li><a class="reference external" href="http://go.microsoft.com/fwlink/?LinkId=254432">http://go.microsoft.com/fwlink/?LinkId=254432</a>.</li>
+</ul>
+<p>Once you download the file, you may need to import your subscription
+Id and valid X.509 certificate from the file with the help of the  Azure cross-platform
+command line interface. More information about the Azure CLI can be
+found in the Manual/article about the</p>
+<ul class="simple">
+<li><a class="reference external" href="http://azure.microsoft.com/en-us/documentation/articles/xplat-cli">Azure Cross-Platform Command-Line Interface</a>.</li>
+</ul>
+<p>The Azure credentials require that the X.509 certificate is placed in
+the <cite>.cloudmesh</cite> directory. The <em>subscriptionid</em> field should be filled
+with your Azure subscription id. The valid X.509 certificate file
+(.pem) must also be stored in the <cite>.cloudmesh</cite> directory. We store it
+under the name:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$HOME</span>/.cloudmesh/azure_managementCertificate.pem
+</pre></div>
+</div>
+<p>Cloudmesh yaml file has an example invalid entry that you can change
+with your settings. It can be easily identified while looking for the
+keyword azure in the <cite>cloudmesh.yaml</cite> file.
+As Azure is a commercial service it is important that you properly
+secure the .cloudmesh directory and its yaml files.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Recommended files and directory permissions for Secured Cloudmesh
+To protect the yaml files against any access from other users, we recommend
+to use <cite>chmod</cite> command. Try <cite>chmod -R o+rwx,go-rwx ~/.cloudmesh</cite> to make
+any file in the <em>.cloudmesh</em> directory a private file to your user account.
+This way allows you have a full access to the files and the directory but
+not others.</p>
+</div>
+<div class="section" id="azure-quickstart">
+<h4>2.6.2.1. Azure Quickstart<a class="headerlink" href="#azure-quickstart" title="Permalink to this headline">¶</a></h4>
+<div class="section" id="azure-account">
+<h5>2.6.2.1.1. Azure account<a class="headerlink" href="#azure-account" title="Permalink to this headline">¶</a></h5>
+<p>If you do not have an Azure account you can obtain one from Microsoft.
+Microsoft provides a free-trial for new account applicants. The
+Windows Azure site is located at</p>
+<ul class="simple">
+<li><a class="reference external" href="https://manage.windowsazure.com">https://manage.windowsazure.com</a></li>
+</ul>
+</div>
+<div class="section" id="download-credentials">
+<h5>2.6.2.1.2. Download credentials<a class="headerlink" href="#download-credentials" title="Permalink to this headline">¶</a></h5>
+<p>Form ther you can download the:</p>
+<div class="highlight-bash"><div class="highlight"><pre>.publishsettings
+</pre></div>
+</div>
+</div>
+<div class="section" id="install-azure-cli">
+<h5>2.6.2.1.3. Install Azure CLI<a class="headerlink" href="#install-azure-cli" title="Permalink to this headline">¶</a></h5>
+<p>Next you will need to install the Azure CLI. This is documented at</p>
+<ul class="simple">
+<li><a class="reference external" href="http://azure.microsoft.com/en-us/documentation/articles/xplat-cli/">http://azure.microsoft.com/en-us/documentation/articles/xplat-cli/</a></li>
+</ul>
+<p>Here you find install instructions fror Linux but also a link to an
+OSX installer.</p>
+<p>Once the client is installed you can download the credentials</p>
+</div>
+<div class="section" id="import-credentials-via-azure-cli">
+<h5>2.6.2.1.4. Import Credentials via Azure CLI<a class="headerlink" href="#import-credentials-via-azure-cli" title="Permalink to this headline">¶</a></h5>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>azure account download
+<span class="nv">$ </span>azure account import &lt;.publishsettings file path&gt;
+</pre></div>
+</div>
+</div>
+<div class="section" id="download-subscription-file-publishsettings">
+<h5>2.6.2.1.5. Download Subscription File (.publishsettings)<a class="headerlink" href="#download-subscription-file-publishsettings" title="Permalink to this headline">¶</a></h5>
+<ul class="simple">
+<li><a class="reference external" href="http://go.microsoft.com/fwlink/?LinkId=254432">http://go.microsoft.com/fwlink/?LinkId=254432</a></li>
+</ul>
+</div>
+<div class="section" id="place-x-509-certificate-on-cloudmesh">
+<h5>2.6.2.1.6. Place X.509 certificate on Cloudmesh<a class="headerlink" href="#place-x-509-certificate-on-cloudmesh" title="Permalink to this headline">¶</a></h5>
+<div class="highlight-bash"><div class="highlight"><pre> <span class="nv">$ </span>cp -p ~/.azure/managementCertificate.pem ~/.cloudmesh/azure_managementCertificate.pem
+
+Only the owner with <span class="nb">read </span>and write permission e.g. -rw-------
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Recommended files and directory permissions for Secured Cloudmesh
+To protect the yaml files against any access from other users, we recommend
+to use <cite>chmod</cite> command. Try
+<cite>chmod o+rwx,go-rwx ~/azure_managementCertificate.pem</cite> to make the file a
+private file to your user account. This way allows you have a full access to
+the file but not others.</p>
+</div>
+</div>
+<div class="section" id="replace-subscription-id">
+<h5>2.6.2.1.7. Replace Subscription ID<a class="headerlink" href="#replace-subscription-id" title="Permalink to this headline">¶</a></h5>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>azure service cert list
+</pre></div>
+</div>
+<p>provides your subscription id that just imported from the .publishsettings file.</p>
+<p>Now, you are ready to use Azure Virtual Machines on Cloudmesh.</p>
+</div>
+<div class="section" id="test-azure-virtual-machine">
+<h5>2.6.2.1.8. Test Azure Virtual Machine<a class="headerlink" href="#test-azure-virtual-machine" title="Permalink to this headline">¶</a></h5>
+<p>TBD</p>
+</div>
+<div class="section" id="example-azure-cloudmesh-configuration">
+<h5>2.6.2.1.9. Example Azure cloudmesh configuration<a class="headerlink" href="#example-azure-cloudmesh-configuration" title="Permalink to this headline">¶</a></h5>
+<div class="highlight-bash"><div class="highlight"><pre>azure:
+  cm_host: windowsazure.com
+  cm_label: waz
+  cm_type: azure
+  cm_type_version: null
+  credentials:
+    managementcertfile: <span class="nv">$HOME</span>/.cloudmesh/azure_managementCertificate.pem
+    servicecertfile: <span class="nv">$HOME</span>/.cloudmesh/azure_serviceCertificate.pfx
+    subscriptionid: 367367382-7687-6767-6767-6876dsa87ds
+    thumbprint: <span class="nv">$HOME</span>/.cloudmesh/azure_thumbprint
+  default:
+    flavor: ExtraSmall
+    image: b39f27a8b8c64d52b05eac6a62ebad85__Ubuntu_DAILY_BUILD-saucy-13_10-amd64-server-20130930-en-us-30GB
+    location: East US
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="amazon-web-services">
+<h2>2.7. Amazon Web Services<a class="headerlink" href="#amazon-web-services" title="Permalink to this headline">¶</a></h2>
+<p>Amazon EC2 Cloud requires Secret Access Keys to use Amazon Web Services (AWS).
+To configure Amazon EC2 on Cloudmesh, you need to provide the Secret Access
+Keys of your account. Amazon allows only to download the credentials via their
+web page, you need to go to the <a class="reference external" href="http://console.aws.amazon.com/iam/home?#security_credential">Security Credentials</a> page to get the
+credentials. You may use your existing AWS account or create a new AWS account.
+The Access Key is a pair of Access Key ID and Secret Access Key and these
+values should be replaced with <em>EC2_ACCESS_KEY</em> and <em>EC2_SECRET_KEY</em> fields in
+the yaml file. Cloudmesh identifies <em>cm_type: aws</em> as Amazon Web Services in
+the yaml file, you update the <em>aws</em> section with your security credentials.
+Note that Amazon offers commercial services, the access key identification and
+the secret key should be kept in a safe place to avoid any unexpected usage
+from someone who you didn&#8217;t authorize.</p>
+<div class="highlight-bash"><div class="highlight"><pre>aws:
+  cm_host: aws.amazon.com
+  cm_label: aws
+  cm_type: aws
+  cm_type_version: null
+  credentials:
+    access_key_id: ABCDHJLKHLDKJHLDKJH
+    keyname: cloudmesh
+    privatekeyfile: <span class="nv">$HOME</span>/.cloudmesh/aws_pk.pem
+    secret_access_key: abcgfiuegfiuesgfudsgfgdskjgfkdjsg
+    userid: albert
+  default:
+    flavor: m1.small
+    image: ami-fbb2fc92
+    location: us-east-1
+</pre></div>
+</div>
+<div class="section" id="india">
+<h3>2.7.1. India<a class="headerlink" href="#india" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-bash"><div class="highlight"><pre>clouds:
+    india:
+        cm_heading: India OpenStack, Juno
+        cm_host: india.futuregrid.org
+        cm_label: ios_juno
+        cm_service_url_type: publicURL
+        cm_type: openstack
+        cm_type_version: juno
+        credentials:
+            OS_AUTH_URL: https://i5r.idp.iu.futuregrid.org:5000/v2.0
+            OS_CACERT: <span class="nv">$HOME</span>/.cloudmesh/india-juno-cacert.pem
+            OS_PASSWORD: PUT_YOUR OPENSTCK_PASSWORD_HERE look it
+            OS_TENANT_NAME: PUT_YOUR_PROJECTID_HERE
+            OS_USERNAME: PUT_YOUR_PROTALNAME_HERE
+            OS_VERSION: juno
+        default:
+            flavor: None
+</pre></div>
+</div>
+</div>
+<div class="section" id="alamo">
+<h3>2.7.2. Alamo<a class="headerlink" href="#alamo" title="Permalink to this headline">¶</a></h3>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Alamos is no longer supported, it has been moved to chameleon cloud</p>
+</div>
+<p>Although Alamo on FG is an openstack grizzly cloud, it is not as
+sophisticated configured as the clouds on india and sierra. Instead is
+uses for horizon the username and password from the openstack portal,
+but does not expose its native cloud interfaces through the https
+protocol. Instead it only offers access with the limited EC2 cloud
+interfaces that are inferior in capabilities to the openstack
+interfaces. Here is an example:</p>
+<div class="highlight-bash"><div class="highlight"><pre>alamo:
+  cm_host: alamo.futuregrid.org
+  cm_label: alamo
+  cm_type: ec2
+  cm_type_version: null
+  credentials:
+    EC2_PRIVATE_KEY: <span class="nv">$HOME</span>/.cloudmesh/alamo/pk.pem
+    EC2_CERT: <span class="nv">$HOME</span>/.cloudmesh/alamo/cert.pem
+    NOVA_CERT: <span class="nv">$HOME</span>/.cloudmesh/alamo/cacert.pem
+    EUCALYPTUS_CERT: <span class="nv">$HOME</span>/.cloudmesh/alamo/cacert.pem
+    EC2_URL: https://openstack.futuregrid.tacc.utexas.edu:8773/services/Cloud
+    EC2_ACCESS_KEY: hfghfgejfhfdgjdhgjdhdgfjdhfgjhdg
+    EC2_SECRET_KEY: utiutiueteyuieywiuywiuweyriuweyu
+    keyname: cloudmesh
+    userid: albert
+  default:
+    flavor: m1.small
+    image: ami-fbb2fc92
+    location: us-east-1
+</pre></div>
+</div>
+</div>
+<div class="section" id="a-complete-example">
+<h3>2.7.3. A complete example<a class="headerlink" href="#a-complete-example" title="Permalink to this headline">¶</a></h3>
+<p>A more complete example of a cloudmesh.yaml file is available at</p>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference external" href="https://github.com/cloudmesh/cloudmesh/blob/master/etc/cloudmesh.yaml">https://github.com/cloudmesh/cloudmesh/blob/master/etc/cloudmesh.yaml</a></li>
+</ul>
+</div></blockquote>
+<p>Here you need to replace all varibles in brackets. However there is a
+more convenient way to do this with an additional yaml file that is
+called me.yaml</p>
+</div>
+</div>
+<div class="section" id="cloudmesh-server-yaml">
+<h2>2.8. cloudmesh-server.yaml<a class="headerlink" href="#cloudmesh-server-yaml" title="Permalink to this headline">¶</a></h2>
+<p>Cloudmesh contains also a configuration file which i used to interface
+with some server functionality. THis is only needed for some advanced
+concepts such as power and temperature management as wel as bare metal
+provisioning. As we at times modify the server yaml file and add new
+features we have added a meta attribute to the file to document the
+version and the type:</p>
+<div class="highlight-bash"><div class="highlight"><pre>meta:
+  yaml_version: 2.0
+  kind: server
+cloudmesh:
+  server:
+    ... all other text gis here ...
+</pre></div>
+</div>
+<p>In addition a file starts with the attributes cloudmesh and
+server. All other contents is indented under server.</p>
+<div class="section" id="debugging">
+<h3>2.8.1. Debugging<a class="headerlink" href="#debugging" title="Permalink to this headline">¶</a></h3>
+<p>cloudmesh allows to set the debug level conveniently via the loglevel
+attribute. Furthermore, one can disable the use of the production
+environment (which disables the use of LDAP) while setting the
+production attribute to False:</p>
+<div class="highlight-bash"><div class="highlight"><pre>server:
+  loglevel: DEBUG
+  production: False
+</pre></div>
+</div>
+</div>
+<div class="section" id="web-ui">
+<h3>2.8.2. Web UI<a class="headerlink" href="#web-ui" title="Permalink to this headline">¶</a></h3>
+<p>Cloudmesh contains an optional Web UI interface that can be used to
+interface with various clouds similar to horizon. However in contrast
+to Horizopn it is not limited to OpenStack. It also provides access to
+temperature data and user interfaces to bare metal provisioning. These
+may be role based and not every user may be allowed to access
+them. Thus they may not see links in the user interface for them. Only
+priveleged users will.</p>
+<p>The userinterface can be configured as follows:</p>
+<div class="highlight-bash"><div class="highlight"><pre>webui:
+    host: 127.0.0.1
+    port: 5555
+    secret: development key
+    browser: True
+    page: <span class="s2">&quot;&quot;</span>
+</pre></div>
+</div>
+<p>The host on which the server is placeed is either specified by ip or
+hostname. A port on which the ui is started needs to be specified. In
+addition a secret key has to be specified to enable some security
+settings. It is best to use a key that is very difficult to crack.</p>
+<p>If you set the browser variable to true, cloudmesh will automatically
+upon restart open a web page. The web page can be specified via the
+page attribute. If you specify &#8220;&#8221; it will go to the home page. This is
+useful if you like to develop cloudmesh and like to repeatedly open a
+particular page you work on.</p>
+</div>
+<div class="section" id="ldap-integration">
+<h3>2.8.3. LDAP Integration<a class="headerlink" href="#ldap-integration" title="Permalink to this headline">¶</a></h3>
+<p>Cloudmesh can be configured to read usernames from an LDAP server. On
+FutureGrid we use the server configured for our FG users. However you
+can certainly manage your own LDAP server. The configuration is done
+via a proxy server that allows you to execute ldap commands. This
+allows you to connect to the proxy server as other servers may not
+allow to access the LDAP server as it is behind a firewall. The dn
+location of the people and groups are also specifiable:</p>
+<div class="highlight-bash"><div class="highlight"><pre>ldap:
+    with_ldap: False
+    hostname: localhost
+    cert: <span class="nv">$HOME</span>/.cloudmesh/FGLdapCacert.pem
+    proxyhost: &lt;ip&gt;
+    proxyuser: &lt;username&gt;
+    proxyldap: proxy.&lt;yourdomain.org&gt;
+    personbase: <span class="s2">&quot;ou=People,dc=futuregrid,dc=org&quot;</span>
+    projectbase: <span class="s2">&quot;ou=Groups,dc=futuregrid,dc=org&quot;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="clusters">
+<h3>2.8.4. Clusters<a class="headerlink" href="#clusters" title="Permalink to this headline">¶</a></h3>
+<p>To access the control network of the clusters you can specify a
+username and password for each cluster. This is done via the following
+configuration:</p>
+<div class="highlight-bash"><div class="highlight"><pre>clusters:
+    india:
+        bmc:
+            user: &lt;username&gt;
+            password: &lt;password&gt;
+            proxy:
+               ip: &lt;proxyip&gt;
+               user: &lt;proxyusername&gt;
+    <span class="nb">echo</span>:
+            user: &lt;username&gt;
+            password: &lt;password&gt;
+            proxy:
+               ip: &lt;proxyip&gt;
+               user: &lt;proxyusername&gt;
+    bravo:
+        pxe:
+            proxy:
+               ip: &lt;ip&gt;
+               user: &lt;username&gt;
+        bmc:
+            user: &lt;username&gt;
+            password: &lt;password&gt;
+            proxy:
+               ip: &lt;proxyip&gt;
+               user: &lt;proxyusername&gt;
+</pre></div>
+</div>
+<p>Note that you have te ability to specify a proxy machine in case the
+access to the control network is behind a firewall. Also it is
+possible to specify different usernames for access to pxe and bmc.</p>
+</div>
+<div class="section" id="roles">
+<h3>2.8.5. Roles<a class="headerlink" href="#roles" title="Permalink to this headline">¶</a></h3>
+<p>The portal framework can specify explicitly different roles and users
+and projects to restrict access to specific web pages. Some of the
+information such as active users and projects are fetsched frm the
+LDAP server for the role &#8220;user&#8221;.</p>
+<p>However, two specific roles can be explicitly set, such as the admin
+and rain roles. Here it is possible to add usernames or project
+numbers and the specified user in the projects or the explicitly
+specified users will have the given role. This allows a fine grained
+control of users and roles. Additional roles could be added and become
+useful for customized plugins to cloudmesh to expose features
+seclectively.</p>
+<p>todo:</p>
+<div class="highlight-bash"><div class="highlight"><pre>roles:
+    user:
+       users:
+       - active
+       projects:
+       - active
+    admin:
+       users:
+       - albert
+       projects:
+       - fg1000
+       - fg1001
+    rain:
+        users:
+        - albert
+        projects:
+        - fg1000
+</pre></div>
+</div>
+</div>
+<div class="section" id="keystone-server">
+<h3>2.8.6. Keystone server<a class="headerlink" href="#keystone-server" title="Permalink to this headline">¶</a></h3>
+<p>certain actions of a keystone server may not be executed by a regular
+user. in his case the server yaml file allows you to use an
+administrative account that can be configured under the keystone
+attribute:</p>
+<div class="highlight-bash"><div class="highlight"><pre>keystone:
+    sierra_openstack_grizzly:
+        OS_AUTH_URL : https://&lt;ipsdsc&gt;:35357/v2.0
+        OS_CACERT : <span class="nv">$HOME</span>/.cloudmesh/sierra-cacert.pem
+        OS_PASSWORD : &lt;password&gt;
+        OS_TENANT_NAME : &lt;tenant&gt;
+        OS_USERNAME : &lt;username&gt;
+    india_openstack_essex:
+        OS_AUTH_URL : http://&lt;ipindia&gt;:5000/v2.0
+        OS_PASSWORD : &lt;password&gt;
+        OS_TENANT_NAME : &lt;tenant&gt;
+        OS_USERNAME : &lt;username&gt;
+        OS_CACERT : None
+</pre></div>
+</div>
+<p>please note that the names of the clouds need to be the exact names
+used as in cloudmesh.yaml. The username and password can be obtained
+from the cloud administrator if allowed.</p>
+</div>
+<div class="section" id="mongo">
+<h3>2.8.7. Mongo<a class="headerlink" href="#mongo" title="Permalink to this headline">¶</a></h3>
+<p>currently we use mongo to save the state of cloudmesh. We have created
+an easy schem to separate information and we simply recommend to reuse
+the mongo section from the server yaml example file. Simply change the
+valeus for username, password, and key to values you like if you set
+it up on your local machine:</p>
+<div class="highlight-bash"><div class="highlight"><pre>mongo:
+    db: cloudmesh
+    host: localhost
+    port: 27017
+    path: <span class="nv">$HOME</span>/.cloudmesh/mongodb
+    username: &lt;username&gt;
+    password: &lt;password&gt;
+    collections:
+        inventory:
+            db: inventory
+        cloudmesh:
+            db: cloudmesh
+        profile:
+            db: cloudmesh
+        user:
+            db: user
+        metric:
+            db: metric
+        clouds:
+            db: clouds
+        pbs:
+            db: hpc
+        qstat:
+            db: hpc
+        qinfo:
+            db: hpc
+        pbsnodes:
+            db: hpc
+        launcher:
+            db: launcher
+        pagestatus:
+            db: defaults
+        password:
+            key: &lt;key&gt;
+            db: hallo
+        defaults:
+            db: defaults
+        experiment:
+            db: experiment
+        store:
+            db: store
+</pre></div>
+</div>
+</div>
+<div class="section" id="complete-example">
+<h3>2.8.8. Complete Example<a class="headerlink" href="#complete-example" title="Permalink to this headline">¶</a></h3>
+<p>An example cloudmesh_server.yaml file is located at</p>
+<ul class="simple">
+<li><a class="reference external" href="https://github.com/cloudmesh/cloudmesh/blob/master/etc/cloudmesh_server.yaml">https://github.com/cloudmesh/cloudmesh/blob/master/etc/cloudmesh_server.yaml</a></li>
+</ul>
+</div>
+</div>
+<div class="section" id="cloudmesh-cluster-yaml">
+<h2>2.9. cloudmesh_cluster.yaml<a class="headerlink" href="#cloudmesh-cluster-yaml" title="Permalink to this headline">¶</a></h2>
+<p>Cloudmesh has the ability to create automatically an inventory of
+large clusters based on some statically defined information. Because
+the cluster may be in offline mode this static definition is useful in
+order to also identif resources that may be offline or not reachable.</p>
+<p>The definition will be used to create for each resource a number of
+objects that can be used to easier access the resource or be used for
+starting services on the resource.</p>
+<p>We have created a simple program that creates a single yaml file for a
+resource form this information. However we also have a json
+representation that can be used in order not to depend on the file
+system and interface directly with the database. This is of advantage
+in a multi tenanted multi hosted environments in which provisioning of
+resources is executed by multiple users. It also allows more easily
+the dynamic management of resources that can be swapped in and out of
+the inventory.</p>
+<p>A typical cloudmesh_cluster.yaml file looks as follows:</p>
+<div class="highlight-bash"><div class="highlight"><pre>meta:
+  yaml_version: 1.2
+  kind: clusters
+cloudmesh:
+    inventory:
+        mycluster:
+            id: c<span class="o">[</span>001-016<span class="o">]</span>
+            nameserver: 123.123.1.1
+            publickeys:
+            - name: management
+              path: <span class="nv">$HOME</span>/.cloudmesh/id_rsa_management.pub
+            - name: storage
+              path: <span class="nv">$HOME</span>/.cloudmesh/id_rsa_storage.pub
+            network:
+            - name: eth0
+              <span class="nb">type</span>: internal
+              id: c<span class="o">[</span>001-016<span class="o">]</span>
+              label: c-internal<span class="o">[</span>001-016<span class="o">]</span>
+              range: 172.100.100.<span class="o">[</span>11-26<span class="o">]</span>
+              broadcast: 172.100.101.255
+              netmask: 255.255.252.0
+              bootproto: dhcp
+              onboot: yes
+            - name: eth1
+              <span class="nb">type</span>: public
+              id: c<span class="o">[</span>001-016<span class="o">]</span>
+              label: c-compuet<span class="o">[</span>001-016<span class="o">]</span>
+              range: 149.103.104.<span class="o">[</span>11-26<span class="o">]</span>
+              broadcast: 149.103.104.255
+              netmask: 255.255.255.0
+              gateway: 149.103.104.254
+              bootproto: static
+              onboot: yes
+            - name: ib0
+              <span class="nb">type</span>: infiniband
+              id: c<span class="o">[</span>001-016<span class="o">]</span>
+              label: c-ib<span class="o">[</span>001-016<span class="o">]</span>
+              range: 192.168.0.<span class="o">[</span>11-26<span class="o">]</span>
+              broadcast: 192.168.0.255
+              netmask: 255.255.255.0
+              bootproto: static
+              onboot: yes
+            - name: bmc
+              <span class="nb">type</span>: bmc
+              id: c<span class="o">[</span>001-016<span class="o">]</span>
+              label: bmc-c<span class="o">[</span>001-016<span class="o">]</span>
+              range: 192.168.105.<span class="o">[</span>11-26<span class="o">]</span>
+            - name: pxe
+              id: c<span class="o">[</span>001-016<span class="o">]</span>
+              label: c-pxe<span class="o">[</span>001-016<span class="o">]</span>
+              range: na<span class="o">[</span>001-016<span class="o">]</span>
+              <span class="nb">type</span>: pxe
+              pxe_prefix: /tftpboot/pxelinux.cfg
+</pre></div>
+</div>
+<div class="section" id="metadata">
+<h3>2.9.1. Metadata<a class="headerlink" href="#metadata" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><dl class="docutils">
+<dt>meta:</dt>
+<dd>yaml_version: 1.2
+kind: clusters</dd>
+</dl>
+</div></blockquote>
+</div>
+<div class="section" id="id1">
+<h3>2.9.2. Clusters<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><dl class="docutils">
+<dt>cloudmesh:</dt>
+<dd><dl class="first last docutils">
+<dt>inventory:</dt>
+<dd><dl class="first last docutils">
+<dt>mycluster1:</dt>
+<dd>...</dd>
+<dt>mycluster2:</dt>
+<dd>...</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+</dl>
+</div></blockquote>
+</div>
+<div class="section" id="a-cluster">
+<h3>2.9.3. A Cluster<a class="headerlink" href="#a-cluster" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><dl class="docutils">
+<dt>mycluster:</dt>
+<dd><blockquote class="first">
+<div><p>id: c[001-016]
+nameserver: 123.123.1.1
+publickeys:
+- name: management</p>
+<blockquote>
+<div>path: $HOME/.cloudmesh/id_rsa_management.pub</div></blockquote>
+<ul class="simple">
+<li>name: storage
+path: $HOME/.cloudmesh/id_rsa_storage.pub</li>
+</ul>
+<p>network:
+- name: eth0</p>
+<blockquote>
+<div>...</div></blockquote>
+<ul>
+<li><dl class="first docutils">
+<dt>name: ib0</dt>
+<dd><p class="first last">...</p>
+</dd>
+</dl>
+</li>
+</ul>
+</div></blockquote>
+<ul class="last">
+<li><dl class="first docutils">
+<dt>name: bmc</dt>
+<dd><p class="first last">...</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</div></blockquote>
+</div>
+<div class="section" id="network">
+<h3>2.9.4. Network:<a class="headerlink" href="#network" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><p>network:
+- name: eth0</p>
+<blockquote>
+<div>type: internal
+id: c[001-016]
+label: c-internal[001-016]
+range: 172.100.100.[11-26]
+broadcast: 172.100.101.255
+netmask: 255.255.252.0
+bootproto: [dhcp, static]
+onboot: yes</div></blockquote>
+</div></blockquote>
+<dl class="docutils">
+<dt>type:</dt>
+<dd>internal, public, pxe, bmc</dd>
+<dt>id:</dt>
+<dd>TBD</dd>
+<dt>label:</dt>
+<dd>TBD</dd>
+<dt>range:</dt>
+<dd>TBD</dd>
+<dt>broadcast:</dt>
+<dd>TBD</dd>
+<dt>Bootprooto:</dt>
+<dd>TBD</dd>
+<dt>onboot:</dt>
+<dd>TBD</dd>
+</dl>
+<p>Special resources bmc and pxe</p>
+<p>bmc:</p>
+<div class="highlight-bash"><div class="highlight"><pre>- name: bmc
+  <span class="nb">type</span>: bmc
+  id: c<span class="o">[</span>001-016<span class="o">]</span>
+  label: bmc-c<span class="o">[</span>001-016<span class="o">]</span>
+  range: 192.168.105.<span class="o">[</span>11-26<span class="o">]</span>
+</pre></div>
+</div>
+<dl class="docutils">
+<dt>pxe::</dt>
+<dd><ul class="first last simple">
+<li>name: pxe
+id: c[001-016]
+label: c-pxe[001-016]
+range: na[001-016]
+type: pxe
+pxe_prefix: /tftpboot/pxelinux.cfg</li>
+</ul>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="other-yaml-files">
+<h2>2.10. Other Yaml files<a class="headerlink" href="#other-yaml-files" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference external" href="https://github.com/cloudmesh/cloudmesh/blob/master/etc/cloudmesh_celery.yaml">https://github.com/cloudmesh/cloudmesh/blob/master/etc/cloudmesh_celery.yaml</a></li>
+</ul>
+<p>Note the the ip addresses in this file are ficticious
+* <a class="reference external" href="https://github.com/cloudmesh/cloudmesh/blob/master/etc/cloudmesh_cluster.yaml">https://github.com/cloudmesh/cloudmesh/blob/master/etc/cloudmesh_cluster.yaml</a></p>
+<ul class="simple">
+<li><a class="reference external" href="https://github.com/cloudmesh/cloudmesh/blob/master/etc/cloudmesh_launcher.yaml">https://github.com/cloudmesh/cloudmesh/blob/master/etc/cloudmesh_launcher.yaml</a></li>
+</ul>
+</div>
+<div class="section" id="me-sample">
+<h2>2.11. Me Sample<a class="headerlink" href="#me-sample" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference external" href="https://github.com/cloudmesh/cloudmesh/blob/master/etc/me-sample.yaml">https://github.com/cloudmesh/cloudmesh/blob/master/etc/me-sample.yaml</a></li>
+<li><a class="reference external" href="https://github.com/cloudmesh/cloudmesh/blob/master/etc/me.yaml">https://github.com/cloudmesh/cloudmesh/blob/master/etc/me.yaml</a></li>
+</ul>
+</div>
+<div class="section" id="ec2-credentials-this-secition-is-outdated">
+<h2>2.12. EC2 Credentials (THIS SECITION IS OUTDATED)<a class="headerlink" href="#ec2-credentials-this-secition-is-outdated" title="Permalink to this headline">¶</a></h2>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Hotel and Alamo are no longer supported</p>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">*:</th><td class="field-body"><p class="first">With OpenStack Horizon, EC2 credentials can be downloaded.</p>
+<ul class="last simple">
+<li>login <a class="reference external" href="https://openstack.uc.futuregrid.org/dashboard/">OpenStack Havana on Hotel</a> or <a class="reference external" href="https://openstack.futuregrid.tacc.utexas.edu/horizon">OpenStack
+Folsom on Alamo</a></li>
+<li>Click &#8216;Access &amp; Security&#8217;</li>
+<li>Select &#8216;API Access&#8217; tab</li>
+<li>Click &#8216;Download EC2 Credentials&#8217; (which is a direct link here for
+<a class="reference external" href="http://openstack.uc.futuregrid.org/horizon/project/access_and_security/api_access/ec2/">Hotel</a>
+or <a class="reference external" href="http://openstack.futuregrid.tacc.utexas.edu/horizon/project/access_and_security/api_access/ec2/">Alamo</a>)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Next we specify the credentials of the cloud. We can obtain them
+typically from the cloud provider. The mechnism to obtain them may
+vary and you will need to look it up. Often you will have an rc file
+or a GUI that allows you to export the needed information. We have
+strived to keep the same attributes that are provided by the supported
+cloud providors. Hence typically no change is needed and you can just
+paste and copy the values. However, if your cloud needs certificates,
+they may have to be specially dealt with and placed in special
+directories. For cloudmesn we provide them as part of the install and
+ainclude them in the:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$HOME</span>/.cloudmesh/
+</pre></div>
+</div>
+<p>directory. Naturally the attributes in credentials depend on the cloud
+type and are different between the different clouds. In our case we
+define the cloud on sierra which has the following credentials:</p>
+<div class="highlight-bash"><div class="highlight"><pre>credentials:
+  OS_AUTH_URL: https://s77r.idp.sdsc.futuregrid.org:5000/v2.0
+  OS_CACERT: <span class="nv">$HOME</span>/.cloudmesh/sierra-cacert.pem
+  OS_PASSWORD: YOURPASSWORDHERE
+  OS_TENANT_NAME: YOURPROJECTIDHERE
+  OS_USERNAME: albert
+  OS_VERSION: grizzly
+</pre></div>
+</div>
+<p>Only the last field OS_VERSION is not provided by the openstack rc
+file. We simply specify the version and must make sure it is the same
+as provided in cm_type_version. In future versions of cloudmesh we may
+remove this attribute and only work with cm_type_version, but it is
+very convenient to have the value also in credentials, so we left it
+there for now also. The rest of the attributes are regular attributes
+you find in the rc file. For Futuregrid Openstack clouds they will
+have the following meaning:</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">OS_AUTH_URL:</th><td class="field-body"><p class="first">The endpount that is used to manage virtual machines</p>
+<p>Example: <a class="reference external" href="https://s77r.idp.sdsc.futuregrid.org:5000/v2.0">https://s77r.idp.sdsc.futuregrid.org:5000/v2.0</a></p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">OS_CACERT:</th><td class="field-body"><p class="first">The location in which the certificate for the cloud is placed to
+interact with https in case your cloud is properly protected. In
+case it does not use https please inform yourself about the security
+consequences.</p>
+<p>Example: $HOME/.cloudmesh/sierra-cacert.pem</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">OS_PASSWORD:</th><td class="field-body"><p class="first">The password you use for this cloud</p>
+<p>Example: jhdjaTYWUIYBY</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">OS_TENANT_NAME:</th><td class="field-body"><p class="first">The fg project number. In case you have multiple projects, you need to define multiple clouds
+with multiple credentials that are distinguished by different tennant names.</p>
+<p>Example: fg1000</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">OS_USERNAME:</th><td class="field-body"><p class="first">Your futuregrid portal name.</p>
+<p>Example: albert</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">OS_VERSION:</th><td class="field-body"><p class="first">The version of openstack you use as described also by cm_type_version</p>
+<p class="last">Example: grizzly</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p>As it is often the case that users have a default image or flavor and
+try to avoid remembering the values for them, such values can also be
+specified in the cloudmesh.yaml file. This comes especially handy in
+case of classes in which a teacher may provide the class with a custom
+image and give students hints for which flavor to use. Also users that
+deal with the instantiation of many VMs clearly benefit from this
+feature:</p>
+<div class="highlight-bash"><div class="highlight"><pre>default:
+  flavor: m1.tiny
+  image: 4199d988-0833-4497-a473-96fc456fac2f
+</pre></div>
+</div>
+<p>In our example above we have set the default to m1.tine for the falvor
+and one of our default images available on the cloud.</p>
+<p>The next sections show examples for several clouds with ficticious
+account information. Please replace it with your own.</p>
+</div>
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2014, 2013, Gregor von Laszewski for  FutureGrid.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>
