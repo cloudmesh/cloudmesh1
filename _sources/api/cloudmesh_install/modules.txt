@@ -1,7 +1,0 @@
-cloudmesh_install
-=================
-
-.. toctree::
-   :maxdepth: 4
-
-   cloudmesh_install

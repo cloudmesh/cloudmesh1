@@ -1,7 +1,0 @@
-cloudmesh_web
-=============
-
-.. toctree::
-   :maxdepth: 4
-
-   cloudmesh_web

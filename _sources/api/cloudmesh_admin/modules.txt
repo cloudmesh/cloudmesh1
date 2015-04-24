@@ -1,7 +1,0 @@
-cloudmesh_admin
-===============
-
-.. toctree::
-   :maxdepth: 4
-
-   cloudmesh_admin
