@@ -196,7 +196,7 @@ class cm_shell_launcher:
             if cookbook in [ "hadoop", "openmpi" ]:
                 privatekey, publickey = generate_keypair()
                 t_url = \
-                ("https://raw.githubusercontent.com/cloudmesh/cloudmesh/dev1.3/heat-templates/ubuntu-14.04/"
+                ("https://raw.githubusercontent.com/cloudmesh/cloudmesh/master/heat-templates/ubuntu-14.04/"
                 + str(cookbook) + "-cluster/" + str(cookbook) + "-cluster.yaml")
                 param = {'KeyName': keynamenew,
                          'PublicKeyString': publickey,
