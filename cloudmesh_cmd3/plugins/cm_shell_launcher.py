@@ -169,7 +169,7 @@ class cm_shell_launcher:
             userid = self.cm_config.username()
             def_cloud = self.get_cloud_name(userid)
             self.cm_mongo.activate(userid)
-            cm_config_launcher = self.cm_config_launcher()
+            cm_config_launcher = cm_config_launcher()
             
             userinfo = self.cm_user.info(userid)
             if "key" in userinfo["defaults"]:
