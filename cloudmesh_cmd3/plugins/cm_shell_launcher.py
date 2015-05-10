@@ -169,7 +169,7 @@ class cm_shell_launcher:
             userid = self.cm_config.username()
             def_cloud = self.get_cloud_name(userid)
             self.cm_mongo.activate(userid)
-            cm_config_launcher = cm_config_launcher()
+            config_launcher = cm_config_launcher()
             
             userinfo = self.cm_user.info(userid)
             if "key" in userinfo["defaults"]:
@@ -190,7 +190,7 @@ class cm_shell_launcher:
             s_name = "launcher-{0}-{1}-{2}".format(userid, cookbook, get_rand_string())
             dummy = "123456789"  # doing nothing. just for test
             t_url = \
-            cm_config_launcher['cloudmesh']['launcher']['default']['template']
+            config_launcher['cloudmesh']['launcher']['default']['template']
             param = {'KeyName': keynamenew,
                      'Cookbook': cookbook,
                      'dummy': dummy}
@@ -198,7 +198,7 @@ class cm_shell_launcher:
             if cookbook in [ "hadoop", "openmpi" ]:
                 privatekey, publickey = generate_keypair()
                 t_url = \
-                        cm_config_launcher['cloudmesh']['launcher']['recipes'][cookbook]['template']
+                        config_launcher['cloudmesh']['launcher']['recipes'][cookbook]['template']
                 param = {'KeyName': keynamenew,
                          'PublicKeyString': publickey,
                          'PrivateKeyString': privatekey}
