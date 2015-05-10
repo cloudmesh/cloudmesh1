@@ -76,7 +76,7 @@ cloudmesh:
                     db: hallo
                     key: change_me
                 defaults:
-                    db: defaults
+                    db: cloudmesh
                 experiment:
                     db: cloudmeshobj
         keystone:
