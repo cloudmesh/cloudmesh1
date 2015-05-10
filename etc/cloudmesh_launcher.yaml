@@ -3,7 +3,9 @@ meta:
     kind: launcher
 cloudmesh:
     launcher:
-        recipies:
+        default:
+            template: https://raw.githubusercontent.com/cloudmesh/cloudmesh/master/heat-templates/centos6/launcher/launcher.yaml
+        recipes:
             bigdata_mooc:
                 name: Big Data Class at IU
                 shortdescription: Deploys an Image for a class taught on Big Data.
@@ -84,10 +86,10 @@ cloudmesh:
             hadoop:
                 label: hadoop
                 name: Hadoop
-                shortdescription: Deploys a haddop cluster on the VMs specified.
+                shortdescription: Deploys a hadoop cluster on the VMs specified.
                 description:
                     >
-                        Deploys a haddop cluster on the VMs specified
+                        Deploys a hadoop cluster on the VMs specified
                 parameters:
                     - nodes: 
                         type: integer
@@ -112,12 +114,32 @@ cloudmesh:
                         type: selector
                         value:
                         - india
-                        - sierra
                         required: True
+                template: https://raw.githubusercontent.com/cloudmesh/cloudmesh/master/heat-templates/ubuntu-14.04/hadoop-cluster/hadoop-cluster.yaml
                 image: /static/img/launcher/hadoop.jpg
                 script: 
                     type: sh
                     value: echo "Hello"
+            openmpi:
+                name: OpenMPI
+                shortdescription: Deploys a Open MPI cluster.
+                description:
+                        Deploys a Open MPI cluster.
+                parameters:
+                    - nodes:
+                        type: integer
+                        value: 1
+                        required: True
+                    - selector:
+                        type: selector
+                        value:
+                        - vm
+                    - cloud:
+                        type: selector
+                        value:
+                        - india
+                        required: True
+                template: https://raw.githubusercontent.com/cloudmesh/cloudmesh/master/heat-templates/ubuntu-14.04/openmpi-cluster/openmpi-cluster.yaml
             ganglia:
                 name: Ganglia
                 shortdescription: Deploys a Ganglia service for the vms specified.    

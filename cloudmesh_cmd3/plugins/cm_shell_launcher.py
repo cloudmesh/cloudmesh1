@@ -9,6 +9,7 @@ from cloudmesh_base.logger import LOGGER
 from cloudmesh_common.util import get_rand_string
 from cloudmesh_base.ConfigDict import ConfigDict
 from cloudmesh.config.cm_config import cm_config
+from cloudmesh.config.cm_config import cm_config_launcher
 from cloudmesh.user.cm_user import cm_user
 from cloudmesh.cm_mongo import cm_mongo
 from cmd3.shell import command
@@ -168,6 +169,7 @@ class cm_shell_launcher:
             userid = self.cm_config.username()
             def_cloud = self.get_cloud_name(userid)
             self.cm_mongo.activate(userid)
+            cm_config_launcher = self.cm_config_launcher()
             
             userinfo = self.cm_user.info(userid)
             if "key" in userinfo["defaults"]:
@@ -188,7 +190,7 @@ class cm_shell_launcher:
             s_name = "launcher-{0}-{1}-{2}".format(userid, cookbook, get_rand_string())
             dummy = "123456789"  # doing nothing. just for test
             t_url = \
-            "https://raw.githubusercontent.com/cloudmesh/cloudmesh/master/heat-templates/centos6/launcher/launcher.yaml"
+            cm_config_launcher['cloudmesh']['launcher']['default']['template']
             param = {'KeyName': keynamenew,
                      'Cookbook': cookbook,
                      'dummy': dummy}
@@ -196,8 +198,7 @@ class cm_shell_launcher:
             if cookbook in [ "hadoop", "openmpi" ]:
                 privatekey, publickey = generate_keypair()
                 t_url = \
-                ("https://raw.githubusercontent.com/cloudmesh/cloudmesh/master/heat-templates/ubuntu-14.04/"
-                + str(cookbook) + "-cluster/" + str(cookbook) + "-cluster.yaml")
+                        cm_config_launcher['cloudmesh']['launcher']['recipes'][cookbook]['template']
                 param = {'KeyName': keynamenew,
                          'PublicKeyString': publickey,
                          'PrivateKeyString': privatekey}
