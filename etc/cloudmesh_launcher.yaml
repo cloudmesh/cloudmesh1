@@ -120,6 +120,78 @@ cloudmesh:
                 script: 
                     type: sh
                     value: echo "Hello"
+            hadoop2.7:
+                name: Hadoop 2.7.0
+                description:
+                    >
+                        Deploys a haddop cluster on the VMs specified
+                parameters:
+                    - nodes: 
+                        type: integer
+                        value: 1
+                        required: True
+                    - other: 
+                        type: float
+                        value: 5.0
+                        required: True
+                    - types: 
+                        type: string
+                        value: enter vm or bare metal
+                        required: True
+                    - selector:
+                        type: selector
+                        value:
+                        - vm
+                        - baremetal
+                        - xyz
+                        required: True
+                    - cloud:
+                        type: selector
+                        value:
+                        - india
+                        - sierra
+                        required: True
+                image: /static/img/launcher/hadoop.jpg
+                script: 
+                    type: sh
+                    value: echo "Hello"
+                template: https://raw.githubusercontent.com/cloudmesh/cloudmesh/dev2.0/heat-templates/ubuntu-14.04/hadoop-cluster/hadoop2.7-cluster.yaml
+            hadoop2.7-image:
+                name: Hadoop 2.7.0 with VM image
+                description:
+                    >
+                        Deploys a haddop cluster on the VMs specified
+                parameters:
+                    - nodes: 
+                        type: integer
+                        value: 1
+                        required: True
+                    - other: 
+                        type: float
+                        value: 5.0
+                        required: True
+                    - types: 
+                        type: string
+                        value: enter vm or bare metal
+                        required: True
+                    - selector:
+                        type: selector
+                        value:
+                        - vm
+                        - baremetal
+                        - xyz
+                        required: True
+                    - cloud:
+                        type: selector
+                        value:
+                        - india
+                        - sierra
+                        required: True
+                image: /static/img/launcher/hadoop.jpg
+                script: 
+                    type: sh
+                    value: echo "Hello"
+                template: https://raw.githubusercontent.com/cloudmesh/cloudmesh/dev2.0/heat-templates/hadoop-v2/hadoop-cluster/hadoop2.7-with-hadoop-v2-image.yaml
             openmpi:
                 name: OpenMPI
                 shortdescription: Deploys a Open MPI cluster.
