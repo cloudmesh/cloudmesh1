@@ -202,7 +202,7 @@ class cm_shell_launcher:
                      'Cookbook': cookbook,
                      'dummy': dummy}
             # test for openmpi, hadoop
-            if cookbook in [ "hadoop", "openmpi" ]:
+            if cookbook[:6] == "hadoop" or cookbook[:7] == "openmpi" :
                 privatekey, publickey = generate_keypair()
                 try:
                     t_url = \
