@@ -12,6 +12,9 @@ parameters:
   PrivateKeyString:
     type: string
     description: a private key string
+  UserName:
+    type: string
+    description: User name
 
 resources:
   security_group:
@@ -34,7 +37,8 @@ resources:
       key_name: { get_param: KeyName }
       image: "futuresystems/ubuntu-14.04"
       flavor: "m1.small"
-      name: hc-slave1
+      name: 
+        list_join: [ "-", [ { get_param : UserName }, "hc-slave1" ] ]
       security_groups:
         - "default"
         - { get_resource: security_group }
@@ -93,7 +97,8 @@ resources:
       key_name: { get_param: KeyName }
       image: "futuresystems/ubuntu-14.04"
       flavor: "m1.small"
-      name: hc-slave2
+      name: 
+        list_join: [ "-", [ { get_param : UserName }, "hc-slave2" ] ]
       security_groups:
         - "default"
         - { get_resource: security_group }
@@ -152,7 +157,8 @@ resources:
       key_name: { get_param: KeyName }
       image: "futuresystems/ubuntu-14.04"
       flavor: "m1.small"
-      name: hc-slave3
+      name:
+        list_join: [ "-", [ { get_param : UserName }, "hc-slave3" ] ]
       security_groups:
         - "default"
         - { get_resource: security_group }
@@ -211,7 +217,8 @@ resources:
       key_name: { get_param: KeyName }
       image: "futuresystems/ubuntu-14.04"
       flavor: "m1.small"
-      name: hc-master
+      name:
+        list_join: [ "-", [ { get_param : UserName }, "hc-master" ] ]
       security_groups:
         - "default"
         - { get_resource: security_group }
