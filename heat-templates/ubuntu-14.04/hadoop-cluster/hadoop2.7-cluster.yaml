@@ -52,9 +52,6 @@ resources:
             useradd -m ubuntu
             echo -e "\n# User rules for ubuntu\nubuntu ALL=(ALL) NOPASSWD:ALL" >>  /etc/sudoers.d/90-cloud-init-users
 
-            apt-get update
-            apt-get install default-jre -y
-
             cat <<EOF > ~/.hadooprc
 
             export JAVA_HOME=/usr/lib/jvm/default-java/
@@ -74,6 +71,12 @@ resources:
             wget http://mirrors.sonic.net/apache/hadoop/common/hadoop-2.7.0/hadoop-2.7.0.tar.gz
             tar xzf hadoop-2.7.0.tar.gz
             ln -s hadoop-2.7.0 hadoop
+            
+            apt-get update
+            apt-get install default-jre -y
+
+            ssh -q -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no hc-slave1 "source ~/.hadooprc;~/hadoop/sbin/hadoop-daemon.sh --script hdfs start datanode"
+            ssh -q -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no hc-slave1 "source ~/.hadooprc;~/hadoop/sbin/yarn-daemon.sh start nodemanager"
 
           params:
             $publickey: { get_param: PublicKeyString }
@@ -108,9 +111,6 @@ resources:
             useradd -m ubuntu
             echo -e "\n# User rules for ubuntu\nubuntu ALL=(ALL) NOPASSWD:ALL" >>  /etc/sudoers.d/90-cloud-init-users
 
-            apt-get update
-            apt-get install default-jre -y
-
             cat <<EOF > ~/.hadooprc
 
             export JAVA_HOME=/usr/lib/jvm/default-java/
@@ -130,6 +130,12 @@ resources:
             wget http://mirrors.sonic.net/apache/hadoop/common/hadoop-2.7.0/hadoop-2.7.0.tar.gz
             tar xzf hadoop-2.7.0.tar.gz
             ln -s hadoop-2.7.0 hadoop
+
+            apt-get update
+            apt-get install default-jre -y
+
+            ssh -q -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no hc-slave2 "source ~/.hadooprc;~/hadoop/sbin/hadoop-daemon.sh --script hdfs start datanode"
+            ssh -q -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no hc-slave2 "source ~/.hadooprc;~/hadoop/sbin/yarn-daemon.sh start nodemanager"
 
           params:
             $publickey: { get_param: PublicKeyString }
@@ -164,9 +170,6 @@ resources:
             useradd -m ubuntu
             echo -e "\n# User rules for ubuntu\nubuntu ALL=(ALL) NOPASSWD:ALL" >>  /etc/sudoers.d/90-cloud-init-users
 
-            apt-get update
-            apt-get install default-jre -y
-
             cat <<EOF > ~/.hadooprc
 
             export JAVA_HOME=/usr/lib/jvm/default-java/
@@ -186,6 +189,12 @@ resources:
             wget http://mirrors.sonic.net/apache/hadoop/common/hadoop-2.7.0/hadoop-2.7.0.tar.gz
             tar xzf hadoop-2.7.0.tar.gz
             ln -s hadoop-2.7.0 hadoop
+
+            apt-get update
+            apt-get install default-jre -y
+
+            ssh -q -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no hc-slave3 "source ~/.hadooprc;~/hadoop/sbin/hadoop-daemon.sh --script hdfs start datanode"
+            ssh -q -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no hc-slave3 "source ~/.hadooprc;~/hadoop/sbin/yarn-daemon.sh start nodemanager"
 
           params:
             $publickey: { get_param: PublicKeyString }
@@ -331,15 +340,6 @@ resources:
             ssh -q -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no $hcmaster "source ~/.hadooprc;hdfs namenode -format"
             ssh -q -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no $hcmaster "source ~/.hadooprc;hadoop/sbin/hadoop-daemon.sh --script hdfs start namenode"
             ssh -q -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no $hcmaster "source ~/.hadooprc;hadoop/sbin/yarn-daemon.sh start resourcemanager"
-
-            ssh -q $hc-slave1 "source ~/.hadooprc;hadoop/sbin/hadoop-daemon.sh --script hdfs start datanode"
-            ssh -q $hc-slave1 "source ~/.hadooprc;hadoop/sbin/yarn-daemon.sh start nodemanager"
-
-            ssh -q $hc-slave2 "source ~/.hadooprc;hadoop/sbin/hadoop-daemon.sh --script hdfs start datanode"
-            ssh -q $hc-slave2 "source ~/.hadooprc;hadoop/sbin/yarn-daemon.sh start nodemanager"
-
-            ssh -q $hc-slave3 "source ~/.hadooprc;hadoop/sbin/hadoop-daemon.sh --script hdfs start datanode"
-            ssh -q $hc-slave3 "source ~/.hadooprc;hadoop/sbin/yarn-daemon.sh start nodemanager"
 
           params:
             $hc-slave1: { get_attr: [ hc-slave1, first_address ] }
