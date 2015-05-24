@@ -217,6 +217,8 @@ class cm_shell_launcher:
                 param = {'KeyName': keynamenew,
                          'PublicKeyString': publickey,
                          'PrivateKeyString': privatekey}
+                if cookbook[:9] == "hadoop2.7":
+                    param["UserName"] = userid
 
             log.debug(def_cloud, userid, s_name, t_url, param)
             res = self.cm_mongo.stack_create(cloud=def_cloud, cm_user_id=userid,
