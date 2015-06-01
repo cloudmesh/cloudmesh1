@@ -1,0 +1,39 @@
+
+packages["osx"] = """
+    echo "######################################################################"
+    echo "## ignor eunused command line flags"
+    echo "######################################################################"    
+    export ARCHFLAGS=-Wno-error=unused-command-line-argument-hard-error-in-future
+    
+    echo "######################################################################"    
+    echo "## install brew"
+    echo "######################################################################"    
+    ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+
+    echo "######################################################################"    
+    echo "## update virtualenv"
+    echo "######################################################################"    
+    sudo easy_install pip && sudo pip install virtualenv
+
+    echo "######################################################################"    
+    echo "## update readline"
+    echo "######################################################################"    
+    sudo easy_install readline
+
+    echo "######################################################################"    
+    echo "## install LDAP 
+    echo "######################################################################"    
+    pip install python-ldap \
+    --global-option=build_ext \
+    --global-option="-I$(xcrun --show-sdk-path)/usr/include/sasl"
+
+"""
+
+packages["ubuntu"] ="""
+
+"""
+
+
+packages["centos"] = """
+
+"""
