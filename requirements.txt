@@ -46,6 +46,7 @@ flask-restful-swagger
 nose
 autopep8
 apache-libcloud==0.14.1
+pbr==0.11.0
 python-novaclient
 python-keystoneclient
 azure
