@@ -10,6 +10,7 @@ amqp==1.4.6               # via kombu, librabbitmq
 aniso8601==1.0.0          # via flask-restful
 anyjson==0.3.3            # via kombu
 apache-libcloud==0.14.1
+<<<<<<< HEAD
 argparse==1.3.0           # via oslo.config, python-keystoneclient, python-novaclient, stevedore
 autopep8==1.1.1
 azure==0.11.0
@@ -124,3 +125,22 @@ xlrd==0.9.3               # via sphinxcontrib-exceltable
 # considered to be unsafe in a requirements file:
 # pip==7.0.1                # via pbr
 # setuptools==17.0          # via actdiag, blockdiag, blockdiagcontrib-cisco, blockdiagcontrib-class, blockdiagcontrib-qb, blockdiagcontrib-square, cryptography, nwdiag, python-ldap, seqdiag, sphinx-bootstrap-theme
+=======
+pbr==0.11.0
+python-novaclient
+python-keystoneclient
+azure
+celery
+flower
+psutil
+simple-json
+pytimeparse
+prettytable
+tabulate
+passlib
+ipython
+pyzmq
+tornado
+fake-factory
+ecdsa
+>>>>>>> b56843004cd98c2293b2fbc88f7ff6d1e66199f9
