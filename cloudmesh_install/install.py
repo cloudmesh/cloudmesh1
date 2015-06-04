@@ -36,7 +36,7 @@ if major != 2 or (major == 2 and minor < 7):
 
 # BUG we need to ignore this in centos and install python 2.7
 
-print sys.dir()
+# print sys.dir()
 
 if not hasattr(sys, 'real_prefix'):
     print "ERROR: You are not running this script inside a virtualenv."
