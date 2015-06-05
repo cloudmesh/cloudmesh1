@@ -99,7 +99,6 @@ pyyaml==3.11
 pyzmq==14.6.0
 requests==2.7.0           # via python-keystoneclient, python-novaclient
 seqdiag==0.9.5
-sh==1.11
 simple-json==1.1
 simplejson==3.7.3         # via cloudmesh-base, cmd3, python-novaclient, simple-json
 six==1.9.0                # via cryptography, debtcollector, flask-restful, oslo.config, oslo.i18n, oslo.serialization, oslo.utils, pyopenssl, python-dateutil, python-keystoneclient, python-novaclient, sphinx, sphinxcontrib-httpdomain, stevedore
