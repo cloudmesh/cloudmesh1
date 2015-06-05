@@ -22,7 +22,6 @@ pycrypto
 fabric
 blessings
 progress
-sh
 console
 python-hostlist
 docopt
