@@ -3,11 +3,14 @@ import sys
 import os
 from build import cursor_on
 
+from cloudmesh_base.util import banner
+
 browser = "firefox"
 
 if sys.platform == 'darwin':
     browser = "open"
 
+debug = True    
 
 @task
 def view():
@@ -19,9 +22,12 @@ def view():
 def html():
     # disable Flask RSTPAGES due to sphins incompatibility
     os.environ['RSTPAGES'] = 'FALSE'
+    banner("API Generation")
     api()
+    banner("Manual Pages")
     man()
     # build the docs locally and view
+    banner("Make the sphinx documentation")
     local("cd docs; make html")
     cursor_on()
 
@@ -29,13 +35,12 @@ def html():
 @task
 def publish():
     """deploy the documentation on gh-pages"""
-    # html()
-    local('cd docs/build/html '
-          '&& git add .  '
-          '&& git commit -m "site generated"'
-          '&& git push origin gh-pages')
-    local('git commit -a -m "build site"')
-    local("git push origin master")
+    banner("publish doc to github")
+    local("ghp-import -n -p docs/build/html")
+    #html()
+    #local('cd docs/build/html && git add .  && git commit -m "site generated" && git push origin gh-pages')
+    #local('git commit -a -m "build site"')
+    #local("git push origin master")
 
 
 @task

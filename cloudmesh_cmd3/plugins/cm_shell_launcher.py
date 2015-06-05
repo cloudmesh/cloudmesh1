@@ -9,6 +9,7 @@ from cloudmesh_base.logger import LOGGER
 from cloudmesh_common.util import get_rand_string
 from cloudmesh_base.ConfigDict import ConfigDict
 from cloudmesh.config.cm_config import cm_config
+from cloudmesh.config.cm_config import cm_config_launcher
 from cloudmesh.user.cm_user import cm_user
 from cloudmesh.cm_mongo import cm_mongo
 from cmd3.shell import command
@@ -168,6 +169,7 @@ class cm_shell_launcher:
             userid = self.cm_config.username()
             def_cloud = self.get_cloud_name(userid)
             self.cm_mongo.activate(userid)
+            config_launcher = cm_config_launcher()
             
             userinfo = self.cm_user.info(userid)
             if "key" in userinfo["defaults"]:
@@ -187,20 +189,36 @@ class cm_shell_launcher:
             cookbook = arguments['MENU']
             s_name = "launcher-{0}-{1}-{2}".format(userid, cookbook, get_rand_string())
             dummy = "123456789"  # doing nothing. just for test
-            t_url = \
-            "https://raw.githubusercontent.com/cloudmesh/cloudmesh/master/heat-templates/centos6/launcher/launcher.yaml"
+            try:
+                t_url = \
+                config_launcher['cloudmesh']['launcher']['default']['template']
+            except:
+                # If key is missing (KeyError), new cloudmesh_launcher.yaml
+                # needs to be copied to ~/.cloudmesh
+                t_url = \
+                "https://raw.githubusercontent.com/cloudmesh/cloudmesh/master/heat-templates/centos6/launcher/launcher.yaml"
+
             param = {'KeyName': keynamenew,
                      'Cookbook': cookbook,
                      'dummy': dummy}
             # test for openmpi, hadoop
-            if cookbook in [ "hadoop", "openmpi" ]:
+            if cookbook[:6] == "hadoop" or cookbook[:7] == "openmpi" :
                 privatekey, publickey = generate_keypair()
-                t_url = \
-                ("https://raw.githubusercontent.com/cloudmesh/cloudmesh/dev1.3/heat-templates/ubuntu-14.04/"
-                + str(cookbook) + "-cluster/" + str(cookbook) + "-cluster.yaml")
+                try:
+                    t_url = \
+                            config_launcher['cloudmesh']['launcher']['recipes'][cookbook]['template']
+                except:
+                    # If key is missing (KeyError), new cloudmesh_launcher.yaml
+                    # needs to be copied to ~/.cloudmesh
+                    t_url = \
+                            ("https://raw.githubusercontent.com/cloudmesh/cloudmesh/master/heat-templates/ubuntu-14.04/"
+                             + str(cookbook) + "-cluster/" + str(cookbook) +
+                             "-cluster.yaml")
                 param = {'KeyName': keynamenew,
                          'PublicKeyString': publickey,
                          'PrivateKeyString': privatekey}
+                if cookbook[:9] == "hadoop2.7":
+                    param["UserName"] = userid
 
             log.debug(def_cloud, userid, s_name, t_url, param)
             res = self.cm_mongo.stack_create(cloud=def_cloud, cm_user_id=userid,

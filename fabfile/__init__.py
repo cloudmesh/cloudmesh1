@@ -1,5 +1,8 @@
-import server
+print("CLEAN")
 import clean
+print("SERVER")
+import server
+print("BUILD")
 import build
 import git
 import pep8

@@ -48,18 +48,20 @@ banner
 Command - banner::
 
     Usage:
-        banner [-c CHAR] [-n WIDTH] [-i INDENT] TEXT
+        banner [-c CHAR] [-n WIDTH] [-i INDENT] [-r COLOR] TEXT
     
     Arguments:
         TEXT   The text message from which to create the banner
         CHAR   The character for the frame. 
         WIDTH  Width of the banner
         INDENT indentation of the banner
+        COLOR  the color
     
     Options:
         -c CHAR   The character for the frame. [default: #]
         -n WIDTH  The width of the banner. [default: 70]
         -i INDENT  The width of the banner. [default: 0]            
+        -r COLOR  The color of the banner. [default: BLACK]
     
     Prints a banner form a one line text message.
     
@@ -1165,6 +1167,27 @@ Command - q::
     Action to be performed whne quit is typed
     
 
+qstat
+----------------------------------------------------------------------
+
+Command - qstat::
+
+    Usage:
+      qstat HOST [-a]  [(--view VIEW | ATTRIBUTES...)] [--output=(dict|table)]
+    
+    tests via ping if the host ith the give NAME is reacahble
+    
+    Arguments:
+    
+      VIEW  the name of the view [default: default].
+      HOST      Name of the machine to test
+    
+    Options:
+    
+       -v       verbose mode
+    
+    
+
 quit
 ----------------------------------------------------------------------
 
@@ -1341,6 +1364,18 @@ Command - security_group::
     
     
 
+setup_yaml
+----------------------------------------------------------------------
+
+Command - setup_yaml::
+
+    ::
+        Usage:
+          setup_yaml  [--force] 
+    
+        Copies a cmd3.yaml file into ~/.cloudmesh/cmd3.yaml
+    
+
 ssh
 ----------------------------------------------------------------------
 
@@ -1481,26 +1516,6 @@ Command - timer::
     
         Implementation note: we have a stopwatch in cloudmesh,
                              that we could copy into cmd3
-    
-
-uebercool
-----------------------------------------------------------------------
-
-Command - uebercool::
-
-    Usage:
-        uebercool NAME
-    
-    tests via ping if the host ith the give NAME is reachable
-    
-    Arguments:
-    
-      NAME      Name of the machine to test
-    
-    Options:
-    
-       -v       verbose mode
-    
     
 
 usage

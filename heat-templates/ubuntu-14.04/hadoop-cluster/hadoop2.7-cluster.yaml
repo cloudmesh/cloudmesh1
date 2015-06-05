@@ -1,0 +1,363 @@
+heat_template_version: 2013-05-23
+
+description: Hadoop cluster with OpenStack Heat
+
+parameters:
+  KeyName:
+    type: string
+    description: Key name for logging in to instance
+  PublicKeyString:
+    type: string
+    description: a public key string
+  PrivateKeyString:
+    type: string
+    description: a private key string
+  UserName:
+    type: string
+    description: User name
+
+resources:
+  security_group:
+    type: AWS::EC2::SecurityGroup
+    properties:
+      GroupDescription: "SSH(22)"
+      SecurityGroupIngress:
+      - IpProtocol: "tcp"
+        FromPort: "22"
+        ToPort : "22"
+        CidrIp : "0.0.0.0/0"
+  floatingip:
+    type: OS::Nova::FloatingIP
+    properties:
+      pool: ext-net
+
+  hc-slave1:
+    type: OS::Nova::Server
+    properties:
+      key_name: { get_param: KeyName }
+      image: "futuresystems/ubuntu-14.04"
+      flavor: "m1.small"
+      name: 
+        list_join: [ "-", [ { get_param : UserName }, "hc-slave1" ] ]
+      security_groups:
+        - "default"
+        - { get_resource: security_group }
+      user_data:
+        str_replace:
+          template: |
+            #!/bin/bash
+            echo $publickey >> /root/.ssh/authorized_keys
+            echo "$privatekey" > /root/.ssh/id_rsa
+            chmod 600 /root/.ssh/id_rsa
+
+            echo "hc-slave1" > /etc/hostname
+            hostname hc-slave1
+
+            useradd -m ubuntu
+            echo -e "\n# User rules for ubuntu\nubuntu ALL=(ALL) NOPASSWD:ALL" >>  /etc/sudoers.d/90-cloud-init-users
+
+            cat <<EOF > ~/.hadooprc
+
+            export JAVA_HOME=/usr/lib/jvm/default-java/
+            export PATH=\$JAVA_HOME/bin:\$PATH
+            export HADOOP_COMMON_HOME=\$HOME/hadoop
+            export HADOOP_MAPRED_HOME=\$HADOOP_COMMON_HOME
+            export HADOOP_HDFS_HOME=\$HADOOP_COMMON_HOME
+            export YARN_HOME=\$HADOOP_COMMON_HOME
+            export PATH=\$PATH:\$HADOOP_COMMON_HOME/bin
+            export PATH=\$PATH:\$HADOOP_COMMON_HOME/sbin
+
+            EOF
+
+            echo "source ~/.hadooprc" >> ~/.bashrc
+
+            cd /root
+            wget http://mirrors.sonic.net/apache/hadoop/common/hadoop-2.7.0/hadoop-2.7.0.tar.gz
+            tar xzf hadoop-2.7.0.tar.gz
+            ln -s hadoop-2.7.0 hadoop
+            
+            apt-get update
+            apt-get install default-jre -y
+
+            ssh -q -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no hc-slave1 "source ~/.hadooprc;~/hadoop/sbin/hadoop-daemon.sh --script hdfs start datanode"
+            ssh -q -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no hc-slave1 "source ~/.hadooprc;~/hadoop/sbin/yarn-daemon.sh start nodemanager"
+
+          params:
+            $publickey: { get_param: PublicKeyString }
+            $privatekey: { get_param: PrivateKeyString }
+  association:
+    type: OS::Nova::FloatingIPAssociation
+    properties:
+      floating_ip: { get_resource: floatingip }
+      server_id: { get_resource: 'hc-slave1' }
+
+  hc-slave2:
+    type: OS::Nova::Server
+    properties:
+      key_name: { get_param: KeyName }
+      image: "futuresystems/ubuntu-14.04"
+      flavor: "m1.small"
+      name: 
+        list_join: [ "-", [ { get_param : UserName }, "hc-slave2" ] ]
+      security_groups:
+        - "default"
+        - { get_resource: security_group }
+      user_data:
+        str_replace:
+          template: |
+            #!/bin/bash
+            echo $publickey >> /root/.ssh/authorized_keys
+            echo "$privatekey" > /root/.ssh/id_rsa
+            chmod 600 /root/.ssh/id_rsa
+
+            echo "hc-slave2" > /etc/hostname
+            hostname hc-slave2
+
+            useradd -m ubuntu
+            echo -e "\n# User rules for ubuntu\nubuntu ALL=(ALL) NOPASSWD:ALL" >>  /etc/sudoers.d/90-cloud-init-users
+
+            cat <<EOF > ~/.hadooprc
+
+            export JAVA_HOME=/usr/lib/jvm/default-java/
+            export PATH=\$JAVA_HOME/bin:\$PATH
+            export HADOOP_COMMON_HOME=\$HOME/hadoop
+            export HADOOP_MAPRED_HOME=\$HADOOP_COMMON_HOME
+            export HADOOP_HDFS_HOME=\$HADOOP_COMMON_HOME
+            export YARN_HOME=\$HADOOP_COMMON_HOME
+            export PATH=\$PATH:\$HADOOP_COMMON_HOME/bin
+            export PATH=\$PATH:\$HADOOP_COMMON_HOME/sbin
+
+            EOF
+
+            echo "source ~/.hadooprc" >> ~/.bashrc
+
+            cd /root
+            wget http://mirrors.sonic.net/apache/hadoop/common/hadoop-2.7.0/hadoop-2.7.0.tar.gz
+            tar xzf hadoop-2.7.0.tar.gz
+            ln -s hadoop-2.7.0 hadoop
+
+            apt-get update
+            apt-get install default-jre -y
+
+            ssh -q -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no hc-slave2 "source ~/.hadooprc;~/hadoop/sbin/hadoop-daemon.sh --script hdfs start datanode"
+            ssh -q -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no hc-slave2 "source ~/.hadooprc;~/hadoop/sbin/yarn-daemon.sh start nodemanager"
+
+          params:
+            $publickey: { get_param: PublicKeyString }
+            $privatekey: { get_param: PrivateKeyString }
+  association:
+    type: OS::Nova::FloatingIPAssociation
+    properties:
+      floating_ip: { get_resource: floatingip }
+      server_id: { get_resource: 'hc-slave2' }
+
+  hc-slave3:
+    type: OS::Nova::Server
+    properties:
+      key_name: { get_param: KeyName }
+      image: "futuresystems/ubuntu-14.04"
+      flavor: "m1.small"
+      name:
+        list_join: [ "-", [ { get_param : UserName }, "hc-slave3" ] ]
+      security_groups:
+        - "default"
+        - { get_resource: security_group }
+      user_data:
+        str_replace:
+          template: |
+            #!/bin/bash
+            echo $publickey >> /root/.ssh/authorized_keys
+            echo "$privatekey" > /root/.ssh/id_rsa
+            chmod 600 /root/.ssh/id_rsa
+
+            echo "hc-slave3" > /etc/hostname
+            hostname hc-slave3
+
+            useradd -m ubuntu
+            echo -e "\n# User rules for ubuntu\nubuntu ALL=(ALL) NOPASSWD:ALL" >>  /etc/sudoers.d/90-cloud-init-users
+
+            cat <<EOF > ~/.hadooprc
+
+            export JAVA_HOME=/usr/lib/jvm/default-java/
+            export PATH=\$JAVA_HOME/bin:\$PATH
+            export HADOOP_COMMON_HOME=\$HOME/hadoop
+            export HADOOP_MAPRED_HOME=\$HADOOP_COMMON_HOME
+            export HADOOP_HDFS_HOME=\$HADOOP_COMMON_HOME
+            export YARN_HOME=\$HADOOP_COMMON_HOME
+            export PATH=\$PATH:\$HADOOP_COMMON_HOME/bin
+            export PATH=\$PATH:\$HADOOP_COMMON_HOME/sbin
+
+            EOF
+            
+            echo "source ~/.hadooprc" >> ~/.bashrc
+
+            cd /root
+            wget http://mirrors.sonic.net/apache/hadoop/common/hadoop-2.7.0/hadoop-2.7.0.tar.gz
+            tar xzf hadoop-2.7.0.tar.gz
+            ln -s hadoop-2.7.0 hadoop
+
+            apt-get update
+            apt-get install default-jre -y
+
+            ssh -q -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no hc-slave3 "source ~/.hadooprc;~/hadoop/sbin/hadoop-daemon.sh --script hdfs start datanode"
+            ssh -q -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no hc-slave3 "source ~/.hadooprc;~/hadoop/sbin/yarn-daemon.sh start nodemanager"
+
+          params:
+            $publickey: { get_param: PublicKeyString }
+            $privatekey: { get_param: PrivateKeyString }
+  association:
+    type: OS::Nova::FloatingIPAssociation
+    properties:
+      floating_ip: { get_resource: floatingip }
+      server_id: { get_resource: 'hc-slave3' }
+
+  hc-master:
+    type: OS::Nova::Server
+    properties:
+      key_name: { get_param: KeyName }
+      image: "futuresystems/ubuntu-14.04"
+      flavor: "m1.small"
+      name:
+        list_join: [ "-", [ { get_param : UserName }, "hc-master" ] ]
+      security_groups:
+        - "default"
+        - { get_resource: security_group }
+      user_data:
+        str_replace:
+          template: |
+            #!/bin/bash
+            echo $publickey >> /root/.ssh/authorized_keys
+            echo "$privatekey" > /root/.ssh/id_rsa
+            chmod 600 /root/.ssh/id_rsa
+
+            echo "hc-master" > /etc/hostname
+            hostname hc-master
+
+            useradd -m ubuntu
+            echo -e "\n# User rules for ubuntu\nubuntu ALL=(ALL) NOPASSWD:ALL" >>  /etc/sudoers.d/90-cloud-init-users
+
+            apt-get update
+            apt-get install default-jre -y
+            apt-get install openjdk-7-jdk -y
+
+            cat <<EOF > ~/.hadooprc
+
+            export JAVA_HOME=/usr/lib/jvm/default-java/
+            export PATH=\$JAVA_HOME/bin:\$PATH
+            export HADOOP_COMMON_HOME=\$HOME/hadoop
+            export HADOOP_MAPRED_HOME=\$HADOOP_COMMON_HOME
+            export HADOOP_HDFS_HOME=\$HADOOP_COMMON_HOME
+            export YARN_HOME=\$HADOOP_COMMON_HOME
+            export PATH=\$PATH:\$HADOOP_COMMON_HOME/bin
+            export PATH=\$PATH:\$HADOOP_COMMON_HOME/sbin
+
+            EOF
+
+            echo "source ~/.hadooprc" >> ~/.bashrc
+
+            cd /root
+            wget http://mirrors.sonic.net/apache/hadoop/common/hadoop-2.7.0/hadoop-2.7.0.tar.gz
+            tar xzf hadoop-2.7.0.tar.gz
+            ln -s hadoop-2.7.0 hadoop
+
+            cat <<EOF > ~/hadoop/etc/hadoop/core-site.xml
+            <configuration>
+            <property>
+            <name>fs.defaultFS</name>
+            <value>hdfs://hc-master/</value>
+            <description>NameNode URI</description>
+            </property>
+            </configuration>
+            EOF
+
+            cat <<EOF > ~/hadoop/etc/hadoop/yarn-site.xml
+            <configuration>
+            <property>
+            <name>yarn.resourcemanager.hostname</name>
+            <value>hc-master</value>
+            <description>The hostname of the ResourceManager</description>
+            </property>
+            <property>
+            <name>yarn.nodemanager.aux-services</name>
+            <value>mapreduce_shuffle</value>
+            <description>shuffle service for MapReduce</description>
+            </property>
+            </configuration>
+            EOF
+
+            cp ~/hadoop/etc/hadoop/mapred-site.xml.template ~/hadoop/etc/hadoop/mapred-site.xml
+
+            cat <<EOF > ~/hadoop/etc/hadoop/mapred-site.xml
+            <configuration>
+            <property>
+            <name>mapreduce.framework.name</name>
+            <value>yarn</value>
+            <description>Execution framework.</description>
+            </property>
+            </configuration>
+            EOF
+
+            cat <<EOF > ~/hadoop/etc/hadoop/slaves
+            hc-slave1
+            hc-slave2
+            hc-slave3
+            EOF
+            
+            hcmaster=$(ifconfig eth0 | awk -F':' '/inet addr/{split($2,_," ");print _[1]}')
+
+            cat << EOF > /etc/hosts.hadoop
+            
+            # internal network addresses for hadoop cluster
+            $hcmaster hc-master
+            $hc-slave1 hc-slave1
+            $hc-slave2 hc-slave2
+            $hc-slave3 hc-slave3
+            EOF
+
+            cat /etc/hosts.hadoop >> /etc/hosts
+
+            scp -q -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no /etc/hosts.hadoop $hc-slave1:/etc/hosts.hadoop
+            scp -q -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no /etc/hosts.hadoop $hc-slave2:/etc/hosts.hadoop
+            scp -q -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no /etc/hosts.hadoop $hc-slave3:/etc/hosts.hadoop
+            ssh -q -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no $hc-slave1 "cat /etc/hosts.hadoop >> /etc/hosts"
+            ssh -q -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no $hc-slave2 "cat /etc/hosts.hadoop >> /etc/hosts"
+            ssh -q -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no $hc-slave3 "cat /etc/hosts.hadoop >> /etc/hosts"
+
+            for slave in `cat ~/hadoop/etc/hadoop/slaves`
+            do
+               ssh-keyscan $slave >> ~/.ssh/known_hosts
+               for i in `seq 1 12`
+               do
+                  ssh $slave ls hadoop/etc/hadoop &> /dev/null
+                  IS_INSTALLED=$?
+                  if [ 0 -eq "$IS_INSTALLED" ]
+                  then
+                     ssh $slave "ssh-keyscan hc-master >> ~/.ssh/known_hosts"
+                     ssh $slave "ssh-keyscan hc-slave1 >> ~/.ssh/known_hosts"
+                     ssh $slave "ssh-keyscan hc-slave2 >> ~/.ssh/known_hosts"
+                     ssh $slave "ssh-keyscan hc-slave3 >> ~/.ssh/known_hosts"
+                     rsync -avxP --exclude=logs ~/hadoop/etc/hadoop/ $slave:~/hadoop/etc/hadoop/
+                     break
+                  fi
+                  echo waiting.
+                  sleep 5
+               done
+            done
+
+            ssh -q -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no $hcmaster "source ~/.hadooprc;hdfs namenode -format"
+            ssh -q -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no $hcmaster "source ~/.hadooprc;hadoop/sbin/hadoop-daemon.sh --script hdfs start namenode"
+            ssh -q -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no $hcmaster "source ~/.hadooprc;hadoop/sbin/yarn-daemon.sh start resourcemanager"
+
+          params:
+            $hc-slave1: { get_attr: [ hc-slave1, first_address ] }
+            $hc-slave2: { get_attr: [ hc-slave2, first_address ] }
+            $hc-slave3: { get_attr: [ hc-slave3, first_address ] }
+            $publickey: { get_param: PublicKeyString }
+            $privatekey: { get_param: PrivateKeyString }
+
+  association:
+    type: OS::Nova::FloatingIPAssociation
+    properties:
+      floating_ip: { get_resource: floatingip }
+      server_id: { get_resource: 'hc-master' }
+

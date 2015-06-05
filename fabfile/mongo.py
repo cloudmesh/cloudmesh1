@@ -62,7 +62,7 @@ def reset(password=None):
     PROGRESS.next()
     banner("refreshing cloud info")
     simple()
-    local("reset")
+    # local("reset")
 
 
 @task

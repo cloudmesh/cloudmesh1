@@ -177,5 +177,8 @@ pseudoxml:
 	@echo "Build finished. The pseudo-XML files are in $(BUILDDIR)/pseudoxml."
 
 manpages:
-	sphinx-apidoc -H "Modules and Classes" -o source/modules ../cloudmesh ../cloudmesh_web
+	echo "BUILD MANPAGES"
+	cd ../../cloudmesh; python setup.py install
+	sphinx-apidoc -H "Modules and Classes" -o source/modules ../../cloudmesh ../../cloudmesh/cloudmesh ../../cloudmesh_web ../../cloudmesh_base/cloudmesh_base
+
 

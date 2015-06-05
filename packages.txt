@@ -1,0 +1,59 @@
+
+packages["osx"] = """
+    echo "######################################################################"
+    echo "## ignor eunused command line flags"
+    echo "######################################################################"    
+    export ARCHFLAGS=-Wno-error=unused-command-line-argument-hard-error-in-future
+    
+    echo "######################################################################"    
+    echo "## install brew"
+    echo "######################################################################"    
+    ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+
+    echo "######################################################################"    
+    echo "## update virtualenv"
+    echo "######################################################################"    
+    sudo easy_install pip && sudo pip install virtualenv
+
+    echo "######################################################################"    
+    echo "## update readline"
+    echo "######################################################################"    
+    sudo easy_install readline
+
+    echo "######################################################################"    
+    echo "## install LDAP 
+    echo "######################################################################"    
+    pip install python-ldap \
+    --global-option=build_ext \
+    --global-option="-I$(xcrun --show-sdk-path)/usr/include/sasl"
+"""
+
+packages["ubuntu"] ="""
+    echo "######################################################################"    
+    echo "## install PACKAGES
+    echo "######################################################################"    
+    sudo apt-get update
+    sudo apt-get -y install curl
+    sudo apt-get -y install emacs24
+    sudo apt-get -y install git
+    sudo apt-get -y install libffi-dev
+    sudo apt-get -y install libldap2-dev
+    sudo apt-get -y install libsasl2-dev
+    sudo apt-get -y install libssl-dev
+    sudo apt-get -y install libpng-dev
+    sudo apt-get -y install libyaml-dev
+    sudo apt-get -y install mercurial
+    sudo apt-get -y install mongodb-server
+    sudo apt-get -y install python-dev
+    sudo apt-get -y install python-setuptools
+    sudo apt-get -y install python-virtualenv
+    sudo apt-get -y install rabbitmq-server
+    sudo apt-get -y install graphviz
+    sudo apt-get -y install libffi-dev
+"""
+
+packages["centos"] = """
+    echo "# ######################################################################"
+    echo "# INstalation for CENTOS is not yet supported
+    echo "# ######################################################################"
+"""

@@ -1,14 +1,24 @@
 from fabric.api import task, local
 from cloudmesh_base.util import banner
 from cloudmesh_base.locations import config_file
-import server
 
 
+def kill(server="server", debug=True):
+    """kills all server processes """
+    with settings(warn_only=True):
+        execute_command("STOP MONGO", "fab mongo.stop", debug=debug)
+        result = local(
+            'ps -ax | fgrep "python {0}.py" | fgrep -v fgrep'.format(server), capture=True).split("\n")
+        for line in result:
+            if line is not '':
+                pid = line.split(" ")[0]
+                local("kill -9 {0}".format(pid))
+                # local("fab queue.stop")
 @task
 def dir():
     """clean the dirs"""
     banner("STOPPING SERVER")
-    server.stop()
+    kill()
     banner("CLEAN DIR")
     local("rm -rf *.egg")
     local('find . -name "*~" -exec rm {} \;  ')
@@ -18,6 +28,7 @@ def dir():
     local("rm -rf *.egg-info")
     local("rm -f celeryd@*")
     local("rm -f *.dump")
+    sys.exit()
 
 
 @task

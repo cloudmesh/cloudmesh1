@@ -14,20 +14,14 @@
 import sys
 import os
 import sphinx_bootstrap_theme
-# import cloudmesh.util
+
 
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 # sys.path.insert(0, os.path.abspath('.'))
 
-sys.path.insert(0, os.path.abspath('../..'))
-sys.path.insert(0, os.path.abspath('../../cloudmesh_common'))
-sys.path.insert(0, os.path.abspath('./cloudmesh_common'))
-sys.path.insert(0, os.path.abspath('../../..'))
-
-# print "PATH", sys.path
-
+import cloudmesh
 
 # -- General configuration -----------------------------------------------
 
@@ -73,7 +67,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'my Cloudmesh'
-copyright = u'2014, 2013, Gregor von Laszewski for  FutureGrid'
+copyright = u'2015, 2014, 2013, Gregor von Laszewski'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -173,7 +167,7 @@ html_theme_options = {
     # such as "amelia" or "cosmo".
     #
     # Note that this is served off CDN, so won't be available offline.
-    # 'bootswatch_theme': "cosmo",
+    #'bootswatch_theme': "cosmo",
 }
 
 
@@ -190,12 +184,12 @@ html_theme_path = sphinx_bootstrap_theme.get_html_theme_path()
 
 # The name of an image file (relative to this directory) to place at the top
 # of the sidebar.
-html_logo = "images/fg-logo-white-24x36.png"
+html_logo = "images/cm-color-logo-24.png"
 
 # The name of an image file (within the static path) to use as favicon of the
 # docs.  This file should be a Windows icon file (.ico) being 16x16 or 32x32
 # pixels large.
-# html_favicon = None
+html_favicon = "images/cm-logo.ico"
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,

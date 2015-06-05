@@ -260,14 +260,28 @@ class cm_shell_cluster:
                 return json.loads(s[h:t+1])
             
             def check_public_ip_existence(d):
-                temp = d['addresses']['private']
+                # Patch for #208
+                try:
+                    temp = d['addresses']['private']
+                except KeyError:
+                    temp = d['addresses']['int-net']
+                except:
+                    return False
+
                 for item in temp:
                     if item["OS-EXT-IPS:type"] == "floating":
                         return True
                 return False
             
             def get_ip(d, kind="floating"): # kind is either floating or fixed
-                temp = d['addresses']['private']
+                # Patch for #208
+                try:
+                    temp = d['addresses']['private']
+                except KeyError:
+                    temp = d['addresses']['int-net']
+                except:
+                    temp = []
+
                 for item in temp:
                     if item["OS-EXT-IPS:type"] == kind:
                         return item['addr']#.encode('ascii')
@@ -288,7 +302,7 @@ class cm_shell_cluster:
                     Console.warning("Please check the network")
                     return
                 print ("checking({0})...".format(repeat_index))
-                time.sleep(5)
+                time.sleep(10)
                 res = str(cm(command_refresh))
                 res = string_to_dict(res)
                 if _help0(res):
@@ -317,7 +331,7 @@ class cm_shell_cluster:
                     Console.warning("Please check the network")
                     return
                 print ("checking({0})...".format(repeat_index))
-                time.sleep(5)
+                time.sleep(10)
                 res = str(cm(command_refresh))
                 res = string_to_dict(res)
                 if _help(res):
