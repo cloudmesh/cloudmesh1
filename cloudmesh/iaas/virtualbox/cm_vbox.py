@@ -8,10 +8,23 @@ from cloudmesh_base.logger import LOGGER
 log = LOGGER(__file__)
 
 # TODO bake not implemented
-vbox_list = Shell.VBoxManage.bake("list", "vms", "-l")
-vbox_vminfo = Shell.VBoxManage.bake("showvminfo")
-vbox_controlvm = Shell.VBoxManage.bake("controlvm")
-vbox_startvm = Shell.VBoxManage.bake("startvm")
+
+
+def vbox_list(*args):
+    a = ["list", "vms", "-l"] + args
+    return Shell.execute('VBoxManage', a)
+
+def vbox_vminfo(*args):
+    a = ["showvminfo"] + args
+    return Shell.execute('VBoxManage', a)
+
+def vbox_controlvm(*args):
+    a = ["controlvm"] + args
+    return Shell.execute('VBoxManage', a)
+
+def vbox_startcm(*args):
+    a = ["startvm"] + args
+    return Shell.execute('VBoxManage', a)
 
 #
 # LIST

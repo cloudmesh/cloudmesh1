@@ -1,7 +1,7 @@
 # from cloudmesh.util.gitinfo import GitInfo
 from cloudmesh_base.logger import LOGGER
 from flask import Blueprint, render_template
-from sh import git
+from cloudmesh_base.Shell import Shell
 import requests
 
 log = LOGGER(__file__)
@@ -11,8 +11,7 @@ git_module = Blueprint('git_module', __name__)
 
 @git_module.route('/git')
 def display_git_authors():
-    result = git("shortlog", "-s", "-n",
-                 _tty_in=True, _tty_out=False).split("\n")
+    result = Shell.git("shortlog", "-s", "-n").split("\n")
     authors = {}
     for line in result:
         try:

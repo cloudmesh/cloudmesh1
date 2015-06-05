@@ -15,7 +15,6 @@ from flask.ext.principal import Permission, RoleNeed
 from flask.ext.wtf import Form
 from hostlist import expand_hostlist
 from pprint import pprint
-from sh import blockdiag
 from wtforms import TextField, SelectField, TextAreaField
 import cloudmesh
 

@@ -17,10 +17,7 @@ from cloudmesh.iaas.azure.cm_azure import cm_azure as azure
 from cloudmesh_base.locations import config_file
 
 try:
-    # from sh import fgmetric
     from fgmetric.FGMetricsAPI import FGMetricsAPI
-    # OR
-    # from sh import fgmetric
 except:
     # TODO THIS IS NOT HOW WE DO IT, SETUP CONTAINS ALL REQUEMENTS
     # FIX SETUP

@@ -5,8 +5,9 @@ from cloudmesh_base.logger import LOGGER
 from IPython.lib import passwd
 from shutil import copyfile
 from cloudmesh_base.util import path_expand
+from cloudmesh_base.Shell import Shell
 import os
-import sh
+
 
 log = LOGGER(__file__)
 
@@ -74,13 +75,13 @@ class notebook(object):
         #
         # TODO: this is not a good way to kill, as it apears that we only read 80 chars for each line in ps
         #
-        result = sh.ps("-o", "pid,command", _tty_in=False, _tty_out=False)
-        for line in result.split("\n"):
+        result = Shell.ps("-o", "pid,command").split("\n")
+        for line in result:
             if "notebook" in line and "ipython" in line:
                 attributes = line.strip().split(' ')
                 pid = attributes[0]
                 print("TERMINATING", pid)
-                sh.kill("-9", pid)
+                Shell.kill("-9", pid)
 
 
 class cm_shell_notebook:

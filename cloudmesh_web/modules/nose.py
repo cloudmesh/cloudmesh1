@@ -6,6 +6,7 @@ from datetime import datetime
 from flask import Blueprint, render_template, redirect
 from flask.ext.login import login_required
 from flask.ext.principal import Permission, RoleNeed
+from cloudmesh_base.Shell import Shell
 from sh import nosetests, pwd
 
 log = LOGGER(__file__)
@@ -78,11 +79,11 @@ def run_nosetest(test=None):
         filename = "/tmp/nosetests_{0}.json".format(test)
         testname = "../tests/test_{0}.py".format(test)
 
-    print "PWD", pwd()
+    print "PWD", Shell.pwd()
     try:
-        result = nosetests("--with-json", "-w", "../tests",
+        result = Shell.nosetests("--with-json", "-w", "../tests",
                            "--json-file='{0}' {1}".format(filename, testname))
     except:
         pass
-    print "RRRR", result
+    print "Result", result
     return redirect("/test/nose")

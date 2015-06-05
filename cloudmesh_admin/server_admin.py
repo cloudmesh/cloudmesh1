@@ -7,8 +7,6 @@ from cloudmesh_base.util import path_expand
 
 from cloudmesh.shell.Shell import Shell
 
-# BUG: replace with Shell
-import sh
 # need to get rid of fabric later
 from fabric.api import task, local, settings, hide
 
@@ -127,7 +125,7 @@ class celery_server(cloudmesh_server):
 
 class cloudmesh_server(object):
     def _ps(self):
-        return sh.ps("-ax", _tty_out=False)
+        return Shell.ps("-ax")
 
         # def __init__(self):
         # pass
@@ -164,7 +162,7 @@ class cloudmesh_server(object):
                                     self.workers[worker]["count"]))
         print(json.dumps(self.workers, indent=4))
 
-        self.celery_cmd = sh.which("celery")
+        self.celery_cmd = Shell.which("celery")
         # print ("CCCC", self.celery_cmd)
         # sys.exit()
         '''
@@ -224,14 +222,15 @@ class cloudmesh_server(object):
         os.system("cd cloudmesh_web; python server.py &")
         time.sleep(4)
 
+
+
     def _stop_web_server(self):
         # stop web server
         banner("stop the web server")
         try:
-            result = sh.fgrep(
-                sh.fgrep(self._ps(), "python {name}.py".format(**self.server_env)),
-                "-v", "fgrep"
-            ).split("\n")[:-1]
+            result = Shell.ps().split("\n")
+            result = Shell.remove_line_with(result, "fgrep")
+            result = Shell.find_lines_with(result, "python {name}.py".format(**self.server_env))
             print(result)
 
             for line in result:
@@ -241,7 +240,7 @@ class cloudmesh_server(object):
                     print("PID", pid)
                     print("KILL")
                     try:
-                        sh.kill("-9", str(pid))
+                        Shell.kill("-9", str(pid))
                     except Exception, e:
                         print("ERROR")
                         print(e)
@@ -316,7 +315,7 @@ class cloudmesh_server(object):
         banner("creating dir")
         if not os.path.exists(path):
             print("Creating mongodb directory in {0}".format(path))
-            sh.mkdir("-p", path)
+            Shell.mkdir(path)
 
         banner("check")
 
@@ -365,7 +364,7 @@ class cloudmesh_server(object):
         """starts in dir webgui the program server.py and displays a
             browser on the given port and link """
         try:
-            sh.killall("-15", "mongod")
+            Shell.killall("-15", "mongod")
         except:
             print("INFO: cloudmesh mongo server not running")
 
@@ -377,8 +376,10 @@ class cloudmesh_server(object):
         d = {}
 
         try:
-            lines = sh.grep(
-                sh.grep(self._ps(), "celery"), "worker").split("\n")[:-1]
+            # BUGBUG
+            lines = Shell.ps().split("\n")
+            lines = Shell.find_lines_with(lines,"celery")
+            lines = Shell.find_lines_with(lines,"worker")
             for line in lines:
                 (pid, command) = line.lstrip().split(" ", 1)
                 d[pid] = line
@@ -394,7 +395,7 @@ class cloudmesh_server(object):
             command, worker_str, app, queue)
         # directories for log and pid file
         celery_dir = path_expand("~/.cloudmesh/celery")
-        sh.mkdir("-p", celery_dir)
+        Shell.mkdir(celery_dir)
         parameter_string += " --pidfile=\"{0}/%n.pid\" ".format(celery_dir)
         parameter_string += " --logfile=\"{0}/%n.log\" ".format(celery_dir)
         if concurrency is not None:
@@ -431,7 +432,7 @@ class cloudmesh_server(object):
         print(processes.keys())
         for pid in processes:
             try:
-                sh.kill("-9", str(pid))
+                Shell.kill("-9", str(pid))
             except:
                 print(pid, " process already deleted")
 
@@ -455,7 +456,7 @@ class rabbitmq_server(object):
         location = path_expand("~/.cloudmesh/rabbitm")
 
         if sys.platform == "darwin":
-            sh.mkdir("-p", location)
+            Shell.mkdir(location)
             self.rabbit_env["RABBITMQ_MNESIA_BASE"] = location
             self.rabbit_env["RABBITMQ_LOG_BASE"] = location
             os.environ["RABBITMQ_MNESIA_BASE"] = location
@@ -465,7 +466,7 @@ class rabbitmq_server(object):
             self.rabbit_env["rabbitmqctl"] = \
                 "/usr/local/opt/rabbitmq/sbin/rabbitmqctl"
         elif sys.platform == "linux2":
-            sh.mkdir("-p", location)
+            Shell.mkdir(location)
             self.rabbit_env["RABBITMQ_MNESIA_BASE"] = location
             self.rabbit_env["RABBITMQ_LOG_BASE"] = location
             os.environ["RABBITMQ_MNESIA_BASE"] = location
@@ -561,7 +562,7 @@ class rabbitmq_server(object):
         location = path_expand("~/.cloudmesh/rabbitm")
 
         if sys.platform == "darwin":
-            mkdir("-p", location)
+            Shell.mkdir(location)
             rabbit_env["RABBITMQ_MNESIA_BASE"] = location
             rabbit_env["RABBITMQ_LOG_BASE"] = location
             os.environ["RABBITMQ_MNESIA_BASE"] = location
@@ -571,7 +572,7 @@ class rabbitmq_server(object):
             rabbit_env["rabbitmqctl"] = \
                 "/usr/local/opt/rabbitmq/sbin/rabbitmqctl"
         elif sys.platform == "linux2":
-            mkdir("-p", location)
+            Shell.mkdir(location)
             rabbit_env["RABBITMQ_MNESIA_BASE"] = location
             rabbit_env["RABBITMQ_LOG_BASE"] = location
             os.environ["RABBITMQ_MNESIA_BASE"] = location

@@ -7,7 +7,7 @@ from flask import Blueprint, g, render_template, request, redirect, url_for
 from flask.ext.login import login_required  # @UnresolvedImport
 from flask.ext.wtf import Form  # @UnresolvedImport
 from pprint import pprint
-from sh import pwd  # @UnresolvedImport
+from cloudmesh_base.Shell import Shell
 from wtforms import SelectField
 from flask.ext.principal import Permission, RoleNeed
 import time
@@ -225,7 +225,7 @@ def display_rack_map():
     # log.debug("relative dir image, {0}".format(relative_dir_image))
     flask_dir = "static"
     # guess absolute path of cloudmesh_web
-    rack_py_dir = pwd().strip().split("/")
+    rack_py_dir = Shell.pwd().strip().split("/")
     cloudmesh_web_dir = rack_py_dir  # [:-1]
     # log.debug("cloudmesh_web dir, {0}".format(cloudmesh_web_dir))
     list_image_dir = [flask_dir] + relative_dir_image.strip().split("/")

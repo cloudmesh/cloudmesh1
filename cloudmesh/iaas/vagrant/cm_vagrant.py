@@ -1,18 +1,32 @@
 from cloudmesh_base.Shell import Shell
 from sh import rsync
 
+# TODO bake not implemented
 
-vm_up = vagrant.bake("up")
-# vagrant up
-vm_ssh = vagrant.bake("ssh")
-# vargant ssh
-# use self.vm_up instead to cover the provider
-#
-vm_init = vagrant.bake("init")
-# vagrant init precise32 http://files.vagrantup.com/precise32.box
-vm_suspend = vagrant.bake("suspend")
-vm_halt = vagrant.bake("halt")  # ?
-vm_destroy = vagrant.bake("destroy")  # ?
+def vm_up(*args):
+    a = ['up'] + args
+    return Shell.execute('vagrant', a)
+
+def vm_ssh(*args):
+    a = ['ssh'] + args
+    return Shell.execute('vagrant', a)
+
+def vm_init(*args):
+    a = ['init'] + args
+    return Shell.execute('vagrant', a)
+
+def vm_suspend(*args):
+    a = ['suspend'] + args
+    return Shell.execute('vagrant', a)
+
+def vm_halt(*args):
+    a = ['halt'] + args
+    return Shell.execute('vagrant', a)
+
+def vm_destroy(*args):
+    a = ['destroy'] + args
+    return Shell.execute('vagrant', a)
+
 
 
 class vagrant:
@@ -49,9 +63,16 @@ class vagrant:
     def provider(self):
         self._provider = provider
         if provider is None:
-            self.vm_up = vagrant.bake("up", "--provider", provider)
+            def vm_up(*args):
+                a = ['up',"--provider", provider] + args
+                return Shell.execute('vagrant', a)
+
         else:
-            self.vm_up = vagrant.bake("up")
+            def vm_up(*args):
+                a = ['up'] + args
+                return Shell.execute('vagrant', a)
+
+        self.vm_up = vm_up
 
     def image_list(self):
         images = {}

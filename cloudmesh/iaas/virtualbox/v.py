@@ -1,10 +1,17 @@
 from __future__ import print_function
-from sh import VBoxManage
+from cloudmesh_base.Shell import Shell
 from collections import OrderedDict
 from pprint import pprint
 
-vbox_list = VBoxManage.bake("list", "vms", "-l")
-vbox_vminfo = VBoxManage.bake("showvminfo")
+
+def vbox_list(*args):
+    a = ["list", "vms", "-l"] + args
+    return Shell.execute('VBoxManage', a)
+
+def vbox_vminfo(*args):
+    a = ["showvminfo"] + args
+    return Shell.execute('VBoxManage', a)
+
 #
 # LIST
 #

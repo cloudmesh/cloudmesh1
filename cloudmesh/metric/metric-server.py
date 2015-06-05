@@ -3,8 +3,8 @@ from flask import Flask, url_for
 from docopt import docopt
 # from cloudmesh.metric.cm_metric import shell_command_metric
 from cm_metric import shell_command_metric
-import sh
 from cloudmesh_base.logger import LOGGER
+from cloudmesh_base.Shell import Shell
 
 log = LOGGER(__file__)
 
@@ -31,7 +31,7 @@ def get_metric_for_cloud(cloudname, username, metric, timestart, timeend, period
         "-p", period
     ]
     log.info(arguments)
-    command = sh.Command("cm-metric")
+    command = Shell.execute("cm-metric")
     result = command(arguments)
     log.info(result)
     print 70 * "="
@@ -54,7 +54,7 @@ def get_metric_for_cluster(clustername, username, metric, timestart, timeend, pe
         "-p", period
     ]
     log.info(arguments)
-    command = sh.Command("cm-metric")
+    command = Shell.execute("cm-metric")
     result = command(arguments)
     log.info(result)
     print 70 * "="
