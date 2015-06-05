@@ -1,9 +1,4 @@
-from sh import gmkproject
-from sh import gchproject
-from sh import gchuser
-from sh import glusers
-from sh import gstatement
-
+from cloudmesh_base.Shell import Shell
 from cloudmesh.accounting.AccountingBaseClass import AccountingBaseClass
 
 
@@ -51,17 +46,17 @@ class GoldAccounting(AccountingBaseClass):
             gchuser("-F", phone)
 
     def add_project(self, name, description):
-        gmkproject("-d", description, "-p", name)
+        Shell.gmkproject("-d", description, "-p", name)
 
     def add_user_to_projects(self, project, userid):
         username = None  # transfer user id to username
-        gchproject("-addUsers", username, project)
+        Shell.gchproject("-addUsers", username, project)
 
     def deactivate_project(self, name):
-        gchproject("-I", name)
+        Shell.gchproject("-I", name)
 
     def deactivate_user_from_project(self, project, userid):
-        gchproject("--deactUsers", userid)
+        Shell.gchproject("--deactUsers", userid)
 
     def activate_user_from_project(self, project, userid):
-        gchproject("--actUsers", userid)
+        Shell.gchproject("--actUsers", userid)

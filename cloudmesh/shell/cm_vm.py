@@ -9,7 +9,6 @@ from cloudmesh.util.ssh import ssh_execute
 from cloudmesh_base.util import banner
 from cloudmesh_base.util import yn_choice
 from cmd3.console import Console
-from sh import ssh
 from subprocess import call
 from pprint import pprint
 import sys
@@ -293,7 +292,7 @@ class VMcommand(object):
         if self.arguments['<command>']:
             commands = ' '.join(self.arguments['<command>'])
             try:
-                print(">>>\n")
+                # print(">>>\n")
                 print(ssh_execute(self.arguments['--ln'], address,
                                   commands, key=self.arguments['--key']))
             except:

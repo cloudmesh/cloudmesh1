@@ -3,7 +3,7 @@ import sys
 import os
 import time
 import json
-from sh import cm
+from cloudmesh_base.Shell import Shell
 from pprint import pprint
 from cmd3.console import Console
 from cmd3.shell import command
@@ -303,7 +303,7 @@ class cm_shell_cluster:
                     return
                 print ("checking({0})...".format(repeat_index))
                 time.sleep(10)
-                res = str(cm(command_refresh))
+                res = str(Shell.cm(command_refresh))
                 res = string_to_dict(res)
                 if _help0(res):
                     proceed = True
@@ -315,7 +315,7 @@ class cm_shell_cluster:
             print ("assigning public ips...")
             for k, v in res.iteritems():
                 if not check_public_ip_existence(v):
-                    cm("vm ip assign --id={0}".format(k.encode('ascii')))
+                    Shell.cm("vm ip assign --id={0}".format(k.encode('ascii')))
             
             def _help(d):
                 for k, v in d.iteritems():
@@ -332,7 +332,7 @@ class cm_shell_cluster:
                     return
                 print ("checking({0})...".format(repeat_index))
                 time.sleep(10)
-                res = str(cm(command_refresh))
+                res = str(Shell.cm(command_refresh))
                 res = string_to_dict(res)
                 if _help(res):
                     proceed = True

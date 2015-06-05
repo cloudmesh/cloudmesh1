@@ -9,7 +9,7 @@ import sys
 import os
 import stat
 # from cloudmesh_user import cloudmesh_user
-from sh import scp
+from cloudmesh_base.Shell import Shell
 from getpass import getpass
 from cloudmesh_base.util import yn_choice, path_expand, banner
 from cloudmesh.user.cm_user import cm_user
@@ -160,7 +160,7 @@ def cm_manage():
 
             print("Copy cloudmesh file from %s to %s" % (from_location, to_location))
 
-            result = scp(from_location, to_location)
+            result = Shell.scp(from_location, to_location)
 
             print(result)
 

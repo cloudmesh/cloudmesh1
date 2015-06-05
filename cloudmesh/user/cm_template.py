@@ -2,14 +2,12 @@ from __future__ import print_function
 from cloudmesh_base.locations import config_file
 from jinja2 import UndefinedError
 import sys
-import yaml
 from jinja2 import Template
 from cloudmesh_base.util import path_expand
 from cloudmesh_base.util import banner
 from cloudmesh_base.ConfigDict import ConfigDict
 import yaml
-from sh import grep as _grep
-from pprint import pprint
+from cloudmesh_base.Shell import Shell
 from cloudmesh_base.logger import LOGGER
 
 
@@ -47,7 +45,7 @@ class cm_template():
         result = []
         s = set(self.variables())
         for attribute in s:
-            grep_result = _grep("-n", attribute, cloudmesh_yaml).split("\n")
+            grep_result = Shell.grep("-n", attribute, cloudmesh_yaml).split("\n")
             for r in grep_result:
                 if "{" in r:
                     result.append(

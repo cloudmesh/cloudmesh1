@@ -1,7 +1,7 @@
 from fabric.api import task, local, settings, hide
 from cloudmesh_base.ConfigDict import ConfigDict
 from cloudmesh.config.cm_config import cm_config_server
-from sh import sudo
+from cloudmesh_base.Shell import Shell
 from cloudmesh_base.locations import config_file
 
 
@@ -57,7 +57,7 @@ def kill():
             columns = proc.split()
             pid = columns[1]
             print "Killing", proc
-            sudo.kill("-9", "{0}".format(pid))
+            Shell.sudo("kill", "-9", "{0}".format(pid))
         print "SUCCESS. tunnel killed"
     else:
         print "WARNING: no tunnel were running"

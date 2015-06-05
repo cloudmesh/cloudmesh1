@@ -1,4 +1,4 @@
-from sh import VBoxManage
+from cloudmesh_base.Shell import Shell
 from collections import OrderedDict
 from pprint import pprint
 from cloudmesh.iaas.ComputeBaseType import ComputeBaseType
@@ -7,10 +7,11 @@ from cloudmesh_base.logger import LOGGER
 
 log = LOGGER(__file__)
 
-vbox_list = VBoxManage.bake("list", "vms", "-l")
-vbox_vminfo = VBoxManage.bake("showvminfo")
-vbox_controlvm = VBoxManage.bake("controlvm")
-vbox_startvm = VBoxManage.bake("startvm")
+# TODO bake not implemented
+vbox_list = Shell.VBoxManage.bake("list", "vms", "-l")
+vbox_vminfo = Shell.VBoxManage.bake("showvminfo")
+vbox_controlvm = Shell.VBoxManage.bake("controlvm")
+vbox_startvm = Shell.VBoxManage.bake("startvm")
 
 #
 # LIST

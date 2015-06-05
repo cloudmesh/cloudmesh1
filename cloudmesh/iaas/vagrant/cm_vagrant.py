@@ -1,4 +1,4 @@
-from sh import vagrant
+from cloudmesh_base.Shell import Shell
 from sh import rsync
 
 
@@ -55,7 +55,7 @@ class vagrant:
 
     def image_list(self):
         images = {}
-        lines = vagrant("box", "list")
+        lines = Shell.vagrant("box", "list")
         for line in lines:
             (name, kind) = line.split("(")
             name = name.strip()

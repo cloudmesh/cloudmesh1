@@ -29,21 +29,14 @@ Description:
 """
 from docopt import docopt
 import os
-
-try:
-    from sh import ls
-except:
-    os.system("pip install sh")
-
-from sh import vagrant
-
+from cloudmesh_base.Shell import Shell
 
 def not_implemented():
     print "ERROR: not yet implemented"
 
 
 def get_boxes(kind):
-    lines = vagrant("box", "list")
+    lines = Shell.vagrant("box", "list")
 
     boxes = []
     for line in lines:

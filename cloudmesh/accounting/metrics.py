@@ -1,12 +1,7 @@
-import pickle
-from sh import fgrep
-from sh import nova
-from sh import tail
-from datetime import datetime
 import json
 import sys
-import os
 import pprint
+
 pp = pprint.PrettyPrinter(indent=4)
 
 # import shelve
@@ -301,7 +296,7 @@ class metrics:
 
     def refresh_keys(self):
         self.keys = []
-        result = fgrep(tail(nova("keypair-list"), "-n", "+4"),"-v","+")
+        result = fgrep(tail(Shell.nova("keypair-list"), "-n", "+4"),"-v","+")
         for line in result:
             (front, name, signature, back) = line.split("|")
             self.keys.append(name.strip())

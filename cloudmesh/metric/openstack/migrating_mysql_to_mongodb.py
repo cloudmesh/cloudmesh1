@@ -8,8 +8,7 @@
 """
 
 import yaml
-from sh import mysql
-from sh import mongoimport
+from cloudmesh_base.Shell import Shell
 
 
 class Migrate_MySQL_to_Mongo:
@@ -42,11 +41,12 @@ class Migrate_MySQL_to_Mongo:
         """
         query = "select * from %s.%s" % (self.dbinfo["mysqldb_dbname"],
                                          tablename)
-        res_mysql = mysql("-u", "{0}".format(self.dbinfo["mysqldb_userid"]),
-                          "-p{0}".format(self.dbinfo["mysqldb_passwd"]),
-                          "-h", "{0}".format(self.dbinfo["mysqldb_hostname"]),
-                          "-e", "{0}".format(query),
-                          "--batch")
+        res_mysql = Shell.mysql(
+            "-u", "{0}".format(self.dbinfo["mysqldb_userid"]),
+            "-p{0}".format(self.dbinfo["mysqldb_passwd"]),
+            "-h", "{0}".format(self.dbinfo["mysqldb_hostname"]),
+            "-e", "{0}".format(query),
+            "--batch")
 
         # Add quote(") at first
         # Then replace tab to ","
@@ -71,13 +71,14 @@ class Migrate_MySQL_to_Mongo:
         """
         # mongoimport -u cmetrics_user -p -d cloudmetrics -c cloudplatform
         # -type csv -f fields-sep-by-coma --drop cloudplatform.csv --headerline
-        mongoimport("-u", "{0}".format(self.dbinfo["mongodb_userid"]),
-                    "-p", "{0}".format(self.dbinfo["mongodb_passwd"]),
-                    "-d", "{0}".format(self.dbinfo["mongodb_dbname"]),
-                    "-c", "{0}".format(tablename),
-                    "-type", "csv",
-                    "-f", "fields-sep-by-coma", "--headerline", "--drop",
-                    _in=csv_data)
+        Shell.mongoimport(
+            "-u", "{0}".format(self.dbinfo["mongodb_userid"]),
+            "-p", "{0}".format(self.dbinfo["mongodb_passwd"]),
+            "-d", "{0}".format(self.dbinfo["mongodb_dbname"]),
+            "-c", "{0}".format(tablename),
+            "-type", "csv",
+            "-f", "fields-sep-by-coma", "--headerline", "--drop",
+            _in=csv_data)
 
 if __name__ == "__main__":
     migrate = Migrate_MySQL_to_Mongo()

@@ -6,9 +6,9 @@ sys.stderr = sys.__stderr__
 import re
 import os
 from Crypto.PublicKey import RSA 
-from sh import ssh as sh_ssh
+from cloudmesh_base.Shell import Shell
 
-''' Contains the ssh class. Can be used in casews when you want the output of
+''' Contains the ssh class. Can be used in case when you want the output of
 an ssh call but need to do steps before and after the call
 as part of the ssh session'''
 
@@ -103,6 +103,6 @@ def ssh_execute(loginuser, addr, cmd, key=None):
 
     message = (option + key + host + cmd).split()
 
-    return sh_ssh(message)
+    return Shell.ssh(message)
 
 # -----------------------------------------------------------------------

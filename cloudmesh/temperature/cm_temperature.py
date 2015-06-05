@@ -2,7 +2,7 @@ from __future__ import print_function
 from cloudmesh.config.cm_config import cm_config_server
 from cloudmesh.inventory import Inventory
 from pprint import pprint
-from sh import ssh
+from cloudmesh_base.Shell import Shell
 import re
 
 from cloudmesh_base.logger import LOGGER
@@ -65,7 +65,7 @@ class cm_temperature:
             proxyusername, proxyaddr, hostname))
 
         try:
-            result = ssh("{0}@{1}".format(proxyusername, proxyaddr), command)
+            result = Shell.ssh("{0}@{1}".format(proxyusername, proxyaddr), command)
         except:
             result = ""
 

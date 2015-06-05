@@ -12,6 +12,7 @@ from string import Template
 from docopt import docopt
 from ConfigParser import SafeConfigParser
 from pprint import pprint
+from cloudmesh_base.Shell import Shell
 
 rc_file_locations = {
 #    'india-havana': {
@@ -76,9 +77,7 @@ def download_rc_files(userid):
         print "    ",
         result = None
         try:
-            from sh import scp
-
-            result = scp("-o", "StrictHostKeyChecking=no",
+            result = Shell.scp("-o", "StrictHostKeyChecking=no",
                          "%(userid)s@%(hostname)s:%(source)s" % host, "%(dest)s" % host)
             print "ok", result
         except Exception, e:

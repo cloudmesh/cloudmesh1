@@ -14,10 +14,7 @@ from cloudmesh_base.util import path_expand as cm_path_expand
 from cloudmesh.rack.rack_progress import get_temperature_progress, get_service_progress
 from jinja2 import Template
 from hostlist import expand_hostlist
-from sh import rackdiag  # @UnresolvedImport
-from sh import rm  # @UnresolvedImport
-from sh import pwd  # @UnresolvedImport
-from sh import mkdir  # @UnresolvedImport
+from cloudmesh_base.Shell import Shell
 from os import path
 import random
 import time
@@ -159,7 +156,7 @@ class BaseClusterMap:
             "The output directory of rack diagram is {0}".format(abs_dir_output))
         # make sure the output directory exist
         if not path.exists(abs_dir_output):
-            mkdir("-p", abs_dir_output)
+            Shell.mkdir(abs_dir_output)
 
         self.readClustersConfig(abs_dir_yaml)
         self.readRackConfig(name, abs_dir_yaml, abs_dir_diag)
@@ -481,7 +478,7 @@ class BaseClusterMap:
 
         log.debug("Call rackdiag to draw the image of rack ...")
         # call rackdiag to plot
-        rackdiag("-T{0}".format(self.image_type),
+        Shell.rackdiag("-T{0}".format(self.image_type),
                  "-o", self.filename_rack_image, self.filename_diag_temp)
         self.map_progress.set_plot_map()
 
@@ -492,7 +489,7 @@ class BaseClusterMap:
 
         # delete the temporary diag file if needed
         if self.flag_delete_diag_temp:
-            rm("-f", self.filename_diag_temp)
+            Shell.rm("-f", self.filename_diag_temp)
 
     # get random number
     # range is 0.0 ~ 1.0
@@ -515,7 +512,7 @@ class BaseClusterMap:
 
     # guess default location of image output
     def guessDefaultDiagramLocation(self):
-        arr_dir_current = pwd().strip().split("/")
+        arr_dir_current = Shell.pwd().strip().split("/")
         # current py file: cloudmesh_home/cloudmesh/rack/*.py
         # cloudmesh_web static dir: cloudmesh_home/cloudmesh_web/static
         arr_dir_guess = arr_dir_current[

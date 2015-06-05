@@ -6,7 +6,7 @@ from cloudmesh.rack.cluster_map_heat import HeatClusterMap
 from cloudmesh.rack.cluster_map_service import ServiceClusterMap
 from cloudmesh.rack.rack_data import RackData
 from cloudmesh.temperature.cm_temperature import cm_temperature
-from sh import pwd
+from cloudmesh_base.Shell import Shell
 import time
 from cloudmesh_base.logger import LOGGER
 from cloudmesh_base.locations import config_file
@@ -52,7 +52,7 @@ class RackWork:
         # log.debug("relative dir image, {0}".format(relative_dir_image))
         flask_dir = "static"
         # guess absolute path of cloudmesh_web
-        rack_py_dir = pwd().strip().split("/")
+        rack_py_dir = Shell.pwd().strip().split("/")
         cloudmesh_web_dir = rack_py_dir
         # log.debug("cloudmesh_web dir, {0}".format(cloudmesh_web_dir))
         list_image_dir = [flask_dir] + relative_dir_image.strip().split("/")

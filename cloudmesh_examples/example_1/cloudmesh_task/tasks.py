@@ -1,8 +1,7 @@
 # from __future__ import absolute_import
 
 from cloudmesh_task.celery import app
-from sh import ssh
-from pprint import pprint
+from cloudmesh_base.Shell import Shell
 import datetime
 
 
@@ -23,7 +22,7 @@ def cm_ssh(host, username=None, command=None):
 
         result["time_start"] = str(datetime.datetime.now())
         result["output"] = str(
-            ssh("{0}@{1}".format(username, host), "date; " + command))
+            Shell.ssh("{0}@{1}".format(username, host), "date; " + command))
         # result["output"] = "DEBUG {0} {1}".format(host, str(now))
         result["time_end"] = str(datetime.datetime.now())
 

@@ -4,9 +4,6 @@ The purpose of this class is to provide a simple API
 to write some attribute and its value pairs to note attribute of cluster nodes.
 """
 from __future__ import print_function
-from sh import ssh
-from ast import literal_eval
-from types import *
 from copy import deepcopy
 from cloudmesh.pbs.pbs import PBS
 from cloudmesh.inventory import Inventory

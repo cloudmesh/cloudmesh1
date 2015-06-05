@@ -3,7 +3,7 @@ async task, get cluster temperature,
 value of "-1" means cannot connect to server or get temperature
 """
 
-from sh import ssh
+from cloudmesh_base.Shell import Shell
 from celery import Celery
 
 from cloudmesh.temperature.cm_temperature import cm_temperature as Temperature
@@ -45,10 +45,11 @@ def task_sensors(dict_idip):
             ip = cluster[uid]
             dict_data[cluster][uid]["ip"] = ip
             # fetch uid-ip server's temperature
-            report = ssh("-o ConnectTimeout=1", "-o ConnectionAttempts=1",
-                         "user", ip,
-                         "sensors"
-                         )
+            report = Shell.ssh(
+                "-o ConnectTimeout=1", "-o ConnectionAttempts=1",
+                "user", ip,
+                "sensors"
+                )
             temp = parseCpuTemperature(report)
             dict_data[cluster][uid]["temp"] = temp[0]
 

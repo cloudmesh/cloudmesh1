@@ -1,5 +1,5 @@
-from sh import cm as cm_sh
+from cloudmesh_base.Shell import Shell
 
 
 def shell(*args, **kwargs):
-    return cm_sh(args, kwargs)
+    return Shell.cm(args, kwargs)

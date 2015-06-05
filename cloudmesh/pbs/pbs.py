@@ -5,7 +5,7 @@ from ast import literal_eval
 from collections import Counter
 from hostlist import expand_hostlist
 from pprint import pprint
-from sh import ssh
+from cloudmesh_base.Shell import Shell
 from xml.dom import minidom
 import yaml
 import sys
@@ -71,7 +71,7 @@ class PBS:
         """
         if self.pbs_qinfo_default_data is None or refresh:
             try:
-                result = ssh("{0}@{1}".format(self.user, self.host), "qstat")
+                result = Shell.ssh("{0}@{1}".format(self.user, self.host), "qstat")
             except:
                 raise RuntimeError(
                     "can not execute pbs qstat on host {0}".format(self.host))
@@ -125,7 +125,7 @@ class PBS:
 
         if self.pbs_qinfo_data is None or refresh:
             try:
-                result = ssh(
+                result = Shell.ssh(
                     "{0}@{1}".format(self.user, self.host), "qstat -Q -f")
             except:
                 raise RuntimeError(
@@ -194,7 +194,7 @@ class PBS:
     def _qmgr(self, command):
         result = None
         try:
-            result = ssh("{0}@{1}".format(self.user, self.host), command)
+            result = Shell.ssh("{0}@{1}".format(self.user, self.host), command)
         except:
             raise RuntimeError(
                 "can not execute qmgr on host {0}, command:".format(self.host, command))
@@ -223,7 +223,7 @@ class PBS:
 
         if self.pbs_nodes_data is None or refresh:
             try:
-                result = ssh(
+                result = Shell.ssh(
                     "{0}@{1}".format(self.user, self.host), "pbsnodes", "-a")
             except:
                 raise RuntimeError(
@@ -278,7 +278,7 @@ class PBS:
         if self.pbs_qstat_data is None or refresh:
             try:
                 xmldata = str(
-                    ssh("{0}@{1}".format(self.user, self.host), "qstat", "-x"))
+                    Shell.ssh("{0}@{1}".format(self.user, self.host), "qstat", "-x"))
             except:
                 raise RuntimeError(
                     "can not execute pbs qstat on host {0}".format(self.host))
@@ -367,7 +367,7 @@ class PBS:
         def pbsnodes_data(host):
 
             result = str(
-                ssh("{0}@{1}".format(self.user, host), "pbsnodes", "-l", "-n"))[:-1]
+                Shell.ssh("{0}@{1}".format(self.user, host), "pbsnodes", "-l", "-n"))[:-1]
             return result
 
         empty = ["", "", ""]
@@ -398,7 +398,7 @@ class PBS:
 
     """
     def _namemap(self,"0000"):
-        result = (str(ssh(host, "pbsnodes", "-l", "-n"))[:-1]).split("\n")
+        result = (str(Shell.ssh(host, "pbsnodes", "-l", "-n"))[:-1]).split("\n")
         names = [x.split()[0] for x in result]
 
         #

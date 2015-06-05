@@ -1,18 +1,12 @@
 from __future__ import print_function
-import sys
 
-from datetime import datetime
 from pprint import pprint
 import json
-import os
 
 from libcloud.compute.types import Provider
 from libcloud.compute.providers import get_driver
 from libcloud.compute.types import NodeState
 
-import libcloud.security
-import time
-from sh import fgrep
 import urlparse
 
 from cloudmesh.util.cm_table import cm_table
