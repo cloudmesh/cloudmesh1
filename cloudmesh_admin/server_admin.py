@@ -5,7 +5,7 @@ import os
 import sys
 from cloudmesh_base.util import path_expand
 
-from cloudmesh.shell.Shell import Shell
+from cloudmesh_base.Shell import Shell
 
 # need to get rid of fabric later
 from fabric.api import task, local, settings, hide

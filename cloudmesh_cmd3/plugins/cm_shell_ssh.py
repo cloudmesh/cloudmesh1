@@ -15,7 +15,7 @@ class cm_shell_ssh:
     def activate_cm_shell_ssh(self):
         self.register_command_topic('ssh', 'ssh')
         userid = self.cm_config.username()
-        print (userid)
+        # print (userid)
         user = {'userid': userid}
         self.ssh_machines = {'bravo': 'ssh -t {userid}@india.futuregrid.org  "/opt/torque/bin/qsub -I -q bravo"'.format(**user),
                              'delta': 'ssh -t {userid}@india.futuregrid.org  "/opt/torque/bin/qsub -I -q delta"'.format(**user),
