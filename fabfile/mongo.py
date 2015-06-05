@@ -1,4 +1,4 @@
-from cloudmesh.shell.Shell import Shell
+from cloudmesh_base.Shell import Shell
 from fabric.api import task, local, settings, hide
 from pprint import pprint
 from cloudmesh.cm_mongo import cm_mongo

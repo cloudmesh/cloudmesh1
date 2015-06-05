@@ -1,4 +1,4 @@
-from cloudmesh.shell.Shell import Shell
+from cloudmesh_base.Shell import Shell
 from flask import Blueprint
 from flask import render_template, redirect, flash
 from datetime import datetime

@@ -17,7 +17,7 @@ import os
 import time
 import json
 from pprint import pprint
-from cloudmesh.shell.Shell import Shell
+from cloudmesh_base.Shell import Shell
 from cloudmesh_base.util import HEADING
 
 

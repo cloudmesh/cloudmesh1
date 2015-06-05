@@ -3,7 +3,7 @@ from cloudmesh_base.util import banner
 from cloudmesh_base.ConfigDict import ConfigDict
 from cloudmesh.config.cm_config import cm_config
 from cloudmesh.user.cm_user import cm_user
-from cloudmesh.shell.Shell import Shell
+from cloudmesh_base.Shell import Shell
 from cloudmesh_base.locations import config_file
 
 

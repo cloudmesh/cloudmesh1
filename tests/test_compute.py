@@ -12,7 +12,7 @@ nosetests -v  --nocapture tests/test_compute.py:Test.test_06
 
 """
 from __future__ import print_function
-from cloudmesh.shell.Shell import Shell
+from cloudmesh_base.Shell import Shell
 import string
 import os
 import time
@@ -35,7 +35,7 @@ class Test:
     # assuming first - is the prefered cloud
     cloudmesh_yaml = config_file("/cloudmesh.yaml")
     print(cloudmesh_yaml)
-    cloud_label = Shell.head(Shell.fgrep("-", cloudmesh_yaml), "-n", "1")
+    cloud_label = Shell.fgrep("-", cloudmesh_yaml).split("\n")[0]
     cloud_label = cloud_label.replace(" - ", "").strip()
 
     def setup(self):
