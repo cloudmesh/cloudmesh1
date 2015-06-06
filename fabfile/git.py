@@ -1,24 +1,30 @@
 from fabric.api import task, local
+import os
+
+class Git(object):
+
+    @classmethod
+    def push(cls):
+        """git push"""
+        os.system("git commit -a ")
+        os.system("git push")
+
+    def gregor():
+        """git config of name and email for gregor"""
+        os.system('git config --global user.name "Gregor von Laszewski"')
+        os.system('git config --global user.email laszewski@gmail.com')
 
 
 @task
 def push():
     """git push"""
-    local("git commit -a ")
-    local("git push")
-
-
-@task
-def pull():
-    """git pull"""
-    local("git pull ")
+    Git.push()
 
 
 @task
 def gregor():
     """git config of name and email for gregor"""
-    local('git config --global user.name "Gregor von Laszewski"')
-    local('git config --global user.email laszewski@gmail.com')
+    Git.gregor()
 
 
 def up():
