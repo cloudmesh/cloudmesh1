@@ -104,7 +104,7 @@ def agent():
 
 @task
 def stop(server="server"):
-    """sma e as the kill command"""
+    """same as the kill command"""
     kill(server)
     cursor_on()
 
@@ -175,18 +175,11 @@ def start(server="server", browser='yes', debug=False):
                     debug=debug)
 
     mongo.start()
-    # execute_command("START MONGO",
-    # "fab mongo.start",
-    #            debug)
 
     queue.start()
-    # execute_command("START RABITMQ",
-    #        "fab queue.start", debug)
 
     queue.flower_server()
-    # execute_command("START FLOWER",
-    #        "fab queue.flower_server",
-    #        debug)
+
     fabric.state.output.stdout = True
     fabric.state.output.stderr = True
     execute_command("START WEB SERVER",
@@ -221,20 +214,6 @@ def view(link=""):
     # local("sleep 2; {0} http://127.0.0.1:{2}/{1}".format(web_browser, link, port))
 
 
-@task
-def clean():
-    """clean the directory"""
-    commands='''
-        find . -name \"#*\" -exec rm {} \\;
-        find . -name \"*~\" -exec rm {} \\;
-        find . -name \"*.pyc\" -exec rm {} \\;
-        rm -rf build dist *.egg-info
-        rm -rf doc/build
-    '''
-    for command in commands.split("\n"):
-        print(command)
-        os.system(command)
-
 # For production server
 @task
 def wsgi(action="start"):
@@ -262,4 +241,4 @@ def wsgi(action="start"):
     elif action == "reload":
         command = "kill -HUP `cat {0}`".format(user_pidfile)
     if command:
-        local(command)
+        os.system(command)
