@@ -3,6 +3,7 @@ from __future__ import with_statement
 import sys
 from cloudmesh_base.logger import LOGGER
 from cloudmesh_base.util import banner
+from cloudmesh_base.Shell import Shell
 from cloudmesh_base.locations import config_file
 from cloudmesh_common.util import PROGRESS
 from cloudmesh.config.cm_config import cm_config_server
@@ -112,14 +113,25 @@ def stop(server="server"):
 def kill(server="server", debug=True):
     """kills all server processes """
     with settings(warn_only=True):
-        execute_command("STOP MONGO", "fab mongo.stop", debug=debug)
-        result = local(
-            'ps -ax | fgrep "python {0}.py" | fgrep -v fgrep'.format(server), capture=True).split("\n")
-        for line in result:
-            if line is not '':
-                pid = line.split(" ")[0]
-                local("kill -9 {0}".format(pid))
-                # local("fab queue.stop")
+        try:
+            mongo.stop()
+        except:
+            print "ERROR: could not stop mongo"
+        # execute_command("STOP MONGO", "fab mongo.stop", debug=debug)
+        result = Shell.ps("-ax").split("\n")
+
+        result = Shell.find_lines_with(result, "python {:}.py".format(server))
+        result = Shell.remove_line_with(result, "fgrep")
+
+        if result is None or len(result) == 0:
+            print "ERROR: no process found to terminate"
+        else:
+            for line in result:
+                if line is not '':
+                    pid = line.split(" ")[0]
+                    print "Killing process", pid
+                    Shell.kill("-9", "{:}".format(pid))
+                    # local("fab queue.stop")
 
 
 @task
@@ -127,10 +139,10 @@ def quick(server="server", browser='yes'):
     """ starts in dir webgui the program server.py and displays a browser on the given port and link"""
 
     banner("INSTALL CLOUDMESH")
-    local("python setup.py install")
+    os.system("python setup.py install")
 
     banner("START WEB SERVER")
-    local("cd cloudmesh_web; python {0}.py &".format(server))
+    os.system("cd cloudmesh_web; python {0}.py &".format(server))
     # view(link)
 
 
@@ -188,7 +200,7 @@ def start(server="server", browser='yes', debug=False):
 @task
 def web(server="server", browser='yes'):
     banner("START WEB SERVER")
-    local("cd cloudmesh_web; python {0}.py &".format(server))
+    os.system("cd cloudmesh_web; python {0}.py &".format(server))
     # view(link)
 
 
@@ -204,7 +216,7 @@ def view(link=""):
 
     url_link = "http://{0}:{1}/{2}".format(host, port, link)
 
-    local("%s %s" % (web_browser, url_link))
+    os.system("%s %s" % (web_browser, url_link))
     # if browser == 'yes':
     # local("sleep 2; {0} http://127.0.0.1:{2}/{1}".format(web_browser, link, port))
 
@@ -212,12 +224,16 @@ def view(link=""):
 @task
 def clean():
     """clean the directory"""
-    local("find . -name \"#*\" -exec rm {} \\;")
-    local("find . -name \"*~\" -exec rm {} \\;")
-    local("find . -name \"*.pyc\" -exec rm {} \\;")
-    local("rm -rf build dist *.egg-info")
-    local("rm -rf doc/build ")
-
+    commands='''
+        find . -name \"#*\" -exec rm {} \\;
+        find . -name \"*~\" -exec rm {} \\;
+        find . -name \"*.pyc\" -exec rm {} \\;
+        rm -rf build dist *.egg-info
+        rm -rf doc/build
+    '''
+    for command in commands.split("\n"):
+        print(command)
+        os.system(command)
 
 # For production server
 @task
