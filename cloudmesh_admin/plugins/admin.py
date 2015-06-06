@@ -18,11 +18,11 @@ def admin_command(args):
     """cm-admin.
 
     Usage:
-      cm-admin server start
-      cm-admin server stop
-      cm-admin server status
-      cm-admin mongo password
-      cm-admin version
+      admin server start
+      admin server stop
+      admin server status
+      admin mongo password
+      admin version
 
     Options:
       -h --help     Show this screen.

@@ -11,6 +11,12 @@ class cm_shell_admin:
     def activate_cm_shell_admin(self):
         self.register_command_topic('cloud', 'admin')
 
+    def import_methods(self):
+        from fabfile.server import start, stop, kill
+        from fabfile.queue import ls as queue_ls
+        from fabfile.mongo import info as mongo_info
+        from fabfile.user import mongo as set_mongo_password
+
     @command
     def do_admin(self, args, arguments):
         """
@@ -22,6 +28,7 @@ class cm_shell_admin:
           admin server status
           admin mongo start
           admin mongo stop
+          admin mongo reset
           admin mongo status
           admin mongo password
           admin celery start
@@ -87,7 +94,37 @@ class cm_shell_admin:
             #queue_ls()
             #mongo_info()
         '''
-        if arguments['password'] and arguments['reset']:
+        self.import_methods()
+
+        if arguments['server']:
+
+            if arguments['start']:
+                from fabfile.server import start as server_start
+                server_start()
+                return
+            elif arguments['stop']:
+                from fabfile.server import start as server_stop
+                server_stop()
+                return
+            elif arguments['status']:
+                print ("STATUS")
+                return
+
+        if arguments['mongo']:
+
+            if arguments['start']:
+                from fabfile.server import start as server_start
+                server_start()
+                return
+            elif arguments['stop']:
+                from fabfile.server import start as server_stop
+                server_stop()
+                return
+            elif arguments['status']:
+                print ("STATUS")
+                return
+
+        elif arguments['password'] and arguments['reset']:
             db = Database()
             db.set_password_local()
             return

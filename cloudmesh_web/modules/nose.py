@@ -1,13 +1,12 @@
 from ast import literal_eval
 from cloudmesh_base.logger import LOGGER
-from cloudmesh.util.ping import ping
+from cloudmesh_base.ping import ping
 from cloudmesh_common.util import cond_decorator
 from datetime import datetime
 from flask import Blueprint, render_template, redirect
 from flask.ext.login import login_required
 from flask.ext.principal import Permission, RoleNeed
 from cloudmesh_base.Shell import Shell
-from sh import nosetests, pwd
 
 log = LOGGER(__file__)
 
