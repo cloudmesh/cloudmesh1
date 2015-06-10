@@ -40,7 +40,7 @@ class Database(object):
 
     def set_password_local(self, passwd=None):
         if passwd is None:
-            prompt1st = "Please set a password to login to the portal later.\nPassword:"
+            prompt1st = "Please set a password to login to Cloudmesh WebUI later.\nPassword:"
             prompt_not_strong = "\nPassword not strong enough. Minimum length is 6. Please enter again.\nPassword:"
             passwd = getpassword(prompt1st)
             while not validate_password(passwd):

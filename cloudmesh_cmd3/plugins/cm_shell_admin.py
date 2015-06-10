@@ -37,7 +37,7 @@ class cm_shell_admin:
 
         Description:
             admin password reset
-               reset portal password
+               reset WebUI password
         """
         
         '''
@@ -106,6 +106,12 @@ class cm_shell_admin:
             server._start_mongo()
         elif arguments['mongo'] and arguments['stop']:
             server._stop_mongo()
+        elif arguments['server'] and arguments['start']:
+            server.start()
+        elif arguments['server'] and arguments['stop']:
+            server.stop()
+
+
         
         
         else:
