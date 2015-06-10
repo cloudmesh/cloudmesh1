@@ -106,10 +106,25 @@ class cm_shell_admin:
             server._start_mongo()
         elif arguments['mongo'] and arguments['stop']:
             server._stop_mongo()
+
+        # ######################################################################
+        # Cloudmesh Server
+        # ######################################################################
         elif arguments['server'] and arguments['start']:
             server.start()
         elif arguments['server'] and arguments['stop']:
             server.stop()
+
+        # ######################################################################
+        # Celery Server
+        # ######################################################################
+        elif arguments['celery'] and arguments['start']:
+            server._start_celery()
+        elif arguments['celery'] and arguments['stop']:
+            server._stop_celery()
+        elif arguments['celery'] and arguments['status']:
+            server._info_celery()
+
 
 
         
@@ -118,5 +133,3 @@ class cm_shell_admin:
             print("UNDER DEVELOPMENT")
 
         
-
-            
