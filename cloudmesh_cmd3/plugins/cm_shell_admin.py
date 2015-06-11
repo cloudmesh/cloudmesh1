@@ -123,7 +123,7 @@ class cm_shell_admin:
         elif arguments['celery'] and arguments['stop']:
             server._stop_celery()
         elif arguments['celery'] and arguments['status']:
-           print ( server._info_celery())
+           print ( server._celery_status())
 
 
 

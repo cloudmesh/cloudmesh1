@@ -386,6 +386,9 @@ class cloudmesh_server(object):
             pass
         return d
 
+    def _celery_status(self):
+        return subprocess.check_output("celery status", shell=True)
+
     def _celery_command(self, command, app, workers, queue, concurrency=None):
         """execute the celery command on the application and workers
         specified"""
