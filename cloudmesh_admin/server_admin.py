@@ -412,10 +412,18 @@ class cloudmesh_server(object):
 
     def _start_celery(self):
         # mq.start()
+        celery_config = ConfigDict(
+            filename=config_file("/cloudmesh_celery.yaml"),
+            kind="worker")
+        self.workers = celery_config.get("cloudmesh.workers")
+
 
         for worker in self.workers:
-            print(worker)
-            print(json.dumps(self.workers[worker]))
+            self.workers[worker]["hostlist"] = hostlist.expand_hostlist(
+                "{0}[1-{1}]".format(self.workers[worker]["id"],
+                                    self.workers[worker]["count"]))
+            # print(worker)
+            # print(json.dumps(self.workers[worker]))
             concurrency = None
             if "concurrency" in self.workers[worker]:
                 concurrency = self.workers[worker]["concurrency"]
