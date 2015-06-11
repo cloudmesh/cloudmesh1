@@ -390,7 +390,7 @@ class cloudmesh_server(object):
 
         p = subprocess.Popen(["celery", "status"],
                              stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        return p.stdout.read()
+        return p.stdout.read() or "INFO: Celery server not running"
 
     def _celery_command(self, command, app, workers, queue, concurrency=None):
         """execute the celery command on the application and workers
