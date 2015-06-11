@@ -115,8 +115,10 @@ def install_command(args):
             osx()
         elif is_centos():
             centos()
+        elif is_cygwin():
+            cygwin()
 
-    elif arguments["query"]:
+        elif arguments["query"]:
 
         import platform
         print "System:    ", platform.system()
@@ -316,6 +318,9 @@ def ubuntu():
     # install all needed python packages(as per requiremnts.txt)
 
 
+def cygwin():
+    print("skipping install")
+    
 def centos():
     install_packages(["git",
                       "mercurial",

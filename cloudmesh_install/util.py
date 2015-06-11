@@ -13,6 +13,7 @@ import os
 import sys
 
 
+
 def get_system():
     if is_ubuntu():
         return "ubuntu"
@@ -20,6 +21,8 @@ def get_system():
         return "centos"
     elif is_osx():
         return "osx"
+    elif is_cygwin():
+        return "cygwin"
     else:
         return "unsupported"
 
@@ -54,3 +57,5 @@ def is_osx():
     return osx
 
 
+def is_cygwin():
+    retrurn sys.platform.lower() in ['cygwin']
