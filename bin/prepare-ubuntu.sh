@@ -19,6 +19,7 @@ PACKAGES="
   rabbitmq-server
   graphviz
   libffi-dev
+  libncurses5-dev
 "
 echo "This will install (if not already installed):"
 for P in $PACKAGES; do
