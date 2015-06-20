@@ -1,6 +1,6 @@
 from __future__ import print_function
 from dbhelper import DBHelper
-from hostlist import expand_hostlist
+from cloudmesh_base.hostlist import Parameter
 from types import *
 from copy import deepcopy
 from cloudmesh_base.logger import LOGGER

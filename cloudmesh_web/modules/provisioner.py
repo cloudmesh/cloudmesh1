@@ -13,7 +13,7 @@ from flask import Blueprint, render_template, redirect, flash
 from flask.ext.login import login_required
 from flask.ext.principal import Permission, RoleNeed
 from flask.ext.wtf import Form
-from hostlist import expand_hostlist
+from cloudmesh_base.hostlist import Parameter
 from pprint import pprint
 from wtforms import TextField, SelectField, TextAreaField
 import cloudmesh
@@ -78,7 +78,7 @@ def display_provisioner_summary():
 def display_provision_host_summary(cluster, spec, service):
 
     time.sleep(1)
-    hosts = expand_hostlist(spec)
+    hosts = Parameter.expand(spec)
     queue = celery_provisiner_queue.control.inspect()
 
     active = queue.active()
@@ -157,8 +157,8 @@ class ProvisionForm(Form):
 
     def validate(self):
         #cluster = inventory.get("cluster", self.cluster.data)
-        posibilities = expand_hostlist(cluster.definition)
-        choice = expand_hostlist(self.nodespec.data)
+        posibilities = Parameter.expand(cluster.definition)
+        choice = Parameter.expand(self.nodespec.data)
         if choice == []:
             ok = False
         else:
@@ -187,7 +187,7 @@ def display_provision_form():
         pprint(form.__dict__)
         print "CLUSTER", form.cluster.data
         print "Service", form.service.data
-        hosts = expand_hostlist(form.nodespec.data)
+        hosts = Parameter.expand(form.nodespec.data)
         print "Nodespec", hosts
 
         for host in hosts:

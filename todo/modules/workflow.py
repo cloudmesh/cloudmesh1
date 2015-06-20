@@ -5,7 +5,7 @@ from datetime import datetime
 from flask.ext.wtf import Form
 from wtforms import TextField, SelectField, TextAreaField
 from cloudmesh.old_inventory.inventory import Inventory
-from hostlist import expand_hostlist
+from cloudmesh_base.hostlist import Parameter
 from cloudmesh.provisioner.provisioner import *
 from cloudmesh.old_inventory.inventory import PROVISIONING_CHOICES
 from cloudmesh.provisioner.queue.celery import celery

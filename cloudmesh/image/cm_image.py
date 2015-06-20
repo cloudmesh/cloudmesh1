@@ -19,7 +19,6 @@ Options:
 """
 from __future__ import print_function
 from docopt import docopt
-import hostlist
 from cloudmesh_base.util import path_expand, banner
 import os
 import cloudmesh

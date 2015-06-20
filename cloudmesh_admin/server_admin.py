@@ -12,7 +12,7 @@ from fabric.api import task, local, settings, hide
 
 import subprocess
 import json
-import hostlist
+from cloudmesh_base.hostlist import Parameter
 from cloudmesh_base.locations import config_file
 from cloudmesh_base.ConfigDict import ConfigDict
 from cloudmesh_base.logger import LOGGER
@@ -157,7 +157,7 @@ class cloudmesh_server(object):
         self.workers = celery_config.get("cloudmesh.workers")
 
         for worker in self.workers:
-            self.workers[worker]["hostlist"] = hostlist.expand_hostlist(
+            self.workers[worker]["hostlist"] = Parameter.expand(
                 "{0}[1-{1}]".format(self.workers[worker]["id"],
                                     self.workers[worker]["count"]))
         print(json.dumps(self.workers, indent=4))

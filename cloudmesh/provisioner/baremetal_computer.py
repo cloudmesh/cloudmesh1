@@ -1,6 +1,6 @@
 from dbhelper import DBHelper
 from baremetal_status import BaremetalStatus
-from hostlist import expand_hostlist
+from cloudmesh_base.hostlist import Parameter
 from copy import deepcopy
 from cloudmesh.util.config import read_yaml_config
 from cloudmesh_base.logger import LOGGER
@@ -60,7 +60,7 @@ class BaremetalComputer:
                     # process the common bmc data in cluster
                     common_bmc_data = cluster_data["bmc"]["common"]
                     host_range = common_bmc_data.pop("range", None)
-                    hosts = expand_hostlist(host_range)
+                    hosts = Parameter.expand(host_range)
                 mac_data = cluster_data["macaddr"]
                 for host in mac_data:
                     if host in hosts:

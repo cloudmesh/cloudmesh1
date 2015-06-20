@@ -13,7 +13,7 @@ from cloudmesh_base.ConfigDict import ConfigDict
 from cloudmesh_base.util import path_expand as cm_path_expand
 from cloudmesh.rack.rack_progress import get_temperature_progress, get_service_progress
 from jinja2 import Template
-from hostlist import expand_hostlist
+from cloudmesh_base.hostlist import Parameter
 from cloudmesh_base.Shell import Shell
 from os import path
 import random
@@ -295,7 +295,7 @@ class BaseClusterMap:
         # server name list, add more server here
         list_servers = []
         for spec in servers_range_list:
-            servers = expand_hostlist(spec)
+            servers = Parameter.expand(spec)
             list_servers += servers
 
         self.dict_servers = dict.fromkeys(

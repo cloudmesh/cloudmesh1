@@ -2,7 +2,7 @@ from __future__ import print_function
 from cloudmesh.config.cm_config import cm_config_server
 from cloudmesh_base.locations import config_file
 from cloudmesh_base.logger import LOGGER
-from hostlist import expand_hostlist
+from cloudmesh_base.hostlist import Parameter
 from pprint import pprint
 import sys
 from cloudmesh_base.util import path_expand as cm_path_expand
@@ -183,7 +183,7 @@ class Inventory:
                             'cm_type': "inventory",
                             'cm_kind': 'server',
                             'cm_key': 'range',
-                            'cm_value': expand_hostlist(cluster["id"]),
+                            'cm_value': Parameter.expand(cluster["id"]),
                             'cm_hostlist': cluster["id"],
                             'cm_attribute': 'variable'
                             })
@@ -222,13 +222,13 @@ class Inventory:
 
         for cluster_name in clusters:
             cluster = clusters[cluster_name]
-            names = expand_hostlist(cluster["id"])
+            names = Parameter.expand(cluster["id"])
             net_id = 0
             for network in cluster["network"]:
 
-                n_index = expand_hostlist(network["id"])
-                n_label = expand_hostlist(network["label"])
-                n_range = expand_hostlist(network["range"])
+                n_index = Parameter.expand(network["id"])
+                n_label = Parameter.expand(network["label"])
+                n_range = Parameter.expand(network["range"])
                 n_name = network["name"]
 
                 for i in range(0, len(names)):

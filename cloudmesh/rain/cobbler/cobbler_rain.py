@@ -3,7 +3,7 @@
 from __future__ import print_function
 
 from docopt import docopt
-import hostlist
+from cloudmesh_base.hostlist import Parameter
 from datetime import datetime, timedelta
 from pytimeparse.timeparse import timeparse
 from cloudmesh.provisioner.rain_cobbler_wrapper import RainCobblerWrapper
@@ -45,7 +45,7 @@ def filtered_hosts_based_baremetal(raw_hosts):
     """
     # wrapper
     wrapper = RainCobblerWrapper()
-    input_hosts = hostlist.expand_hostlist(raw_hosts)
+    input_hosts = Parameter.expand(raw_hosts)
     bm_hosts = wrapper.baremetal_computer_host_list()
     return [h for h in input_hosts if h in bm_hosts] if bm_hosts else []
 
@@ -56,7 +56,7 @@ def filtered_hosts_based_policy(user, projects, hosts):
     # wrapper
     wrapper = RainCobblerWrapper()
     policy = wrapper.get_policy_based_user_or_its_projects(user, projects)
-    policy_hosts = hostlist.expand_hostlist(policy) if policy else None
+    policy_hosts = Parameter.expand(policy) if policy else None
     return [h for h in hosts if h in policy_hosts] if policy_hosts else []
 
 
@@ -70,7 +70,7 @@ def filtered_access_hosts(raw_hosts):
     # policy_hosts = filtered_hosts_based_policy(user, projects, valid_bm_hosts)
     # ONLY for test, MUST be replaced by the above line
     policy_hosts = valid_bm_hosts
-    all_hosts = hostlist.expand_hostlist(raw_hosts)
+    all_hosts = Parameter.expand(raw_hosts)
     unaccess_hosts = [h for h in all_hosts if h not in policy_hosts]
     return {"access": policy_hosts, "unaccess": unaccess_hosts, }
 
@@ -144,7 +144,7 @@ def rain_command(arguments):
     """
     for list in ["HOSTS", "USERS", "PROJECTS","--project", "--user"]:
         try:
-            expanded_list = hostlist.expand_hostlist(arguments[list])
+            expanded_list = Parameter.expand(arguments[list])
             arguments[list]=expanded_list
         except:
             pass

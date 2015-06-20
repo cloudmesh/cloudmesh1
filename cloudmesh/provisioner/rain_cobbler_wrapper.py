@@ -4,7 +4,7 @@ from cloudmesh.rain.cobbler.queue.tasks import deploy_system, power_system
 from baremetal_computer import BaremetalComputer
 from baremetal_status import BaremetalStatus
 from baremetal_policy import BaremetalPolicy
-from hostlist import expand_hostlist, collect_hostlist
+from cloudmesh_base.hostlist import Parameter, collect_hostlist
 from datetime import datetime
 from cloudmesh_base.logger import LOGGER
 #
@@ -38,7 +38,7 @@ class RainCobblerWrapper:
         :param string raw_hosts: ne or more hosts with the valid formation of hostlist
         :return: True means successfully, otherwise False
         """
-        hosts = expand_hostlist(raw_hosts) if raw_hosts else None
+        hosts = Parameter.expand(raw_hosts) if raw_hosts else None
         return self.baremetal.enable_baremetal_computers(hosts)
 
     def baremetal_computer_host_off(self, raw_hosts):
@@ -47,7 +47,7 @@ class RainCobblerWrapper:
         :param string raw_hosts: ne or more hosts with the valid formation of hostlist
         :return: True means successfully, otherwise False
         """
-        hosts = expand_hostlist(raw_hosts) if raw_hosts else None
+        hosts = Parameter.expand(raw_hosts) if raw_hosts else None
         return self.baremetal.disable_baremetal_computers(hosts)
 
     def list_all_user_group_hosts(self, flag_user=True, flag_merge=False):
@@ -107,7 +107,7 @@ class RainCobblerWrapper:
         :param string raw_hosts: one or more hosts with the valid formation of hostlist
         :return: a dict of the formation {"host1": "deployed", "host2": "deploying", "host3": "failed"}
         """
-        hosts = expand_hostlist(raw_hosts) if raw_hosts else None
+        hosts = Parameter.expand(raw_hosts) if raw_hosts else None
         return self.status.get_status_short(hosts)
 
     def get_status_summary(self, raw_hosts=None):
@@ -116,7 +116,7 @@ class RainCobblerWrapper:
         :param string raw_hosts: one or more hosts with the valid formation of hostlist
         :return: a dict of the formation {"deployed": 1, "deploying":2, "failed":2, "total": 5}
         """
-        hosts = expand_hostlist(raw_hosts) if raw_hosts else None
+        hosts = Parameter.expand(raw_hosts) if raw_hosts else None
         return self.status.get_status_summary(hosts)
 
     def provision_host_with_profile(self, profile, hosts):
@@ -132,7 +132,7 @@ class RainCobblerWrapper:
         # check the exist of the profile
         profiles = self.rest_api.get_cobbler_profile_list()
         if profile in profiles:
-            # hosts = expand_hostlist(raw_hosts)
+            # hosts = Parameter.expand(raw_hosts)
             # log.debug("after expand, raw_hosts {0} is: {1}".format(raw_hosts, hosts))
             systems = self.rest_api.get_cobbler_system_list()
             # check the system named host exist in cobbler or not

@@ -3,7 +3,7 @@
 from __future__ import print_function
 from ast import literal_eval
 from collections import Counter
-from hostlist import expand_hostlist
+from cloudmesh_base.hostlist import Parameter
 from pprint import pprint
 from cloudmesh_base.Shell import Shell
 from xml.dom import minidom
@@ -266,7 +266,7 @@ class PBS:
         """add an attribute for the specified hosts in the format
         i[1-20]. which would set the attribute for all hosts in i1 to
         i20"""
-        hosts = expand_hostlist(spec)
+        hosts = Parameter.expand(spec)
         for host in hosts:
             self._set(host, attribute)
 

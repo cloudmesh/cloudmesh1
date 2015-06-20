@@ -5,7 +5,7 @@ from datetime import datetime
 from datetime import timedelta
 import json
 import yaml
-import hostlist
+from cloudmesh_base.hostlist import Parameter
 
 
 def print_format_dict(d, header=None, kind='table'):
@@ -237,7 +237,7 @@ def dict_key_list_table_printer(d, indexed=False):
         if l == 0:
             index_list = []
         else:
-            index_list = hostlist.expand_hostlist("[1-{0}]".format(str(l)))
+            index_list = Parameter.expand("[1-{0}]".format(str(l)))
         x.add_column("index", index_list)
 
     for k, v in d.iteritems():

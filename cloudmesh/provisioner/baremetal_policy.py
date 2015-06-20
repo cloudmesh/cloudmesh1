@@ -1,6 +1,6 @@
 from __future__ import print_function
 from dbhelper import DBHelper
-from hostlist import expand_hostlist, collect_hostlist
+from cloudmesh_base.hostlist import Parameter, collect_hostlist
 from types import *
 from copy import deepcopy
 from cloudmesh_base.logger import LOGGER
@@ -88,7 +88,7 @@ class BaremetalPolicy:
             return None
         all_policys = []
         for name in valid_policy:
-            all_policys.extend(expand_hostlist(valid_policy[name]))
+            all_policys.extend(Parameter.expand(valid_policy[name]))
         return collect_hostlist(list(set(all_policys)))
 
     def get_policy_based_user(self, user):
@@ -116,14 +116,14 @@ class BaremetalPolicy:
         """
         if policys:
             data = {}
-            names = expand_hostlist(name) if name else None
+            names = Parameter.expand(name) if name else None
             for puser in policys:
-                users = expand_hostlist(puser)
+                users = Parameter.expand(puser)
                 common_users = [
                     u for u in users if u in names] if names else users
                 hosts = []
                 for policy in policys[puser]:
-                    hosts.extend(expand_hostlist(policy["policy"]))
+                    hosts.extend(Parameter.expand(policy["policy"]))
                 for user in common_users:
                     if user in data:
                         data[user].extend(hosts)

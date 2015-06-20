@@ -23,7 +23,6 @@ fabric
 blessings
 progress
 console
-python-hostlist
 docopt
 python-ldap
 pyaml

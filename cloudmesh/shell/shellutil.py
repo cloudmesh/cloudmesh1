@@ -6,7 +6,7 @@ from cloudmesh_common.tables import array_dict_table_printer, dict_key_list_tabl
 from cloudmesh_base.util import banner
 import csv
 from cmd3.console import Console
-import hostlist
+from cloudmesh_base.hostlist import Parameter
 from cloudmesh.cm_mongo import cm_mongo
 from cloudmesh.util.naming import server_name_analyzer
 
@@ -253,7 +253,7 @@ def get_vms_look_for(username,
         return False
     if hostls:
         try:
-            hostls_list = hostlist.expand_hostlist(hostls)
+            hostls_list = Parameter.expand(hostls)
         except:
             Console.error("please check your hostlist input, right format e.g. sample[1-9,18]")
             return False

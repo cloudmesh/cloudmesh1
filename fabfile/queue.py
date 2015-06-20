@@ -13,7 +13,7 @@ from cloudmesh_common.util import PROGRESS
 from cloudmesh_base.locations import config_file
 from cloudmesh_base.util import banner
 from fabric.api import task, local, hide, settings
-import hostlist
+from cloudmesh_base.hostlist import Parameter
 import progress
 
 import clean
@@ -43,20 +43,20 @@ else:
 """
 for worker in workers:
     workers[worker] = {"app":"cloudmesh.launcher{0}.queue",
-                       "hostlist":hostlist.expand_hostlist("l[1-{0}]".format(workers[worker])),
+                       "hostlist":Parameter.expand("l[1-{0}]".format(workers[worker])),
                       "queue": worker}
 """
 # no_workers_launcher =
 for worker in workers:
-    workers[worker]["hostlist"] = hostlist.expand_hostlist(
+    workers[worker]["hostlist"] = Parameter.expand(
         "{0}[1-{1}]".format(workers[worker]["id"], workers[worker]["count"]))
 
 # launcher_workers = {"app":"cloudmesh.launcher.queue",
-#                     "hostlist":hostlist.expand_hostlist("l[1-{0}]".format(workers["launcher"]["count"])),
+#                     "hostlist":Parameter.expand("l[1-{0}]".format(workers["launcher"]["count"])),
 #                     "queue":"launcher"}
 #
 # provisioner_workers = {"app":"cloudmesh.provisioner.queue",
-#                        "hostlist":hostlist.expand_hostlist("p[1-2]"),
+#                        "hostlist":Parameter.expand("p[1-2]"),
 #                        "queue":"provisioner"}
 #
 # questat_workers = {"app":"cloudmesh.pbs",

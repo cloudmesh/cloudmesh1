@@ -25,7 +25,7 @@ log = LOGGER(__file__)
 admin_permission = Permission(RoleNeed('admin'))
 
 
-import hostlist
+from cloudmesh_base.hostlist import Parameter
 
 inventory = Inventory()
 # inventory.clear()
@@ -163,7 +163,7 @@ def get_servers_for_clusters(host_lists):
     return_dict = {}
 
     for h in host_lists:
-        allowed_servers = hostlist.expand_hostlist(h)
+        allowed_servers = Parameter.expand(h)
         index = h.find("[")
         key = h[0:index]
         cluster = cluster_dict[key]

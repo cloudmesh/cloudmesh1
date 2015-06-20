@@ -56,7 +56,7 @@
 # from __future__ import dict
 from __future__ import print_function
 from docopt import docopt
-import hostlist
+from cloudmesh_base.hostlist import Parameter
 from datetime import datetime, timedelta
 from pytimeparse.timeparse import timeparse
 # from timestring import Range
@@ -98,7 +98,7 @@ def rain_command(arguments):
 
     for list in ["HOSTS", "USERS", "PROJECTS", "--project", "--user"]:
         try:
-            expanded_list = hostlist.expand_hostlist(arguments[list])
+            expanded_list = Parameter.expand(arguments[list])
             arguments[list] = expanded_list
         except:
             pass
