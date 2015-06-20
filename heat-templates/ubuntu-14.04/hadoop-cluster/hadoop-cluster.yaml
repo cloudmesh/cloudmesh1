@@ -61,18 +61,24 @@ resources:
             knife cookbook site download hadoop
             knife cookbook site download ohai 
             knife cookbook site download sysctl 
+            knife cookbook site download selinux
+            knife cookbook site download ulimit
             tar -zxf java* -C /home/ubuntu/chef-repo/cookbooks
             tar -zxf apt* -C /home/ubuntu/chef-repo/cookbooks
             tar -zxf yum* -C /home/ubuntu/chef-repo/cookbooks
             tar -zxf hadoop* -C /home/ubuntu/chef-repo/cookbooks
             tar -zxf ohai* -C /home/ubuntu/chef-repo/cookbooks
             tar -zxf sysctl* -C /home/ubuntu/chef-repo/cookbooks
+            tar -zxf selinux* -C /home/ubuntu/chef-repo/cookbooks
+            tar -zxf ulimit* -C /home/ubuntu/chef-repo/cookbooks
             rm -rf java*.tar.gz
             rm -rf apt*.tar.gz
             rm -rf yum*.tar.gz
             rm -rf hadoop*.tar.gz
             rm -rf ohai*.tar.gz
             rm -rf sysctl*.tar.gz
+            rm -rf selinux*.tar.gz
+            rm -rf ulimit*.tar.gz
 
             cat << EOL > /home/ubuntu/chef-repo/roles/java.rb
             name "java"
@@ -127,6 +133,7 @@ resources:
 
             chef-solo -j /home/ubuntu/chef-repo/solo.json -c /home/ubuntu/chef-repo/solo.rb
             /etc/init.d/hadoop-hdfs-namenode init
+            su hdfs -c "hadoop namenode -format"
             service hadoop-hdfs-namenode start
             /usr/lib/hadoop/libexec/init-hdfs.sh
 
