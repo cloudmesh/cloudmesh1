@@ -33,7 +33,7 @@ else:
 
 def get_pid(command):
     with hide('output', 'running', 'warnings'):
-        lines = local(
+        lines = os.system(
             "ps -ax |fgrep {0}".format(command), capture=True).split("\n")
     pid = None
     line = None
@@ -56,20 +56,20 @@ def reset(password=None):
     PROGRESS.next()
     print
     if password is None:
-        local("fab user.mongo")
+        os.system("fab user.mongo")
     else:
-        local("fab user.mongo:passwd={0}".format(password))
+        os.system("fab user.mongo:passwd={0}".format(password))
     PROGRESS.next()
     banner("refreshing cloud info")
     simple()
-    # local("reset")
+    # os.system("reset")
 
 
 @task
 def install_osx():
-    # local('ruby -e "$(curl -fsSL https://raw.github.com/mxcl/homebrew/go)"')
-    # local('brew update')
-    local('brew install mongodb')
+    # os.system('ruby -e "$(curl -fsSL https://raw.github.com/mxcl/homebrew/go)"')
+    # os.system('brew update')
+    os.system('brew install mongodb')
 
 
 '''
@@ -107,17 +107,17 @@ def install():
         print "         using", "/tmp/{0}".format(mongo_tar)
     else:
         if sys.platform == "darwin":
-            local(
+            os.system(
                 "cd /tmp; curl -O http://fastdl.mongodb.org/{1}/{0}.tgz"
                 .format(mongo_version, os_version))
         else:
-            local(
+            os.system(
                 "cd /tmp; wget http://fastdl.mongodb.org/{1}/{0}.tgz"
                 .format(mongo_version, os_version))
 
-    local("cd /tmp; tar -xvf {0}.tgz".format(mongo_version))
-    local("cd /tmp; cp {0}/bin/* {1}".format(mongo_version, ENV))
-    where = local("which mongo", capture=True)
+    os.system("cd /tmp; tar -xvf {0}.tgz".format(mongo_version))
+    os.system("cd /tmp; cp {0}/bin/* {1}".format(mongo_version, ENV))
+    where = Shell.which("mongo")
 
     if where.startswith(ENV):
         print "SUCCESS. mongo commands are now installed in", ENV
@@ -132,10 +132,10 @@ def install():
         install_packages(["mongodb",
                           "mongodb-server"])
     elif sys.platform == "darwin":
-        local(
+        os.system(
             'ruby -e "$(curl -fsSL https://raw.github.com/mxcl/homebrew/go)"')
-        local('brew update')
-        local('brew install mongodb')
+        os.system('brew update')
+        os.system('brew install mongodb')
 '''
 
 
@@ -217,17 +217,17 @@ def wipe():
     path = path_expand(config["path"])
 
     banner("{0}".format(path))
-    local("mkdir -p {0}".format(path))
+    Shell.mkdir("{0}".format(path))
     result = str(Shell.ls(path))
     banner(path, "-")
     print result
     print 70 * "-"
     if result != "":
         if yn_choice("deleting the directory", default="n"):
-            local("rm -rf {0}".format(path))
-            local("mkdir -p {0}".format(path))
+            Shell.rm("-rf", "{0}".format(path))
+            Shell.mkdir("{0}".format(path))
             banner("{0}".format(path))
-            local("ls {0}".format(path))
+            Shell.ls("{0}".format(path))
 
 
 def isyes(value):
@@ -273,7 +273,7 @@ def boot(auth=True):
     print Shell.ls(path)
     banner("PROCESS")
     with settings(warn_only=True):
-        local("ps -ax | fgrep mongo")
+        os.system("ps -ax | fgrep mongo")
     PROGRESS.next()
 
 
@@ -291,7 +291,7 @@ def start(auth=True):
 
     if not os.path.exists(path):
         print "Creating mongodb directory in", path
-        local("mkdir -p {0}".format(path))
+        os.system("mkdir -p {0}".format(path))
 
     with settings(warn_only=True):
         with hide('output', 'running', 'warnings'):
@@ -316,7 +316,7 @@ def start(auth=True):
         if isyes(auth):
             with_auth = "--auth"
 
-        local(
+        os.system(
             'mongod {2} --bind_ip 127.0.0.1 '
             '--fork --dbpath {0} '
             '--logpath {0}/mongodb.log '
@@ -330,7 +330,7 @@ def clean():
         'echo "show dbs" | mongo --quiet --port {0}'.format(port), capture=True).splitlines()
     for line in result:
         name = line.split()[0]
-        local('mongo {0} --port {1} --eval "db.dropDatabase();"'
+        os.system('mongo {0} --port {1} --eval "db.dropDatabase();"'
               .format(name, port))
 
 
@@ -362,7 +362,7 @@ def stop():
     # local("mongod --shutdown")
     with settings(warn_only=True):
         with hide('output', 'running', 'warnings'):
-            local("killall -15 mongod")
+            os.system("killall -15 mongod")
 
     # Added to make sure the mongodb server is shutdown.
     # - killall does not work if the server is running on root or mongodb

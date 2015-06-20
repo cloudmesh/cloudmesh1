@@ -89,12 +89,12 @@ def install():
         sys.exit()
     """install the rabbitmq"""
     if sys.platform == "darwin":
-        local("brew install rabbitmq")
+        os.system("brew install rabbitmq")
         if not installed("rabbitmqctl"):
             print("ERROR: make sure /usr/local/sbin/ is added to your PATH")
     elif sys.platform == "linux":
         # TODO: untested
-        local("sudo apt-get install rabbitmq-server")
+        os.system("sudo apt-get install rabbitmq-server")
         # when completed we see:
         # Starting rabbitmq-server: SUCCESS.
     else:
@@ -111,14 +111,14 @@ def user(name=None):
     if name is None:
         rabbit_env["user"] = get_user()
     rabbit_env["password"] = get_password()
-    local("{rabbitmqctl} {user} {password}".format(**rabbit_env))
+    os.system("{rabbitmqctl} {user} {password}".format(**rabbit_env))
 
 
 @task
 def host():
     """adding a host to rabbitmq"""
     rabbit_env["host"] = get_host()
-    local("{rabbitmqctl} add_vhost {host}".format(**rabbit_env))
+    os.system("{rabbitmqctl} add_vhost {host}".format(**rabbit_env))
 
 
 @task
@@ -128,7 +128,7 @@ def allow():
     #       .format(**rabbit_env))
     rabbit_env["host"] = get_host()
     rabbit_env["user"] = get_user()
-    local(
+    os.system(
         '{rabbitmqctl} set_permissions -p {host} {user} ".*" ".*" ".*"'
         .format(**rabbit_env))
 
@@ -142,7 +142,7 @@ def check():
         'file': '/etc/hosts'
     }
     result = int(
-        local("fgrep {host} {file} | wc -l".format(**values), capture=True))
+        os.system("fgrep {host} {file} | wc -l".format(**values), capture=True))
     if result == 0:
         print ('ERROR: the etc file "{file}" does not contain '
                'the hostname "{host}"'.format(**values))
@@ -159,7 +159,7 @@ def check():
 @task
 def dns():
     """restart the dns server"""
-    local("dscacheutil -flushcache")
+    os.system("dscacheutil -flushcache")
 
 
 @task
@@ -182,7 +182,7 @@ def status():
         print "Run '/etc/init.d/rabbitmq-server status' to check status"
     else:
         # BUG rabbit_mqenv not defined
-        local("sudo {rabbitmqctl} status".format(**rabbit_env))
+        Shell.sudo("{rabbitmqctl} status".format(**rabbit_env))
 
 
 def list_queues(parameters):
@@ -210,7 +210,7 @@ def start(detached=None):
         if detached is None:
             rabbit_env['detached'] = "-detached"
         # log.info (rabbit_env)
-        local("{rabbitmq_server} {detached}".format(**rabbit_env))
+        os.system("{rabbitmq_server} {detached}".format(**rabbit_env))
 
 
 @task
@@ -221,7 +221,7 @@ def stop():
         while not yn_choice("Is rabbitmq stopped?", 'n'):
             print "Please stop rabbitmq-server."
     else:
-        local("{rabbitmqctl} stop".format(**rabbit_env))
+        os.system("{rabbitmqctl} stop".format(**rabbit_env))
 
 
 menu_list = [

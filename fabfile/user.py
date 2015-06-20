@@ -7,28 +7,35 @@ from cloudmesh_base.Shell import Shell
 from cloudmesh_base.locations import config_file
 
 
+class User(object):
+
+    @classmethod
+    def password(cls):
+        user_config = cm_config(filename=config_file("/cloudmesh.yaml"))
+        user = user_config.cloud('india')['credentials']
+
+        server_config = ConfigDict(filename=config_file("/cloudmesh_server.yaml"))
+        server = server_config.get('cloudmesh.server.keystone.india')
+
+        print(" ".join(["keystone", "--os-username", server['OS_USERNAME'],
+                        "--os-password", server['OS_PASSWORD'],
+                        "--os-tenant-name", server['OS_TENANT_NAME'],
+                        "--os-auth-url", server['OS_AUTH_URL'],
+                        "user-password-update",
+                        "--pass", user['OS_PASSWORD'], user['OS_USERNAME']]))
+
+        Shell.keystone("--os-username", server['OS_USERNAME'],
+                       "--os-password", server['OS_PASSWORD'],
+                       "--os-tenant-name", server['OS_TENANT_NAME'],
+                       "--os-auth-url", server['OS_AUTH_URL'],
+                       "user-password-update",
+                       "--pass", user['OS_PASSWORD'], user['OS_USERNAME'])
+
+
+
 @task
 def password():
-    user_config = cm_config(filename=config_file("/cloudmesh.yaml"))
-    user = user_config.cloud('india')['credentials']
-
-    server_config = ConfigDict(filename=config_file("/cloudmesh_server.yaml"))
-    server = server_config.get('cloudmesh.server.keystone.india')
-
-    print(" ".join(["keystone", "--os-username", server['OS_USERNAME'],
-                    "--os-password", server['OS_PASSWORD'],
-                    "--os-tenant-name", server['OS_TENANT_NAME'],
-                    "--os-auth-url", server['OS_AUTH_URL'],
-                    "user-password-update",
-                    "--pass", user['OS_PASSWORD'], user['OS_USERNAME']]))
-
-    Shell.keystone("--os-username", server['OS_USERNAME'],
-                   "--os-password", server['OS_PASSWORD'],
-                   "--os-tenant-name", server['OS_TENANT_NAME'],
-                   "--os-auth-url", server['OS_AUTH_URL'],
-                   "user-password-update",
-                   "--pass", user['OS_PASSWORD'], user['OS_USERNAME'])
-
+    User.password()
 
 @task
 def delete_defaults():

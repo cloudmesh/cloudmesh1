@@ -18,6 +18,9 @@ class Shell(Cmd):
 
     def do_quit(self, args):
         """Quits the program."""
+        sys.exit()
+
+    do_q = do_quit
 
 if __name__ == '__main__':
 

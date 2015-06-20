@@ -39,7 +39,7 @@ def shell_command_experiment_group(arguments):
          group list           lists the groups
          group create         creates a new group
          group remove         removes a group
-         group add item       addes an item of a type to a group
+         group add item       adds an item of a type to a group
          group remove item    removes an item of a type from a group
          group show           lists items of a group
 
