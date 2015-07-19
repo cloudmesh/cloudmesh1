@@ -1,0 +1,52 @@
+
+* Goal
+** CM in Docker
+*** DONE ./install user fails with "USER"				:bug:
+    - State "DONE"       from "TODO"       [2015-02-19 Thu 15:24]
+    In `cloudmesh_install/install.py():190
+    Call to `string.Template(results).substitute(os.environ)` fails with a KeyError.
+    This is because in a docker build a user is not known
+
+    My hack: set the USER environment variable in a docker-local build
+    environment
+
+*** TODO fab server.start cannot connect to mongo			:bug:
+
+
+** allow user to specify ssh key for `cm-iu user fetch` 	:enhancement:
+   currently the key is expected to be ~/.ssh/id_rsa
+
+** `cm-iu user fetch` cannot find ~/.futuregrid directory on india	:bug:
+   This is the error:
+   #+BEGIN_SRC
+   cm-iu user fetch
+
+   # ######################################################################
+   # download rcfiles (novarc, eucarc, etc) from IaaS platforms
+   # ######################################################################
+
+   Please enter your portal user id [default: docker]: badi
+   fetching from  india.futuregrid.org{'dest': '/root/.cloudmesh/clouds/india',
+    'hostname': 'india.futuregrid.org',
+    'source': '.futuregrid/openstack_havana/novarc',
+    'userid': 'badi'}
+   create directory: /root/.cloudmesh/clouds/india
+       <- scp -o StricthostKeyChecking=no badi@india.futuregrid.org:.futuregrid/openstack_havana/novarc /root/.cloudmesh/clouds/india
+        failed None 
+
+     RAN: '/usr/bin/scp -o StrictHostKeyChecking=no badi@india.futuregrid.org:.futuregrid/openstack_havana/novarc /root/.cloudmesh/clouds/india'
+
+     STDOUT:
+
+
+     STDERR:
+   scp: .futuregrid/openstack_havana/novarc: No such file or directory
+   #+END_SRC
+
+   This also appears when loading fg455 module on india:
+   #+BEGIN_SRC
+   $ ssh badi@india.futuregrid.org
+   $ module load fg455
+   [...]
+   fg455/0.1.0(110):ERROR:102: Tcl command execution failed: set fp [open ~/.futuregrid/openstack_havana/novarc r]
+   #+END_SRC
