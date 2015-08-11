@@ -102,6 +102,7 @@ seqdiag==0.9.5
 sh==1.11
 simple-json==1.1
 simplejson==3.7.3         # via cloudmesh-base, cmd3, python-novaclient, simple-json
+jsonschema
 six==1.9.0                # via cryptography, debtcollector, flask-restful, oslo.config, oslo.i18n, oslo.serialization, oslo.utils, pyopenssl, python-dateutil, python-keystoneclient, python-novaclient, sphinx, sphinxcontrib-httpdomain, stevedore
 snowballstemmer==1.2.0    # via sphinx
 sphinx-bootstrap-theme==0.4.6
