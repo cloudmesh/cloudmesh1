@@ -76,7 +76,7 @@ paramiko==1.15.2
 passlib==1.6.2
 pbr==0.11.0               # via debtcollector, oslo.i18n, oslo.serialization, oslo.utils, python-keystoneclient, python-novaclient, stevedore
 pep8==1.6.2               # via autopep8
-pillow==2.8.1             # via blockdiag
+pillow==8.1.1             # via blockdiag
 prettytable==0.7.2
 progress==1.2
 psutil==2.2.1
