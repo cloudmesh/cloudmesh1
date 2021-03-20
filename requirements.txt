@@ -58,7 +58,7 @@ ipaddress==1.0.7          # via cryptography
 ipython==3.1.0
 iso8601==0.1.10           # via oslo.serialization, oslo.utils, python-keystoneclient, python-novaclient
 itsdangerous==0.24        # via flask
-jinja2==2.7.3             # via flask, sphinx
+jinja2==2.11.3             # via flask, sphinx
 kombu==3.0.26             # via celery
 librabbitmq==1.6.1
 markupsafe==0.23          # via jinja2
