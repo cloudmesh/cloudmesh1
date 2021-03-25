@@ -95,7 +95,7 @@ python-novaclient==2.25.0
 python-openid==2.2.5      # via flask-openid
 pytimeparse==1.1.4
 pytz==2015.4              # via babel, celery, cloudmesh-timestring, flask-restful, flower, oslo.serialization, oslo.utils
-pyyaml==3.11
+pyyaml==5.4
 pyzmq==14.6.0
 requests==2.7.0           # via python-keystoneclient, python-novaclient
 seqdiag==0.9.5
