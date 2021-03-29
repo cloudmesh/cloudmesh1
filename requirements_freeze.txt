@@ -83,7 +83,7 @@ pyaml==15.5.7
 pyasn1==0.1.7             # via cryptography
 pycparser==2.13           # via cffi
 pycrypto==2.6.1
-pygments==2.0.2           # via flask-rstpages, sphinx
+pygments==2.7.4           # via flask-rstpages, sphinx
 pymongo==2.8
 pyopenssl==0.15.1         # via azure
 python-dateutil==2.4.2    # via azure
