@@ -90,7 +90,7 @@ pyopenssl==0.15.1         # via azure
 python-dateutil==2.4.2    # via azure
 python-hostlist==1.14
 python-keystoneclient==1.5.0
-python-ldap==2.4.19
+python-ldap==3.4.0
 python-novaclient==2.25.0
 python-openid==2.2.5      # via flask-openid
 pytimeparse==1.1.4
