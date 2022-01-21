@@ -54,7 +54,7 @@ futures==3.0.2            # via azure, flower
 gnureadline==6.3.3        # via ipython
 idna==2.0                 # via cryptography
 ipaddress==1.0.7          # via cryptography
-ipython==3.1.0
+ipython==7.16.3
 iso8601==0.1.10           # via oslo.serialization, oslo.utils, python-keystoneclient, python-novaclient
 itsdangerous==0.24        # via flask
 jinja2==2.7.3             # via flask, sphinx
