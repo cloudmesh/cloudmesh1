@@ -48,7 +48,7 @@ flask-rstpages==0.3
 flask-silk==0.2
 flask-wtf==0.11
 flask==0.10.1
-flower==0.8.2
+flower==1.2.0
 funcparserlib==0.3.6      # via blockdiag
 future==0.14.3
 futures==3.0.2            # via azure, flower
