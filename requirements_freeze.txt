@@ -70,7 +70,7 @@ nwdiag==1.0.4
 oslo.config==1.11.0       # via python-keystoneclient
 oslo.i18n==1.6.0          # via oslo.utils, python-keystoneclient, python-novaclient
 oslo.serialization==1.5.0  # via python-keystoneclient, python-novaclient
-oslo.utils==1.5.0         # via oslo.serialization, python-keystoneclient, python-novaclient
+oslo.utils==4.10.1         # via oslo.serialization, python-keystoneclient, python-novaclient
 paramiko==1.15.2
 passlib==1.6.2
 pbr==0.11.0               # via oslo.config, oslo.i18n, oslo.serialization, oslo.utils, python-keystoneclient, python-novaclient, stevedore
