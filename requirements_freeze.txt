@@ -116,7 +116,7 @@ tabulate==0.7.5
 tornado==4.2
 webcolors==1.5            # via blockdiag
 werkzeug==0.10.4          # via flask, flask-wtf
-wheel==0.24.0             # via cmd3
+wheel==0.38.1             # via cmd3
 wtforms==2.0.2
 xlrd==0.9.3               # via sphinxcontrib-exceltable
 
